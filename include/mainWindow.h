@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include "ZQWidget.h"
 #include "zdlInterface.h"
+#include "zSettingsPane.h"
 
 class mainWindow: public QMainWindow{
     Q_OBJECT
@@ -16,5 +17,6 @@ public:
 
 private:
 	zdlInterface* intr;
+	zSettingsPane* settings;
 };
 #endif

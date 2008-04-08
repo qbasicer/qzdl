@@ -14,6 +14,7 @@ int main( int argc, char **argv ){
     QApplication a( argc, argv );
 	qapp = &a;
 
+
 	versionString = "3.0.5.3q";
 	
 	QDir cwd = QDir::current();
@@ -21,7 +22,11 @@ int main( int argc, char **argv ){
 	configurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
 	ZDLConf* tconf = new ZDLConf();
-	tconf->readINI("zdl.ini");
+	if (argc == 1){
+		tconf->readINI(argv[1]);
+	}else{
+		tconf->readINI("zdl.ini");
+	}
 	configurationManager::setActiveConfiguration(tconf);
 	
 	mainWindow *mw = new mainWindow();

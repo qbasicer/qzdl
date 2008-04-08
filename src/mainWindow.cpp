@@ -18,11 +18,20 @@ mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	setWindowTitle(windowTitle);
 	setContentsMargins(2,2,2,2);
 	layout()->setContentsMargins(2,2,2,2);
+	QTabWidget *widget = new QTabWidget(this);
+	
  	intr = new zdlInterface(this);
-	setCentralWidget(intr);
+	settings = new zSettingsPane(this);
+	
+	setCentralWidget(widget);
+	widget->addTab(intr, "Main");
+	widget->addTab(settings, "Settings");
+	widget->addTab(new zdlInterface(this), "Notifications");
 	
 }
 
+
+//Pass through functions.
 void mainWindow::startRead(){
 	intr->startRead();
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();

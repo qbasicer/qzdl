@@ -1,6 +1,5 @@
 #include <QtGui>
 #include <QApplication>
-#include <QMainWindow>
 
 #include "multiPane.h"
 
