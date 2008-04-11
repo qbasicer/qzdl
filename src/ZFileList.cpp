@@ -1,9 +1,32 @@
 #include "ZFileList.h"
 #include "ZFileListable.h"
+#include "configurationManager.h"
+
+#include <iostream>
+using namespace std;
 
 ZFileList::ZFileList(ZQWidget *parent): zListWidget(parent){
 }
 
+
+void ZFileList::rebuild(){
+	cout << "Foo" << endl;
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if (section){
+		cout << "Building section config" << endl;
+	}else{
+		cout << "Building sectionless config of "<<count()<< endl;
+		for(int i = 0; i < count(); i++){
+			QListWidgetItem *itm = pList->item(i);
+			ZFileListable* fitm = (ZFileListable*)itm;
+			char szBuffer[256];
+			snprintf(szBuffer, 256, "file%d", i);
+			zconf->setValue("zdl.save", szBuffer, fitm->getFile());
+		}
+	}
+	
+}
 
 void ZFileList::addButton(){
 	QStringList filters;

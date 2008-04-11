@@ -71,7 +71,7 @@ char* ZDLSection::findVariable(char* variable)
 	return (char*)rc.c_str();
 }
 
-int ZDLSection::setValue(char *variable, char *value)
+int ZDLSection::setValue(char *variable, const char *value)
 {
 	writes++;
 	list<ZDLLine*>::iterator itr;

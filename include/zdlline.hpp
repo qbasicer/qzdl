@@ -7,7 +7,7 @@ public:
 	char* getValue();
 	char* getVariable();
 	char* getLine();
-	int setValue(char *inValue);
+	int setValue(const char *inValue);
 private:
 	int reads;
 	int writes;

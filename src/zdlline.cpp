@@ -45,7 +45,7 @@ char* ZDLLine::getLine()
 	reads++;
 }
 
-int ZDLLine::setValue(char *inValue)
+int ZDLLine::setValue(const char *inValue)
 {
 	line = "";
 	line.append(variable);

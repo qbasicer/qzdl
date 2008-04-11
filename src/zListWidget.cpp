@@ -50,7 +50,7 @@ void zListWidget::insert(ZListable *item, int index){
 	}
 }
 int zListWidget::count(){
-	return list.size();
+	return pList->count();
 }
 void zListWidget::remove(int index){
 	QListWidgetItem *item = pList->takeItem(index);

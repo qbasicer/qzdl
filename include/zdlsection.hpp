@@ -9,7 +9,7 @@ public:
 	char *findVariable(char* variable);
 	int hasVariable(char* variable);
 	void deleteVariable(char* variable);
-	int setValue(char *variable, char *value);
+	int setValue(char *variable, const char *value);
 	int streamWrite(ostream &stream);
 	list<ZDLLine*> lines;
 private:

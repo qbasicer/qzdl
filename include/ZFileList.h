@@ -5,6 +5,7 @@ class ZFileList : public zListWidget{
 public:
 	ZFileList(ZQWidget *parent);
 	virtual void addButton();
+	virtual void rebuild();
 
 };
 

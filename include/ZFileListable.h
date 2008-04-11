@@ -6,9 +6,10 @@
 class ZFileListable : public ZListable{
 public:
 	ZFileListable( QListWidget * parent, int type, QString &qfile);
+	const char* getFile();
 
-
-
+	private:
+		QString fileName;
 };
 
 #endif

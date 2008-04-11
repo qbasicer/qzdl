@@ -9,12 +9,13 @@ public:
 	int hasValue(char *section, char *variable);
 	void deleteValue(char *lsection, char *variable);
 	int setValue(char *lsection, char *variable, int value);
-	int setValue(char *lsection, char *variable, char *szBuffer);
+	int setValue(char *lsection, char *variable, const char *szBuffer);
 	int numberOfSections();
 	~ZDLConf();
 	ZDLConf();
 	list<ZDLSection*> sections;
 	int writeStream(ostream &stream);
+	ZDLSection *getSection(const char* section);
 private:
 	int reads;
 	int writes;

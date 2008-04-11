@@ -10,8 +10,12 @@ ZFileListable::ZFileListable( QListWidget *parent, int type, QString &file):ZLis
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
 	setName(cname.toStdString().c_str());
-	
+	fileName = file;
 
+}
+
+const char* ZFileListable::getFile(){
+	return fileName.toStdString().c_str();
 }
 	
 

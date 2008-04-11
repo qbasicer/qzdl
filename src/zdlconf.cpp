@@ -132,6 +132,17 @@ char *ZDLConf::getValue(char *lsection, char *variable){
 	return NULL;
 }
 
+ZDLSection *ZDLConf::getSection(const char* lsection){
+	list<ZDLSection*>::iterator itr;
+	for (itr = sections.begin(); itr != sections.end();itr++){
+		ZDLSection* section = (*itr);
+		if (strcmp(section->getName(), lsection) == 0){
+			return section;
+		}
+	}
+	return NULL;
+}
+
 int ZDLConf::hasValue(char *lsection, char *variable){
 	reads++;
 	//If we actually have a variable resolver, lets use that.
@@ -158,8 +169,9 @@ int ZDLConf::setValue(char *lsection, char *variable, int value)
 	return setValue(lsection,variable,szBuffer);
 }
 
-int ZDLConf::setValue(char *lsection, char *variable, char *szBuffer)
+int ZDLConf::setValue(char *lsection, char *variable, const char *szBuffer)
 {
+	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
 	writes++;
 	list<ZDLSection*>::iterator itr;
 	
