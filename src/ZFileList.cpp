@@ -8,22 +8,42 @@ using namespace std;
 ZFileList::ZFileList(ZQWidget *parent): zListWidget(parent){
 }
 
-
-void ZFileList::rebuild(){
-	cout << "Foo" << endl;
+void ZFileList::newConfig(){
+	pList->clear();
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
-		cout << "Building section config" << endl;
-	}else{
-		cout << "Building sectionless config of "<<count()<< endl;
-		for(int i = 0; i < count(); i++){
-			QListWidgetItem *itm = pList->item(i);
-			ZFileListable* fitm = (ZFileListable*)itm;
-			char szBuffer[256];
-			snprintf(szBuffer, 256, "file%d", i);
-			zconf->setValue("zdl.save", szBuffer, fitm->getFile());
+		vector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+$", vctr);
+		cout << "I got " << vctr.size() << " matches!" << endl;
+		for(int i = 0; i < vctr.size(); i++){
+			ZFileListable *zList = new ZFileListable(pList, 1001, vctr[i]->getValue());
+			insert(zList, -1);
 		}
+	}
+}
+
+
+void ZFileList::rebuild(){
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if (section){
+		vector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+$", vctr);
+		cout << "I got " << vctr.size() << " matches!" << endl;
+		for(int i = 0; i < vctr.size(); i++){
+			section->deleteVariable(vctr[i]->getVariable());
+		}
+	}
+	
+	cout << "Building lines" << endl;
+	for(int i = 0; i < count(); i++){
+		QListWidgetItem *itm = pList->item(i);
+		ZFileListable* fitm = (ZFileListable*)itm;
+		char szBuffer[256];
+		snprintf(szBuffer, 256, "file%d", i);
+		zconf->setValue("zdl.save", szBuffer, fitm->getFile());
+	
 	}
 	
 }

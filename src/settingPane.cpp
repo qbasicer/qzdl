@@ -13,12 +13,14 @@ settingPane::settingPane(ZQWidget *parent): ZQWidget(parent){
 
 	box->addWidget(new QLabel("Source Port",this));
 
-	QComboBox *sourceList = new QComboBox(this);
+	sourceList = new QComboBox(this);
+	
+	
 	box->addWidget(sourceList);
 
 	box->addWidget(new QLabel("IWAD",this));
 
-	QListWidget *IWADList = new QListWidget(this);
+	IWADList = new QListWidget(this);
 	box->addWidget(IWADList);
 
 	QHBoxLayout *box2 = new QHBoxLayout();
@@ -54,6 +56,57 @@ void settingPane::rebuild(){
 	}else{
 		zconf->deleteValue("zdl.save", "skill");
 	}
+	
+	ZDLSection *section = zconf->getSection("zdl.ports");
+	if (section){
+		int count = 0;
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^p[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			string value = fileVctr[i]->getVariable();
+			
+			string number = "^p";
+			number.append(value.substr(1, value.length()-2));
+			number.append("n$");
+			
+			vector <ZDLLine*> nameVctr;
+			section->getRegex(number.c_str(), nameVctr);
+			if (nameVctr.size() == 1){
+				if (sourceList->currentIndex() == count){
+					zconf->setValue("zdl.save", "port", value.substr(1, value.length()-2).c_str());
+					break;
+				}
+				count++;
+			}
+		}
+	}
+	
+	section = zconf->getSection("zdl.iwads");
+	if (section){
+		int count = 0;
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^i[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			string value = fileVctr[i]->getVariable();
+			
+			string number = "^i";
+			number.append(value.substr(1, value.length()-2));
+			number.append("n$");
+			
+			vector <ZDLLine*> nameVctr;
+			section->getRegex(number.c_str(), nameVctr);
+			if (nameVctr.size() == 1){
+				if (sourceList->currentIndex() == count){
+					zconf->setValue("zdl.save", "iwad", value.substr(1, value.length()-2).c_str());
+					break;
+				}
+				count++;
+			}
+		}
+	}
+
 }
 
 void settingPane::newConfig(){
@@ -71,5 +124,79 @@ void settingPane::newConfig(){
 			diffList->setCurrentIndex(0);
 		}
 	}
+	
+	sourceList->clear();
+	
+	ZDLSection *section = zconf->getSection("zdl.ports");
+	if (section){
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^p[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			string value = fileVctr[i]->getVariable();
+			
+			string number = "^p";
+			number.append(value.substr(1, value.length()-2));
+			number.append("n$");
+			
+			vector <ZDLLine*> nameVctr;
+			section->getRegex(number.c_str(), nameVctr);
+			if (nameVctr.size() == 1){
+				sourceList->addItem(nameVctr[0]->getValue());
+			}
+		}
+	}
+	
+	if(zconf->hasValue("zdl.save", "port")){
+		int index = 0;
+		string rc = zconf->getValue("zdl.save", "port");
+		if (rc.length() > 0){
+			index = atoi((char*)rc.c_str());
+		}
+		if (index >= 0 && index < sourceList->count()){
+			sourceList->setCurrentIndex(index);
+		}else{
+			zconf->setValue("zdl.save", "port", 0);
+			sourceList->setCurrentIndex(0);
+		}
+	}else{
+		cout << "Don't have port" << endl;
+	}
+	
+	IWADList->clear();
+	section = zconf->getSection("zdl.iwads");
+	if (section){
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^i[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			string value = fileVctr[i]->getVariable();
+			
+			string number = "^i";
+			number.append(value.substr(1, value.length()-2));
+			number.append("n$");
+			
+			vector <ZDLLine*> nameVctr;
+			section->getRegex(number.c_str(), nameVctr);
+			if (nameVctr.size() == 1){
+				IWADList->addItem(nameVctr[0]->getValue());
+			}
+		}
+	}
+	
+	if(zconf->hasValue("zdl.save", "iwad")){
+		int index = 0;
+		string rc = zconf->getValue("zdl.save", "iwad");
+		if (rc.length() > 0){
+			index = atoi((char*)rc.c_str());
+		}
+		if (index >= 0 && index < sourceList->count()){
+			IWADList->setCurrentRow(index);
+		}else{
+			zconf->setValue("zdl.save", "iwad", 0);
+			IWADList->setCurrentRow(0);
+		}
+	}
+	
 
 }

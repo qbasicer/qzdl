@@ -12,6 +12,20 @@ zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	QHBoxLayout *buttonRow = new QHBoxLayout();
 	
 	btnAdd = new QPushButton("Add", this);
+	
+	QAction* delact = new QAction(this);
+	delact->setShortcut(Qt::Key_Delete);
+	delact->setShortcutContext(Qt::WidgetShortcut);
+	connect(delact, SIGNAL(triggered()), this, SLOT(removeButton()));
+	
+	QAction* insact = new QAction(this);
+	insact->setShortcut(Qt::Key_Insert);
+	insact->setShortcutContext(Qt::WidgetShortcut);
+	connect(insact, SIGNAL(triggered()), this, SLOT(addButton()));
+	
+	pList->addAction(delact);
+	pList->addAction(insact);
+	
 	btnAdd->setMinimumWidth(30);
 	
 	btnRem = new QPushButton("Rem", this);

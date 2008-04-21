@@ -3,6 +3,9 @@
 #include <string>
 #include <list>
 
+
+
+
 using namespace std;
 #include <zdlcommon.h>
 
@@ -33,7 +36,7 @@ int ZDLConf::readINI(char* file)
 	sections.push_back(current);
 	ifstream stream(file);
 	if (!stream.is_open()){
-		cerr << "Unable to open file " << file << std::endl;
+		cerr << "Unable to open file \"" << file << "\"" << std::endl;
 		return 1;
 	}
 	while (!stream.eof()){
@@ -61,7 +64,7 @@ int ZDLConf::writeINI(char *file)
 	writes++;
 	ofstream stream(file);
 	if (!stream.is_open()){
-		cerr << "Unable to open file " << file << endl;
+		cerr << "Unable to open file \"" << file << "\"" << endl;
 		return 1;
 	}
 	writeStream(stream);
@@ -162,31 +165,33 @@ int ZDLConf::hasValue(char *lsection, char *variable){
 	return false;
 }
 
-int ZDLConf::setValue(char *lsection, char *variable, int value)
+int ZDLConf::setValue(const char *lsection, const char *variable, int value)
 {
 	char szBuffer[256];
 	snprintf(szBuffer, 256, "%d", value);
 	return setValue(lsection,variable,szBuffer);
 }
 
-int ZDLConf::setValue(char *lsection, char *variable, const char *szBuffer)
+int ZDLConf::setValue(const char *lsection, const char *variable, const char *szBuffer)
 {
-	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
+	string value = szBuffer;
+	
+	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
 	writes++;
 	list<ZDLSection*>::iterator itr;
 	
 	for (itr = sections.begin(); itr != sections.end();itr++){
 		ZDLSection* section = (*itr);
 		if (strcmp(section->getName(), lsection) == 0){
-			//Convert value to string now
 			section->setValue(variable, szBuffer);
 			return 0;
 		}
 	}
 	//In this case, we didn't find the section
 	ZDLSection *section = new ZDLSection(lsection);
-	section->setValue(variable, szBuffer);
 	sections.push_back(section);
+	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
+	section->setValue(variable, value.c_str());
 	return 0;
 }
 

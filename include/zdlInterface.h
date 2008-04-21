@@ -13,7 +13,9 @@ public:
 	zdlInterface( QWidget *parent=0);
 	void startRead();
 	void writeConfig();
+	virtual void newConfig();
 private:
+	QVBoxLayout *box;
 	multiPane *mpane;
 };
 #endif

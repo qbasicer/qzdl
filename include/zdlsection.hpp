@@ -1,21 +1,22 @@
 class ZDLSection{
 	friend class ZDLVariables;
 public:
-	ZDLSection(char *name);
+	ZDLSection(const char *name);
 	~ZDLSection();
-	int addLine(char *linedata);
+	int addLine(const char *linedata);
 	char *getName();
 	void setSpecial(int inFlags);
-	char *findVariable(char* variable);
-	int hasVariable(char* variable);
-	void deleteVariable(char* variable);
-	int setValue(char *variable, const char *value);
+	char *findVariable(const char* variable);
+	int hasVariable(const char* variable);
+	void deleteVariable(const char* variable);
+	int setValue(const char *variable, const char *value);
 	int streamWrite(ostream &stream);
+	int getRegex(const char* regex, vector<ZDLLine*> &vctr);
 	list<ZDLLine*> lines;
 private:
 	int reads;
 	int writes;
-	ZDLLine *findLine(char *inVar);
+	ZDLLine *findLine(const char *inVar);
 	int flags;
 	string sectionName;
 };

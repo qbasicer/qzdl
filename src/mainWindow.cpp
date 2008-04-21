@@ -28,6 +28,36 @@ mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	widget->addTab(settings, "Settings");
 	widget->addTab(new zdlInterface(this), "Notifications");
 	
+	QAction *qact = new QAction(widget);
+	qact->setShortcut(Qt::Key_Return);
+	widget->addAction(qact);
+	connect(qact, SIGNAL(triggered()), this, SLOT(launch()));
+	
+	QAction *qact2 = new QAction(widget);
+	qact2->setShortcut(Qt::Key_Escape);
+	widget->addAction(qact2);
+	connect(qact2, SIGNAL(triggered()), this, SLOT(quit()));
+	
+	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
+}
+
+void mainWindow::tabChange(int newTab){
+	if(newTab == 0){
+		settings->notifyFromParent(NULL);
+		intr->readFromParent(NULL);
+	}else if (newTab == 1){
+		intr->notifyFromParent(NULL);
+		settings->readFromParent(NULL);
+	}
+}
+
+void mainWindow::quit(){
+	close();
+}
+
+void mainWindow::launch(){
+	writeConfig();
+	close();
 }
 
 

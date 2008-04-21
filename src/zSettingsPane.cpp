@@ -8,19 +8,28 @@
 zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	
+	QVBoxLayout *iwadl = new QVBoxLayout();
+	QVBoxLayout *spl = new QVBoxLayout();
+	
 	alwaysArgs = new QLineEdit(this);
 	
 	QHBoxLayout *lrpane = new QHBoxLayout();
 	
 	//IWAD
 	QVBoxLayout *lpane = new QVBoxLayout();
-	iwadList = new zListWidget(this);
-	lpane->addWidget(iwadList);
+	iwadList = new ZIWadList(this);
+	iwadl->addWidget(new QLabel("IWADs:", this));
+	iwadl->addWidget(iwadList);
+	
+	lpane->addLayout(iwadl);
 	
 	//Source Port
 	QVBoxLayout *rpane = new QVBoxLayout();
-	sourceList = new zListWidget(this);
-	rpane->addWidget(sourceList);
+	sourceList = new ZSPList(this);
+	spl->addWidget(new QLabel("Source Ports/Engines:", this));
+	spl->addWidget(sourceList);
+	
+	rpane->addLayout(spl);
 	
 	//Add the left and right panes
 	lrpane->addLayout(lpane);

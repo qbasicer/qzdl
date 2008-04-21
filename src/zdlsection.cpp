@@ -2,10 +2,15 @@
 #include <fstream>
 #include <string>
 #include <list>
+
+#ifdef QT_CORE_LIB
+#include <QRegExp>
+#endif
+
 using namespace std;
 #include <zdlcommon.h>
 
-ZDLSection::ZDLSection(char *name)
+ZDLSection::ZDLSection(const char *name)
 {
 	cout << "New section: \"" << name << "\"" << endl;
 	reads = 0;
@@ -29,7 +34,7 @@ void ZDLSection::setSpecial(int inFlags)
 	flags = inFlags;
 }
 
-int ZDLSection::hasVariable(char* variable)
+int ZDLSection::hasVariable(const char* variable)
 {
 	reads++;
 	list<ZDLLine*>::iterator itr;
@@ -42,7 +47,7 @@ int ZDLSection::hasVariable(char* variable)
 	return false;
 }
 
-void ZDLSection::deleteVariable(char* variable)
+void ZDLSection::deleteVariable(const char* variable)
 {
 	reads++;
 	list<ZDLLine*>::iterator itr;
@@ -56,7 +61,7 @@ void ZDLSection::deleteVariable(char* variable)
 	}
 }
 
-char* ZDLSection::findVariable(char* variable)
+char* ZDLSection::findVariable(const char* variable)
 {
 	reads++;
 	list<ZDLLine*>::iterator itr;
@@ -71,7 +76,23 @@ char* ZDLSection::findVariable(char* variable)
 	return (char*)rc.c_str();
 }
 
-int ZDLSection::setValue(char *variable, const char *value)
+int ZDLSection::getRegex(const char* regex, vector<ZDLLine*> &vctr){
+#ifdef QT_CORE_LIB
+	QRegExp rx(regex);
+	list<ZDLLine*>::iterator itr;
+	for (itr=lines.begin(); itr!=lines.end();itr++){
+		ZDLLine* line = (*itr);
+		if (rx.exactMatch(line->getVariable())){
+			vctr.push_back(line);
+		}
+	}
+	return vctr.size();
+	
+#endif
+	return 0;
+}
+
+int ZDLSection::setValue(const char *variable, const char *value)
 {
 	writes++;
 	list<ZDLLine*>::iterator itr;
@@ -86,6 +107,7 @@ int ZDLSection::setValue(char *variable, const char *value)
 	string buffer = variable;
 	buffer.append("=");
 	buffer.append(value);
+	cout << "Buffer: " << buffer << endl;
 	ZDLLine *line = new ZDLLine((char*)buffer.c_str());
 	lines.push_back(line);
 	return 0;
@@ -93,15 +115,19 @@ int ZDLSection::setValue(char *variable, const char *value)
 
 int ZDLSection::streamWrite(ostream &stream)
 {
-	writes++;
-	//Global's don't have a section name
-	if (sectionName.length() > 0){
-		stream << "[" << sectionName << "]" << endl;
-	}
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		stream << line->getLine() << endl;
+	
+	//Write only if we have stuff to write
+	if (lines.size() > 0){
+		writes++;
+		//Global's don't have a section name
+		if (sectionName.length() > 0){
+			stream << "[" << sectionName << "]" << endl;
+		}
+		list<ZDLLine*>::iterator itr;
+		for (itr=lines.begin(); itr!=lines.end();itr++){
+			ZDLLine* line = (*itr);
+			stream << line->getLine() << endl;
+		}
 	}
 	return 0;
 }
@@ -112,7 +138,7 @@ char* ZDLSection::getName()
 	return (char*)sectionName.c_str();
 }
 
-ZDLLine *ZDLSection::findLine(char *inVar)
+ZDLLine *ZDLSection::findLine(const char *inVar)
 {
 	list<ZDLLine*>::iterator itr;
 	for (itr=lines.begin(); itr!=lines.end();itr++){
@@ -125,18 +151,21 @@ ZDLLine *ZDLSection::findLine(char *inVar)
 
 }
 
-int ZDLSection::addLine(char *linedata)
+int ZDLSection::addLine(const char *linedata)
 {
 	writes++;
 	ZDLLine *newl = new ZDLLine(linedata);
 	ZDLLine *ptr = findLine(newl->getVariable());
 	if (ptr == NULL){
 		lines.push_back(newl);
+		return 0;
 	}else{
 		cerr << "ERROR: Duplicate variable " << sectionName << "#" << newl->getVariable() << endl;
 		ptr->setValue(newl->getValue());
 		delete newl;
+		return 1;
 	}
+	
 }
 
 

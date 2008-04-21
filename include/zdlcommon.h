@@ -1,5 +1,6 @@
 #ifndef _ZDLCOMMON_H_
 #define _ZDLCOMMON_H_
+#include <vector>
 #include "zdlcommon.h"
 #include "zdlline.hpp"
 #include "zdlsection.hpp"

@@ -7,7 +7,7 @@ using namespace std;
 
 extern char* chomp(string in);
 
-ZDLLine::ZDLLine(char *inLine)
+ZDLLine::ZDLLine(const char *inLine)
 {
 	reads = 0;
 	writes = 1;
@@ -27,19 +27,19 @@ ZDLLine::~ZDLLine()
 	cout << "Deleting line" << endl;
 }
 
-char* ZDLLine::getValue()
+const char* ZDLLine::getValue()
 {
 	return (char*)value.c_str();
 	reads++;
 }
 
-char* ZDLLine::getVariable()
+const char* ZDLLine::getVariable()
 {
 	return (char*)variable.c_str();
 	reads++;
 }
 
-char* ZDLLine::getLine()
+const char* ZDLLine::getLine()
 {
 	return (char*)line.c_str();
 	reads++;
@@ -61,12 +61,6 @@ void ZDLLine::parse()
 	if (loc != string::npos){
 		variable = chomp(line.substr(0, loc));
 		value = chomp(line.substr(loc+1, line.length() - loc - 1));
-		if (variable == "slashconvert"){
-			if (value == "true"){
-				slashConvert = true;
-				cout << "[ INFO ] Slash converting is currently disabled" << endl;
-			}
-		}
 		//This is important for cross platform
 		//Currently disabled
 		if (slashConvert == true){

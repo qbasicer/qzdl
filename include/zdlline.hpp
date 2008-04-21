@@ -1,12 +1,12 @@
 class ZDLLine{
 	friend class ZDLVariables;
 public:
-	ZDLLine(char *inLine);
+	ZDLLine(const char *inLine);
 	~ZDLLine();
 	int getType();
-	char* getValue();
-	char* getVariable();
-	char* getLine();
+	const char* getValue();
+	const char* getVariable();
+	const char* getLine();
 	int setValue(const char *inValue);
 private:
 	int reads;

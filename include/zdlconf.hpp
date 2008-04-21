@@ -8,8 +8,8 @@ public:
 	char* getValue(char *section, char *variable);
 	int hasValue(char *section, char *variable);
 	void deleteValue(char *lsection, char *variable);
-	int setValue(char *lsection, char *variable, int value);
-	int setValue(char *lsection, char *variable, const char *szBuffer);
+	int setValue(const char *lsection, const char *variable, int value);
+	int setValue(const char *lsection, const char *variable, const char *szBuffer);
 	int numberOfSections();
 	~ZDLConf();
 	ZDLConf();

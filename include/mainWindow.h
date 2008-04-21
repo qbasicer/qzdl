@@ -14,6 +14,10 @@ public:
 	mainWindow( QWidget *parent=0);
 	void startRead();
 	void writeConfig();
+public slots:
+	void launch();
+	void quit();
+	void tabChange(int index);
 
 private:
 	zdlInterface* intr;

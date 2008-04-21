@@ -8,7 +8,9 @@ public:
 	settingPane( ZQWidget *parent=0);
 	virtual void rebuild();
 	virtual void newConfig();
-private:
+protected:
 	QComboBox *diffList;
+	QComboBox *sourceList;
+	QListWidget *IWADList;
 	
 };

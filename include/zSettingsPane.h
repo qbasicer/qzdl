@@ -1,7 +1,8 @@
 #include <QtGui>
 #include <QObject>
 #include "ZQWidget.h"
-#include "zListWidget.h"
+#include "ZSPList.h"
+#include "ZIWadList.h"
 
 class zSettingsPane: public ZQWidget{
 Q_OBJECT
@@ -9,6 +10,6 @@ public:
 	zSettingsPane(QWidget *parent);
 private:
 	QLineEdit *alwaysArgs;
-	zListWidget *iwadList;
-	zListWidget *sourceList;
+	ZIWadList *iwadList;
+	ZSPList *sourceList;
 };

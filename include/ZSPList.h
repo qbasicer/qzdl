@@ -1,9 +1,9 @@
-#ifndef _ZFILELIST_H_
-#define _ZFILELIST_H_
+#ifndef _ZSPLIST_H_
+#define _ZSPLIST_H_
 #include "zListWidget.h"
-class ZFileList : public zListWidget{
+class ZSPList : public zListWidget{
 public:
-	ZFileList(ZQWidget *parent);
+	ZSPList(ZQWidget *parent);
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();

@@ -8,7 +8,7 @@
 
 QApplication *qapp;
 QString versionString;
-
+mainWindow *mw;
 
 int main( int argc, char **argv ){
     QApplication a( argc, argv );
@@ -22,14 +22,14 @@ int main( int argc, char **argv ){
 	configurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
 	ZDLConf* tconf = new ZDLConf();
-	if (argc == 1){
+	if (argc == 2){
 		tconf->readINI(argv[1]);
 	}else{
 		tconf->readINI("zdl.ini");
 	}
 	configurationManager::setActiveConfiguration(tconf);
 	
-	mainWindow *mw = new mainWindow();
+	mw = new mainWindow();
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
