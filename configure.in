@@ -4,12 +4,21 @@ AC_PROG_CC
 AC_PROG_CXX
 
 AC_MSG_CHECKING(qmake project building)
-bnv_try_1="qmake -project src/qzdl.cpp"
+bnv_try_1="qmake -project -o qzdl.pro src/qzdl.cpp"
 AC_TRY_EVAL(bnv_try_1)
 if test "$ac_status" != 0; then
    AC_MSG_ERROR(qmake not available)
 fi
 AC_MSG_RESULT(yes)
+
+AC_MSG_CHECKING(setting project options)
+bnv_try_15="echo \"QT += network\" >> qzdl.pro"
+AC_TRY_EVAL(bnv_try_15)
+if test "$ac_status" != 0; then
+   AC_MSG_ERROR(error appending to file)
+fi
+AC_MSG_RESULT(yes)
+
 
 AC_MSG_CHECKING(Using qmake to build Makefile)
 bnv_try_2="qmake"
