@@ -26,7 +26,7 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	btnEpr->setMinimumWidth(20);
 	btnLaunch->setMinimumWidth(minBtnWidth);
 
-	connect(btnLaunch, SIGNAL( clicked() ), mw, SLOT(launch()));
+	connect(btnLaunch, SIGNAL( clicked() ), this, SLOT(launch()));
 
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -37,6 +37,10 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	box->addWidget(btnEpr);
 	box->addWidget(btnLaunch);
 	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
+}
+
+void buttonPane::launch(){
+	mw->launch();
 }
 
 void buttonPane::newConfig(){

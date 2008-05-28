@@ -21,6 +21,8 @@ int main( int argc, char **argv ){
 	configurationManager::init();
 	configurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
+	ZUpdater *zup = new ZUpdater();
+	
 	ZDLConf* tconf = new ZDLConf();
 	if (argc == 2){
 		tconf->readINI(argv[1]);
@@ -30,9 +32,13 @@ int main( int argc, char **argv ){
 	configurationManager::setActiveConfiguration(tconf);
 	
 	mw = new mainWindow();
+	mw->setUpdater(zup);
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
+	
+	zup->fetch();
+	
     int ret = a.exec();
 	if (ret != 0){
 		return ret;

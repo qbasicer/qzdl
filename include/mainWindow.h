@@ -7,20 +7,25 @@
 #include "ZQWidget.h"
 #include "zdlInterface.h"
 #include "zSettingsPane.h"
+#include "ZUpdater.h"
 
 class mainWindow: public QMainWindow{
     Q_OBJECT
 public:
 	mainWindow( QWidget *parent=0);
+	~mainWindow();
 	void startRead();
 	void writeConfig();
+	void setUpdater(ZUpdater *zup);
 public slots:
 	void launch();
 	void quit();
 	void tabChange(int index);
+	void manageUpdate();
 
-private:
+protected:
 	zdlInterface* intr;
 	zSettingsPane* settings;
+	ZUpdater* zup;
 };
 #endif

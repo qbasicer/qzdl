@@ -8,8 +8,13 @@ class zSettingsPane: public ZQWidget{
 Q_OBJECT
 public: 
 	zSettingsPane(QWidget *parent);
+	virtual void rebuild();
+	virtual void newConfig();
+
 private:
 	QLineEdit *alwaysArgs;
 	ZIWadList *iwadList;
 	ZSPList *sourceList;
+	QCheckBox *updater;
+	
 };

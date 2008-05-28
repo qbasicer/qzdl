@@ -6,14 +6,28 @@
 #include "mainWindow.h"
 #include "configurationManager.h"
 
-
-
 extern QApplication *qapp;
 extern QString versionString;
 
+mainWindow::~mainWindow(){
+	delete zup;
+}
+
+void mainWindow::manageUpdate(){
+	if (zup->hasUpdate()){
+		QMessageBox::information(this, "qZDL Updater", "There is an update.\n\nPlease visit zdlsharp.vectec.net");
+	}
+}
+
+void mainWindow::setUpdater(ZUpdater *zup){
+	this->zup = zup;
+	connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
+}
 
 mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	QString windowTitle = "ZDLSharp ";
+	
+	
 	windowTitle += versionString;
 	setWindowTitle(windowTitle);
 	setContentsMargins(2,2,2,2);

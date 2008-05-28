@@ -10,6 +10,7 @@ public:
 private slots:
 	void sendSignals();
 	void mclick();
+	void launch();
 private:
 	QPushButton *btnEpr;
 };
