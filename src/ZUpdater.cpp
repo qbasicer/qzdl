@@ -107,17 +107,17 @@ void ZUpdater::fetch(){
 #ifdef Q_WS_MAC 
 		if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
 			ua += "MacOS9";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_0){
 			ua += "MacOSX 10.0 Cheetah";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_1){
 			ua += "MacOSX 10.1 Puma";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_2){
 			ua += "MacOSX 10.2 Jaguar";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_3){
 			ua += "MacOSX 10.3 Panther";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_4){
 			ua += "MacOSX 10.4 Tiger";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_5){
 			ua += "MacOSX 10.5 Leopard";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_Unknown){
 			ua += "Mac Unknown";
