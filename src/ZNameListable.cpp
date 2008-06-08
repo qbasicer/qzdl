@@ -3,6 +3,7 @@
 #include "ZNameListable.h"
 #include <string>
 #include <QFileInfo>
+#include <iostream>
 
 using namespace std;
 

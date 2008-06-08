@@ -17,6 +17,7 @@ public:
 	void startRead();
 	void writeConfig();
 	void setUpdater(ZUpdater *zup);
+	
 public slots:
 	void launch();
 	void quit();
@@ -27,5 +28,7 @@ protected:
 	zdlInterface* intr;
 	zSettingsPane* settings;
 	ZUpdater* zup;
+	QString getExecutable();
+	QStringList getArguments();
 };
 #endif

@@ -60,7 +60,6 @@ void ZIWadList::rebuild(){
 		snprintf(szBuffer, 256, "i%df", i);
 		zconf->setValue("zdl.iwads", szBuffer, fitm->getFile());
 		
-	
 	}
 	
 }
@@ -77,7 +76,11 @@ void ZIWadList::addButton(){
 	diag.setWindowTitle("Add IWAD");
 	diag.setFilter(filters);
 	if (diag.exec()){
-		ZNameListable *zList = new ZNameListable(pList, 1001, diag.getFile(), diag.getName());
+		QString fileName = diag.getFile();
+		QString name = diag.getName();
+		ZNameListable *zList = new ZNameListable(pList, 1001, fileName, name);
+		QMessageBox::information(this, diag.getName(), zList->getName());
+		QMessageBox::information(this, diag.getFile(), zList->getFile());
 		insert(zList, -1);
 	}
 

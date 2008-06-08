@@ -71,7 +71,98 @@ void mainWindow::quit(){
 
 void mainWindow::launch(){
 	writeConfig();
+	
+	QString exec = getExecutable();
+	if (exec.length() < 1){
+		QMessageBox::critical(this, "qZDL", "Please select a source port");
+		return;
+	}
+	QStringList args = getArguments();
+	if (args.join("").length() < 1){
+		return;
+	}
+	
+	QString msg = exec;
+	exec += "\n";
+	exec += args.join(" ");
+	QMessageBox::information(this, "qZDL", exec);
+	
+	//QProcess::execute(
 	close();
+}
+
+QStringList mainWindow::getArguments(){
+	QStringList ourString;
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLSection *section = NULL;
+	
+	int iwadIndex = 0;
+	
+	if(zconf->hasValue("zdl.save", "iwad")){
+		int index = 0;
+		string rc = zconf->getValue("zdl.save", "iwad");
+		if (rc.length() > 0){
+			index = atoi((char*)rc.c_str());
+		}
+		if (index >= 0){
+			iwadIndex = index;
+		}else{
+			QMessageBox::critical(this, "qZDL", "Please select an IWAD");
+			return ourString;
+		}
+	}else{
+		QMessageBox::critical(this, "qZDL", "Please select an IWAD");
+		return ourString;
+	}
+	
+	section = zconf->getSection("zdl.iwads");
+	if (section){
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^i[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			if (i == iwadIndex){
+				QString append = "-iwad ";
+				append += fileVctr[i]->getValue();
+				ourString << append;
+			}
+		}
+	}
+}
+
+QString mainWindow::getExecutable(){
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	
+	int portIndex = 0;
+	if(zconf->hasValue("zdl.save", "port")){
+		int index = 0;
+		string rc = zconf->getValue("zdl.save", "port");
+		if (rc.length() > 0){
+			index = atoi((char*)rc.c_str());
+		}
+		if (index >= 0){
+			portIndex = index;
+		}else{
+			zconf->setValue("zdl.save", "port", 0);
+			portIndex = 0;
+		}
+	}else{
+		return "";
+	}
+	
+	ZDLSection *section = zconf->getSection("zdl.ports");
+	if (section){
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^p[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			if (i == portIndex){
+				return fileVctr[i]->getValue();
+			}
+			
+		}
+	}
+	return "";
 }
 
 

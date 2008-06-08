@@ -75,7 +75,9 @@ void ZSPList::addButton(){
 	diag.setWindowTitle("Add Source Port/Engine");
 	diag.setFilter(filters);
 	if (diag.exec()){
-		ZNameListable *zList = new ZNameListable(pList, 1001, diag.getFile(), diag.getName());
+		QString fileName = diag.getFile();
+		QString name = diag.getName();
+		ZNameListable *zList = new ZNameListable(pList, 1001, fileName, name);
 		insert(zList, -1);
 	}
 	
