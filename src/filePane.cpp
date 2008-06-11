@@ -7,7 +7,7 @@
 #include "filePane.h"
 
 
-filePane::filePane(ZQWidget *parent): ZQWidget(parent){
+filePane::filePane(QWidget *parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->setSpacing(2);
 

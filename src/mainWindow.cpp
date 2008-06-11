@@ -40,7 +40,8 @@ mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	setCentralWidget(widget);
 	widget->addTab(intr, "Main");
 	widget->addTab(settings, "Settings");
-	widget->addTab(new zdlInterface(this), "Notifications");
+	//I haven't started on this yet :)
+	//widget->addTab(new zdlInterface(this), "Notifications");
 	
 	QAction *qact = new QAction(widget);
 	qact->setShortcut(Qt::Key_Return);

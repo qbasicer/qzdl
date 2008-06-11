@@ -6,13 +6,23 @@
 
 
 ZQWidget::ZQWidget(ZQWidget *parent){
+	setZParent(parent);
+	std::cout << "Using ZQWidget as parent" << std::endl;
+	setContentsMargins(0,0,0,0);
+}
+
+void ZQWidget::setZParent(ZQWidget *parent){
 	zparent = parent;
 	connect(parent, SIGNAL( buildChildren(ZQWidget*) ), this, SLOT(notifyFromParent(ZQWidget*)));
 	connect(this, SIGNAL(buildParent(ZQWidget*)), parent, SLOT(notifyFromChild(ZQWidget*)));
 	connect(parent, SIGNAL( readChildren(ZQWidget*) ), this, SLOT(readFromParent(ZQWidget*)));
 	connect(this, SIGNAL(readParent(ZQWidget*)), parent, SLOT(readFromChild(ZQWidget*)));
-	std::cout << "Using ZQWidget as parent" << std::endl;
+}
+
+ZQWidget::ZQWidget(){
 	setContentsMargins(0,0,0,0);
+	zparent = NULL;
+	std::cout << "Using QWidget as parent" << std::endl;
 }
 
 ZQWidget::ZQWidget(QWidget *parent){

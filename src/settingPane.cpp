@@ -5,7 +5,7 @@
 #include "configurationManager.h"
 #include "settingPane.h"
 
-settingPane::settingPane(ZQWidget *parent): ZQWidget(parent){
+settingPane::settingPane(QWidget *parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);

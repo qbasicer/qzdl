@@ -5,7 +5,7 @@
 class settingPane: public ZQWidget{
 Q_OBJECT
 public: 
-	settingPane( ZQWidget *parent=0);
+	settingPane( QWidget *parent=0);
 	virtual void rebuild();
 	virtual void newConfig();
 protected:

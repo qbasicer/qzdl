@@ -6,8 +6,9 @@
 class filePane: public ZQWidget{
 Q_OBJECT
 public: 
-	filePane( ZQWidget *parent=0);
+	filePane( QWidget *parent=0);
 	void rebuild();
 private:
+	
 	ZFileList *fList;	
 };

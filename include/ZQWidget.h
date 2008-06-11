@@ -10,6 +10,8 @@ Q_OBJECT
 public: 
 	ZQWidget(ZQWidget *parent);
 	ZQWidget(QWidget *parent);
+	ZQWidget();
+	virtual void setZParent(ZQWidget *parent);
 	virtual void rebuild();
 	virtual void newConfig();
 signals:
