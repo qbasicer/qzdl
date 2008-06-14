@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <list>
-
+#include <cstring>
 
 
 
@@ -23,7 +23,7 @@ extern char* chomp(string in);
 
 
 
-int ZDLConf::readINI(char* file)
+int ZDLConf::readINI(const char* file)
 {
 	reads++;
 	string line;
@@ -59,7 +59,7 @@ int ZDLConf::numberOfSections()
 
 }
 
-int ZDLConf::writeINI(char *file)
+int ZDLConf::writeINI(const char *file)
 {
 	writes++;
 	ofstream stream(file);
@@ -102,7 +102,7 @@ ZDLConf::~ZDLConf()
 
 }
 
-void ZDLConf::deleteValue(char *lsection, char *variable){
+void ZDLConf::deleteValue(const char *lsection, const char *variable){
 	reads++;
 	list<ZDLSection*>::iterator itr;
 	for (itr = sections.begin(); itr != sections.end();itr++){
@@ -114,7 +114,7 @@ void ZDLConf::deleteValue(char *lsection, char *variable){
 	}
 }
 
-char *ZDLConf::getValue(char *lsection, char *variable){
+char *ZDLConf::getValue(const char *lsection, const char *variable){
 	reads++;
 	//If we actually have a variable resolver, lets use that.
 	if (vars){
@@ -146,7 +146,7 @@ ZDLSection *ZDLConf::getSection(const char* lsection){
 	return NULL;
 }
 
-int ZDLConf::hasValue(char *lsection, char *variable){
+int ZDLConf::hasValue(const char *lsection, const char *variable){
 	reads++;
 	//If we actually have a variable resolver, lets use that.
 	if (vars){
@@ -193,18 +193,6 @@ int ZDLConf::setValue(const char *lsection, const char *variable, const char *sz
 	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
 	section->setValue(variable, value.c_str());
 	return 0;
-}
-
-ZDLSection *ZDLConf::getSection(char *lsection)
-{
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
-			return section;
-		}
-	}
-	return NULL;
 }
 
 void ZDLConf::parse(string in, ZDLSection* current)

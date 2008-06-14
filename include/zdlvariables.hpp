@@ -9,21 +9,21 @@ public:
 	ZDLVariables (ZDLConf* parent, int flags);
 	~ZDLVariables();
 	/* Call this to get the variable.  Automatic resolving will be used. */
-	char *getVariable(char *lsection, char *variable, int* status);
-	int hasVariable(char *lsection, char *variable, int* status);
+	char *getVariable(const char *lsection, const char *variable, int* status);
+	int hasVariable(const char *lsection, const char *variable, int* status);
 	/* Set usage flags */
 	void setFlags(int flags);
 	/* Set the value of a variable.
 	 * Set the temp flag to not write it out at close
 	 */
-	int setVariable(char *section, char *variable, char *value, int temp);
+	int setVariable(const char *section, const char *variable, const char *value, int temp);
 private:
-	int containsUnresolved(char *inBuffer);
-	char *resolveVariable(char *inBuffer);
-	int getVariableStart(char *inBuffer);
-	int getVariableEnd(char *inBuffer);
-	char *demangle(char *inBuffer);
-	int demangleHelper(char *inBuffer);
+	int containsUnresolved(const char *inBuffer);
+	char *resolveVariable(const char *inBuffer);
+	int getVariableStart(const char *inBuffer);
+	int getVariableEnd(const char *inBuffer);
+	char *demangle(const char *inBuffer);
+	int demangleHelper(const char *inBuffer);
 	int _flags;
 	int depth;
 	ZDLConf *_parent;

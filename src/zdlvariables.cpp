@@ -1,6 +1,8 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <cstring>
+#include <cstdlib>
 using namespace std;
 #include <zdlcommon.h>
 
@@ -47,7 +49,7 @@ ZDLVariables::~ZDLVariables ()
 {
 }
 
-int ZDLVariables::hasVariable(char *lsection, char *variable, int* status)
+int ZDLVariables::hasVariable(const char *lsection, const char *variable, int* status)
 {
 	int cdepth = depth;
 	//Handle environment requests differently
@@ -74,7 +76,7 @@ int ZDLVariables::hasVariable(char *lsection, char *variable, int* status)
 	return false;
 }
 
-char *ZDLVariables::getVariable(char *lsection, char *variable, int* status)
+char *ZDLVariables::getVariable(const char *lsection, const char *variable, int* status)
 {
 	int cdepth = depth;
 	/* This mechanism prevents a stack overflow by recursing down too far */
@@ -120,7 +122,7 @@ char *ZDLVariables::getVariable(char *lsection, char *variable, int* status)
 	if (cdepth == 0){depth = 0;}else{depth--;}
 	return (char*)blank.c_str();
 }
-int ZDLVariables::getVariableStart(char *inBuffer)
+int ZDLVariables::getVariableStart(const char *inBuffer)
 {
 	string buffer(inBuffer);
 	string::size_type loc = buffer.find("${", 0);
@@ -132,7 +134,7 @@ int ZDLVariables::getVariableStart(char *inBuffer)
 
 }
 
-int ZDLVariables::demangleHelper(char *inBuffer)
+int ZDLVariables::demangleHelper(const char *inBuffer)
 {
 	string buffer(inBuffer);
 	string::size_type loc = buffer.find("$\\{", 0);
@@ -142,7 +144,7 @@ int ZDLVariables::demangleHelper(char *inBuffer)
 	return -1;
 }
 
-char *ZDLVariables::demangle(char *inBuffer)
+char *ZDLVariables::demangle(const char *inBuffer)
 {
 	string buffer(inBuffer);
 	int pos = demangleHelper((char*)buffer.c_str());
@@ -153,7 +155,7 @@ char *ZDLVariables::demangle(char *inBuffer)
 	return (char*)buffer.c_str();
 }
 
-int ZDLVariables::getVariableEnd(char *inBuffer)
+int ZDLVariables::getVariableEnd(const char *inBuffer)
 {
 	string buffer(inBuffer);
 	for (int i = getVariableStart(inBuffer); i < buffer.length(); i++){
@@ -165,7 +167,7 @@ int ZDLVariables::getVariableEnd(char *inBuffer)
 	return 0;
 }
 
-char *ZDLVariables::resolveVariable(char *inBuffer)
+char *ZDLVariables::resolveVariable(const char *inBuffer)
 {
 	string buffer(inBuffer);
 	/* We use this to remove our varible from our string */
@@ -190,7 +192,7 @@ char *ZDLVariables::resolveVariable(char *inBuffer)
 	}
 }
 
-int ZDLVariables::containsUnresolved(char *inBuffer)
+int ZDLVariables::containsUnresolved(const char *inBuffer)
 {
 	string built(inBuffer);
 	string::size_type loc = built.find("${", 0);

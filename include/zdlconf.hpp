@@ -3,11 +3,11 @@ class ZDLVariables;
 class ZDLConf {
 	friend class ZDLVariables;
 public:
-	int readINI(char *file);
-	int writeINI(char *file);
-	char* getValue(char *section, char *variable);
-	int hasValue(char *section, char *variable);
-	void deleteValue(char *lsection, char *variable);
+	int readINI(const char *file);
+	int writeINI(const char *file);
+	char* getValue(const char *section, const char *variable);
+	int hasValue(const char *section, const char *variable);
+	void deleteValue(const char *lsection, const char *variable);
 	int setValue(const char *lsection, const char *variable, int value);
 	int setValue(const char *lsection, const char *variable, const char *szBuffer);
 	int numberOfSections();
@@ -20,6 +20,5 @@ private:
 	int reads;
 	int writes;
 	void parse(string in, ZDLSection* current);
-	ZDLSection *getSection(char *lsection);
 	ZDLVariables *vars;
 };
