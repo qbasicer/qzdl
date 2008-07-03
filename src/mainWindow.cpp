@@ -72,6 +72,7 @@ void mainWindow::quit(){
 
 void mainWindow::launch(){
 	writeConfig();
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	
 	QString exec = getExecutable();
 	if (exec.length() < 1){
@@ -83,90 +84,15 @@ void mainWindow::launch(){
 		return;
 	}
 	
-	QString msg = exec;
-	exec += "\n";
-	exec += args.join(" ");
-	QMessageBox::information(this, "qZDL", exec);
+	QProcess::execute(exec, args);
+	if (zconf->hasValue("zdl.general", "autoclose")){
+		QString append = zconf->getValue("zdl.save", "autoclose");
+		if (append == "true"){
+			close();
+		}
+	}
 	
-	//QProcess::execute(
-	close();
 }
-
-// From: Form1.cs (ZDLSharp Source)
-// public static String genCmdLine(int iwad, String cline, int skill, String map)
-// {
-// 	String cmdline = " -iwad \"" + iwads[iwad].path + "\" " + persistantCmdline + " -skill " + skill;
-// 	if (map.Length > 0)
-// 	{
-// 		cmdline += " -warp " + map;
-// 	}
-// 	if (DMFLAGS.Length > 0)
-// 	{
-// 		cmdline += " +dmflags " + DMFLAGS;
-// 	}
-// 	if (DMFLAGS2.Length > 0){
-// 
-// 		cmdline += " +dmflags2 " + DMFLAGS2;
-// 	}
-// 
-// 	if (files[0] != null)
-// 	{
-// 		if (files[0].isActive)
-// 		{
-// 			cmdline += " -file";
-// 			for (int i = 0; i < 32; i++)
-// 			{
-// 				if (files[i] != null)
-// 				{
-// 					if (files[i].isActive)
-// 					{
-// 						cmdline += " \"" + files[i].path + "\"";
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// 	cmdline += " " + cline;
-// 	if (gameMode > 0)
-// 	{
-// 		if (noPlayers == 0)
-// 		{
-// 			if (hostIP.Length < 1)
-// 			{
-// 				MessageBox.Show("Unable to join server.  Please enter an IP/Hostname", "ZDLSharp", MessageBoxButtons.OK, MessageBoxIcon.Error);
-// 				return "";
-// 			}
-// 			cmdline += " -join " + hostIP;
-// 		}
-// 		else
-// 		{
-// 			cmdline += " -host " + noPlayers;
-// 			if (gameMode == 2)
-// 			{
-// 				cmdline += " -deathmatch";
-// 			}
-// 			if (frags > 0)
-// 			{
-// 				cmdline += " +fraglimit " + frags;
-// 			}
-// 		}
-// 		if (enabled){
-// 			if (dup > 0 && dup < 10){
-// 				cmdline += " -dup " + dup;
-// 			}
-// 			if (extratic){
-// 				cmdline += " -extratic";
-// 			}
-// 			if (mode > 0){
-// 				cmdline += " -netmode" + (mode - 1);
-// 			}
-// 			if (port > 0 && port < 65536){
-// 				cmdline += " -port " + port;
-// 			}
-// 		}
-// 	}
-// 	return cmdline;
-// }
 
 QStringList mainWindow::getArguments(){
 	QStringList ourString;
@@ -199,12 +125,55 @@ QStringList mainWindow::getArguments(){
 		
 		for(int i = 0; i < fileVctr.size(); i++){
 			if (i == iwadIndex){
-				QString append = "-iwad ";
-				append += fileVctr[i]->getValue();
-				ourString << append;
+				ourString << "-iwad";
+				ourString << fileVctr[i]->getValue();
+			
 			}
 		}
 	}
+	
+	if (zconf->hasValue("zdl.save", "skill")){
+		ourString << "-skill";
+		ourString << zconf->getValue("zdl.save", "skill");
+	}
+	
+	if (zconf->hasValue("zdl.general", "alwaysadd")){
+		ourString << zconf->getValue("zdl.general", "alwaysadd");
+	}
+	
+	if (zconf->hasValue("zdl.save", "warp")){
+		ourString << "-warp";
+		ourString << zconf->getValue("zdl.save", "warp");
+	}
+	
+	if (zconf->hasValue("zdl.save", "dmflags")){
+		ourString << "+dmflags";
+		ourString << zconf->getValue("zdl.save", "dmflags");
+	}
+	
+	if (zconf->hasValue("zdl.save", "dmflags2")){
+		ourString << "+dmflags2";
+		ourString << zconf->getValue("zdl.save", "dmflags2");
+	}
+	
+	section = zconf->getSection("zdl.save");
+	if (section){
+		vector <ZDLLine*> fileVctr;
+		section->getRegex("^file[0-9]+$", fileVctr);
+		
+		if (fileVctr.size() > 0){
+			ourString << "-file";
+			for(int i = 0; i < fileVctr.size(); i++){
+				ourString << fileVctr[i]->getValue();
+			}
+		}
+	}
+	
+	if (zconf->hasValue("zdl.save", "extra")){
+		ourString << zconf->getValue("zdl.save", "extra");
+	}
+
+	return ourString;
 }
 
 QString mainWindow::getExecutable(){
