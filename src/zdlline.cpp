@@ -53,6 +53,7 @@ int ZDLLine::setValue(const char *inValue)
 	line.append(inValue);
 	parse();
 	writes++;
+	return 0;
 }
 
 void ZDLLine::parse()

@@ -45,7 +45,7 @@ int ZDLConf::readINI(const char* file)
 		current = sections.back();
 	}
 	stream.close();
-
+	return 0;
 }
 
 int ZDLConf::numberOfSections()
@@ -78,6 +78,7 @@ int ZDLConf::writeStream(ostream &stream){
 		ZDLSection* section = (*itr);
 		section->streamWrite(stream);
 	}
+	return 0;
 }
 
 ZDLConf::ZDLConf()

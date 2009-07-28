@@ -34,7 +34,7 @@ void zdlInterface::newConfig(){
 		vector <ZDLLine*> vctr;
 		//Search for our string
 		section->getRegex("^dlgmode$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			//Are we open?
 			if (strcmp(vctr[i]->getValue(), "open") == 0){
 				cout << "Opening config" << endl;

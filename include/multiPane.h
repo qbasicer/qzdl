@@ -9,6 +9,13 @@ class multiPane: public ZQWidget{
 Q_OBJECT
 public: 
 	multiPane( ZQWidget *parent=0);
+private:
+	QComboBox *gMode;
+	QLineEdit *tHostAddy;
+	QComboBox *gPlayers;
+	QLineEdit *tFragLimit;
+	QPushButton *bDMFlags;
+	QPushButton *bDMFlags2;
 };
 
 #endif

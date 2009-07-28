@@ -45,7 +45,7 @@ void ZUpdater::fetch(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (strcmp(fileVctr[i]->getValue(), "disabled") == 0){
 				return;
 			}
@@ -178,7 +178,7 @@ void ZUpdater::httpRequestFinished(int requestId, bool error){
 }
 
 void ZUpdater::readyRead ( const QHttpResponseHeader & resp ){
-	cout << "readyRead" << endl;
+	cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
 	QByteArray inBytes = http->readAll();
 	buffer.append(inBytes);
 }

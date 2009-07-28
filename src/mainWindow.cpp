@@ -99,7 +99,7 @@ QStringList mainWindow::getArguments(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
 	
-	int iwadIndex = 0;
+	unsigned int iwadIndex = 0;
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
@@ -123,7 +123,7 @@ QStringList mainWindow::getArguments(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (i == iwadIndex){
 				ourString << "-iwad";
 				ourString << fileVctr[i]->getValue();
@@ -163,7 +163,7 @@ QStringList mainWindow::getArguments(){
 		
 		if (fileVctr.size() > 0){
 			ourString << "-file";
-			for(int i = 0; i < fileVctr.size(); i++){
+			for(unsigned int i = 0; i < fileVctr.size(); i++){
 				ourString << fileVctr[i]->getValue();
 			}
 		}
@@ -179,7 +179,7 @@ QStringList mainWindow::getArguments(){
 QString mainWindow::getExecutable(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	
-	int portIndex = 0;
+	unsigned int portIndex = 0;
 	if(zconf->hasValue("zdl.save", "port")){
 		int index = 0;
 		string rc = zconf->getValue("zdl.save", "port");
@@ -201,7 +201,7 @@ QString mainWindow::getExecutable(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (i == portIndex){
 				return fileVctr[i]->getValue();
 			}

@@ -24,9 +24,9 @@ public slots:
 	virtual void notifyFromParent(ZQWidget*);
 	virtual void readFromChild(ZQWidget*);
 	virtual void readFromParent(ZQWidget*);
-protected:
-	virtual void fromUpstream(ZQWidget *origin);
-	virtual void fromDownstream(ZQWidget *origin);
+//protected:
+//	virtual void fromUpstream(ZQWidget *origin);
+//	virtual void fromDownstream(ZQWidget *origin);
 
 private:
 	ZQWidget *zparent;

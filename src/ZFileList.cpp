@@ -16,7 +16,7 @@ void ZFileList::newConfig(){
 		vector <ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+$", vctr);
 		cout << "I got " << vctr.size() << " matches!" << endl;
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			ZFileListable *zList = new ZFileListable(pList, 1001, vctr[i]->getValue());
 			insert(zList, -1);
 		}
@@ -31,7 +31,7 @@ void ZFileList::rebuild(){
 		vector <ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+$", vctr);
 		cout << "I got " << vctr.size() << " matches!" << endl;
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 	}

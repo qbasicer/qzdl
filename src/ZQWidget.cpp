@@ -5,7 +5,7 @@
 #include <QMetaObject>
 
 
-ZQWidget::ZQWidget(ZQWidget *parent){
+ZQWidget::ZQWidget(ZQWidget *parent):QWidget(parent){
 	setZParent(parent);
 	std::cout << "Using ZQWidget as parent" << std::endl;
 	setContentsMargins(0,0,0,0);
@@ -25,7 +25,7 @@ ZQWidget::ZQWidget(){
 	std::cout << "Using QWidget as parent" << std::endl;
 }
 
-ZQWidget::ZQWidget(QWidget *parent){
+ZQWidget::ZQWidget(QWidget *parent):QWidget(parent){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
 	std::cout << "Using QWidget as parent" << std::endl;
@@ -35,7 +35,7 @@ void ZQWidget::notifyFromChild(ZQWidget *origin){
 	if (origin != this){
 		emit buildChildren(origin);
 		emit buildParent(origin);
-		fromDownstream(origin);
+		//fromDownstream(origin);
 		rebuild();
 		const QMetaObject * qmo = metaObject();
 		std::cout << "Notify from child (I am " << qmo->className() << ")" << std::endl;
@@ -45,7 +45,7 @@ void ZQWidget::notifyFromChild(ZQWidget *origin){
 void ZQWidget::notifyFromParent(ZQWidget *origin){
 	if (origin != this){
 		emit buildChildren(origin);
-		fromUpstream(origin);
+		//fromUpstream(origin);
 		rebuild();
 		const QMetaObject * qmo = metaObject();
 		std::cout << "Notify from parent (I am " << qmo->className() << ")" << std::endl;
@@ -71,11 +71,11 @@ void ZQWidget::readFromParent(ZQWidget *origin){
 	}
 }
 
-void ZQWidget::fromDownstream(ZQWidget *origin){
-}
+//void ZQWidget::fromDownstream(ZQWidget *origin){
+//}
 
-void ZQWidget::fromUpstream(ZQWidget *origin){
-}
+//void ZQWidget::fromUpstream(ZQWidget *origin){
+//}
 
 void ZQWidget::rebuild(){
 }

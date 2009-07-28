@@ -5,7 +5,7 @@
 #include "configurationManager.h"
 #include "settingPane.h"
 
-settingPane::settingPane(QWidget *parent){
+settingPane::settingPane(QWidget *parent):ZQWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -63,7 +63,7 @@ void settingPane::rebuild(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^p";
@@ -88,7 +88,7 @@ void settingPane::rebuild(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^i";
@@ -132,7 +132,7 @@ void settingPane::newConfig(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^p";
@@ -169,7 +169,7 @@ void settingPane::newConfig(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^i";

@@ -17,7 +17,7 @@ void ZIWadList::newConfig(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^i";
@@ -41,12 +41,12 @@ void ZIWadList::rebuild(){
 	if (section){
 		vector <ZDLLine*> vctr;
 		section->getRegex("^i[0-9]f$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 		vctr.clear();
 		section->getRegex("^i[0-9]n$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 	}

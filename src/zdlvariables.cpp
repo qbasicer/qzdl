@@ -51,7 +51,7 @@ ZDLVariables::~ZDLVariables ()
 
 int ZDLVariables::hasVariable(const char *lsection, const char *variable, int* status)
 {
-	int cdepth = depth;
+	*status = 0;
 	//Handle environment requests differently
 	if (strcmp("env", lsection) == 0){
 		return true;
@@ -76,8 +76,9 @@ int ZDLVariables::hasVariable(const char *lsection, const char *variable, int* s
 	return false;
 }
 
-char *ZDLVariables::getVariable(const char *lsection, const char *variable, int* status)
+const char *ZDLVariables::getVariable(const char *lsection, const char *variable, int* status)
 {
+	*status = 0;
 	int cdepth = depth;
 	/* This mechanism prevents a stack overflow by recursing down too far */
 	if (++depth > 16){
@@ -158,7 +159,7 @@ char *ZDLVariables::demangle(const char *inBuffer)
 int ZDLVariables::getVariableEnd(const char *inBuffer)
 {
 	string buffer(inBuffer);
-	for (int i = getVariableStart(inBuffer); i < buffer.length(); i++){
+	for (unsigned int i = getVariableStart(inBuffer); i < buffer.length(); i++){
 		if (buffer[i] == '}'){
 			return i;
 		}

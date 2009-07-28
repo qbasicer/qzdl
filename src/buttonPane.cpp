@@ -49,7 +49,7 @@ void buttonPane::newConfig(){
 	if (section){
 		vector <ZDLLine*> vctr;
 		section->getRegex("^dlgmode$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			if (strcmp(vctr[i]->getValue(), "open") == 0){
 				btnEpr->setText("^");
 			}else{

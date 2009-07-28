@@ -75,7 +75,7 @@ void zListWidget::remove(int index){
 	}
 }
 ZListable* zListWidget::get(int index){
-	if (index >= 0 && index < list.size()){
+	if (index >= 0 && index < (int)list.size()){
 		return list[index];
 	}
 	return NULL;

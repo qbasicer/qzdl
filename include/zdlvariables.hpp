@@ -9,7 +9,7 @@ public:
 	ZDLVariables (ZDLConf* parent, int flags);
 	~ZDLVariables();
 	/* Call this to get the variable.  Automatic resolving will be used. */
-	char *getVariable(const char *lsection, const char *variable, int* status);
+	const char *getVariable(const char *lsection, const char *variable, int* status);
 	int hasVariable(const char *lsection, const char *variable, int* status);
 	/* Set usage flags */
 	void setFlags(int flags);

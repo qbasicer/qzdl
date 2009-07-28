@@ -17,7 +17,7 @@ void ZSPList::newConfig(){
 		vector <ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
-		for(int i = 0; i < fileVctr.size(); i++){
+		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			string value = fileVctr[i]->getVariable();
 			
 			string number = "^p";
@@ -41,12 +41,12 @@ void ZSPList::rebuild(){
 	if (section){
 		vector <ZDLLine*> vctr;
 		section->getRegex("^p[0-9]f$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 		vctr.clear();
 		section->getRegex("^p[0-9]n$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 	}
