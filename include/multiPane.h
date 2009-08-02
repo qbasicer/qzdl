@@ -9,6 +9,8 @@ class multiPane: public ZQWidget{
 Q_OBJECT
 public: 
 	multiPane( ZQWidget *parent=0);
+	virtual void newConfig();
+	virtual void rebuild();
 private:
 	QComboBox *gMode;
 	QLineEdit *tHostAddy;
