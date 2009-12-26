@@ -188,7 +188,7 @@ int ZDLConf::setValue(const char *lsection, const char *variable, const char *sz
 	for (itr = sections.begin(); itr != sections.end();itr++){
 		ZDLSection* section = (*itr);
 		if (strcmp(section->getName(), lsection) == 0){
-			section->setValue(variable, szBuffer);
+			section->setValue(variable, value.c_str());
 			return 0;
 		}
 	}
