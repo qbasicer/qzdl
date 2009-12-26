@@ -10,6 +10,8 @@ public:
 	zSettingsPane(QWidget *parent);
 	virtual void rebuild();
 	virtual void newConfig();
+	void startRead();
+	void writeConfig();
 
 private:
 	QLineEdit *alwaysArgs;

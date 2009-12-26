@@ -18,8 +18,12 @@ class configurationManager{
 		static ZDLConf* getActiveConfiguration();
 		static void setCurrentDirectory(string dir);
 		static const char* getCurrentDirectory();
+		static void setInfobar(ZQWidget *zib);
+		static ZQWidget *getInfobar();
+		static void setInfobarMessage(const char* msg, int icon = 0);
 	protected:
 		static ZQWidget* interface;
+		static ZQWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
 };

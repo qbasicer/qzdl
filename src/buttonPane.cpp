@@ -6,6 +6,7 @@
 
 #include "buttonPane.h"
 #include "mainWindow.h"
+#include "ZAdvancedMultiplayerDialog.h"
 
 extern mainWindow *mw;
 
@@ -37,6 +38,8 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	box->addWidget(btnEpr);
 	box->addWidget(btnLaunch);
 	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
+	
+	//connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
 }
 
 void buttonPane::launch(){
@@ -76,6 +79,12 @@ void buttonPane::mclick(){
 		btnEpr->setText("^");
 	}
 	configurationManager::getInterface()->newConfig();
+}
+
+void buttonPane::ampclick(){
+	ZAdvancedMultiplayerDialog *zampd = new ZAdvancedMultiplayerDialog(this);
+	zampd->exec();
+	delete zampd;
 }
 
 void buttonPane::sendSignals(){

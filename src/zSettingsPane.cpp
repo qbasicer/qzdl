@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QtGui>
 #include <QApplication>
 
@@ -90,3 +91,12 @@ void zSettingsPane::newConfig(){
 	
 }
 
+void zSettingsPane::startRead(){
+	emit readChildren(this);
+	newConfig();
+}
+
+void zSettingsPane::writeConfig(){
+	emit buildChildren(this);
+	rebuild();
+}

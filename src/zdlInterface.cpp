@@ -7,9 +7,11 @@
 #include "zdlInterface.h"
 #include "bottomPane.h"
 #include "topPane.h"
+#include "ZInfoBar.h"
 
 zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	configurationManager::setInterface(this);
+	
 	box = new QVBoxLayout(this);
 	topPane *tpane = new topPane(this);
 	bottomPane *bpane = new bottomPane(this);
@@ -17,8 +19,13 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
+	ZInfoBar *zib = new ZInfoBar(this);
+	box->addWidget(zib);
+	
+	configurationManager::setInfobar(zib);
 	box->addWidget(tpane);
 	box->addWidget(bpane);
+	
 }
 
 //Called when there's a change to the configuration that we need to look at.

@@ -23,6 +23,7 @@ public slots:
 	void quit();
 	void tabChange(int index);
 	void manageUpdate();
+	void badLaunch();
 
 protected:
 	zdlInterface* intr;
@@ -30,5 +31,6 @@ protected:
 	ZUpdater* zup;
 	QString getExecutable();
 	QStringList getArguments();
+	int procerr;
 };
 #endif

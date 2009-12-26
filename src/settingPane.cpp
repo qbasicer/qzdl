@@ -113,7 +113,8 @@ void settingPane::newConfig(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "skill");
+		int stat;
+		string rc = zconf->getValue("zdl.save", "skill", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}
@@ -138,18 +139,19 @@ void settingPane::newConfig(){
 			string number = "^p";
 			number.append(value.substr(1, value.length()-2));
 			number.append("n$");
-			
+			int stat;
 			vector <ZDLLine*> nameVctr;
 			section->getRegex(number.c_str(), nameVctr);
 			if (nameVctr.size() == 1){
-				sourceList->addItem(nameVctr[0]->getValue());
+				sourceList->addItem(nameVctr[0]->getValue(),stat);
 			}
 		}
 	}
 	
 	if(zconf->hasValue("zdl.save", "port")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "port");
+		int stat;
+		string rc = zconf->getValue("zdl.save", "port", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}
@@ -186,7 +188,8 @@ void settingPane::newConfig(){
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "iwad");
+		int stat;
+		string rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}

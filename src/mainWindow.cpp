@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
@@ -5,6 +6,7 @@
 #include "zdlInterface.h"
 #include "mainWindow.h"
 #include "configurationManager.h"
+#include "ZInfoBar.h"
 
 extern QApplication *qapp;
 extern QString versionString;
@@ -67,6 +69,7 @@ void mainWindow::tabChange(int newTab){
 }
 
 void mainWindow::quit(){
+	writeConfig();
 	close();
 }
 
@@ -84,14 +87,36 @@ void mainWindow::launch(){
 		return;
 	}
 	
-	QProcess::execute(exec, args);
+	QProcess *proc = new QProcess(this);
+	proc->setProcessChannelMode(QProcess::ForwardedChannels);
+	proc->start(exec, args);
+	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
-		QString append = zconf->getValue("zdl.save", "autoclose");
+		QString append = zconf->getValue("zdl.save", "autoclose",&stat);
 		if (append == "true"){
 			close();
 		}
 	}
 	
+	procerr = proc->error();
+	
+	if(proc->state() != QProcess::NotRunning){
+		std::cout << "ERROR!" << std::endl;
+		configurationManager::setInfobarMessage("The process ended abnormally.",1);
+		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
+	}
+	
+}
+
+void mainWindow::badLaunch(){
+	if(procerr == QProcess::FailedToStart){
+		QMessageBox::warning(NULL,"Failed to Start", "Failed to launch the application executable.",QMessageBox::Ok,QMessageBox::Ok);
+	}else if(procerr == QProcess::Crashed){
+		QMessageBox::warning(NULL,"Process Crashed", "The application ended abnormally (usually due to a crash or error).",QMessageBox::Ok,QMessageBox::Ok);
+	}else{
+		QMessageBox::warning(NULL,"Unknown error", "There was a problem running the application.",QMessageBox::Ok,QMessageBox::Ok);
+	}
 }
 
 QStringList mainWindow::getArguments(){
@@ -100,10 +125,10 @@ QStringList mainWindow::getArguments(){
 	ZDLSection *section = NULL;
 	
 	unsigned int iwadIndex = 0;
-	
+	int stat;
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "iwad");
+		string rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}
@@ -134,26 +159,26 @@ QStringList mainWindow::getArguments(){
 	
 	if (zconf->hasValue("zdl.save", "skill")){
 		ourString << "-skill";
-		ourString << zconf->getValue("zdl.save", "skill");
+		ourString << zconf->getValue("zdl.save", "skill", &stat);
 	}
 	
 	if (zconf->hasValue("zdl.general", "alwaysadd")){
-		ourString << zconf->getValue("zdl.general", "alwaysadd");
+		ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
 	}
 	
 	if (zconf->hasValue("zdl.save", "warp")){
 		ourString << "-warp";
-		ourString << zconf->getValue("zdl.save", "warp");
+		ourString << zconf->getValue("zdl.save", "warp", &stat);
 	}
 	
 	if (zconf->hasValue("zdl.save", "dmflags")){
 		ourString << "+dmflags";
-		ourString << zconf->getValue("zdl.save", "dmflags");
+		ourString << zconf->getValue("zdl.save", "dmflags", &stat);
 	}
 	
 	if (zconf->hasValue("zdl.save", "dmflags2")){
 		ourString << "+dmflags2";
-		ourString << zconf->getValue("zdl.save", "dmflags2");
+		ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
 	}
 	
 	section = zconf->getSection("zdl.save");
@@ -170,7 +195,7 @@ QStringList mainWindow::getArguments(){
 	}
 	
 	if (zconf->hasValue("zdl.save", "extra")){
-		ourString << zconf->getValue("zdl.save", "extra");
+		ourString << zconf->getValue("zdl.save", "extra", &stat);
 	}
 
 	return ourString;
@@ -178,11 +203,11 @@ QStringList mainWindow::getArguments(){
 
 QString mainWindow::getExecutable(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
-	
+	int stat;
 	unsigned int portIndex = 0;
 	if(zconf->hasValue("zdl.save", "port")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "port");
+		string rc = zconf->getValue("zdl.save", "port", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}
@@ -215,6 +240,7 @@ QString mainWindow::getExecutable(){
 //Pass through functions.
 void mainWindow::startRead(){
 	intr->startRead();
+	settings->startRead();
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	zconf->setValue("zdl.general", "version", ZDL_VERSION_STRING);
@@ -222,4 +248,5 @@ void mainWindow::startRead(){
 
 void mainWindow::writeConfig(){
 	intr->writeConfig();
+	settings->writeConfig();
 }

@@ -5,7 +5,8 @@ class ZDLConf {
 public:
 	int readINI(const char *file);
 	int writeINI(const char *file);
-	char* getValue(const char *section, const char *variable);
+	//char* getValue(const char *section, const char *variable);
+	const char *getValue(const char *lsection, const char *variable, int *status);
 	int hasValue(const char *section, const char *variable);
 	void deleteValue(const char *lsection, const char *variable);
 	int setValue(const char *lsection, const char *variable, int value);

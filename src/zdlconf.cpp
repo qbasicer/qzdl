@@ -115,26 +115,30 @@ void ZDLConf::deleteValue(const char *lsection, const char *variable){
 	}
 }
 
-char *ZDLConf::getValue(const char *lsection, const char *variable){
+const char *ZDLConf::getValue(const char *lsection, const char *variable, int *status){
 	reads++;
-	//If we actually have a variable resolver, lets use that.
 	if (vars){
-		int nRc = 0;
-		string rc = vars->getVariable(lsection, variable, &nRc);
-		return (char*)rc.c_str();
-	//Otherwise, lets look for it ourself.
+		string rc = vars->getVariable(lsection, variable, status);
+		return rc.c_str();
 	}else{
-		list<ZDLSection*>::iterator itr;
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			if (strcmp(section->getName(), lsection) == 0){
-				string rc = section->findVariable(variable);
-				return (char*)rc.c_str();
-			}
+		ZDLSection *sect = getSection(lsection);
+		if (sect){
+			*status = 1;
+			return sect->findVariable(variable);
 		}
+
 	}
-	return NULL;
+	*status = 0;
+	string ret = "";
+	return ret.c_str();
+
 }
+
+//char *ZDLConf::getValue(const char *lsection, const char *variable){
+//	int stat;
+//	string temp = getValue(lsection, variable, &stat);
+//	return (char*)temp.c_str();
+//}
 
 ZDLSection *ZDLConf::getSection(const char* lsection){
 	list<ZDLSection*>::iterator itr;

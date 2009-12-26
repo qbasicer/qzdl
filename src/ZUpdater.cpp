@@ -1,6 +1,7 @@
+#include <QMessageBox>
 #include "ZUpdater.h"
 #include "configurationManager.h"
-
+#include "ZInfoBar.h"
 #include <iostream>
 using namespace std;
 
@@ -37,6 +38,14 @@ int ZUpdater::hasUpdate(){
 	return updateCode;
 }
 
+void ZUpdater::updatesDisabledInfobar(){
+	QMessageBox::warning(NULL,"Updates Disabled", "You have disabled checking for updates.  This means that you will no longer get notification of new releases.\n\nIf you did not disable the updates yourself, then qZDL has automatically disabled updates silently if there were connectivity issues with the update server.\n\nTo re-enable updates, please go to the settings tab in the main interface.",QMessageBox::Ok,QMessageBox::Ok);
+}
+
+void ZUpdater::updatesOldSystem(){
+	QMessageBox::warning(NULL,"Old Update System", "Thank you for trying qZDL!!\n\nCurrently updates are pushed by a rather limited script located on our server.  Unfortunately, it doesn't quite have the ability to check to see if your version is the most current version.  You most likely checked out our version from SVN from our sourceforge website.  We only bump the version number on major releases, so we encourage you to manually check for updates on our sourceforge project page.\n\nhttp://sf.net/projects/ZDLSharp",QMessageBox::Ok,QMessageBox::Ok);
+}
+
 void ZUpdater::fetch(){
 	cout << "fetch" << endl;
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
@@ -47,11 +56,17 @@ void ZUpdater::fetch(){
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (strcmp(fileVctr[i]->getValue(), "disabled") == 0){
+				configurationManager::setInfobarMessage("Updates are disabled.",1);
+				ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+				connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
 				return;
 			}
 		}
 		
 	}
+	ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+	configurationManager::setInfobarMessage("Currently using the old update system.",2);
+	connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesOldSystem()));
 	if (httpGetId == 0){
 		buffer.clear();
 		updateCode = 0;

@@ -25,6 +25,8 @@ Q_OBJECT
 		void httpRequestFinished(int requestId, bool error);
 		void readyRead (const QHttpResponseHeader &resp);
 		void readResponseHeader(const QHttpResponseHeader &responseHeader);
+		void updatesDisabledInfobar();
+		void updatesOldSystem();
 	signals:
 		void updateReady();
 		

@@ -11,6 +11,7 @@ private slots:
 	void sendSignals();
 	void mclick();
 	void launch();
+	void ampclick();
 private:
 	QPushButton *btnEpr;
 };
