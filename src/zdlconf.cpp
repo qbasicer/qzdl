@@ -118,9 +118,11 @@ void ZDLConf::deleteValue(const char *lsection, const char *variable){
 const char *ZDLConf::getValue(const char *lsection, const char *variable, int *status){
 	reads++;
 	if (vars){
+		cout << "ZDLConf::getValue using variable resolution" << endl;
 		string rc = vars->getVariable(lsection, variable, status);
 		return rc.c_str();
 	}else{
+		cout << "ZDLConf::getValue using non-variable resolution" << endl;
 		ZDLSection *sect = getSection(lsection);
 		if (sect){
 			*status = 1;

@@ -29,7 +29,7 @@ void mainWindow::setUpdater(ZUpdater *zup){
 mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	QString windowTitle = "ZDLSharp ";
 	
-	
+	setWindowIcon(configurationManager::getIcon());
 	windowTitle += versionString;
 	setWindowTitle(windowTitle);
 	setContentsMargins(2,2,2,2);
@@ -196,6 +196,39 @@ QStringList mainWindow::getArguments(){
 	
 	if (zconf->hasValue("zdl.save", "extra")){
 		ourString << zconf->getValue("zdl.save", "extra", &stat);
+	}
+	
+	if(zconf->hasValue("zdl.net","advenabled")){
+		QString aNetEnabled = zconf->getValue("zdl.net","advenabled",&stat);
+		if(aNetEnabled == "enabled"){
+			if(zconf->hasValue("zdl.net","port")){
+				ourString << "-port";
+				ourString << zconf->getValue("zdl.net","port",&stat);
+			}
+			if(zconf->hasValue("zdl.net","extratic")){
+				QString tExtratic = zconf->getValue("zdl.net","extratic",&stat);
+				if(tExtratic == "enabled"){
+					ourString << "-extratic";
+				}
+			}
+			if(zconf->hasValue("zdl.net","netmode")){
+				QString tNetMode = zconf->getValue("zdl.net","netmode",&stat);
+				if(tNetMode == "1"){
+					ourString << "-netmode";
+					ourString << "0";
+				}else if(tNetMode == "2"){
+					ourString << "-netmode";
+					ourString << "1";
+				}
+			}
+			if(zconf->hasValue("zdl.net","dup")){
+				QString tDup = zconf->getValue("zdl.net","dup",&stat);
+				if(tDup != "0"){
+					ourString << "-dup";
+					ourString << tDup;
+				}
+			}
+		}
 	}
 
 	return ourString;

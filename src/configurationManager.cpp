@@ -10,6 +10,7 @@ using namespace std;
 #include <zdlcommon.h>
 #include "configurationManager.h"
 #include "ZInfoBar.h"
+#include "ico_icon.xpm"
 
 void configurationManager::init(){
 	activeConfig = NULL;
@@ -43,6 +44,10 @@ void configurationManager::setCurrentDirectory(string dir){
 
 void configurationManager::setInfobar(ZQWidget *widget){
 	infobar = widget;
+}
+
+QPixmap configurationManager::getIcon(){
+	return QPixmap(zdlicon);
 }
 
 ZQWidget* configurationManager::getInfobar(){

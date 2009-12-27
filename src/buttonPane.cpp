@@ -39,7 +39,7 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	box->addWidget(btnLaunch);
 	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
 	
-	//connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
+	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
 }
 
 void buttonPane::launch(){

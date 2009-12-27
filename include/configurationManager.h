@@ -20,6 +20,7 @@ class configurationManager{
 		static const char* getCurrentDirectory();
 		static void setInfobar(ZQWidget *zib);
 		static ZQWidget *getInfobar();
+		static QPixmap getIcon();
 		static void setInfobarMessage(const char* msg, int icon = 0);
 	protected:
 		static ZQWidget* interface;

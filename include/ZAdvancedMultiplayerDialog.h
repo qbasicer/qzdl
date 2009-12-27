@@ -11,9 +11,14 @@ public:
 	ZAdvancedMultiplayerDialog(ZQWidget *parent=0);
 private:
 	QCheckBox *enable;
+	QCheckBox *extratic;
+	QComboBox *netmode;
+	QLineEdit *portNo;
+	QComboBox *dupmode;
 private slots:
 	void save();
 	void close();
+	void readConfig();
 };
 
 #endif

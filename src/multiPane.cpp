@@ -57,7 +57,8 @@ void multiPane::newConfig(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section && section->hasVariable("host")){
-		QString hostName = section->findVariable("host");
+		int stat;
+		QString hostName = zconf->getValue("zdl.save","host",&stat);
 		tHostAddy->setText(hostName);
 	}else{
 		tHostAddy->setText("");
