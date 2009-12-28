@@ -2,6 +2,7 @@
 #include <QApplication>
 #include "configurationManager.h"
 #include "multiPane.h"
+#include "ZTempDMFlagDialog.h"
 
 
 multiPane::multiPane(ZQWidget *parent): ZQWidget(parent){
@@ -50,6 +51,9 @@ multiPane::multiPane(ZQWidget *parent): ZQWidget(parent){
 	topGrid->setSpacing(0);
 
 	layout()->setContentsMargins(0,0,0,0);
+	
+	connect(bDMFlags, SIGNAL(clicked()), this, SLOT(dmflags()));
+	connect(bDMFlags2, SIGNAL(clicked()), this, SLOT(dmflags2()));
 
 }
 
@@ -144,7 +148,25 @@ void multiPane::rebuild(){
 }
 
 
+void multiPane::dmflags(){
+	ZTempDMFlagDialog dialog(this);
+	bool ok;
+	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
+	int ret = dialog.exec();
+	if (ret == 1){
+		bDMFlags->setText(QString::number(dialog.value()));
+	}
+}
 
+void multiPane::dmflags2(){
+	ZTempDMFlagDialog dialog(this);
+	bool ok;
+	dialog.setValue(bDMFlags2->text().toInt(&ok, 10));
+	int ret = dialog.exec();
+	if (ret == 1){
+		bDMFlags2->setText(QString::number(dialog.value()));
+	}
+}
 
 
 

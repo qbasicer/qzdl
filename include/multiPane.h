@@ -18,6 +18,9 @@ private:
 	QLineEdit *tFragLimit;
 	QPushButton *bDMFlags;
 	QPushButton *bDMFlags2;
+protected slots:
+	void dmflags();
+	void dmflags2();
 };
 
 #endif
