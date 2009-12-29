@@ -22,7 +22,10 @@ class configurationManager{
 		static ZQWidget *getInfobar();
 		static QPixmap getIcon();
 		static void setInfobarMessage(const char* msg, int icon = 0);
+		static QString getConfigFileName();
+		static void setConfigFileName(QString name);
 	protected:
+		static QString filename;
 		static ZQWidget* interface;
 		static ZQWidget* infobar;
 		static ZDLConf *activeConfig;

@@ -25,10 +25,11 @@ int main( int argc, char **argv ){
 	
 	ZDLConf* tconf = new ZDLConf();
 	if (argc == 2){
-		tconf->readINI(argv[1]);
+		configurationManager::setConfigFileName(argv[1]);
 	}else{
-		tconf->readINI("zdl.ini");
+		configurationManager::setConfigFileName("zdl.ini");
 	}
+	tconf->readINI(configurationManager::getConfigFileName().toStdString().c_str());
 	configurationManager::setActiveConfiguration(tconf);
 	
 	mw = new mainWindow();
@@ -47,7 +48,7 @@ int main( int argc, char **argv ){
 	QString qscwd = configurationManager::getCurrentDirectory();
 	tconf = configurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
-	tconf->writeINI("zdl.ini");
+	tconf->writeINI(configurationManager::getConfigFileName().toStdString().c_str());
 	return ret;
 }
 

@@ -28,10 +28,12 @@ void mainWindow::setUpdater(ZUpdater *zup){
 
 mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	QString windowTitle = "ZDLSharp ";
+	windowTitle += versionString + " - " + configurationManager::getConfigFileName();
+	setWindowTitle(windowTitle);
 	
 	setWindowIcon(configurationManager::getIcon());
-	windowTitle += versionString;
-	setWindowTitle(windowTitle);
+	
+	
 	setContentsMargins(2,2,2,2);
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
@@ -50,12 +52,13 @@ mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	widget->addAction(qact);
 	connect(qact, SIGNAL(triggered()), this, SLOT(launch()));
 	
-	QAction *qact2 = new QAction(widget);
+	qact2 = new QAction(widget);
 	qact2->setShortcut(Qt::Key_Escape);
 	widget->addAction(qact2);
 	connect(qact2, SIGNAL(triggered()), this, SLOT(quit()));
 	
 	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
+	
 }
 
 void mainWindow::tabChange(int newTab){
@@ -277,6 +280,10 @@ void mainWindow::startRead(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	zconf->setValue("zdl.general", "version", ZDL_VERSION_STRING);
+	
+	QString windowTitle = "ZDLSharp ";
+	windowTitle += versionString + " - " + configurationManager::getConfigFileName();
+	setWindowTitle(windowTitle);
 }
 
 void mainWindow::writeConfig(){

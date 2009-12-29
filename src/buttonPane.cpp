@@ -7,6 +7,7 @@
 #include "buttonPane.h"
 #include "mainWindow.h"
 #include "ZAdvancedMultiplayerDialog.h"
+#include "ZAboutDialog.h"
 
 extern mainWindow *mw;
 
@@ -14,11 +15,31 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	QHBoxLayout *box = new QHBoxLayout(this);
 
 	QPushButton *btnExit = new QPushButton("Exit", this);
-	QPushButton *btnZDL = new QPushButton("ZDL", this);
+	btnZDL = new QPushButton("ZDL", this);
 	QPushButton *btnMSet = new QPushButton("Multi Settings", this);
 	btnEpr = new QPushButton("\\/", this);
 	QPushButton *btnLaunch = new QPushButton("Launch", this);
 
+	QMenu *context = new QMenu(btnZDL);
+	QMenu *actions = new QMenu("Actions",context);
+	
+	actions->addAction("Show Command Line");
+	actions->addAction("Clear PWAD list");
+	actions->addAction("Clear all fields");
+	
+	context->addMenu(actions);
+	context->addSeparator();
+	QAction *loadAction = context->addAction("Load Config");
+	QAction *saveAction = context->addAction("Save Config");
+	context->addSeparator();
+	QAction *aboutAction = context->addAction("About");
+	
+	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
+	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
+	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
+	
+	btnZDL->setMenu(context);
+	
 	int minBtnWidth = 50;
 
 	btnExit->setMinimumWidth(minBtnWidth-20);
@@ -90,4 +111,57 @@ void buttonPane::ampclick(){
 void buttonPane::sendSignals(){
 	emit buildParent(this);
 	emit buildChildren(this);
+}
+
+void buttonPane::saveConfigFile(){
+	sendSignals();
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	QStringList filters;
+	filters << "ZDL/ini (*.zdl *.ini)"
+			<< "ZDL files (*.zdl)"
+			<< "ini Files (*.ini)"
+			<< "Any files (*)";
+	QFileDialog dialog(this,"Save");
+	dialog.setFilters(filters);
+	QStringList fileNames;
+	if(dialog.exec()){
+		fileNames = dialog.selectedFiles();
+		for(int i = 0; i < fileNames.size(); i++){
+			configurationManager::setConfigFileName(fileNames[i]);
+			zconf->writeINI(fileNames[i].toStdString().c_str());
+		}
+		mw->startRead();
+	}
+	
+}
+
+void buttonPane::loadConfigFile(){
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	QStringList filters;
+	filters << "ZDL/ini (*.zdl *.ini)"
+			<< "ZDL files (*.zdl)"
+			<< "ini Files (*.ini)"
+			<< "Any files (*)";
+	QFileDialog dialog(this);
+	dialog.setFilters(filters);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	QStringList fileNames;
+	if(dialog.exec()){
+		fileNames = dialog.selectedFiles();
+		for(int i = 0; i < fileNames.size(); i++){
+			delete zconf;
+			ZDLConf* tconf = new ZDLConf();
+			configurationManager::setConfigFileName(fileNames[i]);
+			tconf->readINI(fileNames[i].toStdString().c_str());
+			configurationManager::setActiveConfiguration(tconf);
+			
+		}
+		mw->startRead();
+	}
+	
+}
+
+void buttonPane::aboutClick(){
+	ZAboutDialog zad(this);
+	zad.exec();
 }

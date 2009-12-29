@@ -21,6 +21,7 @@ ZDLConf *configurationManager::activeConfig;
 string configurationManager::cdir;
 ZQWidget* configurationManager::interface;
 ZQWidget* configurationManager::infobar;
+QString configurationManager::filename;
 
 void configurationManager::setInterface(ZQWidget *widget){
 	interface  = widget;
@@ -61,4 +62,13 @@ void configurationManager::setInfobarMessage(const char* message, int icon){
 
 const char* configurationManager::getCurrentDirectory(){
 	return cdir.c_str();
+}
+
+
+QString configurationManager::getConfigFileName(){
+	return filename;
+}
+
+void configurationManager::setConfigFileName(QString name){
+	filename = name;
 }

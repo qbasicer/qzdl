@@ -32,5 +32,6 @@ protected:
 	QString getExecutable();
 	QStringList getArguments();
 	int procerr;
+	QAction *qact2;
 };
 #endif

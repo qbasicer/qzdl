@@ -12,6 +12,10 @@ private slots:
 	void mclick();
 	void launch();
 	void ampclick();
+	void saveConfigFile();
+	void loadConfigFile();
+	void aboutClick();
 private:
 	QPushButton *btnEpr;
+	QPushButton *btnZDL;
 };
