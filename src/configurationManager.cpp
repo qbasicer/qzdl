@@ -22,6 +22,7 @@ string configurationManager::cdir;
 ZQWidget* configurationManager::interface;
 ZQWidget* configurationManager::infobar;
 QString configurationManager::filename;
+ZUpdater *configurationManager::zupper;
 
 void configurationManager::setInterface(ZQWidget *widget){
 	interface  = widget;
@@ -71,4 +72,12 @@ QString configurationManager::getConfigFileName(){
 
 void configurationManager::setConfigFileName(QString name){
 	filename = name;
+}
+
+void configurationManager::setUpdater(ZUpdater *zup){
+	zupper = zup;
+}
+
+ZUpdater *configurationManager::getUpdater(){
+	return zupper;
 }

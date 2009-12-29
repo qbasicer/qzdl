@@ -34,6 +34,7 @@ int main( int argc, char **argv ){
 	
 	mw = new mainWindow();
 	mw->setUpdater(zup);
+	configurationManager::setUpdater(zup);
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();

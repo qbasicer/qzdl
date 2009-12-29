@@ -1,3 +1,6 @@
+#ifndef _ZUPDATER_H_
+#define _ZUPDATER_H_
+
 #include <QtCore>
 #include <QObject>
 #include <QHttp>
@@ -11,6 +14,7 @@ Q_OBJECT
 	void fetch();
 	int hasUpdate();
 	int hasError();
+	void fetch(int doAnyways);
 	
 	private:
 		
@@ -31,3 +35,5 @@ Q_OBJECT
 		void updateReady();
 		
 };
+
+#endif

@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include "ZQWidget.h"
+#include "ZUpdater.h"
 
 using namespace std;
 
@@ -24,12 +25,15 @@ class configurationManager{
 		static void setInfobarMessage(const char* msg, int icon = 0);
 		static QString getConfigFileName();
 		static void setConfigFileName(QString name);
+		static void setUpdater(ZUpdater *zup);
+		static ZUpdater *getUpdater();
 	protected:
 		static QString filename;
 		static ZQWidget* interface;
 		static ZQWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
+		static ZUpdater *zupper;
 };
 
 #endif

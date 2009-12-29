@@ -12,7 +12,8 @@ public:
 	virtual void newConfig();
 	void startRead();
 	void writeConfig();
-
+protected slots:
+	void checkNow();	
 private:
 	QLineEdit *alwaysArgs;
 	ZIWadList *iwadList;

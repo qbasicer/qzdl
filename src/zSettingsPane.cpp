@@ -41,8 +41,15 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	sections->addWidget(alwaysArgs);
 	sections->addLayout(lrpane);
 	
+	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
-	sections->addWidget(updater);
+	QPushButton *btnCheckNow = new QPushButton("Check now",this);
+	connect(btnCheckNow, SIGNAL( clicked() ), this, SLOT(checkNow()));
+	
+	hbox->addWidget(updater);
+	hbox->addWidget(btnCheckNow);
+	
+	sections->addLayout(hbox);
 	
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -89,6 +96,11 @@ void zSettingsPane::newConfig(){
 		updater->setCheckState(Qt::Checked);
 	}
 	
+}
+
+void zSettingsPane::checkNow(){
+	ZUpdater *zup = configurationManager::getUpdater();
+	zup->fetch(1);
 }
 
 void zSettingsPane::startRead(){

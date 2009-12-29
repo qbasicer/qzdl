@@ -47,6 +47,10 @@ void ZUpdater::updatesOldSystem(){
 }
 
 void ZUpdater::fetch(){
+	fetch(0);
+}
+
+void ZUpdater::fetch(int doAnyways){
 	cout << "fetch" << endl;
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
@@ -59,7 +63,9 @@ void ZUpdater::fetch(){
 				configurationManager::setInfobarMessage("Updates are disabled.",1);
 				ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
 				connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
-				return;
+				if(doAnyways == 0){
+					return;
+				}
 			}
 		}
 		
@@ -189,6 +195,7 @@ void ZUpdater::httpRequestFinished(int requestId, bool error){
 	}else{
 		updateCode = 0;
 	}
+	httpGetId = 0;
 	emit updateReady();
 }
 
