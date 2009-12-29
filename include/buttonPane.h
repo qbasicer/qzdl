@@ -15,6 +15,7 @@ private slots:
 	void saveConfigFile();
 	void loadConfigFile();
 	void aboutClick();
+	void showCommandline();
 private:
 	QPushButton *btnEpr;
 	QPushButton *btnZDL;

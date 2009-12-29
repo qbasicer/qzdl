@@ -23,7 +23,7 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	QMenu *context = new QMenu(btnZDL);
 	QMenu *actions = new QMenu("Actions",context);
 	
-	actions->addAction("Show Command Line");
+	QAction *showCommandline = actions->addAction("Show Command Line");
 	actions->addAction("Clear PWAD list");
 	actions->addAction("Clear all fields");
 	
@@ -37,6 +37,7 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
+	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	
 	btnZDL->setMenu(context);
 	
@@ -164,4 +165,11 @@ void buttonPane::loadConfigFile(){
 void buttonPane::aboutClick(){
 	ZAboutDialog zad(this);
 	zad.exec();
+}
+
+void buttonPane::showCommandline(){
+	sendSignals();
+	QStringList cmdLst = mw->getArguments();
+	QString cmd = cmdLst.join(" ");
+	QMessageBox::information(this,"qZDL Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
 }

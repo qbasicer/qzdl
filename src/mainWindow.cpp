@@ -128,6 +128,7 @@ QStringList mainWindow::getArguments(){
 	ZDLSection *section = NULL;
 	
 	unsigned int iwadIndex = 0;
+	bool ok;
 	int stat;
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
@@ -200,6 +201,36 @@ QStringList mainWindow::getArguments(){
 	if (zconf->hasValue("zdl.save", "extra")){
 		ourString << zconf->getValue("zdl.save", "extra", &stat);
 	}
+	
+	if(zconf->hasValue("zdl.save","gametype")){
+		QString tGameType = zconf->getValue("zdl.save","gametype",&stat);
+		if(tGameType != "0"){
+			if (tGameType == "2"){
+				ourString << "-deathmath";
+			}
+			int players = -1;
+			if(zconf->hasValue("zdl.save","players")){
+				QString tPlayers = zconf->getValue("zdl.save","players",&stat);
+				players = tPlayers.toInt(&ok, 10);
+			}
+			if(players > 0){
+				ourString << "-host";
+				ourString << QString::number(players);
+			}else if(players == 0){
+				if(zconf->hasValue("zdl.save","host")){
+					ourString << "-join";
+					zconf->getValue("zdl.save","host",&stat);
+				}
+			}
+			if(zconf->hasValue("zdl.save","fraglimit")){
+				ourString << "+fraglimit";
+				ourString << zconf->getValue("zdl.save","fraglimit",&stat);
+				
+			}
+		}
+	}
+	
+	
 	
 	if(zconf->hasValue("zdl.net","advenabled")){
 		QString aNetEnabled = zconf->getValue("zdl.net","advenabled",&stat);
