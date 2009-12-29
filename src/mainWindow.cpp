@@ -176,12 +176,14 @@ QStringList mainWindow::getArguments(){
 	}
 	
 	if (zconf->hasValue("zdl.save", "dmflags")){
-		ourString << "+dmflags";
+		ourString << "+set";
+		ourString << "dmflags";
 		ourString << zconf->getValue("zdl.save", "dmflags", &stat);
 	}
 	
 	if (zconf->hasValue("zdl.save", "dmflags2")){
-		ourString << "+dmflags2";
+		ourString << "+set";
+		ourString << "dmflags2";
 		ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
 	}
 	
@@ -223,7 +225,8 @@ QStringList mainWindow::getArguments(){
 				}
 			}
 			if(zconf->hasValue("zdl.save","fraglimit")){
-				ourString << "+fraglimit";
+				ourString << "+set";
+				ourString << "fraglimit";
 				ourString << zconf->getValue("zdl.save","fraglimit",&stat);
 				
 			}
