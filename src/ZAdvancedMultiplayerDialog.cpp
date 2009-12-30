@@ -5,8 +5,8 @@
 ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
 	setWindowTitle("qZDL Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
-	QFormLayout *form = new QFormLayout();
-	form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+	QGridLayout *form = new QGridLayout();
+	//form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	
 	extratic = new QCheckBox("On/Off", this);
@@ -33,11 +33,16 @@ ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog
 	connect(btnBox, SIGNAL(accepted()), this, SLOT(save()));
 	connect(btnBox, SIGNAL(rejected()), this, SLOT(close()));
 	
-	form->addRow(new QLabel("Extratic:",this),extratic);
-	form->addRow(new QLabel("Net Mode:",this),netmode);
-	form->addRow(new QLabel("Port:",this),portNo);
-	form->addRow(new QLabel("Dup:",this),dupmode);
-	form->addRow(new QLabel("Enable:",this),enable);
+	form->addWidget(new QLabel("Extratic:",this),0,0);
+	form->addWidget(extratic,0,1);
+	form->addWidget(new QLabel("Net Mode:",this),1,0);
+	form->addWidget(netmode,1,1);
+	form->addWidget(new QLabel("Port:",this),2,0);
+	form->addWidget(portNo,2,1);
+	form->addWidget(new QLabel("Dup:",this),3,0);
+	form->addWidget(dupmode,3,1);
+	form->addWidget(new QLabel("Enable:",this),4,0);
+	form->addWidget(enable,4,1);
 	
 	QLabel *top = new QLabel("ZDL<i>Sharp</i>",this);
 	QFont font;
