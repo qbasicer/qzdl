@@ -96,7 +96,7 @@ void mainWindow::launch(){
 	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
 		QString append = zconf->getValue("zdl.save", "autoclose",&stat);
-		if (append == "true"){
+		if (append == "1" || append == "true"){
 			close();
 		}
 	}

@@ -16,6 +16,7 @@ protected slots:
 	void checkNow();	
 private:
 	QLineEdit *alwaysArgs;
+	QCheckBox *launchClose;
 	ZIWadList *iwadList;
 	ZSPList *sourceList;
 	QCheckBox *updater;

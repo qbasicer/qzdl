@@ -22,15 +22,14 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	iwadl->addWidget(new QLabel("IWADs:", this));
 	iwadl->addWidget(iwadList);
 	
-	lpane->addLayout(iwadl);
-	
 	//Source Port
 	QVBoxLayout *rpane = new QVBoxLayout();
 	sourceList = new ZSPList(this);
 	spl->addWidget(new QLabel("Source Ports/Engines:", this));
 	spl->addWidget(sourceList);
 	
-	rpane->addLayout(spl);
+	rpane->addLayout(iwadl);
+	lpane->addLayout(spl);
 	
 	//Add the left and right panes
 	lrpane->addLayout(lpane);
@@ -38,8 +37,11 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	
 	//Add all the sections together
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
+	
+	launchClose = new QCheckBox("Close on launch",this);
 	sections->addWidget(alwaysArgs);
 	sections->addLayout(lrpane);
+	sections->addWidget(launchClose);
 	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
@@ -71,6 +73,11 @@ void zSettingsPane::rebuild(){
 		zconf->setValue("zdl.net", "updateManager", "disabled");
 	}
 	
+	if(launchClose->checkState() == Qt::Checked){
+		zconf->setValue("zdl.general","autoclose", "1");
+	}else{
+		zconf->setValue("zdl.general","autoclose", "0");
+	}
 }
 
 void zSettingsPane::newConfig(){
@@ -94,6 +101,16 @@ void zSettingsPane::newConfig(){
 	}else{
 		//Default to on if it's not listed
 		updater->setCheckState(Qt::Checked);
+	}
+	
+	if(zconf->hasValue("zdl.general","autoclose")){
+		int ok;
+		QString closeSetting = zconf->getValue("zdl.general","autoclose",&ok);
+		if(closeSetting == "1"){
+			launchClose->setCheckState(Qt::Checked);
+		}else{
+			launchClose->setCheckState(Qt::Unchecked);
+		}
 	}
 	
 }
