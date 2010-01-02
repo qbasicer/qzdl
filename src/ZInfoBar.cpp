@@ -29,7 +29,7 @@ ZInfoBar::ZInfoBar(ZQWidget *parent): ZQWidget(parent){
 	QPushButton *btn = new QPushButton("More",this);
 	QPushButton *btnhide = new QPushButton("Hide",this);
 	btn->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred ));
-	box->addSpacerItem(new QSpacerItem(10000,0,QSizePolicy::Preferred));
+	box->addItem(new QSpacerItem(10000,0,QSizePolicy::Preferred));
 	box->addWidget(btn);
 	box->addWidget(btnhide);
 	
