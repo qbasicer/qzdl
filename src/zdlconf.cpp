@@ -23,27 +23,31 @@ extern char* chomp(string in);
 
 int ZDLConf::readINI(const char* file)
 {
-	reads++;
-	string line;
-	/* We allow lines to be outside of any section (ie header comments)
-	 * We use a global section to read this.  We also keep track of
-	 * which section we're in.  We do that with a pointer (current)
-	 */
-	ZDLSection *current = new ZDLSection("");
-	current->setSpecial(ZDL_FLAG_NAMELESS);
-	sections.push_back(current);
-	ifstream stream(file);
-	if (!stream.is_open()){
-		cerr << "Unable to open file \"" << file << "\"" << std::endl;
+	if((mode & ZDLConf::FileRead) != 0){
+		reads++;
+		string line;
+		/* We allow lines to be outside of any section (ie header comments)
+		* We use a global section to read this.  We also keep track of
+		* which section we're in.  We do that with a pointer (current)
+		*/
+		ZDLSection *current = new ZDLSection("");
+		current->setSpecial(ZDL_FLAG_NAMELESS);
+		sections.push_back(current);
+		ifstream stream(file);
+		if (!stream.is_open()){
+			cerr << "Unable to open file \"" << file << "\"" << std::endl;
+			return 1;
+		}
+		while (!stream.eof()){
+			getline(stream,line);
+			parse(line, current);
+			current = sections.back();
+		}
+		stream.close();
+		return 0;
+	}else{
 		return 1;
 	}
-	while (!stream.eof()){
-		getline(stream,line);
-		parse(line, current);
-		current = sections.back();
-	}
-	stream.close();
-	return 0;
 }
 
 int ZDLConf::numberOfSections()
@@ -59,24 +63,32 @@ int ZDLConf::numberOfSections()
 
 int ZDLConf::writeINI(const char *file)
 {
-	writes++;
-	ofstream stream(file);
-	if (!stream.is_open()){
-		cerr << "Unable to open file \"" << file << "\"" << endl;
+	if((mode & ZDLConf::FileWrite) != 0){
+		writes++;
+		ofstream stream(file);
+		if (!stream.is_open()){
+			cerr << "Unable to open file \"" << file << "\"" << endl;
+			return 1;
+		}
+		writeStream(stream);
+		stream.close();
+		return 0;
+	}else{
 		return 1;
 	}
-	writeStream(stream);
-	stream.close();
-	return 0;
 }
 
 int ZDLConf::writeStream(ostream &stream){
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		section->streamWrite(stream);
+	if((mode & ZDLConf::FileWrite) != 0){
+		list<ZDLSection*>::iterator itr;
+		for (itr = sections.begin(); itr != sections.end();itr++){
+			ZDLSection* section = (*itr);
+			section->streamWrite(stream);
+		}
+		return 0;
+	}else{
+		return 1;
 	}
-	return 0;
 }
 
 ZDLConf::ZDLConf(int mode)
@@ -86,6 +98,14 @@ ZDLConf::ZDLConf(int mode)
 	reads = 0;
 	writes = 0;
 	vars = new ZDLVariables(this);
+}
+
+/* int ZDLConf::reopen(int mode)
+ * Returns: 0 on success, nonzero on failure
+ */
+int ZDLConf::reopen(int mode){
+	this->mode = mode;
+	return 0;
 }
 
 ZDLConf::~ZDLConf()

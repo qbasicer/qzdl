@@ -6,9 +6,13 @@ class ZDLConf {
 	friend class ZDLVariables;
 public:
 	enum modes{
-		ReadOnly  = 0x01,
-		WriteOnly = 0x02,
-		ReadWrite = ReadOnly | WriteOnly
+		ReadOnly  		= 0x01,
+		WriteOnly 		= 0x02,
+		ReadWrite 		= ReadOnly | WriteOnly,
+		FileRead  		= 0x04,
+  		FileWrite 		= 0x08,
+		FileReadWrite 	= FileRead | FileWrite,
+  		Default			= ReadWrite | FileReadWrite
 	};
 	
 	int readINI(const char *file);
@@ -21,7 +25,8 @@ public:
 	int setValue(const char *lsection, const char *variable, const char *szBuffer);
 	int numberOfSections();
 	~ZDLConf();
-	ZDLConf(int mode = ZDLConf::ReadWrite);
+	ZDLConf(int mode = ZDLConf::Default);
+	int reopen(int mode);
 	list<ZDLSection*> sections;
 	int writeStream(ostream &stream);
 	ZDLSection *getSection(const char* section);
