@@ -21,8 +21,6 @@ extern char* chomp(string in);
  *      Date: July 29th, 2007
  */
 
-
-
 int ZDLConf::readINI(const char* file)
 {
 	reads++;
@@ -81,8 +79,9 @@ int ZDLConf::writeStream(ostream &stream){
 	return 0;
 }
 
-ZDLConf::ZDLConf()
+ZDLConf::ZDLConf(int mode)
 {
+	this->mode = mode;
 	cout << "New configuration" << endl;
 	reads = 0;
 	writes = 0;
@@ -104,33 +103,40 @@ ZDLConf::~ZDLConf()
 }
 
 void ZDLConf::deleteValue(const char *lsection, const char *variable){
-	reads++;
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
-			section->deleteVariable(variable);
-			
+	if((mode & WriteOnly) != 0){
+		writes++;
+		list<ZDLSection*>::iterator itr;
+		for (itr = sections.begin(); itr != sections.end();itr++){
+			ZDLSection* section = (*itr);
+			if (strcmp(section->getName(), lsection) == 0){
+				section->deleteVariable(variable);
+				
+			}
 		}
 	}
 }
 
 const char *ZDLConf::getValue(const char *lsection, const char *variable, int *status){
-	reads++;
-	if (vars){
-		cout << "ZDLConf::getValue using variable resolution" << endl;
-		string rc = vars->getVariable(lsection, variable, status);
-		return rc.c_str();
-	}else{
-		cout << "ZDLConf::getValue using non-variable resolution" << endl;
-		ZDLSection *sect = getSection(lsection);
-		if (sect){
-			*status = 1;
-			return sect->findVariable(variable);
+	if((mode & ReadOnly) != 0){
+		reads++;
+		if (vars){
+			cout << "ZDLConf::getValue using variable resolution" << endl;
+			string rc = vars->getVariable(lsection, variable, status);
+			return rc.c_str();
+		}else{
+			cout << "ZDLConf::getValue using non-variable resolution" << endl;
+			ZDLSection *sect = getSection(lsection);
+			if (sect){
+				*status = 1;
+				return sect->findVariable(variable);
+			}
+	
 		}
-
+		*status = 0;
+	}else{
+		*status = 2;
 	}
-	*status = 0;
+	
 	string ret = "";
 	return ret.c_str();
 
@@ -143,29 +149,33 @@ const char *ZDLConf::getValue(const char *lsection, const char *variable, int *s
 //}
 
 ZDLSection *ZDLConf::getSection(const char* lsection){
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
-			return section;
+	if((mode & ReadOnly) != 0){
+		list<ZDLSection*>::iterator itr;
+		for (itr = sections.begin(); itr != sections.end();itr++){
+			ZDLSection* section = (*itr);
+			if (strcmp(section->getName(), lsection) == 0){
+				return section;
+			}
 		}
 	}
 	return NULL;
 }
 
 int ZDLConf::hasValue(const char *lsection, const char *variable){
-	reads++;
-	//If we actually have a variable resolver, lets use that.
-	if (vars){
-		int nRc = 0;
-		return vars->hasVariable(lsection, variable, &nRc);
-	//Otherwise, lets look for it ourself.
-	}else{
-		list<ZDLSection*>::iterator itr;
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			if (strcmp(section->getName(), lsection) == 0){
-				return section->hasVariable(variable);
+	if((mode & ReadOnly) != 0){
+		reads++;
+		//If we actually have a variable resolver, lets use that.
+		if (vars){
+			int nRc = 0;
+			return vars->hasVariable(lsection, variable, &nRc);
+		//Otherwise, lets look for it ourself.
+		}else{
+			list<ZDLSection*>::iterator itr;
+			for (itr = sections.begin(); itr != sections.end();itr++){
+				ZDLSection* section = (*itr);
+				if (strcmp(section->getName(), lsection) == 0){
+					return section->hasVariable(variable);
+				}
 			}
 		}
 	}
@@ -174,31 +184,36 @@ int ZDLConf::hasValue(const char *lsection, const char *variable){
 
 int ZDLConf::setValue(const char *lsection, const char *variable, int value)
 {
-	char szBuffer[256];
-	snprintf(szBuffer, 256, "%d", value);
-	return setValue(lsection,variable,szBuffer);
+	if((mode & WriteOnly) != 0){
+		char szBuffer[256];
+		snprintf(szBuffer, 256, "%d", value);
+		return setValue(lsection,variable,szBuffer);
+	}else{
+		return -1;
+	}
 }
 
 int ZDLConf::setValue(const char *lsection, const char *variable, const char *szBuffer)
 {
-	string value = szBuffer;
-	
-	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
-	writes++;
-	list<ZDLSection*>::iterator itr;
-	
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
-			section->setValue(variable, value.c_str());
-			return 0;
+	if((mode & WriteOnly) != 0){
+		string value = szBuffer;
+		cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
+		writes++;
+		list<ZDLSection*>::iterator itr;
+		
+		for (itr = sections.begin(); itr != sections.end();itr++){
+			ZDLSection* section = (*itr);
+			if (strcmp(section->getName(), lsection) == 0){
+				section->setValue(variable, value.c_str());
+				return 0;
+			}
 		}
+		//In this case, we didn't find the section
+		ZDLSection *section = new ZDLSection(lsection);
+		sections.push_back(section);
+		cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
+		section->setValue(variable, value.c_str());
 	}
-	//In this case, we didn't find the section
-	ZDLSection *section = new ZDLSection(lsection);
-	sections.push_back(section);
-	cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
-	section->setValue(variable, value.c_str());
 	return 0;
 }
 
