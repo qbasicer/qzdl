@@ -15,7 +15,9 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	topPane *tpane = new topPane(this);
 	bottomPane *bpane = new bottomPane(this);
+	bpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
 	mpane = new multiPane(this);
+	mpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
