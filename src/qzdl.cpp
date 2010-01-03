@@ -15,7 +15,7 @@ int main( int argc, char **argv ){
 	qapp = &a;
 
 
-	versionString = "3.0.5.3q";
+	versionString = ZDL_VERSION_STRING;
 	
 	QDir cwd = QDir::current();
 	configurationManager::init();

@@ -162,7 +162,7 @@ void settingPane::newConfig(){
 			sourceList->setCurrentIndex(0);
 		}
 	}else{
-		cout << "Don't have port" << endl;
+		//cout << "Don't have port" << endl;
 	}
 	
 	IWADList->clear();
