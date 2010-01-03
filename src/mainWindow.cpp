@@ -17,7 +17,7 @@ mainWindow::~mainWindow(){
 
 void mainWindow::manageUpdate(){
 	if (zup->hasUpdate()){
-		QMessageBox::information(this, "qZDL Updater", "There is an update.\n\nPlease visit zdlsharp.vectec.net");
+		QMessageBox::information(this, "ZDLSharp Updater", "There is an update.\n\nPlease visit zdlsharp.vectec.net");
 	}
 }
 
@@ -82,7 +82,7 @@ void mainWindow::launch(){
 	
 	QString exec = getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, "qZDL", "Please select a source port");
+		QMessageBox::critical(this, "ZDLSharp", "Please select a source port");
 		return;
 	}
 	QStringList args = getArguments();
@@ -139,11 +139,11 @@ QStringList mainWindow::getArguments(){
 		if (index >= 0){
 			iwadIndex = index;
 		}else{
-			QMessageBox::critical(this, "qZDL", "Please select an IWAD");
+			QMessageBox::critical(this, "ZDLSharp", "Please select an IWAD");
 			return ourString;
 		}
 	}else{
-		QMessageBox::critical(this, "qZDL", "Please select an IWAD");
+		QMessageBox::critical(this, "ZDLSharp", "Please select an IWAD");
 		return ourString;
 	}
 	

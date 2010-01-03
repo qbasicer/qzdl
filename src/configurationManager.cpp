@@ -32,7 +32,7 @@ ZQWidget* configurationManager::getInterface(){
 }
 
 void configurationManager::setActiveConfiguration(ZDLConf *zconf){
-	cout << "Using new configuration" << endl;
+	//cout << "Using new configuration" << endl;
 	configurationManager::activeConfig = zconf;
 }
 

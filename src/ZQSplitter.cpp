@@ -8,7 +8,7 @@
 ZQSplitter::ZQSplitter(ZQWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
-	std::cout << "SPLIT: Using ZQWidget as parent" << std::endl;
+	//std::cout << "SPLIT: Using ZQWidget as parent" << std::endl;
 	box->addWidget(split);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -17,7 +17,7 @@ ZQSplitter::ZQSplitter(ZQWidget *parent):ZQWidget(parent){
 ZQSplitter::ZQSplitter(QWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
-	std::cout << "SPLIT: Using QWidget as parent" << std::endl;
+	//std::cout << "SPLIT: Using QWidget as parent" << std::endl;
 	box->addWidget(split);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);

@@ -83,7 +83,7 @@ const char *ZDLVariables::getVariable(const char *lsection, const char *variable
 	/* This mechanism prevents a stack overflow by recursing down too far */
 	if (++depth > 16){
 		depth--;
-		cerr << "[error]Overflow bailing" << endl;
+		//cerr << "[error]Overflow bailing" << endl;
 		return (char*)blank.c_str();
 	}
 	//Handle environment requests differently
@@ -188,7 +188,7 @@ char *ZDLVariables::resolveVariable(const char *inBuffer)
 		buffer.replace(varStart, varEnd - varStart + 1, value);
 		return (char*)buffer.c_str();
 	}else{
-		cerr << "[ERROR]Invalid notation (${section#variable})" << endl;
+		//cerr << "[ERROR]Invalid notation (${section#variable})" << endl;
 		return (char*)blank.c_str();
 	}
 }

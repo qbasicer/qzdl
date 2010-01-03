@@ -171,5 +171,5 @@ void buttonPane::showCommandline(){
 	sendSignals();
 	QStringList cmdLst = mw->getArguments();
 	QString cmd = cmdLst.join(" ");
-	QMessageBox::information(this,"qZDL Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
+	QMessageBox::information(this,"ZDLSharp Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
 }

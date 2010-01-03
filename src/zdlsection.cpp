@@ -12,7 +12,7 @@ using namespace std;
 
 ZDLSection::ZDLSection(const char *name)
 {
-	cout << "New section: \"" << name << "\"" << endl;
+	//cout << "New section: \"" << name << "\"" << endl;
 	reads = 0;
 	writes = 0;
 	sectionName = name;
@@ -20,13 +20,13 @@ ZDLSection::ZDLSection(const char *name)
 
 ZDLSection::~ZDLSection()
 {
-	cout << "Deleting section and it's children..." << endl;
+	//cout << "Deleting section and it's children..." << endl;
 	while (lines.size() > 0){
 		ZDLLine *line = lines.front();
 		lines.pop_front();
 		delete line;
 	}
-	cout << "Section deleted" << endl;
+	//cout << "Section deleted" << endl;
 }
 
 void ZDLSection::setSpecial(int inFlags)
@@ -107,7 +107,7 @@ int ZDLSection::setValue(const char *variable, const char *value)
 	string buffer = variable;
 	buffer.append("=");
 	buffer.append(value);
-	cout << "Buffer: " << buffer << endl;
+	//cout << "Buffer: " << buffer << endl;
 	ZDLLine *line = new ZDLLine((char*)buffer.c_str());
 	lines.push_back(line);
 	return 0;
@@ -160,7 +160,7 @@ int ZDLSection::addLine(const char *linedata)
 		lines.push_back(newl);
 		return 0;
 	}else{
-		cerr << "ERROR: Duplicate variable " << sectionName << "#" << newl->getVariable() << endl;
+		//cerr << "ERROR: Duplicate variable " << sectionName << "#" << newl->getVariable() << endl;
 		ptr->setValue(newl->getValue());
 		delete newl;
 		return 1;

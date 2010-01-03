@@ -3,7 +3,7 @@
 #include <QDialogButtonBox>
 
 ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
-	setWindowTitle("qZDL Advanced Multiplayer Settings");
+	setWindowTitle("ZDLSharp Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QGridLayout *form = new QGridLayout();
 	//form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);

@@ -6,7 +6,7 @@
 extern QString versionString;
 
 ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
-	setWindowTitle("About qZDL");
+	setWindowTitle("About ZDLSharp");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QHBoxLayout *hbox = new QHBoxLayout();
 	box->addLayout(hbox);

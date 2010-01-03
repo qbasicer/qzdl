@@ -17,14 +17,12 @@ ZDLLine::ZDLLine(const char *inLine)
 	}else{
 		parse();
 	}
-	cout << "New line: Type: " << type << " Value: " << inLine << endl;
 	slashConvert = false;
 	
 }
 
 ZDLLine::~ZDLLine()
 {
-	cout << "Deleting line" << endl;
 }
 
 const char* ZDLLine::getValue()

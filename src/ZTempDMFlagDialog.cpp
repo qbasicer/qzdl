@@ -3,7 +3,7 @@
 #include <QDialogButtonBox>
 
 ZTempDMFlagDialog::ZTempDMFlagDialog(ZQWidget *parent):QDialog(parent){
-	setWindowTitle("qZDL DMFlag Editor");
+	setWindowTitle("ZDLSharp DMFlag Editor");
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QVBoxLayout *box = new QVBoxLayout(this);
 	flagVal = new QLineEdit(this);

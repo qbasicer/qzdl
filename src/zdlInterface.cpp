@@ -46,12 +46,12 @@ void zdlInterface::newConfig(){
 		for(unsigned int i = 0; i < vctr.size(); i++){
 			//Are we open?
 			if (strcmp(vctr[i]->getValue(), "open") == 0){
-				cout << "Opening config" << endl;
+				//cout << "Opening config" << endl;
 				box->addWidget(mpane);
 				mpane->setVisible(true);
 			//No?
 			}else{
-				cout << "Removing config" << endl;
+				//cout << "Removing config" << endl;
 				box->removeWidget(mpane);
 				mpane->setVisible(false);
 				mpane->hide();
@@ -59,13 +59,13 @@ void zdlInterface::newConfig(){
 		}
 		//Do we have the section, but not the key?
 		if (vctr.size() < 1){
-			cout << "Removing config (no line present)" << endl;
+			//cout << "Removing config (no line present)" << endl;
 			box->removeWidget(mpane);
 			mpane->setVisible(false);
 		}
 	//Do we not even have the section?
 	}else{
-		cout << "Removing config (no section present)" << endl;
+		//cout << "Removing config (no section present)" << endl;
 		box->removeWidget(mpane);
 	}
 	this->update();

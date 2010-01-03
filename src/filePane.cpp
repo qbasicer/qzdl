@@ -21,5 +21,5 @@ filePane::filePane(QWidget *parent):ZQWidget(parent){
 }
 
 void filePane::rebuild(){
-	std::cout << "Rebuilding config" << std::endl;
+	//std::cout << "Rebuilding config" << std::endl;
 }

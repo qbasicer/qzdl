@@ -35,7 +35,7 @@ int ZDLConf::readINI(const char* file)
 		sections.push_back(current);
 		ifstream stream(file);
 		if (!stream.is_open()){
-			cerr << "Unable to open file \"" << file << "\"" << std::endl;
+			//cerr << "Unable to open file \"" << file << "\"" << std::endl;
 			return 1;
 		}
 		while (!stream.eof()){
@@ -67,7 +67,7 @@ int ZDLConf::writeINI(const char *file)
 		writes++;
 		ofstream stream(file);
 		if (!stream.is_open()){
-			cerr << "Unable to open file \"" << file << "\"" << endl;
+			//cerr << "Unable to open file \"" << file << "\"" << endl;
 			return 1;
 		}
 		writeStream(stream);
@@ -94,7 +94,7 @@ int ZDLConf::writeStream(ostream &stream){
 ZDLConf::ZDLConf(int mode)
 {
 	this->mode = mode;
-	cout << "New configuration" << endl;
+	//cout << "New configuration" << endl;
 	reads = 0;
 	writes = 0;
 	vars = new ZDLVariables(this);
@@ -110,7 +110,7 @@ int ZDLConf::reopen(int mode){
 
 ZDLConf::~ZDLConf()
 {
-	cout << "Configuration deleted." << endl;
+	//cout << "Configuration deleted." << endl;
 	while (sections.size() > 0){
 		ZDLSection* section = sections.front();
 		sections.pop_front();
@@ -118,7 +118,7 @@ ZDLConf::~ZDLConf()
 	}
 	if (vars)
 		delete vars;
-	cout << "Deleting configuration children." << endl;
+	//cout << "Deleting configuration children." << endl;
 
 }
 
@@ -140,11 +140,11 @@ const char *ZDLConf::getValue(const char *lsection, const char *variable, int *s
 	if((mode & ReadOnly) != 0){
 		reads++;
 		if (vars){
-			cout << "ZDLConf::getValue using variable resolution" << endl;
+			//cout << "ZDLConf::getValue using variable resolution" << endl;
 			string rc = vars->getVariable(lsection, variable, status);
 			return rc.c_str();
 		}else{
-			cout << "ZDLConf::getValue using non-variable resolution" << endl;
+			//cout << "ZDLConf::getValue using non-variable resolution" << endl;
 			ZDLSection *sect = getSection(lsection);
 			if (sect){
 				*status = 1;
@@ -217,7 +217,7 @@ int ZDLConf::setValue(const char *lsection, const char *variable, const char *sz
 {
 	if((mode & WriteOnly) != 0){
 		string value = szBuffer;
-		cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
+		//cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
 		writes++;
 		list<ZDLSection*>::iterator itr;
 		
@@ -231,7 +231,7 @@ int ZDLConf::setValue(const char *lsection, const char *variable, const char *sz
 		//In this case, we didn't find the section
 		ZDLSection *section = new ZDLSection(lsection);
 		sections.push_back(section);
-		cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
+		//cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
 		section->setValue(variable, value.c_str());
 	}
 	return 0;
