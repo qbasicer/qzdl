@@ -8,14 +8,16 @@
 using namespace std;
 
 ZNameListable::ZNameListable( QListWidget *parent, int type, const char* file, const char* name):ZListable(parent, type){
-	setName(name);
+	QString list = QString("%1 [%2]").arg(name).arg(file);
+	setName(list.toStdString().c_str());
 	fileName = file;
 	displayName = name;
 }
 
 
 ZNameListable::ZNameListable( QListWidget *parent, int type, QString &file, QString &name):ZListable(parent, type){
-	setName(name.toStdString().c_str());
+	QString list = QString("%1 [%2]").arg(name).arg(file);
+	setName(list.toStdString().c_str());
 	fileName = file;
 	displayName = name;
 

@@ -10,7 +10,8 @@ ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):Z
 
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
-	setName(cname.toStdString().c_str());
+	QString list = QString("%1 [%2]").arg(cname).arg(file);
+	setName(list.toStdString().c_str());
 	fileName = file;
 
 }
@@ -19,7 +20,8 @@ ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):Z
 ZFileListable::ZFileListable( QListWidget *parent, int type, QString &file):ZListable(parent, type){
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
-	setName(cname.toStdString().c_str());
+	QString list = QString("%1 [%2]").arg(cname).arg(file);
+	setName(list.toStdString().c_str());
 	fileName = file;
 
 }
