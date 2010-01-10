@@ -77,7 +77,7 @@ void ZUpdater::fetch(int doAnyways){
 		buffer.clear();
 		updateCode = 0;
 		http->setHost(this->host, QHttp::ConnectionModeHttp, this->port);
-		QHttpRequestHeader qreq("GET", "/check.php?name=qzdl-svn&id=14");
+		QHttpRequestHeader qreq("GET", "/check.php?name=qzdl-svn&id=15");
 		QString ua = ZDL_ENGINE_NAME;
 		ua += " ";
 		ua += ZDL_VERSION_STRING;

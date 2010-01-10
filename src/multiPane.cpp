@@ -151,6 +151,7 @@ void multiPane::rebuild(){
 
 void multiPane::dmflags(){
 	ZDMFlagDialog dialog(this);
+	bool ok;
 	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
 	dialog.setValue2(bDMFlags2->text().toInt(&ok, 10));
 	int ret = dialog.exec();
