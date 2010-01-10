@@ -3,6 +3,7 @@
 #include "configurationManager.h"
 #include "multiPane.h"
 #include "ZTempDMFlagDialog.h"
+#include "ZDMFlagDialog.h"
 
 
 multiPane::multiPane(ZQWidget *parent): ZQWidget(parent){
@@ -149,23 +150,18 @@ void multiPane::rebuild(){
 
 
 void multiPane::dmflags(){
-	ZTempDMFlagDialog dialog(this);
-	bool ok;
+	ZDMFlagDialog dialog(this);
 	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
+	dialog.setValue2(bDMFlags2->text().toInt(&ok, 10));
 	int ret = dialog.exec();
 	if (ret == 1){
 		bDMFlags->setText(QString::number(dialog.value()));
+		bDMFlags2->setText(QString::number(dialog.value2()));
 	}
 }
 
 void multiPane::dmflags2(){
-	ZTempDMFlagDialog dialog(this);
-	bool ok;
-	dialog.setValue(bDMFlags2->text().toInt(&ok, 10));
-	int ret = dialog.exec();
-	if (ret == 1){
-		bDMFlags2->setText(QString::number(dialog.value()));
-	}
+	dmflags();
 }
 
 
