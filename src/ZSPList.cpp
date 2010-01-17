@@ -74,9 +74,9 @@ void ZSPList::rebuild(){
 		ZNameListable* fitm = (ZNameListable*)itm;
 		char szBuffer[256];
 		snprintf(szBuffer, 256, "p%dn", i);
-		zconf->setValue("zdl.ports", szBuffer, fitm->getName());
+		zconf->setValue("zdl.ports", szBuffer, fitm->getName().toStdString().c_str());
 		snprintf(szBuffer, 256, "p%df", i);
-		zconf->setValue("zdl.ports", szBuffer, fitm->getFile());
+		zconf->setValue("zdl.ports", szBuffer, fitm->getFile().toStdString().c_str());
 		
 	
 	}

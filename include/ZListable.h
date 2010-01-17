@@ -24,10 +24,9 @@
 
 class ZListable: public QListWidgetItem{
 public:
-	virtual const char* getName();
+	virtual QString getName();
 	ZListable( QListWidget * parent, int type);
-	virtual void setName(const char* inName);
-	virtual void setName(QString name);
+	virtual void setName(QString inName);
 protected:
 	int myType;
 };

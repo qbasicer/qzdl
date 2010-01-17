@@ -74,9 +74,9 @@ void ZIWadList::rebuild(){
 		ZNameListable* fitm = (ZNameListable*)itm;
 		char szBuffer[256];
 		snprintf(szBuffer, 256, "i%dn", i);
-		zconf->setValue("zdl.iwads", szBuffer, fitm->getName());
+		zconf->setValue("zdl.iwads", szBuffer, fitm->getName().toStdString().c_str());
 		snprintf(szBuffer, 256, "i%df", i);
-		zconf->setValue("zdl.iwads", szBuffer, fitm->getFile());
+		zconf->setValue("zdl.iwads", szBuffer, fitm->getFile().toStdString().c_str());
 		
 	}
 	

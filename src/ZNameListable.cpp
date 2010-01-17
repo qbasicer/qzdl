@@ -39,12 +39,12 @@ ZNameListable::ZNameListable( QListWidget *parent, int type, QString &file, QStr
 
 }
 
-const char* ZNameListable::getFile(){
-	return fileName.toStdString().c_str();
+QString ZNameListable::getFile(){
+	return fileName;
 }
 
-const char* ZNameListable::getName(){
-	return displayName.toStdString().c_str();
+QString ZNameListable::getName(){
+	return displayName;
 }
 
 void ZNameListable::setDisplayName(QString name){
@@ -59,5 +59,6 @@ void ZNameListable::setFile(QString file){
 
 QString ZNameListable::generateName(){
 	QString list = QString("%1 [%2]").arg(displayName).arg(fileName);
+	return list;
 }
 

@@ -43,6 +43,7 @@ public slots:
 	void tabChange(int index);
 	void manageUpdate();
 	void badLaunch();
+	void newUpdate();
 
 protected:
 	zdlInterface* intr;

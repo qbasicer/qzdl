@@ -25,14 +25,10 @@ ZListable::ZListable( QListWidget * parent, int type):QListWidgetItem(parent){
 	myType = type;
 }
 
-void ZListable::setName(const char* newName){
-	setText(newName);
-}
-
 void ZListable::setName(QString newName){
 	setText(newName);
 }
 
-const char* ZListable::getName(){
-	return text().toStdString().c_str();
+QString ZListable::getName(){
+	return text();
 }

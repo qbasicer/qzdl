@@ -25,8 +25,8 @@ class ZNameListable : public ZListable{
 	public:
 		ZNameListable( QListWidget *parent, int type, const char* file, const char* name);
 		ZNameListable( QListWidget *parent, int type, QString &qfile, QString &name);
-		const char* getFile();
-		const char* getName();
+		QString getFile();
+		QString getName();
 		void setDisplayName(QString name);
 		void setFile(QString file);
 

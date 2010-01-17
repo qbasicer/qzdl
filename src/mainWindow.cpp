@@ -35,8 +35,14 @@ mainWindow::~mainWindow(){
 
 void mainWindow::manageUpdate(){
 	if (zup->hasUpdate()){
-		QMessageBox::information(this, "ZDLSharp Updater", "There is an update.\n\nPlease visit zdlsharp.vectec.net");
+		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+		configurationManager::setInfobarMessage("There is an update available.",2);
+		connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
 	}
+}
+
+void mainWindow::newUpdate(){
+	QMessageBox::warning(NULL,"ZDLSharp", "There has been an update posted for ZDLSharp\n\nPlease visit the ZDLSharp website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 }
 
 void mainWindow::setUpdater(ZUpdater *zup){

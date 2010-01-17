@@ -88,9 +88,7 @@ void ZUpdater::fetch(int doAnyways){
 		}
 		
 	}
-	ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
-	configurationManager::setInfobarMessage("Currently using the old update system.",2);
-	connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesOldSystem()));
+	
 	if (httpGetId == 0){
 		buffer.clear();
 		updateCode = 0;
