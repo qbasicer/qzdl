@@ -74,6 +74,7 @@ void ZNameInput::basedOff(ZNameListable *listable){
 	if (listable){
 		lfile->setText(listable->getFile());
 		lname->setText(listable->getName());
+		
 	}
 }
 

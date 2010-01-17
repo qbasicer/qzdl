@@ -21,6 +21,7 @@
 #include "configurationManager.h"
 #include "ZNameInput.h"
 
+#include <cstdio>
 #include <iostream>
 using namespace std;
 
@@ -45,7 +46,9 @@ void ZSPList::newConfig(){
 			vector <ZDLLine*> nameVctr;
 			section->getRegex(number.c_str(), nameVctr);
 			if (nameVctr.size() == 1){
-				ZNameListable *zList = new ZNameListable(pList, 1001, fileVctr[i]->getValue(), nameVctr[0]->getValue());
+				QString disName = nameVctr[0]->getValue();
+				QString fileName = fileVctr[i]->getValue();
+				ZNameListable *zList = new ZNameListable(pList, 1001, fileName, disName);
 				insert(zList, -1);
 			}
 		}
