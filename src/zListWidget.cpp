@@ -54,6 +54,8 @@ zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	QObject::connect(btnRem, SIGNAL(clicked()), this, SLOT(removeButton()));
 	QObject::connect(btnUp, SIGNAL(clicked()), this, SLOT(upButton()));
 	QObject::connect(btnDn, SIGNAL(clicked()), this, SLOT(downButton()));
+	QObject::connect(pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editButton(QListWidgetItem*)));
+	
 }
 
 void zListWidget::insert(ZListable *item, int index){
@@ -114,6 +116,9 @@ void zListWidget::downButton(){
 			pList->setCurrentRow(oldRow+1);
 		}
 	}
+}
+
+void zListWidget::editButton(QListWidgetItem * item){
 }
 
 

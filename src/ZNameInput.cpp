@@ -52,6 +52,13 @@ void ZNameInput::browse(){
 	}
 }
 
+void ZNameInput::basedOff(ZNameListable *listable){
+	if (listable){
+		lfile->setText(listable->getFile());
+		lname->setText(listable->getName());
+	}
+}
+
 void ZNameInput::setFilter(QStringList inFilters){
 	filters = inFilters;
 }

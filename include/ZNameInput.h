@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QObject>
+#include "ZNameListable.h"
 
 class ZNameInput: public QDialog{
 	Q_OBJECT
@@ -11,6 +12,7 @@ class ZNameInput: public QDialog{
 		const char* getName();
 		const char* getFile();
 		void setFilter(QStringList inFilters);
+		void basedOff(ZNameListable *listable);
 	public slots:
 		void browse();
 	protected:

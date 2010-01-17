@@ -7,6 +7,7 @@ public:
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();
+	virtual void editButton(QListWidgetItem * item);
 
 };
 

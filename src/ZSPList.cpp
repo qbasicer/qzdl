@@ -68,7 +68,7 @@ void ZSPList::rebuild(){
 void ZSPList::addButton(){
 	QStringList filters;
 	filters << "Executable (*.exe *.bin)"
-			<< "Any files (*)";
+			<< "All files (*)";
 	
 	
 	ZNameInput diag(this);
@@ -84,3 +84,21 @@ void ZSPList::addButton(){
 	
 }
 
+void ZSPList::editButton(QListWidgetItem * item){
+	if (item){
+		QStringList filters;
+		filters << "Executable (*.exe *.bin)"
+				<< "All files (*)";
+		ZNameListable *zitem = (ZNameListable*)item;
+		ZNameInput diag(this);
+		diag.setWindowTitle("Add Source Port/Engine");
+		diag.setFilter(filters);
+		diag.basedOff(zitem);
+		if(diag.exec()){
+			QString fileName = diag.getFile();
+			QString name = diag.getName();
+			zitem->setDisplayName(name);
+			zitem->setFile(fileName);
+		}	
+	}
+}

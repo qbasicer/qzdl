@@ -9,6 +9,7 @@ public:
 	virtual const char* getName();
 	ZListable( QListWidget * parent, int type);
 	virtual void setName(const char* inName);
+	virtual void setName(QString name);
 protected:
 	int myType;
 };

@@ -70,7 +70,7 @@ void ZIWadList::addButton(){
          << "WAD Files (*.wad)"
          << "pk3 Files (*.pk3)"
          << "zip Files (*.zip)"
-         << "Any files (*)";
+         << "All files (*)";
 	
 	ZNameInput diag(this);
 	diag.setWindowTitle("Add IWAD");
@@ -79,10 +79,30 @@ void ZIWadList::addButton(){
 		QString fileName = diag.getFile();
 		QString name = diag.getName();
 		ZNameListable *zList = new ZNameListable(pList, 1001, fileName, name);
-		QMessageBox::information(this, diag.getName(), zList->getName());
-		QMessageBox::information(this, diag.getFile(), zList->getFile());
 		insert(zList, -1);
 	}
 
+}
+
+void ZIWadList::editButton(QListWidgetItem * item){
+	if (item){
+		QStringList filters;
+		filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
+				<< "WAD Files (*.wad)"
+				<< "pk3 Files (*.pk3)"
+				<< "zip Files (*.zip)"
+				<< "All files (*)";
+		ZNameListable *zitem = (ZNameListable*)item;
+		ZNameInput diag(this);
+		diag.setWindowTitle("Add IWAD");
+		diag.setFilter(filters);
+		diag.basedOff(zitem);
+		if(diag.exec()){
+			QString fileName = diag.getFile();
+			QString name = diag.getName();
+			zitem->setDisplayName(name);
+			zitem->setFile(fileName);
+		}	
+	}
 }
 

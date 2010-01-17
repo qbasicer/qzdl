@@ -24,6 +24,7 @@ protected slots:
 	virtual void removeButton();
 	virtual void upButton();
 	virtual void downButton();
+	virtual void editButton(QListWidgetItem * item );
 protected:
 	QPushButton *btnAdd;
 	QPushButton *btnRem;
