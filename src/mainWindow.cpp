@@ -127,12 +127,12 @@ void mainWindow::launch(){
 	
 	procerr = proc->error();
 	
-	if(proc->state() != QProcess::NotRunning){
-		std::cout << "ERROR!" << std::endl;
-		configurationManager::setInfobarMessage("The process ended abnormally.",1);
-		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
-		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
-	}
+// 	if(proc->state() != QProcess::NotRunning){
+// 		std::cout << "ERROR!" << std::endl;
+// 		configurationManager::setInfobarMessage("The process ended abnormally.",1);
+// 		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+// 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
+// 	}
 	
 }
 
