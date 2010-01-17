@@ -26,6 +26,8 @@
 #include "mainWindow.h"
 #include "ZAdvancedMultiplayerDialog.h"
 #include "ZAboutDialog.h"
+#include "aup.xpm"
+#include "adown.xpm"
 
 extern mainWindow *mw;
 
@@ -35,7 +37,7 @@ buttonPane::buttonPane(ZQWidget *parent): ZQWidget(parent){
 	QPushButton *btnExit = new QPushButton("Exit", this);
 	btnZDL = new QPushButton("ZDL", this);
 	QPushButton *btnMSet = new QPushButton("Multi Settings", this);
-	btnEpr = new QPushButton("\\/", this);
+	btnEpr = new QPushButton(this);
 	QPushButton *btnLaunch = new QPushButton("Launch", this);
 
 	QMenu *context = new QMenu(btnZDL);
@@ -94,29 +96,35 @@ void buttonPane::newConfig(){
 		section->getRegex("^dlgmode$", vctr);
 		for(unsigned int i = 0; i < vctr.size(); i++){
 			if (strcmp(vctr[i]->getValue(), "open") == 0){
-				btnEpr->setText("^");
+				btnEpr->setIcon(QPixmap(adown));
 			}else{
-				btnEpr->setText("\\/");
+				btnEpr->setIcon(QPixmap(aup));
 			}
 		}
 		if (vctr.size() < 1){
-			btnEpr->setText("\\/");
+			btnEpr->setIcon(QPixmap(aup));
 		}
 	}else{
-		btnEpr->setText("\\/");
+		btnEpr->setIcon(QPixmap(aup));
 	}
 	
 }
 
 void buttonPane::mclick(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
-	if (btnEpr->text() == "^"){
-		zconf->setValue("zdl.save", "dlgmode", "closed");
-		btnEpr->setText("\\/");
+	int stat;
+	if(zconf->hasValue("zdl.save","dlgmode")){
+		QString txt = zconf->getValue("zdl.save","dlgmode",&stat);
+		if(txt == "closed"){
+			btnEpr->setIcon(QPixmap(adown));
+			zconf->setValue("zdl.save", "dlgmode", "open");
+		}else{
+			zconf->setValue("zdl.save", "dlgmode", "closed");
+			btnEpr->setIcon(QPixmap(aup));
+		}
 	}else{
-		cout << "closing dialog (down arrow)" << endl;
+		btnEpr->setIcon(QPixmap(adown));
 		zconf->setValue("zdl.save", "dlgmode", "open");
-		btnEpr->setText("^");
 	}
 	configurationManager::getInterface()->newConfig();
 }
