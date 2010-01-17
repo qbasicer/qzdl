@@ -21,6 +21,8 @@
 
 #include "configurationManager.h"
 #include "zListWidget.h"
+#include "adown.xpm"
+#include "aup.xpm"
 
 zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	QVBoxLayout *column = new QVBoxLayout(this);
@@ -49,10 +51,12 @@ zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	btnRem = new QPushButton("Rem", this);
 	btnRem->setMinimumWidth(30);
 	
-	btnUp = new QPushButton("/\\", this);
+	btnUp = new QPushButton(this);
+	btnUp->setIcon(QPixmap(aup));
 	btnUp->setMinimumWidth(10);
 	
-	btnDn = new QPushButton("\\/", this);
+	btnDn = new QPushButton(this);
+	btnDn->setIcon(QPixmap(adown));
 	btnDn->setMinimumWidth(10);
 	
 	buttonRow->addWidget(btnAdd);
@@ -137,6 +141,7 @@ void zListWidget::downButton(){
 }
 
 void zListWidget::editButton(QListWidgetItem * item){
+	item = item;
 }
 
 
