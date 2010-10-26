@@ -7,4 +7,5 @@ Here's a short list of future features:
 - Global/local/user based configs
 - A small preview of the map, read this from a screenshot directory
 - Expand ~
+- Implement the 'always add these args' to spec
 
