@@ -6,4 +6,5 @@ Here's a short list of future features:
 - Store IWAD map names in config files (ie m0n=E1M1)
 - Global/local/user based configs
 - A small preview of the map, read this from a screenshot directory
+- Expand ~
 
