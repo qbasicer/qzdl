@@ -23,7 +23,7 @@
 #include "bottomPane.h"
 #include "buttonPane.h"
 
-QLineEdit *extraArgs;
+#include "configurationManager.h"
 
 bottomPane::bottomPane(ZQWidget *parent): ZQWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
@@ -36,4 +36,26 @@ bottomPane::bottomPane(ZQWidget *parent): ZQWidget(parent){
 	box->addWidget(ecla);
 	box->addWidget(extraArgs);
 	box->addWidget(pan);
+}
+
+void bottomPane::rebuild(){
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	if(extraArgs->text().length() > 0){
+		zconf->setValue("zdl.save", "efirst", extraArgs->text().toStdString().c_str());
+	}else{
+		zconf->deleteValue("zdl.save", "efirst");
+	}
+}
+
+void bottomPane::newConfig(){
+	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	if(zconf->hasValue("zdl.save", "efirst")){
+		int stat;
+		string rc = zconf->getValue("zdl.save", "efirst", &stat);
+		if(rc.length() > 0){
+			extraArgs->setText(rc.c_str());
+		}
+	}else{
+		extraArgs->setText("");
+	}
 }

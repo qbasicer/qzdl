@@ -30,8 +30,10 @@ private:
 	int reads;
 	int writes;
 	void parse();
+	int findComment(char delim);
 	int type;
 	string line;
+	string comment;
 	string value;
 	string variable;
 	int slashConvert;

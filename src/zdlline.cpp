@@ -36,6 +36,7 @@ ZDLLine::ZDLLine(const char *inLine)
 		parse();
 	}
 	slashConvert = false;
+	comment = "";
 	
 }
 
@@ -67,13 +68,43 @@ int ZDLLine::setValue(const char *inValue)
 	line.append(variable);
 	line.append("=");
 	line.append(inValue);
+	if(comment.size() > 0){
+		line.append("     ");
+		line.append(comment);
+	}
 	parse();
 	writes++;
 	return 0;
 }
 
+int ZDLLine::findComment(char delim){
+	string::size_type cloc = line.find(delim, line.size());
+	if (cloc != string::npos){
+		if (cloc > 0){
+			if (line[cloc-1] != '\\'){
+				return cloc;
+			}
+		}
+	}
+	return -1;
+}
+
 void ZDLLine::parse()
 {
+	int cloc = findComment(';');
+	int cloc2 = findComment('#');
+	if(cloc != -1 && cloc2 != -1){
+		cloc = min(cloc,cloc2);
+	}else if(cloc == -1 && cloc2 != -1){
+		cloc = cloc2;
+	}
+	
+	if(cloc != -1){
+		//Strip out comment
+		comment = chomp(line.substr(cloc, line.size()));
+		
+	}
+	
 	string::size_type loc = line.find("=", 0);
 	if (loc != string::npos){
 		variable = chomp(line.substr(0, loc));

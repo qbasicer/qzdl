@@ -235,7 +235,16 @@ int ZDLConf::setValue(const char *lsection, const char *variable, const char *sz
 {
 	if((mode & WriteOnly) != 0){
 		string value = szBuffer;
-		//cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<value<<")"<<endl;
+		
+		//Better handing of variables.  Don't overwrite if you don't have to.
+		if(hasValue(lsection,variable)){
+			int stat;
+			string oldValue = getValue(lsection, variable, &stat);
+			if(oldValue == szBuffer){
+				return 0;
+			}
+		}
+		
 		writes++;
 		list<ZDLSection*>::iterator itr;
 		

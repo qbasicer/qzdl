@@ -154,6 +154,13 @@ QStringList mainWindow::getArguments(){
 	unsigned int iwadIndex = 0;
 	bool ok;
 	int stat;
+	if(zconf->hasValue("zdl.save", "efirst")){
+		string rc = zconf->getValue("zdl.save", "efirst", &stat);
+		if(rc.length() > 0){
+			ourString << rc.c_str();
+		}
+	}
+	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
 		string rc = zconf->getValue("zdl.save", "iwad", &stat);

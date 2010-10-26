@@ -23,4 +23,8 @@ class bottomPane: public ZQWidget{
 Q_OBJECT
 public: 
 	bottomPane( ZQWidget *parent=0);
+	virtual void rebuild();
+	virtual void newConfig();
+protected:
+	QLineEdit *extraArgs;
 };
