@@ -202,7 +202,7 @@ QStringList mainWindow::getArguments(){
 	}
 	
 	if (zconf->hasValue("zdl.save", "warp")){
-		ourString << "-warp";
+		ourString << "-map";
 		ourString << zconf->getValue("zdl.save", "warp", &stat);
 	}
 	
@@ -226,7 +226,12 @@ QStringList mainWindow::getArguments(){
 		if (fileVctr.size() > 0){
 			ourString << "-file";
 			for(unsigned int i = 0; i < fileVctr.size(); i++){
-				ourString << fileVctr[i]->getValue();
+				//TODO: Fix this
+				//Dirty ugly hack.
+				QString quoted =  "\"";
+				quoted += fileVctr[i]->getValue();
+				quoted += "\"";
+				ourString << quoted;
 			}
 		}
 	}
