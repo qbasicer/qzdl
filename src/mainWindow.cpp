@@ -186,7 +186,10 @@ QStringList mainWindow::getArguments(){
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (i == iwadIndex){
 				ourString << "-iwad";
-				ourString << fileVctr[i]->getValue();
+				QString temp = "\"";
+				temp += fileVctr[i]->getValue();
+				temp += "\"";
+				ourString << temp;
 			
 			}
 		}
