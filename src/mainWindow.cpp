@@ -202,7 +202,7 @@ QStringList mainWindow::getArguments(){
 	}
 	
 	if (zconf->hasValue("zdl.save", "warp")){
-		ourString << "-map";
+		ourString << "+map";
 		ourString << zconf->getValue("zdl.save", "warp", &stat);
 	}
 	

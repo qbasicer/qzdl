@@ -50,7 +50,7 @@ settingPane::settingPane(QWidget *parent):ZQWidget(parent){
 	QVBoxLayout *skillBox = new QVBoxLayout();
 	box2->addLayout(skillBox);
 
-	QLineEdit *warpText = new QLineEdit(this);
+	warpText = new QLineEdit(this);
 	warpBox->addWidget(new QLabel("Map",this));
 	warpBox->addWidget(warpText);
 
@@ -73,6 +73,12 @@ void settingPane::rebuild(){
 		zconf->setValue("zdl.save", "skill", diffList->currentIndex());
 	}else{
 		zconf->deleteValue("zdl.save", "skill");
+	}
+	
+	if(warpText->text().length() > 0){
+		zconf->setValue("zdl.save", "warp", warpText->text().toStdString().c_str());
+	}else{
+		zconf->deleteValue("zdl.save", "warp");
 	}
 	
 	ZDLSection *section = zconf->getSection("zdl.ports");
@@ -142,7 +148,21 @@ void settingPane::newConfig(){
 			zconf->setValue("zdl.save", "skill", 0);
 			diffList->setCurrentIndex(0);
 		}
+	
 	}
+	
+	if(zconf->hasValue("zdl.save", "warp")){
+		int stat;
+		string rc = zconf->getValue("zdl.save","warp",&stat);
+		if(rc.length() > 0){
+			warpText->setText(QString(rc.c_str()));
+		}else{
+			warpText->setText("");
+		}
+	}else{
+		warpText->setText("");
+	}
+	
 	
 	sourceList->clear();
 	

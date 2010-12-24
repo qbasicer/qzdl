@@ -30,5 +30,6 @@ protected:
 	QComboBox *diffList;
 	QComboBox *sourceList;
 	QListWidget *IWADList;
+	QLineEdit *warpText;
 	
 };
