@@ -28,7 +28,7 @@ using namespace std;
 #define ZDL_FLAG_NAMELESS	0x00001
 
 
-#define ZDL_VERSION_STRING	"3.0.5.3q - SVN 48"
+#define ZDL_VERSION_STRING	"3.0.5.3q - SVN 54"
 #define ZDL_VERSION_ID		16
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
 #define ZDL_ENGINE_NAME		"ZDLSharp"
