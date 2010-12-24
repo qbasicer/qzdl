@@ -27,8 +27,8 @@ class ZNameInput: public QDialog{
 	Q_OBJECT
 	public: 
 		ZNameInput(QWidget *parent);
-		const char* getName();
-		const char* getFile();
+		QString getName();
+		QString getFile();
 		void setFilter(QStringList inFilters);
 		void basedOff(ZNameListable *listable);
 	public slots:

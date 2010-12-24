@@ -116,7 +116,7 @@ void settingPane::rebuild(){
 			vector <ZDLLine*> nameVctr;
 			section->getRegex(number.c_str(), nameVctr);
 			if (nameVctr.size() == 1){
-				if (sourceList->currentIndex() == count){
+				if (IWADList->currentRow() == count){
 					zconf->setValue("zdl.save", "iwad", value.substr(1, value.length()-2).c_str());
 					break;
 				}
@@ -211,7 +211,7 @@ void settingPane::newConfig(){
 		if (rc.length() > 0){
 			index = atoi((char*)rc.c_str());
 		}
-		if (index >= 0 && index < sourceList->count()){
+		if (index >= 0 && index < IWADList->count()){
 			IWADList->setCurrentRow(index);
 		}else{
 			zconf->setValue("zdl.save", "iwad", 0);

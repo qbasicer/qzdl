@@ -82,14 +82,14 @@ void ZNameInput::setFilter(QStringList inFilters){
 	filters = inFilters;
 }
 
-const char* ZNameInput::getName(){
+QString ZNameInput::getName(){
 	if (lname->text().length() > 0){
-		return lname->text().toStdString().c_str();
+		return lname->text();
 	}else{
-		return lfile->text().toStdString().c_str();
+		return lfile->text();
 	}
 }
 
-const char* ZNameInput::getFile(){
-	return lfile->text().toStdString().c_str();
+QString ZNameInput::getFile(){
+	return lfile->text();
 }
