@@ -51,7 +51,7 @@ settingPane::settingPane(QWidget *parent):ZQWidget(parent){
 	box2->addLayout(skillBox);
 
 	QLineEdit *warpText = new QLineEdit(this);
-	warpBox->addWidget(new QLabel("Warp",this));
+	warpBox->addWidget(new QLabel("Map",this));
 	warpBox->addWidget(warpText);
 
 	diffList = new QComboBox(this);
