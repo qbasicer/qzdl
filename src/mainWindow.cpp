@@ -190,7 +190,7 @@ QStringList mainWindow::getArguments(){
 				temp += fileVctr[i]->getValue();
 				temp += "\"";
 				ourString << temp;
-			
+				break;
 			}
 		}
 	}

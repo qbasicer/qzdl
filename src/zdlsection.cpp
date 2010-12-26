@@ -128,6 +128,7 @@ int ZDLSection::setValue(const char *variable, const char *value)
 	//cout << "Buffer: " << buffer << endl;
 	ZDLLine *line = new ZDLLine((char*)buffer.c_str());
 	lines.push_back(line);
+	
 	return 0;
 }
 
@@ -145,6 +146,7 @@ int ZDLSection::streamWrite(ostream &stream)
 		for (itr=lines.begin(); itr!=lines.end();itr++){
 			ZDLLine* line = (*itr);
 			stream << line->getLine() << endl;
+			cout << "Writing section " << getName() << " data: " << line->getLine() << endl;
 		}
 	}
 	return 0;

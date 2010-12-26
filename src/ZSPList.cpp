@@ -60,16 +60,7 @@ void ZSPList::rebuild(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
-		vector <ZDLLine*> vctr;
-		section->getRegex("^p[0-9]f$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
-		}
-		vctr.clear();
-		section->getRegex("^p[0-9]n$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
-		}
+		zconf->deleteSection("zdl.ports");
 	}
 	
 	for(int i = 0; i < count(); i++){

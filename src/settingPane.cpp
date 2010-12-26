@@ -124,6 +124,7 @@ void settingPane::rebuild(){
 			if (nameVctr.size() == 1){
 				if (IWADList->currentRow() == count){
 					zconf->setValue("zdl.save", "iwad", value.substr(1, value.length()-2).c_str());
+					
 					break;
 				}
 				count++;

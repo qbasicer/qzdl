@@ -27,6 +27,7 @@
 using namespace std;
 #include <zdlcommon.h>
 
+
 extern char* chomp(string in);
 
 /* ZDLConf.cpp
@@ -138,6 +139,18 @@ ZDLConf::~ZDLConf()
 		delete vars;
 	//cout << "Deleting configuration children." << endl;
 
+}
+
+void ZDLConf::deleteSection(QString lsection){
+	list<ZDLSection*>::iterator itr;
+	for (itr = sections.begin(); itr != sections.end();itr++){
+		ZDLSection* section = (*itr);
+		QString secName = section->getName();
+		if (secName == lsection){
+			sections.erase(itr);
+			break;
+		}
+	}
 }
 
 void ZDLConf::deleteValue(const char *lsection, const char *variable){

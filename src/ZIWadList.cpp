@@ -59,26 +59,19 @@ void ZIWadList::rebuild(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.iwads");
 	if (section){
-		vector <ZDLLine*> vctr;
-		section->getRegex("^i[0-9]f$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
-		}
-		vctr.clear();
-		section->getRegex("^i[0-9]n$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
-		}
+		zconf->deleteSection("zdl.iwads");
 	}
 	
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZNameListable* fitm = (ZNameListable*)itm;
+		
 		char szBuffer[256];
 		snprintf(szBuffer, 256, "i%dn", i);
 		zconf->setValue("zdl.iwads", szBuffer, fitm->getName().toStdString().c_str());
 		snprintf(szBuffer, 256, "i%df", i);
 		zconf->setValue("zdl.iwads", szBuffer, fitm->getFile().toStdString().c_str());
+		
 		
 	}
 	
