@@ -152,6 +152,16 @@ QStringList mainWindow::getArguments(){
 	ZDLSection *section = NULL;
 	
 	unsigned int iwadIndex = 0;
+	int doquotes = 1;
+	
+	if(zconf->hasValue("zdl.general","quotefiles")){
+		int ok;
+		string rc = zconf->getValue("zdl.general","quotefiles",&ok);
+		if(rc == "disabled"){
+			doquotes = 0;
+		}	
+	}
+	
 	bool ok;
 	int stat;
 	if(zconf->hasValue("zdl.save", "efirst")){
@@ -186,10 +196,14 @@ QStringList mainWindow::getArguments(){
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (i == iwadIndex){
 				ourString << "-iwad";
-				QString temp = "\"";
-				temp += fileVctr[i]->getValue();
-				temp += "\"";
-				ourString << temp;
+				if(doquotes){
+					QString temp = "\"";
+					temp += fileVctr[i]->getValue();
+					temp += "\"";
+					ourString << temp;
+				}else{
+					ourString << fileVctr[i]->getValue();
+				}
 				break;
 			}
 		}
@@ -231,10 +245,14 @@ QStringList mainWindow::getArguments(){
 			for(unsigned int i = 0; i < fileVctr.size(); i++){
 				//TODO: Fix this
 				//Dirty ugly hack.
-				QString quoted =  "\"";
-				quoted += fileVctr[i]->getValue();
-				quoted += "\"";
-				ourString << quoted;
+				if(doquotes){
+					QString quoted =  "\"";
+					quoted += fileVctr[i]->getValue();
+					quoted += "\"";
+					ourString << quoted;
+				}else{
+					ourString << fileVctr[i]->getValue();
+				}
 			}
 		}
 	}
