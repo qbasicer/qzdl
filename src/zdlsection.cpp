@@ -146,7 +146,6 @@ int ZDLSection::streamWrite(ostream &stream)
 		for (itr=lines.begin(); itr!=lines.end();itr++){
 			ZDLLine* line = (*itr);
 			stream << line->getLine() << endl;
-			cout << "Writing section " << getName() << " data: " << line->getLine() << endl;
 		}
 	}
 	return 0;
