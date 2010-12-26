@@ -152,13 +152,13 @@ QStringList mainWindow::getArguments(){
 	ZDLSection *section = NULL;
 	
 	unsigned int iwadIndex = 0;
-	int doquotes = 1;
+	int doquotes = 0;
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
 		string rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			doquotes = 0;
+		if(rc == "enabled"){
+			doquotes = 1;
 		}	
 	}
 	

@@ -58,12 +58,10 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	
 	launchClose = new QCheckBox("Close on launch",this);
 	pathQuote = new QCheckBox("Quote paths",this);
-	slashConvert = new QCheckBox("Convert backslashes to forward slashes",this);
 	sections->addWidget(alwaysArgs);
 	sections->addLayout(lrpane);
 	sections->addWidget(launchClose);
 	sections->addWidget(pathQuote);
-	//sections->addWidget(slashConvert);
 	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
@@ -101,12 +99,6 @@ void zSettingsPane::rebuild(){
 		zconf->setValue("zdl.general", "quotefiles", "enabled");
 	}
 	
-	if (slashConvert->checkState() == Qt::Checked){
-		zconf->setValue("zdl.general", "slashconvert", "enabled");
-	}else{
-		zconf->setValue("zdl.general", "slashconvert", "disabled");
-	}
-	
 	if(launchClose->checkState() == Qt::Checked){
 		zconf->setValue("zdl.general","autoclose", "1");
 	}else{
@@ -141,25 +133,13 @@ void zSettingsPane::newConfig(){
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
 		string rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			pathQuote->setCheckState(Qt::Unchecked);
-		}else{
-			pathQuote->setCheckState(Qt::Checked);
-		}	
-	}else{
-		pathQuote->setCheckState(Qt::Checked);
-	}
-	
-	if(zconf->hasValue("zdl.general","slashconvert")){
-		int ok;
-		string rc = zconf->getValue("zdl.general","slashconvert",&ok);
 		if(rc == "enabled"){
-			slashConvert->setCheckState(Qt::Checked);
+			pathQuote->setCheckState(Qt::Checked);
 		}else{
-			slashConvert->setCheckState(Qt::Unchecked);
+			pathQuote->setCheckState(Qt::Unchecked);
 		}	
 	}else{
-		slashConvert->setCheckState(Qt::Unchecked);
+		pathQuote->setCheckState(Qt::Unchecked);
 	}
 	
 	if(zconf->hasValue("zdl.general","autoclose")){

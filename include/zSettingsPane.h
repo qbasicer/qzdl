@@ -39,6 +39,5 @@ private:
 	ZSPList *sourceList;
 	QCheckBox *updater;
 	QCheckBox *pathQuote;
-	QCheckBox *slashConvert;
 	
 };
