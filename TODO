@@ -1,3 +1,7 @@
+Bugs:
+- Map field stored lower case
+- Fix complete replace of config on .ZDL load - replace without clearning current config
+
 Here's a short list of future features:
 
 - Get IWAD Map names (questionable)
