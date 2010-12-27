@@ -39,8 +39,10 @@ ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
 	vbox->addWidget(title);
 	vbox->addWidget(new QLabel("C Version Copyright (C) BioHazard 2005",this));
 	vbox->addWidget(new QLabel("C# Version Copyright (C) QBasicer 2007",this));
-	vbox->addWidget(new QLabel("Qt Version Copyright (C) Cody Harris 2007-2010",this));
-	vbox->addWidget(new QLabel("http://zdlsharp.vectec.net",this));
+	vbox->addWidget(new QLabel("Qt Version Copyright (C) Cody Harris 2007-2011",this));
+	QLabel *url = new QLabel("<a href=http://zdlsharp.vectec.net>http://zdlsharp.vectec.net</a>",this);
+	url->setOpenExternalLinks(true);
+	vbox->addWidget(url);
 	
 	QLabel *pic = new QLabel(this);
 	pic->setPixmap(QPixmap(aboutImg));
@@ -51,6 +53,26 @@ ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
 	
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
 	box->addWidget(new QLabel("Special thanks to Risen, Enjay, DRDTeam.org, ZDoom.org",this));
+	
+	ZDLConfiguration *conf = configurationManager::getConfiguration();
+	if(conf){
+		QString systemConfPath = conf->getPath(ZDLConfiguration::CONF_SYSTEM);
+		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
+		
+		box->addWidget(new QLabel(" ",this));
+		
+		QLabel *systemConf = new QLabel("System Configuration File: "+systemConfPath,this);
+		systemConf->setTextInteractionFlags(Qt::TextSelectableByMouse);
+		
+		QLabel *userConf = new QLabel("User Configuration File: "+userConfPath,this);
+		userConf->setTextInteractionFlags(Qt::TextSelectableByMouse);
+		
+		box->addWidget(systemConf);
+		box->addWidget(userConf);
+	}
+	
+	
+	
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok,Qt::Horizontal,this);
 	box->addWidget(btnBox);
 	connect(btnBox, SIGNAL(accepted()), this, SLOT(close()));

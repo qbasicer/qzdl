@@ -19,6 +19,8 @@
 class ZDLVariables;
 
 #include <QtCore>
+#include <iostream>
+#include <list>
 
 class ZDLConf {
 	friend class ZDLVariables;
@@ -45,14 +47,14 @@ public:
 	~ZDLConf();
 	ZDLConf(int mode = ZDLConf::Default);
 	int reopen(int mode);
-	list<ZDLSection*> sections;
-	int writeStream(ostream &stream);
+	std::list<ZDLSection*> sections;
+	int writeStream(std::ostream &stream);
 	ZDLSection *getSection(const char* section);
 	void deleteSection(QString section);
 private:
 	int mode;
 	int reads;
 	int writes;
-	void parse(string in, ZDLSection* current);
+	void parse(std::string in, ZDLSection* current);
 	ZDLVariables *vars;
 };

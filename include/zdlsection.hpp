@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
+#include <vector>
+
 class ZDLSection{
 	friend class ZDLVariables;
 public:
@@ -28,13 +30,13 @@ public:
 	int hasVariable(const char* variable);
 	void deleteVariable(const char* variable);
 	int setValue(const char *variable, const char *value);
-	int streamWrite(ostream &stream);
-	int getRegex(const char* regex, vector<ZDLLine*> &vctr);
-	list<ZDLLine*> lines;
+	int streamWrite(std::ostream &stream);
+	int getRegex(const char* regex, std::vector<ZDLLine*> &vctr);
+	std::list<ZDLLine*> lines;
 private:
 	int reads;
 	int writes;
 	ZDLLine *findLine(const char *inVar);
 	int flags;
-	string sectionName;
+	std::string sectionName;
 };

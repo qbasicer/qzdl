@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+#include <string>
+
 class ZDLConf;
 
 class ZDLVariables{
@@ -45,7 +47,7 @@ private:
 	int _flags;
 	int depth;
 	ZDLConf *_parent;
-	string blank;
+	std::string blank;
 	//list <ZDLVariable *>variableList;
 	static int trendBytes;
 	static int trendNum;

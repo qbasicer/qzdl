@@ -41,7 +41,7 @@ extern char* chomp(string in);
  */
 
 int ZDLConf::readINI(const char* file)
-{
+{	
 	if((mode & ZDLConf::FileRead) != 0){
 		reads++;
 		string line;
@@ -54,7 +54,8 @@ int ZDLConf::readINI(const char* file)
 		sections.push_back(current);
 		ifstream stream(file);
 		if (!stream.is_open()){
-			//cerr << "Unable to open file \"" << file << "\"" << std::endl;
+			cerr << "Unable to open file \"" << file << "\"" << std::endl;
+			mode = mode & ~FileWrite;
 			return 1;
 		}
 		while (!stream.eof()){
@@ -63,6 +64,12 @@ int ZDLConf::readINI(const char* file)
 			current = sections.back();
 		}
 		stream.close();
+		
+		QFileInfo info(file);
+		if(!info.isWritable()){
+			mode = mode & ~FileWrite;
+		}
+		
 		return 0;
 	}else{
 		return 1;
@@ -86,7 +93,7 @@ int ZDLConf::writeINI(const char *file)
 		writes++;
 		ofstream stream(file);
 		if (!stream.is_open()){
-			//cerr << "Unable to open file \"" << file << "\"" << endl;
+			cerr << "Unable to open file \"" << file << "\"" << endl;
 			return 1;
 		}
 		writeStream(stream);

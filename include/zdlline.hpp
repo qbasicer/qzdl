@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <string>
  
 class ZDLLine{
 	friend class ZDLVariables;
@@ -32,9 +34,9 @@ private:
 	void parse();
 	int findComment(char delim);
 	int type;
-	string line;
-	string comment;
-	string value;
-	string variable;
+	std::string line;
+	std::string comment;
+	std::string value;
+	std::string variable;
 	int slashConvert;
 };

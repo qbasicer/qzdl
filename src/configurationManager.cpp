@@ -33,6 +33,7 @@ using namespace std;
 void configurationManager::init(){
 	activeConfig = NULL;
 	cdir = "";
+	conf = new ZDLConfiguration();
 }
 
 ZDLConf *configurationManager::activeConfig;
@@ -41,6 +42,7 @@ ZQWidget* configurationManager::interface;
 ZQWidget* configurationManager::infobar;
 QString configurationManager::filename;
 ZUpdater *configurationManager::zupper;
+ZDLConfiguration *configurationManager::conf;
 
 void configurationManager::setInterface(ZQWidget *widget){
 	interface  = widget;
@@ -98,4 +100,8 @@ void configurationManager::setUpdater(ZUpdater *zup){
 
 ZUpdater *configurationManager::getUpdater(){
 	return zupper;
+}
+
+ZDLConfiguration* configurationManager::getConfiguration(){
+	return conf;
 }

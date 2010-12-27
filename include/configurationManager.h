@@ -23,6 +23,7 @@
 #include <string>
 #include "ZQWidget.h"
 #include "ZUpdater.h"
+#include "ZDLConfiguration.h"
 
 using namespace std;
 
@@ -33,8 +34,13 @@ class configurationManager{
 		static void init();
 		static ZQWidget* getInterface();
 		static void setInterface(ZQWidget *widget);
+		
+		// Deprecating this soon!
 		static void setActiveConfiguration(ZDLConf *zconf);
 		static ZDLConf* getActiveConfiguration();
+		
+		static ZDLConfiguration* getConfiguration();
+		
 		static void setCurrentDirectory(string dir);
 		static const char* getCurrentDirectory();
 		static void setInfobar(ZQWidget *zib);
@@ -52,6 +58,7 @@ class configurationManager{
 		static ZDLConf *activeConfig;
 		static string cdir;
 		static ZUpdater *zupper;
+		static ZDLConfiguration *conf;
 };
 
 #endif
