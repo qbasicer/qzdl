@@ -35,7 +35,7 @@ using namespace std;
 #else
 
 #define ZDL_VERSION_STRING	"3.0.5.3q - SVN 66"
-#define ZDL_VERSION_ID		24
+#define ZDL_VERSION_ID		20
 
 #endif
 
