@@ -1,6 +1,17 @@
 Bugs:
 - Map field stored lower case
 - Fix complete replace of config on .ZDL load - replace without clearning current config
+- <NeuralStunner> Okay. First off, for some reason ZDoom doesn't get to properly read AutoExec
+  <NeuralStunner> Works fine with ZDL 3.1a, I'm thinking because it changes active directory to ZDoom's
+  <Zbot> By the way, NeuralStunner on espernet told me "privmsg qbasicer that I found: ZDLSharp definitely needs to switch to the port's directory. Ran ChocoDoom with it, and it stored the configs in ZDL's directory." 17 minutes and 4 seconds ago
+- +Set does not appear to work
+  <NeuralStunner> "+Set DeathMatch 1" will not start a game as DM (3.1a does)
+  <NeuralStunner> +DeathMatch 1 works, however
+  <NeuralStunner> Odd thing is, it uses +Set in the command line for the DMFlags
+- <NeuralStunner> When Remove is used on a file in the External Files list, it unselects everything in that box
+  <NeuralStunner> Whereas in 1.3a it leaves the next file selected, so you can just hit Remove repeatedly and clear the list
+- Exit button doesn't work - oops!
+
 
 Here's a short list of future features:
 
