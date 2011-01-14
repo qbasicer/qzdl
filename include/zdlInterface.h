@@ -45,6 +45,7 @@ private slots:
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();
+	QLayout *getTopPane();
 	void buttonPaneNewConfig();
 	void bottomPaneRebuild();
 	void bottomPaneNewConfig();

@@ -25,9 +25,11 @@
 
 #include "multiPane.h"
 #include "zdlInterface.h"
-#include "topPane.h"
 #include "ZInfoBar.h"
 #include "mainWindow.h"
+#include "filePane.h"
+#include "settingPane.h"
+#include "ZQSplitter.h"
 
 #include "aup.xpm"
 #include "adown.xpm"
@@ -40,7 +42,7 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	
 	
-	topPane *tpane = new topPane(this);
+	QLayout *tpane = getTopPane();
 	QLayout *bpane = getBottomPane();
 	
 	mpane = new multiPane(this);
@@ -52,9 +54,26 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	box->addWidget(zib);
 	
 	configurationManager::setInfobar(zib);
-	box->addWidget(tpane);
+	box->addLayout(tpane);
 	box->addLayout(bpane);
 	
+}
+
+QLayout *zdlInterface::getTopPane(){
+	QHBoxLayout *box = new QHBoxLayout();
+
+	ZQSplitter *split = new ZQSplitter(this);
+	QSplitter *rsplit = split->getSplit();
+	
+	
+	filePane *fpane = new filePane(rsplit);
+	settingPane *spane = new settingPane(rsplit);
+	
+	split->addChild(fpane);
+	split->addChild(spane);
+	box->setSpacing(2);
+	box->addWidget(rsplit);
+	return box;
 }
 
 QLayout *zdlInterface::getBottomPane(){
