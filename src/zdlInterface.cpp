@@ -266,7 +266,8 @@ void zdlInterface::showCommandline(){
 	sendSignals();
 	QStringList cmdLst = mw->getArguments();
 	QString cmd = cmdLst.join(" ");
-	QMessageBox::information(this,"ZDLSharp Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
+	
+	QMessageBox::information(this,ZDL_ENGINE_NAME " Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
 }
 
 void zdlInterface::rebuild(){

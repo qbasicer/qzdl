@@ -95,7 +95,7 @@ void zListWidget::remove(int index){
 	if (item){
 		delete item;
 	}else{
-		QMessageBox::warning(this, "ZDLSharp Error", "You didn't make a selection.");
+		QMessageBox::warning(this, ZDL_ENGINE_NAME " Error", "You didn't make a selection.");
 	}
 }
 ZListable* zListWidget::get(int index){

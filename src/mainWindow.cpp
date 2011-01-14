@@ -42,7 +42,8 @@ void mainWindow::manageUpdate(){
 }
 
 void mainWindow::newUpdate(){
-	QMessageBox::warning(NULL,"ZDLSharp", "There has been an update posted for ZDLSharp\n\nPlease visit the ZDLSharp website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
+	QString engine = ZDL_ENGINE_NAME;
+	QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 }
 
 void mainWindow::setUpdater(ZUpdater *zup){
@@ -51,8 +52,8 @@ void mainWindow::setUpdater(ZUpdater *zup){
 }
 
 mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
-	QString windowTitle = "ZDLSharp ";
-	windowTitle += versionString + " - " + configurationManager::getConfigFileName();
+	QString windowTitle = ZDL_ENGINE_NAME;
+	windowTitle += " " + versionString + " - " + configurationManager::getConfigFileName();
 	setWindowTitle(windowTitle);
 	
 	setWindowIcon(configurationManager::getIcon());
@@ -106,7 +107,7 @@ void mainWindow::launch(){
 	
 	QString exec = getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, "ZDLSharp", "Please select a source port");
+		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
 		return;
 	}
 	QStringList args = getArguments();
@@ -180,11 +181,11 @@ QStringList mainWindow::getArguments(){
 		if (index >= 0){
 			iwadIndex = index;
 		}else{
-			QMessageBox::critical(this, "ZDLSharp", "Please select an IWAD");
+			QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
 			return ourString;
 		}
 	}else{
-		QMessageBox::critical(this, "ZDLSharp", "Please select an IWAD");
+		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
 		return ourString;
 	}
 	
@@ -372,8 +373,8 @@ void mainWindow::startRead(){
 	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	zconf->setValue("zdl.general", "version", ZDL_VERSION_STRING);
 	
-	QString windowTitle = "ZDLSharp ";
-	windowTitle += versionString + " - " + configurationManager::getConfigFileName();
+	QString windowTitle = ZDL_ENGINE_NAME;
+	windowTitle += " " + versionString + " - " + configurationManager::getConfigFileName();
 	setWindowTitle(windowTitle);
 }
 

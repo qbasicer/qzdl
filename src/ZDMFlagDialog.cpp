@@ -21,7 +21,7 @@
 #include <QDialogButtonBox>
 
 ZDMFlagDialog::ZDMFlagDialog(ZQWidget *parent):QDialog(parent){
-	setWindowTitle("ZDLSharp DMFlag Editor");
+	setWindowTitle(ZDL_ENGINE_NAME " DMFlag Editor");
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QVBoxLayout *box = new QVBoxLayout(this);
 	
