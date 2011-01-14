@@ -32,8 +32,27 @@ public:
 	void startRead();
 	void writeConfig();
 	virtual void newConfig();
+	virtual void rebuild();
+private slots:
+	void sendSignals();
+	void mclick();
+	void launch();
+	void ampclick();
+	void saveConfigFile();
+	void loadConfigFile();
+	void aboutClick();
+	void showCommandline();
 private:
+	QLayout *getBottomPane();
+	QLayout *getButtonPane();
+	void buttonPaneNewConfig();
+	void bottomPaneRebuild();
+	void bottomPaneNewConfig();
+	
+	QPushButton *btnEpr;
+	QPushButton *btnZDL;
 	QVBoxLayout *box;
 	multiPane *mpane;
+	QLineEdit *extraArgs;
 };
 #endif

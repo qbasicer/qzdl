@@ -55,7 +55,6 @@ int ZDLConf::readINI(const char* file)
 		ifstream stream(file);
 		if (!stream.is_open()){
 			cerr << "Unable to open file \"" << file << "\"" << std::endl;
-			mode = mode & ~FileWrite;
 			return 1;
 		}
 		while (!stream.eof()){
