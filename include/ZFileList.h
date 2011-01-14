@@ -20,11 +20,13 @@
 #define _ZFILELIST_H_
 #include "zListWidget.h"
 class ZFileList : public zListWidget{
-public:
-	ZFileList(ZQWidget *parent);
-	virtual void addButton();
-	virtual void rebuild();
-	virtual void newConfig();
+	public:
+		ZFileList(ZQWidget *parent);
+		virtual void addButton();
+		virtual void rebuild();
+		virtual void newConfig();
+		virtual void newDrop(QList<QUrl> urlList);
+		
 
 };
 

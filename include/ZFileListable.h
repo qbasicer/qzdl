@@ -24,7 +24,7 @@
 class ZFileListable : public ZListable{
 public:
 	ZFileListable( QListWidget *parent, int type, const char* file);
-	ZFileListable( QListWidget * parent, int type, QString &qfile);
+	ZFileListable( QListWidget * parent, int type, QString qfile);
 	const char* getFile();
 
 	private:

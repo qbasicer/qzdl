@@ -80,6 +80,34 @@ zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	
 }
 
+void zListWidget::doDragDrop(int enabled){
+	setAcceptDrops(enabled);
+}
+
+void zListWidget::newDrop(QList<QUrl> urlList){
+}
+
+void zListWidget::dragEnterEvent(QDragEnterEvent *event){
+		setBackgroundRole(QPalette::Highlight);
+		event->acceptProposedAction();
+}
+
+void zListWidget::dragMoveEvent(QDragMoveEvent *event){
+	event->acceptProposedAction();
+}
+
+void zListWidget::dragLeaveEvent(QDragLeaveEvent *event){
+	setBackgroundRole(QPalette::Dark);
+	event->accept();
+}
+
+void zListWidget::dropEvent(QDropEvent *event){
+	const QMimeData *mimeData = event->mimeData();
+	if (mimeData->hasUrls()) {
+		newDrop(mimeData->urls());
+	}
+}
+
 void zListWidget::insert(ZListable *item, int index){
 	if(index < 0){
 		pList->addItem(item);

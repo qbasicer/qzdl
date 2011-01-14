@@ -70,6 +70,10 @@ void ZNameInput::browse(){
 	}
 }
 
+void ZNameInput::fromUrl(QUrl url){
+	lfile->setText(url.path());
+}
+
 void ZNameInput::basedOff(ZNameListable *listable){
 	if (listable){
 		lfile->setText(listable->getFile());

@@ -31,6 +31,7 @@ class ZNameInput: public QDialog{
 		QString getFile();
 		void setFilter(QStringList inFilters);
 		void basedOff(ZNameListable *listable);
+		void fromUrl(QUrl url);
 	public slots:
 		void browse();
 	protected:

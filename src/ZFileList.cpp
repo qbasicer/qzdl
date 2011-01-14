@@ -26,6 +26,17 @@ using namespace std;
 ZFileList::ZFileList(ZQWidget *parent): zListWidget(parent){
 }
 
+void ZFileList::newDrop(QList<QUrl> urlList){
+	
+	for (int i = 0; i < urlList.size() && i < 32; ++i) {
+		QUrl url = urlList.at(i);
+		if(url.scheme() == "file"){
+			ZFileListable *zList = new ZFileListable(pList, 1001, url.path());
+			insert(zList, -1);
+		}
+	}
+}
+
 void ZFileList::newConfig(){
 	pList->clear();
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
@@ -40,7 +51,6 @@ void ZFileList::newConfig(){
 		}
 	}
 }
-
 
 void ZFileList::rebuild(){
 	ZDLConf *zconf = configurationManager::getActiveConfiguration();
