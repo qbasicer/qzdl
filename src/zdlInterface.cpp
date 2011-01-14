@@ -1,6 +1,6 @@
 /*
  * This file is part of qZDL
- * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2007-2011  Cody Harris
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "filePane.h"
 #include "settingPane.h"
 #include "ZQSplitter.h"
+#include "ZDMFlagPicker.h"
 
 #include "aup.xpm"
 #include "adown.xpm"
@@ -65,7 +66,7 @@ QLayout *zdlInterface::getTopPane(){
 	ZQSplitter *split = new ZQSplitter(this);
 	QSplitter *rsplit = split->getSplit();
 	
-	
+
 	filePane *fpane = new filePane(rsplit);
 	settingPane *spane = new settingPane(rsplit);
 	
@@ -90,6 +91,7 @@ QLayout *zdlInterface::getBottomPane(){
 	return box;
 }
 
+
 QLayout *zdlInterface::getButtonPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
@@ -105,6 +107,7 @@ QLayout *zdlInterface::getButtonPane(){
 	QAction *showCommandline = actions->addAction("Show Command Line");
 	actions->addAction("Clear PWAD list");
 	actions->addAction("Clear all fields");
+	QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 	
 	context->addMenu(actions);
 	context->addSeparator();
@@ -117,6 +120,7 @@ QLayout *zdlInterface::getButtonPane(){
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
+	connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	
 	btnZDL->setMenu(context);
 	
@@ -142,6 +146,11 @@ QLayout *zdlInterface::getButtonPane(){
 	
 	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
 	return box;
+}
+
+void zdlInterface::showNewDMFlagger(){
+	ZDMFlagPicker dialog(this);
+	dialog.exec();
 }
 
 void zdlInterface::launch(){

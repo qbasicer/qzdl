@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<ZDLFlagsList>
+	<Flag type="dmflags" value="8" enabled="false">Falling Damage</Flag>
+	<Flag type="dmflags2" value="2" enabled="false">Drop Weapon</Flag>
+	<Flag type="compatflags" value="1" enabled="false">Find Shortest Textures Like Doom</Flag>
+</ZDLFlagsList>
+

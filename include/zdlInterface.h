@@ -42,6 +42,7 @@ private slots:
 	void loadConfigFile();
 	void aboutClick();
 	void showCommandline();
+	void showNewDMFlagger();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();
