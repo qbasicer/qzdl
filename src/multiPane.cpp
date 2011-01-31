@@ -20,7 +20,6 @@
 #include <QApplication>
 #include "configurationManager.h"
 #include "multiPane.h"
-#include "ZTempDMFlagDialog.h"
 #include "ZDMFlagDialog.h"
 
 
