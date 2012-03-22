@@ -2871,7 +2871,7 @@ $as_echo "yes" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking setting object dir" >&5
 $as_echo_n "checking setting object dir... " >&6; }
-bnv_try_15="echo \"INCLUDEPATH += ./include" >> qzdl.pro"
+bnv_try_15="echo \"INCLUDEPATH += ./include\" >> qzdl.pro"
 { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
   (eval $bnv_try_15) 2>&5
   ac_status=$?

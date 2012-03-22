@@ -44,7 +44,7 @@ fi
 AC_MSG_RESULT(yes)
 
 AC_MSG_CHECKING(setting object dir)
-bnv_try_15="echo \"INCLUDEPATH += ./include" >> qzdl.pro"
+bnv_try_15="echo \"INCLUDEPATH += ./include\" >> qzdl.pro"
 AC_TRY_EVAL(bnv_try_15)
 if test "$ac_status" != 0; then
 AC_MSG_ERROR(error appending to file)
