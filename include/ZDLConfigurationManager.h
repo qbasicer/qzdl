@@ -29,7 +29,7 @@ using namespace std;
 
 #include <zdlcommon.h>
 
-class configurationManager{
+class ZDLConfigurationManager{
 	public:
 		static void init();
 		static ZQWidget* getInterface();

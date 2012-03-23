@@ -19,15 +19,15 @@
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "ZAdvancedMultiplayerDialog.h"
 #include "ZAboutDialog.h"
 
-#include "multiPane.h"
+#include "ZDLMultiPane.h"
 #include "zdlInterface.h"
 #include "ZInfoBar.h"
-#include "mainWindow.h"
-#include "filePane.h"
+#include "ZDLMainWindow.h"
+#include "ZDLFilePane.h"
 #include "settingPane.h"
 #include "ZQSplitter.h"
 #include "ZDMFlagPicker.h"
@@ -35,10 +35,10 @@
 #include "aup.xpm"
 #include "adown.xpm"
 
-extern mainWindow *mw;
+extern ZDLMainWindow *mw;
 
 zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
-	configurationManager::setInterface(this);
+	ZDLConfigurationManager::setInterface(this);
 	
 	box = new QVBoxLayout(this);
 	
@@ -46,7 +46,7 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	QLayout *tpane = getTopPane();
 	QLayout *bpane = getBottomPane();
 	
-	mpane = new multiPane(this);
+	mpane = new ZDLMultiPane(this);
 	mpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -54,7 +54,7 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	ZInfoBar *zib = new ZInfoBar(this);
 	box->addWidget(zib);
 	
-	configurationManager::setInfobar(zib);
+	ZDLConfigurationManager::setInfobar(zib);
 	box->addLayout(tpane);
 	box->addLayout(bpane);
 	
@@ -67,7 +67,7 @@ QLayout *zdlInterface::getTopPane(){
 	QSplitter *rsplit = split->getSplit();
 	
 
-	filePane *fpane = new filePane(rsplit);
+	ZDLFilePane *fpane = new ZDLFilePane(rsplit);
 	settingPane *spane = new settingPane(rsplit);
 	
 	split->addChild(fpane);
@@ -158,7 +158,7 @@ void zdlInterface::launch(){
 }
 
 void zdlInterface::buttonPaneNewConfig(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
 		vector <ZDLLine*> vctr;
@@ -180,7 +180,7 @@ void zdlInterface::buttonPaneNewConfig(){
 }
 
 void zdlInterface::mclick(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
 	if(zconf->hasValue("zdl.save","dlgmode")){
 		QString txt = zconf->getValue("zdl.save","dlgmode",&stat);
@@ -195,7 +195,7 @@ void zdlInterface::mclick(){
 		btnEpr->setIcon(QPixmap(adown));
 		zconf->setValue("zdl.save", "dlgmode", "open");
 	}
-	configurationManager::getInterface()->newConfig();
+	ZDLConfigurationManager::getInterface()->newConfig();
 }
 
 void zdlInterface::ampclick(){
@@ -211,7 +211,7 @@ void zdlInterface::sendSignals(){
 
 void zdlInterface::saveConfigFile(){
 	sendSignals();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ZDL/ini (*.zdl *.ini)"
 			<< "ZDL files (*.zdl)"
@@ -223,7 +223,7 @@ void zdlInterface::saveConfigFile(){
 	if(dialog.exec()){
 		fileNames = dialog.selectedFiles();
 		for(int i = 0; i < fileNames.size(); i++){
-			configurationManager::setConfigFileName(fileNames[i]);
+			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
 			zconf->writeINI(fileNames[i].toStdString().c_str());
 		}
 		mw->startRead();
@@ -232,7 +232,7 @@ void zdlInterface::saveConfigFile(){
 }
 
 void zdlInterface::loadConfigFile(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ZDL/ini (*.zdl *.ini)"
 			<< "ZDL files (*.zdl)"
@@ -247,9 +247,9 @@ void zdlInterface::loadConfigFile(){
 		for(int i = 0; i < fileNames.size(); i++){
 			delete zconf;
 			ZDLConf* tconf = new ZDLConf();
-			configurationManager::setConfigFileName(fileNames[i]);
+			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
 			tconf->readINI(fileNames[i].toStdString().c_str());
-			configurationManager::setActiveConfiguration(tconf);
+			ZDLConfigurationManager::setActiveConfiguration(tconf);
 			
 		}
 		mw->startRead();
@@ -271,7 +271,7 @@ void zdlInterface::showCommandline(){
 }
 
 void zdlInterface::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
 		zconf->setValue("zdl.save", "efirst", extraArgs->text().toStdString().c_str());
 	}else{
@@ -280,7 +280,7 @@ void zdlInterface::rebuild(){
 }
 
 void zdlInterface::bottomPaneNewConfig(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "efirst")){
 		int stat;
 		string rc = zconf->getValue("zdl.save", "efirst", &stat);
@@ -299,7 +299,7 @@ void zdlInterface::newConfig(){
 	buttonPaneNewConfig();
 	bottomPaneNewConfig();
 	//Grab our configuration
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	//Grab our section in the configuration
 	ZDLSection *section = zconf->getSection("zdl.save");
 	//Do we have it?

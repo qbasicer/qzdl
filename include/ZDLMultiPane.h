@@ -16,17 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+#ifndef _MULTIPANE_H_
+#define _MULTIPANE_H_
+
 #include <QtGui>
 #include <QObject>
 #include "ZQWidget.h"
-#include "ZFileList.h"
 
-class filePane: public ZQWidget{
+class ZDLMultiPane: public ZQWidget{
 Q_OBJECT
 public: 
-	filePane( QWidget *parent=0);
-	void rebuild();
+	ZDLMultiPane( ZQWidget *parent=0);
+	virtual void newConfig();
+	virtual void rebuild();
 private:
-	
-	ZFileList *fList;	
+	QComboBox *gMode;
+	QLineEdit *tHostAddy;
+	QComboBox *gPlayers;
+	QLineEdit *tFragLimit;
+	QPushButton *bDMFlags;
+	QPushButton *bDMFlags2;
+protected slots:
+	void dmflags();
+	void dmflags2();
 };
+
+#endif
+

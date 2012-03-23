@@ -20,7 +20,7 @@
 #include <QtGui>
 #include <QApplication>
 
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "zListWidget.h"
 #include "zSettingsPane.h"
 
@@ -78,7 +78,7 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 }
 
 void zSettingsPane::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	//Delete old configs
 	if (section){
@@ -107,7 +107,7 @@ void zSettingsPane::rebuild(){
 }
 
 void zSettingsPane::newConfig(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
 		vector <ZDLLine*> fileVctr;
@@ -155,7 +155,7 @@ void zSettingsPane::newConfig(){
 }
 
 void zSettingsPane::checkNow(){
-	ZUpdater *zup = configurationManager::getUpdater();
+	ZUpdater *zup = ZDLConfigurationManager::getUpdater();
 	zup->fetch(1);
 }
 

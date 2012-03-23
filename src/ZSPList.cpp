@@ -18,7 +18,7 @@
  
 #include "ZSPList.h"
 #include "ZNameListable.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "ZNameInput.h"
 
 #include <cstdio>
@@ -30,7 +30,7 @@ ZSPList::ZSPList(ZQWidget *parent): zListWidget(parent){
 
 void ZSPList::newConfig(){
 	pList->clear();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
 		vector <ZDLLine*> fileVctr;
@@ -57,7 +57,7 @@ void ZSPList::newConfig(){
 
 
 void ZSPList::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
 		zconf->deleteSection("zdl.ports");

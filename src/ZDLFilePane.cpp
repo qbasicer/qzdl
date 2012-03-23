@@ -16,30 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#ifndef _MULTIPANE_H_
-#define _MULTIPANE_H_
-
 #include <QtGui>
-#include <QObject>
-#include "ZQWidget.h"
+#include <QApplication>
+#include <QListWidget>
+#include <iostream>
 
-class multiPane: public ZQWidget{
-Q_OBJECT
-public: 
-	multiPane( ZQWidget *parent=0);
-	virtual void newConfig();
-	virtual void rebuild();
-private:
-	QComboBox *gMode;
-	QLineEdit *tHostAddy;
-	QComboBox *gPlayers;
-	QLineEdit *tFragLimit;
-	QPushButton *bDMFlags;
-	QPushButton *bDMFlags2;
-protected slots:
-	void dmflags();
-	void dmflags2();
-};
+#include "zListWidget.h"
+#include "ZDLFilePane.h"
 
-#endif
 
+ZDLFilePane::ZDLFilePane(QWidget *parent):ZQWidget(parent){
+	QVBoxLayout *box = new QVBoxLayout(this);
+	box->setSpacing(2);
+
+	box->addWidget(new QLabel("External Files",this));
+
+	fList = new ZFileList(this);
+	fList->doDragDrop(true);
+	box->addWidget(fList);
+	setContentsMargins(0,0,0,0);
+	layout()->setContentsMargins(0,0,0,0);
+	
+}
+
+void ZDLFilePane::rebuild(){
+	//std::cout << "Rebuilding config" << std::endl;
+}

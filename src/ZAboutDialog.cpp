@@ -17,7 +17,7 @@
  */
  
 #include "ZAboutDialog.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 #include "bmp_logo.xpm"
 
@@ -54,7 +54,7 @@ ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
 	box->addWidget(new QLabel("Special thanks to Risen, Enjay, DRDTeam.org, ZDoom.org",this));
 	
-	ZDLConfiguration *conf = configurationManager::getConfiguration();
+	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 	if(conf){
 		QString systemConfPath = conf->getPath(ZDLConfiguration::CONF_SYSTEM);
 		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);

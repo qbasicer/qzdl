@@ -20,7 +20,7 @@
 #include <QApplication>
 #include <QComboBox>
 
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "settingPane.h"
 
 settingPane::settingPane(QWidget *parent):ZQWidget(parent){
@@ -68,7 +68,7 @@ settingPane::settingPane(QWidget *parent):ZQWidget(parent){
 }
 
 void settingPane::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(diffList->currentIndex() > 0){
 		zconf->setValue("zdl.save", "skill", diffList->currentIndex());
 	}else{
@@ -135,7 +135,7 @@ void settingPane::rebuild(){
 }
 
 void settingPane::newConfig(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
 		int stat;

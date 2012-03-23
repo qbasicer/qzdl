@@ -18,12 +18,12 @@
  
 #include <QtGui>
 #include <QApplication>
-#include "configurationManager.h"
-#include "multiPane.h"
+#include "ZDLConfigurationManager.h"
+#include "ZDLMultiPane.h"
 #include "ZDMFlagDialog.h"
 
 
-multiPane::multiPane(ZQWidget *parent): ZQWidget(parent){
+ZDLMultiPane::ZDLMultiPane(ZQWidget *parent): ZQWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 
 	gMode = new QComboBox(this);
@@ -75,8 +75,8 @@ multiPane::multiPane(ZQWidget *parent): ZQWidget(parent){
 
 }
 
-void multiPane::newConfig(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+void ZDLMultiPane::newConfig(){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section && section->hasVariable("host")){
 		int stat;
@@ -151,8 +151,8 @@ void multiPane::newConfig(){
 	
 }
 
-void multiPane::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+void ZDLMultiPane::rebuild(){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (tHostAddy->text().length() > 0){
 		zconf->setValue("zdl.save", "host", tHostAddy->text().toStdString().c_str());
 	}
@@ -166,7 +166,7 @@ void multiPane::rebuild(){
 }
 
 
-void multiPane::dmflags(){
+void ZDLMultiPane::dmflags(){
 	ZDMFlagDialog dialog(this);
 	bool ok;
 	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
@@ -178,7 +178,7 @@ void multiPane::dmflags(){
 	}
 }
 
-void multiPane::dmflags2(){
+void ZDLMultiPane::dmflags2(){
 	dmflags();
 }
 

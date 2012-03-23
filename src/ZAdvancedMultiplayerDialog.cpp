@@ -17,7 +17,7 @@
  */
  
 #include "ZAdvancedMultiplayerDialog.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 
 ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
@@ -92,7 +92,7 @@ void ZAdvancedMultiplayerDialog::close(){
 
 void ZAdvancedMultiplayerDialog::readConfig(){
 	int status;
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString tEnabled = zconf->getValue("zdl.net","advenabled",&status);
 	if(status){
 		tEnabled = "disabled";
@@ -151,7 +151,7 @@ void ZAdvancedMultiplayerDialog::readConfig(){
 }
 
 void ZAdvancedMultiplayerDialog::save(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(enable->isChecked()){
 		zconf->setValue("zdl.net", "advenabled", "enabled");
 	}else{

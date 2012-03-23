@@ -27,11 +27,11 @@
 #include "zSettingsPane.h"
 #include "ZUpdater.h"
 
-class mainWindow: public QMainWindow{
+class ZDLMainWindow: public QMainWindow{
     Q_OBJECT
 public:
-	mainWindow( QWidget *parent=0);
-	~mainWindow();
+	ZDLMainWindow( QWidget *parent=0);
+	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
 	void setUpdater(ZUpdater *zup);

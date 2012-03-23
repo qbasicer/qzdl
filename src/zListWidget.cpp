@@ -19,7 +19,7 @@
 #include <QtGui>
 #include <QApplication>
 
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "zListWidget.h"
 #include "adown.xpm"
 #include "aup.xpm"

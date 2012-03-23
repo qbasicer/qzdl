@@ -18,7 +18,7 @@
  
 #include "ZIWadList.h"
 #include "ZNameListable.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include "ZNameInput.h"
 
 #include <iostream>
@@ -29,7 +29,7 @@ ZIWadList::ZIWadList(ZQWidget *parent): zListWidget(parent){
 
 void ZIWadList::newConfig(){
 	pList->clear();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.iwads");
 	if (section){
 		vector <ZDLLine*> fileVctr;
@@ -56,7 +56,7 @@ void ZIWadList::newConfig(){
 
 
 void ZIWadList::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.iwads");
 	if (section){
 		zconf->deleteSection("zdl.iwads");

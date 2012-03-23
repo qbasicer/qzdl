@@ -19,7 +19,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include <string.h>
 #include "exclaim.xpm"
 #include "question.xpm"

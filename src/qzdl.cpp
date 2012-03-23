@@ -21,12 +21,12 @@
 #include <QMainWindow>
 #include <QDir>
 
-#include "configurationManager.h"
-#include "mainWindow.h"
+#include "ZDLConfigurationManager.h"
+#include "ZDLMainWindow.h"
 
 QApplication *qapp;
 QString versionString;
-mainWindow *mw;
+ZDLMainWindow *mw;
 
 int main( int argc, char **argv ){
     QApplication a( argc, argv );
@@ -36,23 +36,23 @@ int main( int argc, char **argv ){
 	versionString = ZDL_VERSION_STRING;
 	
 	QDir cwd = QDir::current();
-	configurationManager::init();
-	configurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
+	ZDLConfigurationManager::init();
+	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
 	ZUpdater *zup = new ZUpdater();
 	
 	ZDLConf* tconf = new ZDLConf();
 	if (argc == 2){
-		configurationManager::setConfigFileName(argv[1]);
+		ZDLConfigurationManager::setConfigFileName(argv[1]);
 	}else{
-		configurationManager::setConfigFileName("zdl.ini");
+		ZDLConfigurationManager::setConfigFileName("zdl.ini");
 	}
-	tconf->readINI(configurationManager::getConfigFileName().toStdString().c_str());
-	configurationManager::setActiveConfiguration(tconf);
+	tconf->readINI(ZDLConfigurationManager::getConfigFileName().toStdString().c_str());
+	ZDLConfigurationManager::setActiveConfiguration(tconf);
 	
-	mw = new mainWindow();
+	mw = new ZDLMainWindow();
 	mw->setUpdater(zup);
-	configurationManager::setUpdater(zup);
+	ZDLConfigurationManager::setUpdater(zup);
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
@@ -64,10 +64,10 @@ int main( int argc, char **argv ){
 		return ret;
 	}
 	mw->writeConfig();
-	QString qscwd = configurationManager::getCurrentDirectory();
-	tconf = configurationManager::getActiveConfiguration();
+	QString qscwd = ZDLConfigurationManager::getCurrentDirectory();
+	tconf = ZDLConfigurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
-	tconf->writeINI(configurationManager::getConfigFileName().toStdString().c_str());
+	tconf->writeINI(ZDLConfigurationManager::getConfigFileName().toStdString().c_str());
 	return ret;
 }
 

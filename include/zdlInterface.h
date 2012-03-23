@@ -22,7 +22,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZQWidget.h"
-#include "multiPane.h"
+#include "ZDLMultiPane.h"
 
 
 class zdlInterface: public ZQWidget{
@@ -54,7 +54,7 @@ private:
 	QPushButton *btnEpr;
 	QPushButton *btnZDL;
 	QVBoxLayout *box;
-	multiPane *mpane;
+	ZDLMultiPane *mpane;
 	QLineEdit *extraArgs;
 };
 #endif

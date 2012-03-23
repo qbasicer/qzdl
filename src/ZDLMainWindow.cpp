@@ -22,41 +22,41 @@
 #include <QMainWindow>
 
 #include "zdlInterface.h"
-#include "mainWindow.h"
-#include "configurationManager.h"
+#include "ZDLMainWindow.h"
+#include "ZDLConfigurationManager.h"
 #include "ZInfoBar.h"
 
 extern QApplication *qapp;
 extern QString versionString;
 
-mainWindow::~mainWindow(){
+ZDLMainWindow::~ZDLMainWindow(){
 	delete zup;
 }
 
-void mainWindow::manageUpdate(){
+void ZDLMainWindow::manageUpdate(){
 	if (zup->hasUpdate()){
-		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
-		configurationManager::setInfobarMessage("There is an update available.",2);
+		ZInfoBar *bar = (ZInfoBar*)ZDLConfigurationManager::getInfobar();
+		ZDLConfigurationManager::setInfobarMessage("There is an update available.",2);
 		connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
 	}
 }
 
-void mainWindow::newUpdate(){
+void ZDLMainWindow::newUpdate(){
 	QString engine = ZDL_ENGINE_NAME;
 	QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 }
 
-void mainWindow::setUpdater(ZUpdater *zup){
+void ZDLMainWindow::setUpdater(ZUpdater *zup){
 	this->zup = zup;
 	connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
 }
 
-mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
+ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	QString windowTitle = ZDL_ENGINE_NAME;
-	windowTitle += " " + versionString + " - " + configurationManager::getConfigFileName();
+	windowTitle += " " + versionString + " - " + ZDLConfigurationManager::getConfigFileName();
 	setWindowTitle(windowTitle);
 	
-	setWindowIcon(configurationManager::getIcon());
+	setWindowIcon(ZDLConfigurationManager::getIcon());
 	
 	
 	setContentsMargins(2,2,2,2);
@@ -86,7 +86,7 @@ mainWindow::mainWindow(QWidget *parent): QMainWindow(parent){
 	
 }
 
-void mainWindow::tabChange(int newTab){
+void ZDLMainWindow::tabChange(int newTab){
 	if(newTab == 0){
 		settings->notifyFromParent(NULL);
 		intr->readFromParent(NULL);
@@ -96,14 +96,14 @@ void mainWindow::tabChange(int newTab){
 	}
 }
 
-void mainWindow::quit(){
+void ZDLMainWindow::quit(){
 	writeConfig();
 	close();
 }
 
-void mainWindow::launch(){
+void ZDLMainWindow::launch(){
 	writeConfig();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	
 	QString exec = getExecutable();
 	if (exec.length() < 1){
@@ -130,14 +130,14 @@ void mainWindow::launch(){
 	
 // 	if(proc->state() != QProcess::NotRunning){
 // 		std::cout << "ERROR!" << std::endl;
-// 		configurationManager::setInfobarMessage("The process ended abnormally.",1);
-// 		ZInfoBar *bar = (ZInfoBar*)configurationManager::getInfobar();
+// 		ZDLConfigurationManager::setInfobarMessage("The process ended abnormally.",1);
+// 		ZInfoBar *bar = (ZInfoBar*)ZDLConfigurationManager::getInfobar();
 // 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
 // 	}
 	
 }
 
-void mainWindow::badLaunch(){
+void ZDLMainWindow::badLaunch(){
 	if(procerr == QProcess::FailedToStart){
 		QMessageBox::warning(NULL,"Failed to Start", "Failed to launch the application executable.",QMessageBox::Ok,QMessageBox::Ok);
 	}else if(procerr == QProcess::Crashed){
@@ -147,9 +147,9 @@ void mainWindow::badLaunch(){
 	}
 }
 
-QStringList mainWindow::getArguments(){
+QStringList ZDLMainWindow::getArguments(){
 	QStringList ourString;
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
 	
 	unsigned int iwadIndex = 0;
@@ -329,8 +329,8 @@ QStringList mainWindow::getArguments(){
 	return ourString;
 }
 
-QString mainWindow::getExecutable(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+QString ZDLMainWindow::getExecutable(){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
 	unsigned int portIndex = 0;
 	if(zconf->hasValue("zdl.save", "port")){
@@ -366,19 +366,19 @@ QString mainWindow::getExecutable(){
 
 
 //Pass through functions.
-void mainWindow::startRead(){
+void ZDLMainWindow::startRead(){
 	intr->startRead();
 	settings->startRead();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	zconf->setValue("zdl.general", "version", ZDL_VERSION_STRING);
 	
 	QString windowTitle = ZDL_ENGINE_NAME;
-	windowTitle += " " + versionString + " - " + configurationManager::getConfigFileName();
+	windowTitle += " " + versionString + " - " + ZDLConfigurationManager::getConfigFileName();
 	setWindowTitle(windowTitle);
 }
 
-void mainWindow::writeConfig(){
+void ZDLMainWindow::writeConfig(){
 	intr->writeConfig();
 	settings->writeConfig();
 }

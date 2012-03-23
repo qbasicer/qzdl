@@ -17,7 +17,7 @@
  */
  
 #include "ZDMFlagDialog.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 
 ZDMFlagDialog::ZDMFlagDialog(ZQWidget *parent):QDialog(parent){

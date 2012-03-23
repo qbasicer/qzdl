@@ -18,7 +18,7 @@
  
 #include "ZFileList.h"
 #include "ZFileListable.h"
-#include "configurationManager.h"
+#include "ZDLConfigurationManager.h"
 
 #include <iostream>
 using namespace std;
@@ -39,7 +39,7 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 
 void ZFileList::newConfig(){
 	pList->clear();
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
 		vector <ZDLLine*> vctr;
@@ -53,7 +53,7 @@ void ZFileList::newConfig(){
 }
 
 void ZFileList::rebuild(){
-	ZDLConf *zconf = configurationManager::getActiveConfiguration();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
 		vector <ZDLLine*> vctr;
