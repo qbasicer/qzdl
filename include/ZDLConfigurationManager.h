@@ -22,7 +22,7 @@
 #include <list>
 #include <string>
 #include "ZQWidget.h"
-#include "ZUpdater.h"
+#include "ZDLUpdater.h"
 #include "ZDLConfiguration.h"
 
 using namespace std;
@@ -49,15 +49,15 @@ class ZDLConfigurationManager{
 		static void setInfobarMessage(const char* msg, int icon = 0);
 		static QString getConfigFileName();
 		static void setConfigFileName(QString name);
-		static void setUpdater(ZUpdater *zup);
-		static ZUpdater *getUpdater();
+		static void setUpdater(ZDLUpdater *zup);
+		static ZDLUpdater *getUpdater();
 	protected:
 		static QString filename;
 		static ZQWidget* interface;
 		static ZQWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
-		static ZUpdater *zupper;
+		static ZDLUpdater *zupper;
 		static ZDLConfiguration *conf;
 };
 

@@ -41,7 +41,7 @@ string ZDLConfigurationManager::cdir;
 ZQWidget* ZDLConfigurationManager::interface;
 ZQWidget* ZDLConfigurationManager::infobar;
 QString ZDLConfigurationManager::filename;
-ZUpdater *ZDLConfigurationManager::zupper;
+ZDLUpdater *ZDLConfigurationManager::zupper;
 ZDLConfiguration *ZDLConfigurationManager::conf;
 
 void ZDLConfigurationManager::setInterface(ZQWidget *widget){
@@ -94,11 +94,11 @@ void ZDLConfigurationManager::setConfigFileName(QString name){
 	filename = name;
 }
 
-void ZDLConfigurationManager::setUpdater(ZUpdater *zup){
+void ZDLConfigurationManager::setUpdater(ZDLUpdater *zup){
 	zupper = zup;
 }
 
-ZUpdater *ZDLConfigurationManager::getUpdater(){
+ZDLUpdater *ZDLConfigurationManager::getUpdater(){
 	return zupper;
 }
 

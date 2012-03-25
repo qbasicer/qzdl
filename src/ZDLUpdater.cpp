@@ -17,13 +17,13 @@
  */
  
 #include <QMessageBox>
-#include "ZUpdater.h"
+#include "ZDLUpdater.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
 #include <iostream>
 using namespace std;
 
-ZUpdater::ZUpdater(){
+ZDLUpdater::ZDLUpdater(){
 	http = new QHttp(this);
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
 			this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
@@ -38,37 +38,37 @@ ZUpdater::ZUpdater(){
 	httpGetId = 0;
 }
 
-ZUpdater::~ZUpdater(){
+ZDLUpdater::~ZDLUpdater(){
 	delete http;
 }
 
-void ZUpdater::setHost(const char* host, const int port){
+void ZDLUpdater::setHost(const char* host, const int port){
 	this->host = host;
 	this->port = port;
 }
 
-int ZUpdater::hasError(){
+int ZDLUpdater::hasError(){
 	return errorCode;
 }
 
-int ZUpdater::hasUpdate(){
+int ZDLUpdater::hasUpdate(){
 	//cout << "hasUpdate" << endl;
 	return updateCode;
 }
 
-void ZUpdater::updatesDisabledInfobar(){
+void ZDLUpdater::updatesDisabledInfobar(){
 	QMessageBox::warning(NULL,"Updates Disabled", "You have disabled checking for updates.  This means that you will no longer get notification of new releases.\n\nIf you did not disable the updates yourself, then " ZDL_ENGINE_NAME " has automatically disabled updates silently if there were connectivity issues with the update server.\n\nTo re-enable updates, please go to the settings tab in the main interface.",QMessageBox::Ok,QMessageBox::Ok);
 }
 
-void ZUpdater::updatesOldSystem(){
+void ZDLUpdater::updatesOldSystem(){
 	QMessageBox::warning(NULL,"Old Update System", "Thank you for trying " ZDL_ENGINE_NAME "!!\n\nCurrently updates are pushed by a rather limited script located on our server.  Unfortunately, it doesn't quite have the ability to check to see if your version is the most current version.  You most likely checked out our version from SVN from our sourceforge website.  We only bump the version number on major releases, so we encourage you to manually check for updates on our sourceforge project page.\n\nhttp://sf.net/projects/ZDLSharp",QMessageBox::Ok,QMessageBox::Ok);
 }
 
-void ZUpdater::fetch(){
+void ZDLUpdater::fetch(){
 	fetch(0);
 }
 
-void ZUpdater::fetch(int doAnyways){
+void ZDLUpdater::fetch(int doAnyways){
 	//cout << "fetch" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
@@ -193,7 +193,7 @@ void ZUpdater::fetch(int doAnyways){
 	
 }
 
-void ZUpdater::httpRequestFinished(int requestId, bool error){
+void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 	//cout << "httpRequestFinished" << endl;
 	if (requestId != httpGetId)
 		return;
@@ -224,13 +224,13 @@ void ZUpdater::httpRequestFinished(int requestId, bool error){
 	emit updateReady();
 }
 
-void ZUpdater::readyRead ( const QHttpResponseHeader & resp ){
+void ZDLUpdater::readyRead ( const QHttpResponseHeader & resp ){
 	//cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
 	QByteArray inBytes = http->readAll();
 	buffer.append(inBytes);
 }
 
-void ZUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
+void ZDLUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
 	//cout << "readResponseHeader" << endl;
 	errorCode = responseHeader.statusCode();
 	//cout << "Error code: " << errorCode << endl;

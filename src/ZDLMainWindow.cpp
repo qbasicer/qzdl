@@ -46,7 +46,7 @@ void ZDLMainWindow::newUpdate(){
 	QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 }
 
-void ZDLMainWindow::setUpdater(ZUpdater *zup){
+void ZDLMainWindow::setUpdater(ZDLUpdater *zup){
 	this->zup = zup;
 	connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
 }

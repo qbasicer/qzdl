@@ -25,7 +25,7 @@
 #include "ZQWidget.h"
 #include "ZDLInterface.h"
 #include "zSettingsPane.h"
-#include "ZUpdater.h"
+#include "ZDLUpdater.h"
 
 class ZDLMainWindow: public QMainWindow{
     Q_OBJECT
@@ -34,7 +34,7 @@ public:
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
-	void setUpdater(ZUpdater *zup);
+	void setUpdater(ZDLUpdater *zup);
 	QStringList getArguments();
 	QString getExecutable();
 public slots:
@@ -48,7 +48,7 @@ public slots:
 protected:
 	ZDLInterface* intr;
 	zSettingsPane* settings;
-	ZUpdater* zup;
+	ZDLUpdater* zup;
 	
 	int procerr;
 	QAction *qact2;

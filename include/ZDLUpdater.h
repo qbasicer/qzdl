@@ -23,11 +23,11 @@
 #include <QObject>
 #include <QHttp>
 
-class ZUpdater: public QObject{
+class ZDLUpdater: public QObject{
 Q_OBJECT
 	public:
-		ZUpdater();
-		~ZUpdater();
+		ZDLUpdater();
+		~ZDLUpdater();
 	void setHost(const char* host, const int port);
 	void fetch();
 	int hasUpdate();

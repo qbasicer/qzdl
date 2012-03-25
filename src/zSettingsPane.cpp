@@ -155,7 +155,7 @@ void zSettingsPane::newConfig(){
 }
 
 void zSettingsPane::checkNow(){
-	ZUpdater *zup = ZDLConfigurationManager::getUpdater();
+	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
 	zup->fetch(1);
 }
 

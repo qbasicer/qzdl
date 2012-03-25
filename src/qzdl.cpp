@@ -39,7 +39,7 @@ int main( int argc, char **argv ){
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
-	ZUpdater *zup = new ZUpdater();
+	ZDLUpdater *zup = new ZDLUpdater();
 	
 	ZDLConf* tconf = new ZDLConf();
 	if (argc == 2){
