@@ -21,9 +21,9 @@
 
 #include "ZListable.h"
 
-class ZNameListable : public ZListable{
+class ZDLNameListable : public ZListable{
 	public:
-		ZNameListable( QListWidget *parent, int type, QString qfile, QString name);
+		ZDLNameListable( QListWidget *parent, int type, QString qfile, QString name);
 		QString getFile();
 		QString getName();
 		void setDisplayName(QString name);

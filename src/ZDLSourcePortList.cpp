@@ -17,7 +17,7 @@
  */
  
 #include "ZDLSourcePortList.h"
-#include "ZNameListable.h"
+#include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZNameInput.h"
 
@@ -48,7 +48,7 @@ void ZDLSourcePortList::newConfig(){
 			if (nameVctr.size() == 1){
 				QString disName = nameVctr[0]->getValue();
 				QString fileName = fileVctr[i]->getValue();
-				ZNameListable *zList = new ZNameListable(pList, 1001, fileName, disName);
+				ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, disName);
 				insert(zList, -1);
 			}
 		}
@@ -65,7 +65,7 @@ void ZDLSourcePortList::rebuild(){
 	
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
-		ZNameListable* fitm = (ZNameListable*)itm;
+		ZDLNameListable* fitm = (ZDLNameListable*)itm;
 		char szBuffer[256];
 		snprintf(szBuffer, 256, "p%dn", i);
 		zconf->setValue("zdl.ports", szBuffer, fitm->getName().toStdString().c_str());
@@ -89,7 +89,7 @@ void ZDLSourcePortList::addButton(){
 	if (diag.exec()){
 		QString fileName = diag.getFile();
 		QString name = diag.getName();
-		ZNameListable *zList = new ZNameListable(pList, 1001, fileName, name);
+		ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, name);
 		insert(zList, -1);
 	}
 	
@@ -101,7 +101,7 @@ void ZDLSourcePortList::editButton(QListWidgetItem * item){
 		QStringList filters;
 		filters << "Executable (*.exe *.bin)"
 				<< "All files (*)";
-		ZNameListable *zitem = (ZNameListable*)item;
+		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZNameInput diag(this);
 		diag.setWindowTitle("Add Source Port/Engine");
 		diag.setFilter(filters);

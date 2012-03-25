@@ -21,7 +21,7 @@
 
 #include <QtGui>
 #include <QObject>
-#include "ZNameListable.h"
+#include "ZDLNameListable.h"
 
 class ZNameInput: public QDialog{
 	Q_OBJECT
@@ -30,7 +30,7 @@ class ZNameInput: public QDialog{
 		QString getName();
 		QString getFile();
 		void setFilter(QStringList inFilters);
-		void basedOff(ZNameListable *listable);
+		void basedOff(ZDLNameListable *listable);
 		void fromUrl(QUrl url);
 	public slots:
 		void browse();

@@ -74,7 +74,7 @@ void ZNameInput::fromUrl(QUrl url){
 	lfile->setText(url.path());
 }
 
-void ZNameInput::basedOff(ZNameListable *listable){
+void ZNameInput::basedOff(ZDLNameListable *listable){
 	if (listable){
 		lfile->setText(listable->getFile());
 		lname->setText(listable->getName());

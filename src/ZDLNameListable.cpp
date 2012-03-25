@@ -18,7 +18,7 @@
  
 
 #include "ZListable.h"
-#include "ZNameListable.h"
+#include "ZDLNameListable.h"
 #include <string>
 #include <QFileInfo>
 #include <iostream>
@@ -26,31 +26,31 @@
 
 using namespace std;
 
-ZNameListable::ZNameListable( QListWidget *parent, int type, QString file, QString name):ZListable(parent, type){
+ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, QString name):ZListable(parent, type){
 	setFile(file);
 	setDisplayName(name);
 	setName(generateName());
 }
 
-QString ZNameListable::getFile(){
+QString ZDLNameListable::getFile(){
 	return fileName;
 }
 
-QString ZNameListable::getName(){
+QString ZDLNameListable::getName(){
 	return displayName;
 }
 
-void ZNameListable::setDisplayName(QString name){
+void ZDLNameListable::setDisplayName(QString name){
 	displayName = name;
 	setName(generateName());
 }
 
-void ZNameListable::setFile(QString file){
+void ZDLNameListable::setFile(QString file){
 	fileName = file;
 	setName(generateName());
 }
 
-QString ZNameListable::generateName(){
+QString ZDLNameListable::generateName(){
 	QString list = QString("%1 [%2]").arg(displayName).arg(fileName);
 	return list;
 }
