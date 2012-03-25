@@ -29,7 +29,7 @@
 #include "ZDLMainWindow.h"
 #include "ZDLFilePane.h"
 #include "settingPane.h"
-#include "ZQSplitter.h"
+#include "ZDLQSplitter.h"
 #include "ZDMFlagPicker.h"
 
 #include "aup.xpm"
@@ -63,7 +63,7 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 QLayout *ZDLInterface::getTopPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
-	ZQSplitter *split = new ZQSplitter(this);
+	ZDLQSplitter *split = new ZDLQSplitter(this);
 	QSplitter *rsplit = split->getSplit();
 	
 

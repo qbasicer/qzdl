@@ -24,11 +24,11 @@
 #include "ZQWidget.h"
 
 
-class ZQSplitter: public virtual ZQWidget{
+class ZDLQSplitter: public virtual ZQWidget{
 Q_OBJECT
 	public:
-		ZQSplitter(ZQWidget *parent);
-		ZQSplitter(QWidget *parent);
+		ZDLQSplitter(ZQWidget *parent);
+		ZDLQSplitter(QWidget *parent);
 		virtual void addChild(QWidget *child);
 		virtual void addChild(ZQWidget *child);
 		virtual QSplitter* getSplit();

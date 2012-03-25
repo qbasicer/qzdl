@@ -19,11 +19,11 @@
 #include <iostream>
 #include <QtGui>
 #include <QApplication>
-#include "ZQSplitter.h"
+#include "ZDLQSplitter.h"
 #include <QMetaObject>
 
 
-ZQSplitter::ZQSplitter(ZQWidget *parent):ZQWidget(parent){
+ZDLQSplitter::ZDLQSplitter(ZQWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
 	//std::cout << "SPLIT: Using ZQWidget as parent" << std::endl;
@@ -32,7 +32,7 @@ ZQSplitter::ZQSplitter(ZQWidget *parent):ZQWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-ZQSplitter::ZQSplitter(QWidget *parent):ZQWidget(parent){
+ZDLQSplitter::ZDLQSplitter(QWidget *parent):ZQWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
 	//std::cout << "SPLIT: Using QWidget as parent" << std::endl;
@@ -41,16 +41,16 @@ ZQSplitter::ZQSplitter(QWidget *parent):ZQWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-QSplitter *ZQSplitter::getSplit(){
+QSplitter *ZDLQSplitter::getSplit(){
 	return split;
 }
 
-void ZQSplitter::addChild(ZQWidget *child){
+void ZDLQSplitter::addChild(ZQWidget *child){
 	split->addWidget(child);
 	//Hook the child up with our internal signal handling
 	child->setZParent(this);
 }
 
-void ZQSplitter::addChild(QWidget *child){
+void ZDLQSplitter::addChild(QWidget *child){
 	split->addWidget(child);
 }
