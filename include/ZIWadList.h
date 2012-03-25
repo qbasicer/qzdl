@@ -18,8 +18,8 @@
  
 #ifndef _ZIWADLIST_H_
 #define _ZIWADLIST_H_
-#include "zListWidget.h"
-class ZIWadList : public zListWidget{
+#include "ZDLListWidget.h"
+class ZIWadList : public ZDLListWidget{
 public:
 	ZIWadList(ZQWidget *parent);
 	virtual void addButton();

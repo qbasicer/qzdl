@@ -24,7 +24,7 @@
 #include <iostream>
 using namespace std;
 
-ZIWadList::ZIWadList(ZQWidget *parent): zListWidget(parent){
+ZIWadList::ZIWadList(ZQWidget *parent): ZDLListWidget(parent){
 }
 
 void ZIWadList::newConfig(){

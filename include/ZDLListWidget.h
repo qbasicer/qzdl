@@ -27,10 +27,10 @@
 
 using namespace std;
 
-class zListWidget: public ZQWidget{
+class ZDLListWidget: public ZQWidget{
 	Q_OBJECT
 	public: 
-		zListWidget(ZQWidget *parent);
+		ZDLListWidget(ZQWidget *parent);
 		virtual void insert(ZListable *item, int index);
 		virtual int count();
 		virtual void remove(int index);

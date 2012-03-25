@@ -18,8 +18,8 @@
  
 #ifndef _ZFILELIST_H_
 #define _ZFILELIST_H_
-#include "zListWidget.h"
-class ZFileList : public zListWidget{
+#include "ZDLListWidget.h"
+class ZFileList : public ZDLListWidget{
 	public:
 		ZFileList(ZQWidget *parent);
 		virtual void addButton();

@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include "ZDLConfigurationManager.h"
-#include "zListWidget.h"
+#include "ZDLListWidget.h"
 #include "ZDLSettingsPane.h"
 
 ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){

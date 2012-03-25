@@ -20,11 +20,11 @@
 #include <QApplication>
 
 #include "ZDLConfigurationManager.h"
-#include "zListWidget.h"
+#include "ZDLListWidget.h"
 #include "adown.xpm"
 #include "aup.xpm"
 
-zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
+ZDLListWidget::ZDLListWidget(ZQWidget *parent): ZQWidget(parent){
 	QVBoxLayout *column = new QVBoxLayout(this);
 	pList = new QListWidget(this);
 	pList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -80,45 +80,45 @@ zListWidget::zListWidget(ZQWidget *parent): ZQWidget(parent){
 	
 }
 
-void zListWidget::doDragDrop(int enabled){
+void ZDLListWidget::doDragDrop(int enabled){
 	setAcceptDrops(enabled);
 }
 
-void zListWidget::newDrop(QList<QUrl> urlList){
+void ZDLListWidget::newDrop(QList<QUrl> urlList){
 }
 
-void zListWidget::dragEnterEvent(QDragEnterEvent *event){
+void ZDLListWidget::dragEnterEvent(QDragEnterEvent *event){
 		setBackgroundRole(QPalette::Highlight);
 		event->acceptProposedAction();
 }
 
-void zListWidget::dragMoveEvent(QDragMoveEvent *event){
+void ZDLListWidget::dragMoveEvent(QDragMoveEvent *event){
 	event->acceptProposedAction();
 }
 
-void zListWidget::dragLeaveEvent(QDragLeaveEvent *event){
+void ZDLListWidget::dragLeaveEvent(QDragLeaveEvent *event){
 	setBackgroundRole(QPalette::Dark);
 	event->accept();
 }
 
-void zListWidget::dropEvent(QDropEvent *event){
+void ZDLListWidget::dropEvent(QDropEvent *event){
 	const QMimeData *mimeData = event->mimeData();
 	if (mimeData->hasUrls()) {
 		newDrop(mimeData->urls());
 	}
 }
 
-void zListWidget::insert(ZListable *item, int index){
+void ZDLListWidget::insert(ZListable *item, int index){
 	if(index < 0){
 		pList->addItem(item);
 	}else{
 		pList->insertItem(index, item);
 	}
 }
-int zListWidget::count(){
+int ZDLListWidget::count(){
 	return pList->count();
 }
-void zListWidget::remove(int index){
+void ZDLListWidget::remove(int index){
 	QListWidgetItem *item = pList->takeItem(index);
 	if (item){
 		delete item;
@@ -126,18 +126,18 @@ void zListWidget::remove(int index){
 		QMessageBox::warning(this, ZDL_ENGINE_NAME " Error", "You didn't make a selection.");
 	}
 }
-ZListable* zListWidget::get(int index){
+ZListable* ZDLListWidget::get(int index){
 	if (index >= 0 && index < (int)list.size()){
 		return list[index];
 	}
 	return NULL;
 }
 
-void zListWidget::addButton(){
+void ZDLListWidget::addButton(){
 
 }
 
-void zListWidget::removeButton(){
+void ZDLListWidget::removeButton(){
 	QList<QListWidgetItem *> slist = pList->selectedItems();
 	for(int i = 0; i < slist.size(); i++){
 		int rowid = pList->row(slist[i]);
@@ -145,7 +145,7 @@ void zListWidget::removeButton(){
 	}
 }
 
-void zListWidget::upButton(){
+void ZDLListWidget::upButton(){
 	if (pList->selectedItems().size() == 1){
 		if (pList->currentRow () > 0){
 			int oldRow = pList->currentRow ();
@@ -157,7 +157,7 @@ void zListWidget::upButton(){
 }
 
 
-void zListWidget::downButton(){
+void ZDLListWidget::downButton(){
 	if (pList->selectedItems().size() == 1){
 		if (pList->currentRow () < pList->count()-1){
 			int oldRow = pList->currentRow ();
@@ -168,7 +168,7 @@ void zListWidget::downButton(){
 	}
 }
 
-void zListWidget::editButton(QListWidgetItem * item){
+void ZDLListWidget::editButton(QListWidgetItem * item){
 	item = item;
 }
 

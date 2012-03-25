@@ -23,7 +23,7 @@
 #include <iostream>
 using namespace std;
 
-ZFileList::ZFileList(ZQWidget *parent): zListWidget(parent){
+ZFileList::ZFileList(ZQWidget *parent): ZDLListWidget(parent){
 }
 
 void ZFileList::newDrop(QList<QUrl> urlList){

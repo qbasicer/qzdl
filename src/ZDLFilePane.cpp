@@ -21,7 +21,7 @@
 #include <QListWidget>
 #include <iostream>
 
-#include "zListWidget.h"
+#include "ZDLListWidget.h"
 #include "ZDLFilePane.h"
 
 
