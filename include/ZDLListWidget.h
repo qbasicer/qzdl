@@ -23,7 +23,7 @@
 #include <QObject>
 #include <vector>
 #include "ZQWidget.h"
-#include "ZListable.h"
+#include "ZDLListable.h"
 
 using namespace std;
 
@@ -31,12 +31,12 @@ class ZDLListWidget: public ZQWidget{
 	Q_OBJECT
 	public: 
 		ZDLListWidget(ZQWidget *parent);
-		virtual void insert(ZListable *item, int index);
+		virtual void insert(ZDLListable *item, int index);
 		virtual int count();
 		virtual void remove(int index);
-		virtual ZListable* get(int index);
-		//virtual vector<ZListable*> getList();
-		//virtual void setList(vector<ZListable*> *newlist);
+		virtual ZDLListable* get(int index);
+		//virtual vector<ZDLListable*> getList();
+		//virtual void setList(vector<ZDLListable*> *newlist);
 		void doDragDrop(int enabled);
 		virtual void newDrop(QList<QUrl> urlList);
 	protected slots:
@@ -56,7 +56,7 @@ class ZDLListWidget: public ZQWidget{
 		QPushButton *btnUp;
 		QPushButton *btnDn;
 		QListWidget *pList;
-		vector<ZListable*> list;
+		vector<ZDLListable*> list;
 
 };
 #endif

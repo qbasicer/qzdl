@@ -22,10 +22,10 @@
 #include <QListWidgetItem>
 #include <QObject>
 
-class ZListable: public QListWidgetItem{
+class ZDLListable: public QListWidgetItem{
 public:
 	virtual QString getName();
-	ZListable( QListWidget * parent, int type);
+	ZDLListable( QListWidget * parent, int type);
 	virtual void setName(QString inName);
 protected:
 	int myType;

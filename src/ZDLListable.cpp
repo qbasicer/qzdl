@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZListable.h"
+#include "ZDLListable.h"
 #include <string>
 
 using namespace std;
 
-ZListable::ZListable( QListWidget * parent, int type):QListWidgetItem(parent){
+ZDLListable::ZDLListable( QListWidget * parent, int type):QListWidgetItem(parent){
 	myType = type;
 }
 
-void ZListable::setName(QString newName){
+void ZDLListable::setName(QString newName){
 	setText(newName);
 }
 
-QString ZListable::getName(){
+QString ZDLListable::getName(){
 	return text();
 }

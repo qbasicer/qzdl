@@ -19,9 +19,9 @@
 #ifndef _ZFILELISTABLE_H_
 #define _ZFILELISTABLE_H_
 
-#include "ZListable.h"
+#include "ZDLListable.h"
 
-class ZFileListable : public ZListable{
+class ZFileListable : public ZDLListable{
 public:
 	ZFileListable( QListWidget *parent, int type, const char* file);
 	ZFileListable( QListWidget * parent, int type, QString qfile);

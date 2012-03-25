@@ -17,14 +17,14 @@
  */
  
 
-#include "ZListable.h"
+#include "ZDLListable.h"
 #include "ZFileListable.h"
 #include <string>
 #include <QFileInfo>
 
 using namespace std;
 
-ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):ZListable(parent, type){
+ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):ZDLListable(parent, type){
 
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
@@ -34,7 +34,7 @@ ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):Z
 
 }
 
-ZFileListable::ZFileListable( QListWidget *parent, int type, QString file):ZListable(parent, type){
+ZFileListable::ZFileListable( QListWidget *parent, int type, QString file):ZDLListable(parent, type){
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
 	QString list = QString("%1 [%2]").arg(cname).arg(file);

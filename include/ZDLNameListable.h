@@ -19,9 +19,9 @@
 #ifndef _ZNAMELISTABLE_H_
 #define _ZNAMELISTABLE_H_
 
-#include "ZListable.h"
+#include "ZDLListable.h"
 
-class ZDLNameListable : public ZListable{
+class ZDLNameListable : public ZDLListable{
 	public:
 		ZDLNameListable( QListWidget *parent, int type, QString qfile, QString name);
 		QString getFile();

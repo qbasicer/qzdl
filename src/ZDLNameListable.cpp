@@ -17,7 +17,7 @@
  */
  
 
-#include "ZListable.h"
+#include "ZDLListable.h"
 #include "ZDLNameListable.h"
 #include <string>
 #include <QFileInfo>
@@ -26,7 +26,7 @@
 
 using namespace std;
 
-ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, QString name):ZListable(parent, type){
+ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, QString name):ZDLListable(parent, type){
 	setFile(file);
 	setDisplayName(name);
 	setName(generateName());

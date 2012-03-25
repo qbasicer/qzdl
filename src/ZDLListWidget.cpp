@@ -108,7 +108,7 @@ void ZDLListWidget::dropEvent(QDropEvent *event){
 	}
 }
 
-void ZDLListWidget::insert(ZListable *item, int index){
+void ZDLListWidget::insert(ZDLListable *item, int index){
 	if(index < 0){
 		pList->addItem(item);
 	}else{
@@ -126,7 +126,7 @@ void ZDLListWidget::remove(int index){
 		QMessageBox::warning(this, ZDL_ENGINE_NAME " Error", "You didn't make a selection.");
 	}
 }
-ZListable* ZDLListWidget::get(int index){
+ZDLListable* ZDLListWidget::get(int index){
 	if (index >= 0 && index < (int)list.size()){
 		return list[index];
 	}
@@ -150,7 +150,7 @@ void ZDLListWidget::upButton(){
 		if (pList->currentRow () > 0){
 			int oldRow = pList->currentRow ();
 			QListWidgetItem *item = pList->takeItem(oldRow);
-			insert((ZListable*)item, oldRow-1);
+			insert((ZDLListable*)item, oldRow-1);
 			pList->setCurrentRow(oldRow-1);
 		}
 	}
@@ -162,7 +162,7 @@ void ZDLListWidget::downButton(){
 		if (pList->currentRow () < pList->count()-1){
 			int oldRow = pList->currentRow ();
 			QListWidgetItem *item = pList->takeItem(oldRow);
-			insert((ZListable*)item, oldRow+1);
+			insert((ZDLListable*)item, oldRow+1);
 			pList->setCurrentRow(oldRow+1);
 		}
 	}
