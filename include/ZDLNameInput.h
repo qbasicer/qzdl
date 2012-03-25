@@ -23,10 +23,10 @@
 #include <QObject>
 #include "ZDLNameListable.h"
 
-class ZNameInput: public QDialog{
+class ZDLNameInput: public QDialog{
 	Q_OBJECT
 	public: 
-		ZNameInput(QWidget *parent);
+		ZDLNameInput(QWidget *parent);
 		QString getName();
 		QString getFile();
 		void setFilter(QStringList inFilters);

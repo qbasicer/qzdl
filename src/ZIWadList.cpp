@@ -19,7 +19,7 @@
 #include "ZIWadList.h"
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
-#include "ZNameInput.h"
+#include "ZDLNameInput.h"
 
 #include <iostream>
 using namespace std;
@@ -85,7 +85,7 @@ void ZIWadList::addButton(){
          << "zip Files (*.zip)"
          << "All files (*)";
 	
-	ZNameInput diag(this);
+	ZDLNameInput diag(this);
 	diag.setWindowTitle("Add IWAD");
 	diag.setFilter(filters);
 	if (diag.exec()){
@@ -106,7 +106,7 @@ void ZIWadList::editButton(QListWidgetItem * item){
 				<< "zip Files (*.zip)"
 				<< "All files (*)";
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
-		ZNameInput diag(this);
+		ZDLNameInput diag(this);
 		diag.setWindowTitle("Add IWAD");
 		diag.setFilter(filters);
 		diag.basedOff(zitem);

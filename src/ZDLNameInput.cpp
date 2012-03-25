@@ -17,10 +17,10 @@
  */
  
 #include <QtGui>
-#include "ZNameInput.h"
+#include "ZDLNameInput.h"
 #include <string>
 
-ZNameInput::ZNameInput(QWidget *parent):QDialog(parent){
+ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 	QVBoxLayout *lays = new QVBoxLayout(this);
 	QHBoxLayout *files = new QHBoxLayout();
 	
@@ -55,7 +55,7 @@ ZNameInput::ZNameInput(QWidget *parent):QDialog(parent){
 	
 }
 
-void ZNameInput::browse(){
+void ZDLNameInput::browse(){
 	QFileDialog dialog(this);
 	dialog.setFilters(filters);
 	dialog.setFileMode(QFileDialog::ExistingFile);
@@ -70,11 +70,11 @@ void ZNameInput::browse(){
 	}
 }
 
-void ZNameInput::fromUrl(QUrl url){
+void ZDLNameInput::fromUrl(QUrl url){
 	lfile->setText(url.path());
 }
 
-void ZNameInput::basedOff(ZDLNameListable *listable){
+void ZDLNameInput::basedOff(ZDLNameListable *listable){
 	if (listable){
 		lfile->setText(listable->getFile());
 		lname->setText(listable->getName());
@@ -82,11 +82,11 @@ void ZNameInput::basedOff(ZDLNameListable *listable){
 	}
 }
 
-void ZNameInput::setFilter(QStringList inFilters){
+void ZDLNameInput::setFilter(QStringList inFilters){
 	filters = inFilters;
 }
 
-QString ZNameInput::getName(){
+QString ZDLNameInput::getName(){
 	if (lname->text().length() > 0){
 		return lname->text();
 	}else{
@@ -94,6 +94,6 @@ QString ZNameInput::getName(){
 	}
 }
 
-QString ZNameInput::getFile(){
+QString ZDLNameInput::getFile(){
 	return lfile->text();
 }

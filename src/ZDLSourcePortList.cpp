@@ -19,7 +19,7 @@
 #include "ZDLSourcePortList.h"
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
-#include "ZNameInput.h"
+#include "ZDLNameInput.h"
 
 #include <cstdio>
 #include <iostream>
@@ -83,7 +83,7 @@ void ZDLSourcePortList::addButton(){
 			<< "All files (*)";
 	
 	
-	ZNameInput diag(this);
+	ZDLNameInput diag(this);
 	diag.setWindowTitle("Add Source Port/Engine");
 	diag.setFilter(filters);
 	if (diag.exec()){
@@ -102,7 +102,7 @@ void ZDLSourcePortList::editButton(QListWidgetItem * item){
 		filters << "Executable (*.exe *.bin)"
 				<< "All files (*)";
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
-		ZNameInput diag(this);
+		ZDLNameInput diag(this);
 		diag.setWindowTitle("Add Source Port/Engine");
 		diag.setFilter(filters);
 		diag.basedOff(zitem);
