@@ -23,10 +23,10 @@
 #include <QObject>
 #include "ZQWidget.h"
 
-class ZAboutDialog: public QDialog{
+class ZDLAboutDialog: public QDialog{
 Q_OBJECT
 public: 
-	ZAboutDialog(ZQWidget *parent=0);
+	ZDLAboutDialog(ZQWidget *parent=0);
 	protected slots:
 		void close();
 		

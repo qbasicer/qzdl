@@ -21,7 +21,7 @@
 #include <QMainWindow>
 #include "ZDLConfigurationManager.h"
 #include "ZAdvancedMultiplayerDialog.h"
-#include "ZAboutDialog.h"
+#include "ZDLAboutDialog.h"
 
 #include "ZDLMultiPane.h"
 #include "zdlInterface.h"
@@ -258,7 +258,7 @@ void zdlInterface::loadConfigFile(){
 }
 
 void zdlInterface::aboutClick(){
-	ZAboutDialog zad(this);
+	ZDLAboutDialog zad(this);
 	zad.exec();
 }
 

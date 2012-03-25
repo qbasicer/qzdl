@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZAboutDialog.h"
+#include "ZDLAboutDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 #include "bmp_logo.xpm"
 
 extern QString versionString;
 
-ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
+ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
 	setWindowTitle("About "ZDL_ENGINE_NAME);
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QHBoxLayout *hbox = new QHBoxLayout();
@@ -78,6 +78,6 @@ ZAboutDialog::ZAboutDialog(ZQWidget *parent):QDialog(parent){
 	connect(btnBox, SIGNAL(accepted()), this, SLOT(close()));
 }
 
-void ZAboutDialog::close(){
+void ZDLAboutDialog::close(){
 	done(0);
 }
