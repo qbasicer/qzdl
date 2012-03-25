@@ -22,9 +22,9 @@
 
 #include "ZDLConfigurationManager.h"
 #include "zListWidget.h"
-#include "zSettingsPane.h"
+#include "ZDLSettingsPane.h"
 
-zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
+ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	
 	QVBoxLayout *iwadl = new QVBoxLayout();
@@ -77,7 +77,7 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-void zSettingsPane::rebuild(){
+void ZDLSettingsPane::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	//Delete old configs
@@ -106,7 +106,7 @@ void zSettingsPane::rebuild(){
 	}
 }
 
-void zSettingsPane::newConfig(){
+void ZDLSettingsPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
@@ -154,17 +154,17 @@ void zSettingsPane::newConfig(){
 	
 }
 
-void zSettingsPane::checkNow(){
+void ZDLSettingsPane::checkNow(){
 	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
 	zup->fetch(1);
 }
 
-void zSettingsPane::startRead(){
+void ZDLSettingsPane::startRead(){
 	emit readChildren(this);
 	newConfig();
 }
 
-void zSettingsPane::writeConfig(){
+void ZDLSettingsPane::writeConfig(){
 	emit buildChildren(this);
 	rebuild();
 }

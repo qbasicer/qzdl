@@ -24,7 +24,7 @@
 #include <QMainWindow>
 #include "ZQWidget.h"
 #include "ZDLInterface.h"
-#include "zSettingsPane.h"
+#include "ZDLSettingsPane.h"
 #include "ZDLUpdater.h"
 
 class ZDLMainWindow: public QMainWindow{
@@ -47,7 +47,7 @@ public slots:
 
 protected:
 	ZDLInterface* intr;
-	zSettingsPane* settings;
+	ZDLSettingsPane* settings;
 	ZDLUpdater* zup;
 	
 	int procerr;

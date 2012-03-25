@@ -22,10 +22,10 @@
 #include "ZDLSourcePortList.h"
 #include "ZIWadList.h"
 
-class zSettingsPane: public ZQWidget{
+class ZDLSettingsPane: public ZQWidget{
 Q_OBJECT
 public: 
-	zSettingsPane(QWidget *parent);
+	ZDLSettingsPane(QWidget *parent);
 	virtual void rebuild();
 	virtual void newConfig();
 	void startRead();
