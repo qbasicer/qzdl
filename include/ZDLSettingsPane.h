@@ -20,7 +20,7 @@
 #include <QObject>
 #include "ZQWidget.h"
 #include "ZDLSourcePortList.h"
-#include "ZIWadList.h"
+#include "ZDLIWadList.h"
 
 class ZDLSettingsPane: public ZQWidget{
 Q_OBJECT
@@ -35,7 +35,7 @@ protected slots:
 private:
 	QLineEdit *alwaysArgs;
 	QCheckBox *launchClose;
-	ZIWadList *iwadList;
+	ZDLIWadList *iwadList;
 	ZDLSourcePortList *sourceList;
 	QCheckBox *updater;
 	QCheckBox *pathQuote;

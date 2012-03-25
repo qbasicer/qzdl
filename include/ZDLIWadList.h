@@ -19,9 +19,9 @@
 #ifndef _ZIWADLIST_H_
 #define _ZIWADLIST_H_
 #include "ZDLListWidget.h"
-class ZIWadList : public ZDLListWidget{
+class ZDLIWadList : public ZDLListWidget{
 public:
-	ZIWadList(ZQWidget *parent);
+	ZDLIWadList(ZQWidget *parent);
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();

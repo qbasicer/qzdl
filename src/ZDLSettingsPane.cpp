@@ -36,7 +36,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 	
 	//IWAD
 	QVBoxLayout *lpane = new QVBoxLayout();
-	iwadList = new ZIWadList(this);
+	iwadList = new ZDLIWadList(this);
 	iwadl->addWidget(new QLabel("IWADs:", this));
 	iwadl->addWidget(iwadList);
 	

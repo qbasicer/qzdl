@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZIWadList.h"
+#include "ZDLIWadList.h"
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
@@ -24,10 +24,10 @@
 #include <iostream>
 using namespace std;
 
-ZIWadList::ZIWadList(ZQWidget *parent): ZDLListWidget(parent){
+ZDLIWadList::ZDLIWadList(ZQWidget *parent): ZDLListWidget(parent){
 }
 
-void ZIWadList::newConfig(){
+void ZDLIWadList::newConfig(){
 	pList->clear();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.iwads");
@@ -55,7 +55,7 @@ void ZIWadList::newConfig(){
 }
 
 
-void ZIWadList::rebuild(){
+void ZDLIWadList::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.iwads");
 	if (section){
@@ -77,7 +77,7 @@ void ZIWadList::rebuild(){
 	
 }
 
-void ZIWadList::addButton(){
+void ZDLIWadList::addButton(){
 	QStringList filters;
 	filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
          << "WAD Files (*.wad)"
@@ -97,7 +97,7 @@ void ZIWadList::addButton(){
 
 }
 
-void ZIWadList::editButton(QListWidgetItem * item){
+void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
 		QStringList filters;
 		filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
