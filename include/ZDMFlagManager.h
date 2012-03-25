@@ -22,14 +22,14 @@
 #include <QtCore>
 #include <QObject>
 #include "ZQWidget.h"
-#include "ZDMFlagCheckbox.h"
+#include "ZDLDMFlagCheckbox.h"
 #include <QVector>
 
 class ZDMFlagManager: public QObject{
 Q_OBJECT
 	public: 
 		ZDMFlagManager(QWidget *parent=0);
-		void addCheckbox(ZDMFlagCheckbox* box);
+		void addCheckbox(ZDLDMFlagCheckbox* box);
 		int getValue();
 		void setValue(int value);
 		void forceRecalc();
@@ -38,7 +38,7 @@ Q_OBJECT
 	public slots:
 		void stateChanged(int);
 	protected:
-		QVector<ZDMFlagCheckbox*> checks;
+		QVector<ZDLDMFlagCheckbox*> checks;
 };
 
 #endif

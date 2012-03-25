@@ -41,7 +41,7 @@ ZDMFlagDialog::ZDMFlagDialog(ZQWidget *parent):QDialog(parent){
 	txtDMFlag->setInputMask("900000000");
 	txtDMFlag2->setInputMask("900000000");
 	
-	QVector<ZDMFlagCheckbox*> boxes;
+	QVector<ZDLDMFlagCheckbox*> boxes;
 	QVBoxLayout *gb1 = new QVBoxLayout();
 	gDMFlagsL->setLayout(gb1);
 	QVBoxLayout *gb2 = new QVBoxLayout();
@@ -51,50 +51,50 @@ ZDMFlagDialog::ZDMFlagDialog(ZQWidget *parent):QDialog(parent){
 	
 	int last = 0;
 	
-	boxes.append(new ZDMFlagCheckbox(1,0,"Allow Health (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(2,0,"Allow Powerups (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(4,1,"Weapons Stay (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(8,1,"Falling Damage (OLD)",this));
-	boxes.append(new ZDMFlagCheckbox(16,1,"Falling Damage (HEXEN)",this));
-	boxes.append(new ZDMFlagCheckbox(64,1,"Same Map (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(128,1,"Spawn Farthest (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(256,1,"Force Respawn (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(512,0,"Allow Armour (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(1024,0,"Allow Exit (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(2048,1,"Infinite Ammo",this));
-	boxes.append(new ZDMFlagCheckbox(4096,1,"No Monsters",this));
-	boxes.append(new ZDMFlagCheckbox(8192,1,"Monsters Respawn",this));
-	boxes.append(new ZDMFlagCheckbox(16384,1,"Items Respawn",this));
-	boxes.append(new ZDMFlagCheckbox(32768,1,"Fast Monsters",this));
-	boxes.append(new ZDMFlagCheckbox(65536,0,"Allow Jump",this));
-	boxes.append(new ZDMFlagCheckbox(131072,0,"Allow Freelook",this));
+	boxes.append(new ZDLDMFlagCheckbox(1,0,"Allow Health (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(2,0,"Allow Powerups (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(4,1,"Weapons Stay (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(8,1,"Falling Damage (OLD)",this));
+	boxes.append(new ZDLDMFlagCheckbox(16,1,"Falling Damage (HEXEN)",this));
+	boxes.append(new ZDLDMFlagCheckbox(64,1,"Same Map (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(128,1,"Spawn Farthest (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(256,1,"Force Respawn (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(512,0,"Allow Armour (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(1024,0,"Allow Exit (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(2048,1,"Infinite Ammo",this));
+	boxes.append(new ZDLDMFlagCheckbox(4096,1,"No Monsters",this));
+	boxes.append(new ZDLDMFlagCheckbox(8192,1,"Monsters Respawn",this));
+	boxes.append(new ZDLDMFlagCheckbox(16384,1,"Items Respawn",this));
+	boxes.append(new ZDLDMFlagCheckbox(32768,1,"Fast Monsters",this));
+	boxes.append(new ZDLDMFlagCheckbox(65536,0,"Allow Jump",this));
+	boxes.append(new ZDLDMFlagCheckbox(131072,0,"Allow Freelook",this));
 	for(int i = 0; i < boxes.size(); i++){
 		gb1->addWidget(boxes[i]);
 		dmflag->addCheckbox(boxes[i]);
 	}
 	
 	last = boxes.size();
-	boxes.append(new ZDMFlagCheckbox(262144,1,"Mega Powerups Respawn",this));
-	boxes.append(new ZDMFlagCheckbox(524288,0,"Allow FOV",this));
-	boxes.append(new ZDMFlagCheckbox(1048576,0,"Spawn Multi Weaons (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(2097152,0,"Allow Crouch",this));
-	boxes.append(new ZDMFlagCheckbox(4194304,1,"Lose Entire Inventory (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(8388608,0,"Keep Keys (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(16777216,0,"Keep Weapons (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(33554432,0,"Keep Armour (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(67108864,0,"Keep Powerups (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(134217728,0,"Keep Ammo (Co-op)",this));
-	boxes.append(new ZDMFlagCheckbox(268435456,1,"Lose Half Ammo",this));
+	boxes.append(new ZDLDMFlagCheckbox(262144,1,"Mega Powerups Respawn",this));
+	boxes.append(new ZDLDMFlagCheckbox(524288,0,"Allow FOV",this));
+	boxes.append(new ZDLDMFlagCheckbox(1048576,0,"Spawn Multi Weaons (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(2097152,0,"Allow Crouch",this));
+	boxes.append(new ZDLDMFlagCheckbox(4194304,1,"Lose Entire Inventory (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(8388608,0,"Keep Keys (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(16777216,0,"Keep Weapons (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(33554432,0,"Keep Armour (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(67108864,0,"Keep Powerups (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(134217728,0,"Keep Ammo (Co-op)",this));
+	boxes.append(new ZDLDMFlagCheckbox(268435456,1,"Lose Half Ammo",this));
 	for(int i = last; i < boxes.size(); i++){
 		gb2->addWidget(boxes[i]);
 		dmflag->addCheckbox(boxes[i]);
 	}
 	
 	last = boxes.size();
-	boxes.append(new ZDMFlagCheckbox(2,1,"Drop Weapon",this));
-	boxes.append(new ZDMFlagCheckbox(32768,0,"Allow BFG Aiming",this));
-	boxes.append(new ZDMFlagCheckbox(65536,1,"Barrels Respawn (DM)",this));
-	boxes.append(new ZDMFlagCheckbox(131072,1,"Respawn Protection",this));
+	boxes.append(new ZDLDMFlagCheckbox(2,1,"Drop Weapon",this));
+	boxes.append(new ZDLDMFlagCheckbox(32768,0,"Allow BFG Aiming",this));
+	boxes.append(new ZDLDMFlagCheckbox(65536,1,"Barrels Respawn (DM)",this));
+	boxes.append(new ZDLDMFlagCheckbox(131072,1,"Respawn Protection",this));
 	for(int i = last; i < boxes.size(); i++){
 		gb3->addWidget(boxes[i]);
 		dmflag2->addCheckbox(boxes[i]);

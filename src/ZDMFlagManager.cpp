@@ -21,7 +21,7 @@
 ZDMFlagManager::ZDMFlagManager(QWidget *parent) :QObject(parent){
 }
 
-void ZDMFlagManager::addCheckbox(ZDMFlagCheckbox* box){
+void ZDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
 	connect(box,SIGNAL(stateChanged(int)),this,SLOT(stateChanged(int)));
 	checks.append(box);
 }

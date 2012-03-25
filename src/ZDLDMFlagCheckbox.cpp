@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZDMFlagCheckbox.h"
+#include "ZDLDMFlagCheckbox.h"
 
-ZDMFlagCheckbox::ZDMFlagCheckbox(int dmvalue, int highOn, QString text, QWidget *parent):QCheckBox(text,parent){
+ZDLDMFlagCheckbox::ZDLDMFlagCheckbox(int dmvalue, int highOn, QString text, QWidget *parent):QCheckBox(text,parent){
 	logic = highOn;
 	value = dmvalue;
 	setValue(0);
 }
 
-void ZDMFlagCheckbox::setValue(int value){
+void ZDLDMFlagCheckbox::setValue(int value){
 	int msk = value & this->value;
 	if(logic && msk){
 		setCheckState(Qt::Checked);
@@ -35,7 +35,7 @@ void ZDMFlagCheckbox::setValue(int value){
 	}
 }
 
-int ZDMFlagCheckbox::getValue(){
+int ZDLDMFlagCheckbox::getValue(){
 	if(checkState() == Qt::Checked && logic){
 		return value;
 	}else if(checkState() == Qt::Unchecked && !logic){
