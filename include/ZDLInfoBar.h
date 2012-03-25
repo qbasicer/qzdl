@@ -23,10 +23,10 @@
 #include <QObject>
 #include "ZQWidget.h"
 
-class ZInfoBar : public ZQWidget{
+class ZDLInfoBar : public ZQWidget{
 Q_OBJECT
 	public: 
-		ZInfoBar( ZQWidget *parent=0);
+		ZDLInfoBar( ZQWidget *parent=0);
 		void setMessage(const char* messgae, int icon);
 	protected:
 		QLabel *txtlbl;

@@ -27,7 +27,7 @@ using namespace std;
 
 #include <zdlcommon.h>
 #include "ZDLConfigurationManager.h"
-#include "ZInfoBar.h"
+#include "ZDLInfoBar.h"
 #include "ico_icon.xpm"
 
 void ZDLConfigurationManager::init(){
@@ -77,7 +77,7 @@ ZQWidget* ZDLConfigurationManager::getInfobar(){
 }
 
 void ZDLConfigurationManager::setInfobarMessage(const char* message, int icon){
-	ZInfoBar *bar = (ZInfoBar*)infobar;
+	ZDLInfoBar *bar = (ZDLInfoBar*)infobar;
 	bar->setMessage(message,icon);
 }
 

@@ -24,7 +24,7 @@
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
-#include "ZInfoBar.h"
+#include "ZDLInfoBar.h"
 
 extern QApplication *qapp;
 extern QString versionString;
@@ -35,7 +35,7 @@ ZDLMainWindow::~ZDLMainWindow(){
 
 void ZDLMainWindow::manageUpdate(){
 	if (zup->hasUpdate()){
-		ZInfoBar *bar = (ZInfoBar*)ZDLConfigurationManager::getInfobar();
+		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 		ZDLConfigurationManager::setInfobarMessage("There is an update available.",2);
 		connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
 	}
@@ -131,7 +131,7 @@ void ZDLMainWindow::launch(){
 // 	if(proc->state() != QProcess::NotRunning){
 // 		std::cout << "ERROR!" << std::endl;
 // 		ZDLConfigurationManager::setInfobarMessage("The process ended abnormally.",1);
-// 		ZInfoBar *bar = (ZInfoBar*)ZDLConfigurationManager::getInfobar();
+// 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 // 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
 // 	}
 	

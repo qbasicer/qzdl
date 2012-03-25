@@ -24,9 +24,9 @@
 #include "exclaim.xpm"
 #include "question.xpm"
 
-#include "ZInfoBar.h"
+#include "ZDLInfoBar.h"
 
-ZInfoBar::ZInfoBar(ZQWidget *parent): ZQWidget(parent){
+ZDLInfoBar::ZDLInfoBar(ZQWidget *parent): ZQWidget(parent){
 	QPalette p(palette());
 	normal = p.color(QPalette::Background);
 	warning = QColor(255,96,96);
@@ -59,16 +59,16 @@ ZInfoBar::ZInfoBar(ZQWidget *parent): ZQWidget(parent){
 	setVisible(false);
 }
 
-void ZInfoBar::hidebar(){
+void ZDLInfoBar::hidebar(){
 	disconnect(this, 0, 0, 0);
 	setVisible(false);
 }
 
-void ZInfoBar::more(){
+void ZDLInfoBar::more(){
 	emit moreclicked();
 }
 
-void ZInfoBar::setMessage(const char* message, int icon){
+void ZDLInfoBar::setMessage(const char* message, int icon){
 	QPalette p(palette());
 	disconnect(this, 0, 0, 0);
 	if(icon == 0){

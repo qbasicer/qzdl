@@ -19,7 +19,7 @@
 #include <QMessageBox>
 #include "ZUpdater.h"
 #include "ZDLConfigurationManager.h"
-#include "ZInfoBar.h"
+#include "ZDLInfoBar.h"
 #include <iostream>
 using namespace std;
 
@@ -79,7 +79,7 @@ void ZUpdater::fetch(int doAnyways){
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
 			if (strcmp(fileVctr[i]->getValue(), "disabled") == 0){
 				ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
-				ZInfoBar *bar = (ZInfoBar*)ZDLConfigurationManager::getInfobar();
+				ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 				connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
 				if(doAnyways == 0){
 					return;

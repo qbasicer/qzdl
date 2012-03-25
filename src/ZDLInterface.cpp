@@ -25,7 +25,7 @@
 
 #include "ZDLMultiPane.h"
 #include "ZDLInterface.h"
-#include "ZInfoBar.h"
+#include "ZDLInfoBar.h"
 #include "ZDLMainWindow.h"
 #include "ZDLFilePane.h"
 #include "settingPane.h"
@@ -51,7 +51,7 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
-	ZInfoBar *zib = new ZInfoBar(this);
+	ZDLInfoBar *zib = new ZDLInfoBar(this);
 	box->addWidget(zib);
 	
 	ZDLConfigurationManager::setInfobar(zib);
