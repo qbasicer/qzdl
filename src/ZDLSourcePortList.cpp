@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZSPList.h"
+#include "ZDLSourcePortList.h"
 #include "ZNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZNameInput.h"
@@ -25,10 +25,10 @@
 #include <iostream>
 using namespace std;
 
-ZSPList::ZSPList(ZQWidget *parent): zListWidget(parent){
+ZDLSourcePortList::ZDLSourcePortList(ZQWidget *parent): zListWidget(parent){
 }
 
-void ZSPList::newConfig(){
+void ZDLSourcePortList::newConfig(){
 	pList->clear();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
@@ -56,7 +56,7 @@ void ZSPList::newConfig(){
 }
 
 
-void ZSPList::rebuild(){
+void ZDLSourcePortList::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
@@ -77,7 +77,7 @@ void ZSPList::rebuild(){
 	
 }
 
-void ZSPList::addButton(){
+void ZDLSourcePortList::addButton(){
 	QStringList filters;
 	filters << "Executable (*.exe *.bin)"
 			<< "All files (*)";
@@ -96,7 +96,7 @@ void ZSPList::addButton(){
 	
 }
 
-void ZSPList::editButton(QListWidgetItem * item){
+void ZDLSourcePortList::editButton(QListWidgetItem * item){
 	if (item){
 		QStringList filters;
 		filters << "Executable (*.exe *.bin)"

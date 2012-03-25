@@ -19,7 +19,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZQWidget.h"
-#include "ZSPList.h"
+#include "ZDLSourcePortList.h"
 #include "ZIWadList.h"
 
 class zSettingsPane: public ZQWidget{
@@ -36,7 +36,7 @@ private:
 	QLineEdit *alwaysArgs;
 	QCheckBox *launchClose;
 	ZIWadList *iwadList;
-	ZSPList *sourceList;
+	ZDLSourcePortList *sourceList;
 	QCheckBox *updater;
 	QCheckBox *pathQuote;
 	

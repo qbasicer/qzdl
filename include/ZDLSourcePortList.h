@@ -19,9 +19,9 @@
 #ifndef _ZSPLIST_H_
 #define _ZSPLIST_H_
 #include "zListWidget.h"
-class ZSPList : public zListWidget{
+class ZDLSourcePortList : public zListWidget{
 public:
-	ZSPList(ZQWidget *parent);
+	ZDLSourcePortList(ZQWidget *parent);
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();

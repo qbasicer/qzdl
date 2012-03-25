@@ -42,7 +42,7 @@ zSettingsPane::zSettingsPane(QWidget *parent): ZQWidget(parent){
 	
 	//Source Port
 	QVBoxLayout *rpane = new QVBoxLayout();
-	sourceList = new ZSPList(this);
+	sourceList = new ZDLSourcePortList(this);
 	spl->addWidget(new QLabel("Source Ports/Engines:", this));
 	spl->addWidget(sourceList);
 	
