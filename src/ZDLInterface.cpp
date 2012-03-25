@@ -24,7 +24,7 @@
 #include "ZDLAboutDialog.h"
 
 #include "ZDLMultiPane.h"
-#include "zdlInterface.h"
+#include "ZDLInterface.h"
 #include "ZInfoBar.h"
 #include "ZDLMainWindow.h"
 #include "ZDLFilePane.h"
@@ -37,7 +37,7 @@
 
 extern ZDLMainWindow *mw;
 
-zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
+ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 	ZDLConfigurationManager::setInterface(this);
 	
 	box = new QVBoxLayout(this);
@@ -60,7 +60,7 @@ zdlInterface::zdlInterface(QWidget *parent):ZQWidget(parent){
 	
 }
 
-QLayout *zdlInterface::getTopPane(){
+QLayout *ZDLInterface::getTopPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
 	ZQSplitter *split = new ZQSplitter(this);
@@ -77,7 +77,7 @@ QLayout *zdlInterface::getTopPane(){
 	return box;
 }
 
-QLayout *zdlInterface::getBottomPane(){
+QLayout *ZDLInterface::getBottomPane(){
 	QVBoxLayout *box = new QVBoxLayout();
 	QLabel *ecla = new QLabel("Extra command line arguments",this);
 	extraArgs = new QLineEdit(this);
@@ -92,7 +92,7 @@ QLayout *zdlInterface::getBottomPane(){
 }
 
 
-QLayout *zdlInterface::getButtonPane(){
+QLayout *ZDLInterface::getButtonPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
 	QPushButton *btnExit = new QPushButton("Exit", this);
@@ -148,16 +148,16 @@ QLayout *zdlInterface::getButtonPane(){
 	return box;
 }
 
-void zdlInterface::showNewDMFlagger(){
+void ZDLInterface::showNewDMFlagger(){
 	ZDMFlagPicker dialog(this);
 	dialog.exec();
 }
 
-void zdlInterface::launch(){
+void ZDLInterface::launch(){
 	mw->launch();
 }
 
-void zdlInterface::buttonPaneNewConfig(){
+void ZDLInterface::buttonPaneNewConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
@@ -179,7 +179,7 @@ void zdlInterface::buttonPaneNewConfig(){
 	
 }
 
-void zdlInterface::mclick(){
+void ZDLInterface::mclick(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
 	if(zconf->hasValue("zdl.save","dlgmode")){
@@ -198,18 +198,18 @@ void zdlInterface::mclick(){
 	ZDLConfigurationManager::getInterface()->newConfig();
 }
 
-void zdlInterface::ampclick(){
+void ZDLInterface::ampclick(){
 	ZAdvancedMultiplayerDialog *zampd = new ZAdvancedMultiplayerDialog(this);
 	zampd->exec();
 	delete zampd;
 }
 
-void zdlInterface::sendSignals(){
+void ZDLInterface::sendSignals(){
 	emit buildParent(this);
 	emit buildChildren(this);
 }
 
-void zdlInterface::saveConfigFile(){
+void ZDLInterface::saveConfigFile(){
 	sendSignals();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
@@ -231,7 +231,7 @@ void zdlInterface::saveConfigFile(){
 	
 }
 
-void zdlInterface::loadConfigFile(){
+void ZDLInterface::loadConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ZDL/ini (*.zdl *.ini)"
@@ -257,12 +257,12 @@ void zdlInterface::loadConfigFile(){
 	
 }
 
-void zdlInterface::aboutClick(){
+void ZDLInterface::aboutClick(){
 	ZDLAboutDialog zad(this);
 	zad.exec();
 }
 
-void zdlInterface::showCommandline(){
+void ZDLInterface::showCommandline(){
 	sendSignals();
 	QStringList cmdLst = mw->getArguments();
 	QString cmd = cmdLst.join(" ");
@@ -270,7 +270,7 @@ void zdlInterface::showCommandline(){
 	QMessageBox::information(this,ZDL_ENGINE_NAME " Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
 }
 
-void zdlInterface::rebuild(){
+void ZDLInterface::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
 		zconf->setValue("zdl.save", "efirst", extraArgs->text().toStdString().c_str());
@@ -279,7 +279,7 @@ void zdlInterface::rebuild(){
 	}
 }
 
-void zdlInterface::bottomPaneNewConfig(){
+void ZDLInterface::bottomPaneNewConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "efirst")){
 		int stat;
@@ -295,7 +295,7 @@ void zdlInterface::bottomPaneNewConfig(){
 //Called when there's a change to the configuration that we need to look at.
 //The button changed the configuration, and then notifies us that we need
 //to look at the configuration to see what we need to do.
-void zdlInterface::newConfig(){
+void ZDLInterface::newConfig(){
 	buttonPaneNewConfig();
 	bottomPaneNewConfig();
 	//Grab our configuration
@@ -337,11 +337,11 @@ void zdlInterface::newConfig(){
 
 
 
-void zdlInterface::startRead(){
+void ZDLInterface::startRead(){
 	emit readChildren(this);
 	newConfig();
 }
 
-void zdlInterface::writeConfig(){
+void ZDLInterface::writeConfig(){
 	emit buildChildren(this);
 }

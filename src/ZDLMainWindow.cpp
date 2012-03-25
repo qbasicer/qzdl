@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include "zdlInterface.h"
+#include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
 #include "ZInfoBar.h"
@@ -63,14 +63,14 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
 	
- 	intr = new zdlInterface(this);
+ 	intr = new ZDLInterface(this);
 	settings = new zSettingsPane(this);
 	
 	setCentralWidget(widget);
 	widget->addTab(intr, "Main");
 	widget->addTab(settings, "Settings");
 	//I haven't started on this yet :)
-	//widget->addTab(new zdlInterface(this), "Notifications");
+	//widget->addTab(new ZDLInterface(this), "Notifications");
 	
 	QAction *qact = new QAction(widget);
 	qact->setShortcut(Qt::Key_Return);

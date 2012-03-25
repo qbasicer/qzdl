@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include "ZQWidget.h"
-#include "zdlInterface.h"
+#include "ZDLInterface.h"
 #include "zSettingsPane.h"
 #include "ZUpdater.h"
 
@@ -46,7 +46,7 @@ public slots:
 	void newUpdate();
 
 protected:
-	zdlInterface* intr;
+	ZDLInterface* intr;
 	zSettingsPane* settings;
 	ZUpdater* zup;
 	

@@ -25,10 +25,10 @@
 #include "ZDLMultiPane.h"
 
 
-class zdlInterface: public ZQWidget{
+class ZDLInterface: public ZQWidget{
 Q_OBJECT
 public: 
-	zdlInterface( QWidget *parent=0);
+	ZDLInterface( QWidget *parent=0);
 	void startRead();
 	void writeConfig();
 	virtual void newConfig();
