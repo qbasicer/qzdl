@@ -23,10 +23,10 @@
 #include <QObject>
 #include "ZQWidget.h"
 
-class ZAdvancedMultiplayerDialog: public QDialog{
+class ZDLAdvancedMultiplayerDialog: public QDialog{
 Q_OBJECT
 public: 
-	ZAdvancedMultiplayerDialog(ZQWidget *parent=0);
+	ZDLAdvancedMultiplayerDialog(ZQWidget *parent=0);
 private:
 	QCheckBox *enable;
 	QCheckBox *extratic;

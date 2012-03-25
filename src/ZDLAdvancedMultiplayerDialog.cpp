@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZAdvancedMultiplayerDialog.h"
+#include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 
-ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
+ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
 	setWindowTitle(ZDL_ENGINE_NAME " Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QGridLayout *form = new QGridLayout();
@@ -86,11 +86,11 @@ ZAdvancedMultiplayerDialog::ZAdvancedMultiplayerDialog(ZQWidget *parent):QDialog
 	readConfig();
 }
 
-void ZAdvancedMultiplayerDialog::close(){
+void ZDLAdvancedMultiplayerDialog::close(){
 	done(0);
 }
 
-void ZAdvancedMultiplayerDialog::readConfig(){
+void ZDLAdvancedMultiplayerDialog::readConfig(){
 	int status;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString tEnabled = zconf->getValue("zdl.net","advenabled",&status);
@@ -150,7 +150,7 @@ void ZAdvancedMultiplayerDialog::readConfig(){
 	netmode->setCurrentIndex(nNetMode);
 }
 
-void ZAdvancedMultiplayerDialog::save(){
+void ZDLAdvancedMultiplayerDialog::save(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(enable->isChecked()){
 		zconf->setValue("zdl.net", "advenabled", "enabled");

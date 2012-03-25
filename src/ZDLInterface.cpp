@@ -20,7 +20,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include "ZDLConfigurationManager.h"
-#include "ZAdvancedMultiplayerDialog.h"
+#include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLAboutDialog.h"
 
 #include "ZDLMultiPane.h"
@@ -199,7 +199,7 @@ void ZDLInterface::mclick(){
 }
 
 void ZDLInterface::ampclick(){
-	ZAdvancedMultiplayerDialog *zampd = new ZAdvancedMultiplayerDialog(this);
+	ZDLAdvancedMultiplayerDialog *zampd = new ZDLAdvancedMultiplayerDialog(this);
 	zampd->exec();
 	delete zampd;
 }
