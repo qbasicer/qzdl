@@ -36,6 +36,7 @@
 #include "adown.xpm"
 
 extern ZDLMainWindow *mw;
+extern QApplication *qapp;
 
 ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 	ZDLConfigurationManager::setInterface(this);
@@ -91,6 +92,9 @@ QLayout *ZDLInterface::getBottomPane(){
 	return box;
 }
 
+void ZDLInterface::exitzdl(){
+	mw->close();
+}
 
 QLayout *ZDLInterface::getButtonPane(){
 	QHBoxLayout *box = new QHBoxLayout();
@@ -121,6 +125,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
+	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
 	
 	btnZDL->setMenu(context);
 	

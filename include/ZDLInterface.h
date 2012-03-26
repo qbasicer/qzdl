@@ -43,6 +43,7 @@ private slots:
 	void aboutClick();
 	void showCommandline();
 	void showNewDMFlagger();
+	void exitzdl();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();
