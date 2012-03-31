@@ -139,9 +139,22 @@ void ZDLListWidget::addButton(){
 
 void ZDLListWidget::removeButton(){
 	QList<QListWidgetItem *> slist = pList->selectedItems();
+	int selected = -1;
+	if(slist.size() == 1){
+		selected = pList->currentRow();
+	}
 	for(int i = 0; i < slist.size(); i++){
 		int rowid = pList->row(slist[i]);
 		remove(rowid);
+	}
+	if(selected != -1){
+		if(pList->count() > 0){
+			if(pList->count() <= selected){
+				pList->setCurrentRow(pList->count() - 1);
+			}else{
+				pList->setCurrentRow(selected);
+			}
+		}
 	}
 }
 

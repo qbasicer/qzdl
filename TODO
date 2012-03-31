@@ -1,9 +1,11 @@
 Bugs:
 - Map field stored lower case
+  - Not sure of issue here
 - +Set does not appear to work
   <NeuralStunner> "+Set DeathMatch 1" will not start a game as DM (3.1a does)
   <NeuralStunner> +DeathMatch 1 works, however
   <NeuralStunner> Odd thing is, it uses +Set in the command line for the DMFlags
+  - Not sure of issue here
 - <NeuralStunner> When Remove is used on a file in the External Files list, it unselects everything in that box
   <NeuralStunner> Whereas in 1.3a it leaves the next file selected, so you can just hit Remove repeatedly and clear the list
 
