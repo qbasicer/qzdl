@@ -23,6 +23,7 @@
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
+#include "ZDLVersion.h"
 
 QApplication *qapp;
 QString versionString;
@@ -33,7 +34,7 @@ int main( int argc, char **argv ){
 	qapp = &a;
 
 
-	versionString = ZDL_VERSION_STRING;
+	versionString = ZDL_VERSION_STRING + QString("/") + QString(ZDL_BUILD);
 	
 	QDir cwd = QDir::current();
 	ZDLConfigurationManager::init();

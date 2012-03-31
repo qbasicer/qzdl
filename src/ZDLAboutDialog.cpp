@@ -19,6 +19,7 @@
 #include "ZDLAboutDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
+#include "ZDLVersion.h"
 #include "bmp_logo.xpm"
 
 extern QString versionString;
@@ -37,10 +38,13 @@ ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
 	title->setAlignment(Qt::AlignHCenter);
 	
 	vbox->addWidget(title);
+	vbox->addWidget(new QLabel(QString("Build: ")+QString(ZDL_BUILD),this));
+	vbox->addWidget(new QLabel(QString("Revision: ")+QString(ZDL_REVISION),this));
+	vbox->addWidget(new QLabel(QString("Source: ")+QString(ZDL_SOURCE),this));
 	vbox->addWidget(new QLabel("C Version Copyright (C) BioHazard 2005",this));
 	vbox->addWidget(new QLabel("C# Version Copyright (C) QBasicer 2007",this));
 	vbox->addWidget(new QLabel("Qt Version Copyright (C) Cody Harris 2007-2011",this));
-	QLabel *url = new QLabel("<a href=http://zdlsharp.vectec.net>http://zdlsharp.vectec.net</a>",this);
+	QLabel *url = new QLabel("<a href=http://zdl.vectec.net>http://zdl.vectec.net</a>",this);
 	url->setOpenExternalLinks(true);
 	vbox->addWidget(url);
 	
