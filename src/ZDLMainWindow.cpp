@@ -116,6 +116,23 @@ void ZDLMainWindow::launch(){
 	}
 	
 	QProcess *proc = new QProcess(this);
+
+	//Find the executable
+	QStringList executablePath = exec.split("/");
+
+	//Remove the last item, which will be the .exe
+	executablePath.removeLast();
+
+	//Re-create the string
+	QString workingDirectory = executablePath.join("/");
+
+	//Resolve the path to an absolute directory
+	QDir cwd(workingDirectory);
+	workingDirectory = cwd.absolutePath();
+
+	//Set the working directory to that directory
+	proc->setWorkingDirectory(workingDirectory);
+	
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 	proc->start(exec, args);
 	int stat;
