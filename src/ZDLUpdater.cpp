@@ -73,11 +73,11 @@ void ZDLUpdater::fetch(int doAnyways){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
-			if (strcmp(fileVctr[i]->getValue(), "disabled") == 0){
+			if (fileVctr[i]->getValue().compare("disabled") == 0){
 				ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
 				ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 				connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));

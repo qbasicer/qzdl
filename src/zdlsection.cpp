@@ -28,7 +28,7 @@
 using namespace std;
 #include <zdlcommon.h>
 
-ZDLSection::ZDLSection(const char *name)
+ZDLSection::ZDLSection(QString name)
 {
 	//cout << "New section: \"" << name << "\"" << endl;
 	reads = 0;
@@ -52,54 +52,48 @@ void ZDLSection::setSpecial(int inFlags)
 	flags = inFlags;
 }
 
-int ZDLSection::hasVariable(const char* variable)
+int ZDLSection::hasVariable(QString variable)
 {
 	reads++;
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		if (strcmp(line->getVariable(), variable) == 0){
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(variable) == 0){
 			return true;
 		}
 	}
 	return false;
 }
 
-void ZDLSection::deleteVariable(const char* variable)
+void ZDLSection::deleteVariable(QString variable)
 {
 	reads++;
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		if (strcmp(line->getVariable(), variable) == 0){
-			lines.remove(line);
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(variable) == 0){
+			lines.remove(i);
 			delete line;
 			return;
 		}
 	}
 }
 
-char* ZDLSection::findVariable(const char* variable)
+QString ZDLSection::findVariable(QString variable)
 {
 	reads++;
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		if (strcmp(line->getVariable(), variable) == 0){
-			string rc = line->getValue();
-			return (char*)rc.c_str();
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(variable) == 0){
+			return QString(line->getValue());
 		}
 	}
-	string rc = "";
-	return (char*)rc.c_str();
+	return QString("");
 }
 
-int ZDLSection::getRegex(const char* regex, vector<ZDLLine*> &vctr){
+int ZDLSection::getRegex(QString regex, QVector<ZDLLine*> &vctr){
 #ifdef QT_CORE_LIB
 	QRegExp rx(regex);
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
 		if (rx.exactMatch(line->getVariable())){
 			vctr.push_back(line);
 		}
@@ -110,59 +104,56 @@ int ZDLSection::getRegex(const char* regex, vector<ZDLLine*> &vctr){
 	return 0;
 }
 
-int ZDLSection::setValue(const char *variable, const char *value)
+int ZDLSection::setValue(QString variable, QString value)
 {
 	writes++;
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		if (strcmp(line->getVariable(), variable) == 0){
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(variable) == 0){
 			line->setValue(value);
 			return 0;
 		}
 	}
 	//We can't find the line, create a new one.
-	string buffer = variable;
+	QString buffer = variable;
 	buffer.append("=");
 	buffer.append(value);
 	//cout << "Buffer: " << buffer << endl;
-	ZDLLine *line = new ZDLLine((char*)buffer.c_str());
+	ZDLLine *line = new ZDLLine(buffer);
 	lines.push_back(line);
 	
 	return 0;
 }
 
-int ZDLSection::streamWrite(ostream &stream)
+int ZDLSection::streamWrite(QIODevice *stream)
 {
-	
+	QTextStream tstream(stream);
 	//Write only if we have stuff to write
 	if (lines.size() > 0){
 		writes++;
 		//Global's don't have a section name
 		if (sectionName.length() > 0){
-			stream << "[" << sectionName << "]" << endl;
+			tstream << "[" << sectionName << "]" << endl;
 		}
-		list<ZDLLine*>::iterator itr;
-		for (itr=lines.begin(); itr!=lines.end();itr++){
-			ZDLLine* line = (*itr);
-			stream << line->getLine() << endl;
+		for(int i = 0; i < lines.size(); i++){
+			ZDLLine *line = lines[i];
+			tstream << line->getLine() << endl;
 		}
 	}
 	return 0;
 }
 
-char* ZDLSection::getName()
+QString ZDLSection::getName()
 {
 	reads++;
-	return (char*)sectionName.c_str();
+	return sectionName;
 }
 
-ZDLLine *ZDLSection::findLine(const char *inVar)
+ZDLLine *ZDLSection::findLine(QString inVar)
 {
-	list<ZDLLine*>::iterator itr;
-	for (itr=lines.begin(); itr!=lines.end();itr++){
-		ZDLLine* line = (*itr);
-		if (strcmp(line->getVariable(), inVar) == 0){
+	for (int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(inVar) == 0){
 			return line;
 		}
 	}
@@ -170,7 +161,7 @@ ZDLLine *ZDLSection::findLine(const char *inVar)
 
 }
 
-int ZDLSection::addLine(const char *linedata)
+int ZDLSection::addLine(QString linedata)
 {
 	writes++;
 	ZDLLine *newl = new ZDLLine(linedata);

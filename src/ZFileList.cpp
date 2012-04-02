@@ -49,7 +49,7 @@ void ZFileList::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
-		vector <ZDLLine*> vctr;
+		QVector <ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+$", vctr);
 		//cout << "I got " << vctr.size() << " matches!" << endl;
 		for(unsigned int i = 0; i < vctr.size(); i++){
@@ -63,7 +63,7 @@ void ZFileList::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
-		vector <ZDLLine*> vctr;
+		QVector <ZDLLine*> vctr;
 		section->getRegex("^file[0-9]+$", vctr);
 		//cout << "I got " << vctr.size() << " matches!" << endl;
 		for(unsigned int i = 0; i < vctr.size(); i++){

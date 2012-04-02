@@ -166,10 +166,10 @@ void ZDLInterface::buttonPaneNewConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
-		vector <ZDLLine*> vctr;
+		QVector<ZDLLine*> vctr;
 		section->getRegex("^dlgmode$", vctr);
 		for(unsigned int i = 0; i < vctr.size(); i++){
-			if (strcmp(vctr[i]->getValue(), "open") == 0){
+			if (vctr[i]->getValue().compare("open",Qt::CaseInsensitive) == 0){
 				btnEpr->setIcon(QPixmap(adown));
 			}else{
 				btnEpr->setIcon(QPixmap(aup));
@@ -289,9 +289,9 @@ void ZDLInterface::bottomPaneNewConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "extra")){
 		int stat;
-		string rc = zconf->getValue("zdl.save", "extra", &stat);
+		QString rc = zconf->getValue("zdl.save", "extra", &stat);
 		if(rc.length() > 0){
-			extraArgs->setText(rc.c_str());
+			extraArgs->setText(rc);
 		}
 	}else{
 		extraArgs->setText("");
@@ -310,12 +310,12 @@ void ZDLInterface::newConfig(){
 	ZDLSection *section = zconf->getSection("zdl.save");
 	//Do we have it?
 	if (section){
-		vector <ZDLLine*> vctr;
+		QVector<ZDLLine*> vctr;
 		//Search for our string
 		section->getRegex("^dlgmode$", vctr);
 		for(unsigned int i = 0; i < vctr.size(); i++){
 			//Are we open?
-			if (strcmp(vctr[i]->getValue(), "open") == 0){
+			if (vctr[i]->getValue().compare("open", Qt::CaseInsensitive) == 0){
 				//cout << "Opening config" << endl;
 				box->addWidget(mpane);
 				mpane->setVisible(true);

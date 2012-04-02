@@ -33,18 +33,18 @@ void ZDLSourcePortList::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
-			string value = fileVctr[i]->getVariable();
+			QString value = fileVctr[i]->getVariable();
 			
-			string number = "^p";
-			number.append(value.substr(1, value.length()-2));
+			QString number = "^p";
+			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
 			
-			vector <ZDLLine*> nameVctr;
-			section->getRegex(number.c_str(), nameVctr);
+			QVector <ZDLLine*> nameVctr;
+			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
 				QString disName = nameVctr[0]->getValue();
 				QString fileName = fileVctr[i]->getValue();

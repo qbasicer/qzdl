@@ -213,7 +213,7 @@ QStringList ZDLMainWindow::getArguments(){
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
-		string rc = zconf->getValue("zdl.general","quotefiles",&ok);
+		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
 		if(rc == "enabled"){
 			doquotes = 1;
 		}	
@@ -222,17 +222,17 @@ QStringList ZDLMainWindow::getArguments(){
 	bool ok;
 	int stat;
 	if(zconf->hasValue("zdl.save", "extra")){
-		string rc = zconf->getValue("zdl.save", "extra", &stat);
+		QString rc = zconf->getValue("zdl.save", "extra", &stat);
 		if(rc.length() > 0){
-			ourString << rc.c_str();
+			ourString << rc;
 		}
 	}
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "iwad", &stat);
+		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.c_str());
+			index = atoi((char*)rc.toStdString().c_str());
 		}
 		if (index >= 0){
 			iwadIndex = index;
@@ -247,7 +247,7 @@ QStringList ZDLMainWindow::getArguments(){
 	
 	section = zconf->getSection("zdl.iwads");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
@@ -294,7 +294,7 @@ QStringList ZDLMainWindow::getArguments(){
 	
 	section = zconf->getSection("zdl.save");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^file[0-9]+$", fileVctr);
 		
 		if (fileVctr.size() > 0){
@@ -390,9 +390,9 @@ QString ZDLMainWindow::getExecutable(){
 	unsigned int portIndex = 0;
 	if(zconf->hasValue("zdl.save", "port")){
 		int index = 0;
-		string rc = zconf->getValue("zdl.save", "port", &stat);
+		QString rc = zconf->getValue("zdl.save", "port", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.c_str());
+			index = atoi((char*)rc.toStdString().c_str());
 		}
 		if (index >= 0){
 			portIndex = index;
@@ -406,7 +406,7 @@ QString ZDLMainWindow::getExecutable(){
 	
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){

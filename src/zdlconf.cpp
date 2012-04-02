@@ -28,7 +28,7 @@ using namespace std;
 #include <zdlcommon.h>
 
 
-extern char* chomp(string in);
+extern QString chomp(QString in);
 
 /* ZDLConf.cpp
  *    Author: Cody Harris
@@ -40,11 +40,11 @@ extern char* chomp(string in);
  *      Date: July 29th, 2007
  */
 
-int ZDLConf::readINI(const char* file)
+int ZDLConf::readINI(QString file)
 {	
 	if((mode & ZDLConf::FileRead) != 0){
 		reads++;
-		string line;
+		QString line;
 		/* We allow lines to be outside of any section (ie header comments)
 		* We use a global section to read this.  We also keep track of
 		* which section we're in.  We do that with a pointer (current)
@@ -52,13 +52,15 @@ int ZDLConf::readINI(const char* file)
 		ZDLSection *current = new ZDLSection("");
 		current->setSpecial(ZDL_FLAG_NAMELESS);
 		sections.push_back(current);
-		ifstream stream(file);
-		if (!stream.is_open()){
-			cerr << "Unable to open file \"" << file << "\"" << std::endl;
+		QFile stream(file);
+		stream.open(QIODevice::ReadOnly);
+		if (!stream.isOpen()){
+			cerr << "Unable to open file \"" << file.toStdString() << "\"" << std::endl;
 			return 1;
 		}
-		while (!stream.eof()){
-			getline(stream,line);
+		while (!stream.atEnd()){
+			QByteArray array = stream.readLine();
+			QString line(array);
 			parse(line, current);
 			current = sections.back();
 		}
@@ -77,25 +79,22 @@ int ZDLConf::readINI(const char* file)
 
 int ZDLConf::numberOfSections()
 {
-	int count = 0;
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		count++;
-	}
-	return count;
+	return sections.size();;
 
 }
 
-int ZDLConf::writeINI(const char *file)
+int ZDLConf::writeINI(QString file)
 {
 	if((mode & ZDLConf::FileWrite) != 0){
 		writes++;
-		ofstream stream(file);
-		if (!stream.is_open()){
-			cerr << "Unable to open file \"" << file << "\"" << endl;
+		QFile stream(file);
+		stream.open(QIODevice::WriteOnly);
+		if (!stream.isOpen()){
+			cerr << "Unable to open file \"" << file.toStdString() << "\"" << endl;
 			return 1;
 		}
-		writeStream(stream);
+		QIODevice *dev = &stream;
+		writeStream(dev);
 		stream.close();
 		return 0;
 	}else{
@@ -103,12 +102,10 @@ int ZDLConf::writeINI(const char *file)
 	}
 }
 
-int ZDLConf::writeStream(ostream &stream){
+int ZDLConf::writeStream(QIODevice *stream){
 	if((mode & ZDLConf::FileWrite) != 0){
-		list<ZDLSection*>::iterator itr;
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			section->streamWrite(stream);
+		for(int i = 0; i < sections.size(); i++){
+			sections[i]->streamWrite(stream);
 		}
 		return 0;
 	}else{
@@ -122,7 +119,7 @@ ZDLConf::ZDLConf(int mode)
 	//cout << "New configuration" << endl;
 	reads = 0;
 	writes = 0;
-	vars = new ZDLVariables(this);
+	//vars = new ZDLVariables(this);
 }
 
 /* int ZDLConf::reopen(int mode)
@@ -141,46 +138,45 @@ ZDLConf::~ZDLConf()
 		sections.pop_front();
 		delete section;
 	}
-	if (vars)
-		delete vars;
+	//if (vars)
+	//	delete vars;
 	//cout << "Deleting configuration children." << endl;
 
 }
 
 void ZDLConf::deleteSection(QString lsection){
-	list<ZDLSection*>::iterator itr;
-	for (itr = sections.begin(); itr != sections.end();itr++){
-		ZDLSection* section = (*itr);
-		QString secName = section->getName();
-		if (secName == lsection){
-			sections.erase(itr);
-			break;
-		}
+	for(int i = 0; i < sections.size(); i++){
+		ZDLSection* section = sections[i];
+                QString secName = section->getName();
+                if (secName == lsection){
+                        sections.remove(i);
+                        return;
+                }
 	}
 }
 
-void ZDLConf::deleteValue(const char *lsection, const char *variable){
+void ZDLConf::deleteValue(QString lsection, QString variable){
 	if((mode & WriteOnly) != 0){
 		writes++;
-		list<ZDLSection*>::iterator itr;
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			if (strcmp(section->getName(), lsection) == 0){
-				section->deleteVariable(variable);
-				
-			}
+		for(int i = 0; i < sections.size(); i++){
+			ZDLSection* section = sections[i];
+                        if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
+                                section->deleteVariable(variable);
+
+                        }
+
 		}
 	}
 }
 
-const char *ZDLConf::getValue(const char *lsection, const char *variable, int *status){
+QString ZDLConf::getValue(QString lsection, QString variable, int *status){
 	if((mode & ReadOnly) != 0){
 		reads++;
-		if (vars){
-			//cout << "ZDLConf::getValue using variable resolution" << endl;
-			string rc = vars->getVariable(lsection, variable, status);
-			return rc.c_str();
-		}else{
+		//if (vars){
+		//	//cout << "ZDLConf::getValue using variable resolution" << endl;
+		//	QString rc = vars->getVariable(lsection, variable, status);
+		//	return rc;
+		//}else{
 			//cout << "ZDLConf::getValue using non-variable resolution" << endl;
 			ZDLSection *sect = getSection(lsection);
 			if (sect){
@@ -188,58 +184,55 @@ const char *ZDLConf::getValue(const char *lsection, const char *variable, int *s
 				return sect->findVariable(variable);
 			}
 	
-		}
+		//}
 		*status = 0;
 	}else{
 		*status = 2;
 	}
 	
-	string ret = "";
-	return ret.c_str();
-
+	return QString();
 }
 
-//char *ZDLConf::getValue(const char *lsection, const char *variable){
+//char *ZDLConf::getValue(QString lsection, QString variable){
 //	int stat;
 //	string temp = getValue(lsection, variable, &stat);
 //	return (char*)temp.c_str();
 //}
 
-ZDLSection *ZDLConf::getSection(const char* lsection){
+ZDLSection *ZDLConf::getSection(QString lsection){
 	if((mode & ReadOnly) != 0){
-		list<ZDLSection*>::iterator itr;
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			if (strcmp(section->getName(), lsection) == 0){
-				return section;
-			}
+		for(int i = 0; i < sections.size(); i++){
+			ZDLSection* section = sections[i];
+                        if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+                                return section;
+                        }
 		}
 	}
 	return NULL;
 }
 
-int ZDLConf::hasValue(const char *lsection, const char *variable){
+int ZDLConf::hasValue(QString lsection, QString variable){
 	if((mode & ReadOnly) != 0){
 		reads++;
 		//If we actually have a variable resolver, lets use that.
-		if (vars){
-			int nRc = 0;
-			return vars->hasVariable(lsection, variable, &nRc);
+		//if (vars){
+		//	int nRc = 0;
+		//	return vars->hasVariable(lsection, variable, &nRc);
 		//Otherwise, lets look for it ourself.
-		}else{
-			list<ZDLSection*>::iterator itr;
-			for (itr = sections.begin(); itr != sections.end();itr++){
-				ZDLSection* section = (*itr);
-				if (strcmp(section->getName(), lsection) == 0){
-					return section->hasVariable(variable);
-				}
+		//}else{
+			for(int i = 0; i < sections.size(); i++){
+				ZDLSection* section = sections[i];
+                                if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
+                                        return section->hasVariable(variable);
+                                }
+
 			}
-		}
+		//}
 	}
 	return false;
 }
 
-int ZDLConf::setValue(const char *lsection, const char *variable, int value)
+int ZDLConf::setValue(QString lsection, QString variable, int value)
 {
 	if((mode & WriteOnly) != 0){
 		char szBuffer[256];
@@ -250,57 +243,56 @@ int ZDLConf::setValue(const char *lsection, const char *variable, int value)
 	}
 }
 
-int ZDLConf::setValue(const char *lsection, const char *variable, const char *szBuffer)
+int ZDLConf::setValue(QString lsection, QString variable, QString szBuffer)
 {
 	if((mode & WriteOnly) != 0){
-		string value = szBuffer;
+		QString value = szBuffer;
 		
 		//Better handing of variables.  Don't overwrite if you don't have to.
 		if(hasValue(lsection,variable)){
 			int stat;
-			string oldValue = getValue(lsection, variable, &stat);
+			QString oldValue = getValue(lsection, variable, &stat);
 			if(oldValue == szBuffer){
 				return 0;
 			}
 		}
 		
 		writes++;
-		list<ZDLSection*>::iterator itr;
-		
-		for (itr = sections.begin(); itr != sections.end();itr++){
-			ZDLSection* section = (*itr);
-			if (strcmp(section->getName(), lsection) == 0){
-				section->setValue(variable, value.c_str());
-				return 0;
-			}
+		for(int i = 0; i < sections.size(); i++){
+			ZDLSection* section = sections[i];
+                        if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+                                section->setValue(variable, value);
+                                return 0;
+                        }
+
 		}
 		//In this case, we didn't find the section
 		ZDLSection *section = new ZDLSection(lsection);
 		sections.push_back(section);
 		//cout << "int ZDLConf::setValue("<<lsection<<","<<variable<<","<<szBuffer<<")"<<endl;
-		section->setValue(variable, value.c_str());
+		section->setValue(variable, value);
 	}
 	return 0;
 }
 
-void ZDLConf::parse(string in, ZDLSection* current)
+void ZDLConf::parse(QString in, ZDLSection* current)
 {
 	if (in.length() < 1){
 		return;
 	}
-	string chomped = chomp(in);
+	QString chomped = chomp(in);
 	if (chomped[0] == '[' && chomped[chomped.length() - 1] == ']'){
-		chomped = chomped.substr(1, chomped.length()-2);
+		chomped = chomped.mid(1, chomped.length()-2);
 		//This will remove duplicate sections automagically
-		ZDLSection *ptr = getSection((char*)chomped.c_str());
+		ZDLSection *ptr = getSection(chomped);
 		if (ptr == NULL){
-			current = new ZDLSection((char*)chomped.c_str());
+			current = new ZDLSection(chomped);
 			sections.push_back(current);
 		}else{
 			current = ptr;
 		}
 	}else{
-		current->addLine((char*)chomped.c_str());
+		current->addLine(chomped);
 	}
 }
 

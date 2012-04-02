@@ -82,7 +82,7 @@ void ZDLSettingsPane::rebuild(){
 	ZDLSection *section = zconf->getSection("zdl.net");
 	//Delete old configs
 	if (section){
-		vector <ZDLLine*> vctr;
+		QVector<ZDLLine*> vctr;
 		section->getRegex("^updateManager$", vctr);
 		for(unsigned int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
@@ -115,11 +115,11 @@ void ZDLSettingsPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
-		vector <ZDLLine*> fileVctr;
+		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 		
 		for(unsigned int i = 0; i < fileVctr.size(); i++){
-			if (strcmp(fileVctr[i]->getValue(), "disabled") == 0){
+			if (fileVctr[i]->getValue().compare("disabled") == 0){
 				updater->setCheckState(Qt::Unchecked);
 			}else{
 				updater->setCheckState(Qt::Checked);
@@ -135,16 +135,15 @@ void ZDLSettingsPane::newConfig(){
 	}
 	if(zconf->hasValue("zdl.general","alwaysadd")){
 		int ok;
-		string rc = zconf->getValue("zdl.general","alwaysadd", &ok);
+		QString rc = zconf->getValue("zdl.general","alwaysadd", &ok);
 		if(ok == 0){
-			QString val = QString::fromStdString(rc);
-			alwaysArgs->setText(val);
+			alwaysArgs->setText(rc);
 		}
 	}
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
-		string rc = zconf->getValue("zdl.general","quotefiles",&ok);
+		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
 		if(rc == "enabled"){
 			pathQuote->setCheckState(Qt::Checked);
 		}else{

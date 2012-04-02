@@ -35,26 +35,26 @@ public:
   		Default			= ReadWrite | FileReadWrite
 	};
 	
-	int readINI(const char *file);
-	int writeINI(const char *file);
-	//char* getValue(const char *section, const char *variable);
-	const char *getValue(const char *lsection, const char *variable, int *status);
-	int hasValue(const char *section, const char *variable);
-	void deleteValue(const char *lsection, const char *variable);
-	int setValue(const char *lsection, const char *variable, int value);
-	int setValue(const char *lsection, const char *variable, const char *szBuffer);
+	int readINI(QString file);
+	int writeINI(QString file);
+	//char* getValue(QString section, QString variable);
+	QString getValue(QString lsection, QString variable, int *status);
+	int hasValue(QString section, QString variable);
+	void deleteValue(QString lsection, QString variable);
+	int setValue(QString lsection, QString variable, int value);
+	int setValue(QString lsection, QString variable, QString szBuffer);
 	int numberOfSections();
 	~ZDLConf();
 	ZDLConf(int mode = ZDLConf::Default);
 	int reopen(int mode);
-	std::list<ZDLSection*> sections;
-	int writeStream(std::ostream &stream);
-	ZDLSection *getSection(const char* section);
+	QVector<ZDLSection*> sections;
+	int writeStream(QIODevice *stream);
+	ZDLSection *getSection(QString section);
 	void deleteSection(QString section);
 private:
 	int mode;
 	int reads;
 	int writes;
-	void parse(std::string in, ZDLSection* current);
-	ZDLVariables *vars;
+	void parse(QString in, ZDLSection* current);
+	//ZDLVariables *vars;
 };

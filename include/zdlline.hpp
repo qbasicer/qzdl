@@ -17,26 +17,27 @@
  */
 
 #include <string>
+#include <QtCore>
  
 class ZDLLine{
 	friend class ZDLVariables;
 public:
-	ZDLLine(const char *inLine);
+	ZDLLine(QString inLine);
 	~ZDLLine();
 	int getType();
-	const char* getValue();
-	const char* getVariable();
-	const char* getLine();
-	int setValue(const char *inValue);
+	QString getValue();
+	QString getVariable();
+	QString getLine();
+	int setValue(QString inValue);
 private:
 	int reads;
 	int writes;
 	void parse();
 	int findComment(char delim);
 	int type;
-	std::string line;
-	std::string comment;
-	std::string value;
-	std::string variable;
+	QString line;
+	QString comment;
+	QString value;
+	QString variable;
 	int slashConvert;
 };

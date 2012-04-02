@@ -18,14 +18,14 @@
  
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <QtCore>
 #include <list>
 using namespace std;
 #include <zdlcommon.h>
 
-extern char* chomp(string in);
+extern char* chomp(QString in);
 
-ZDLLine::ZDLLine(const char *inLine)
+ZDLLine::ZDLLine(QString inLine)
 {
 	reads = 0;
 	writes = 1;
@@ -44,25 +44,25 @@ ZDLLine::~ZDLLine()
 {
 }
 
-const char* ZDLLine::getValue()
+QString ZDLLine::getValue()
 {
-	return (char*)value.c_str();
+	return QString(value);
 	reads++;
 }
 
-const char* ZDLLine::getVariable()
+QString ZDLLine::getVariable()
 {
-	return (char*)variable.c_str();
+	return QString(variable);
 	reads++;
 }
 
-const char* ZDLLine::getLine()
+QString ZDLLine::getLine()
 {
-	return (char*)line.c_str();
+	return QString(line);
 	reads++;
 }
 
-int ZDLLine::setValue(const char *inValue)
+int ZDLLine::setValue(QString inValue)
 {
 	line = "";
 	line.append(variable);
@@ -78,8 +78,8 @@ int ZDLLine::setValue(const char *inValue)
 }
 
 int ZDLLine::findComment(char delim){
-	string::size_type cloc = line.find(delim, line.size());
-	if (cloc != string::npos){
+	int cloc = line.indexOf(delim, line.size());
+	if (cloc > -1){
 		if (cloc > 0){
 			if (line[cloc-1] != '\\'){
 				return cloc;
@@ -101,14 +101,15 @@ void ZDLLine::parse()
 	
 	if(cloc != -1){
 		//Strip out comment
-		comment = chomp(line.substr(cloc, line.size()));
+		comment = chomp(line.mid(cloc, line.size()));
 		
 	}
 	
-	string::size_type loc = line.find("=", 0);
-	if (loc != string::npos){
-		variable = chomp(line.substr(0, loc));
-		value = chomp(line.substr(loc+1, line.length() - loc - 1));
+	int loc = line.indexOf("=", 0);
+	if (loc > -1){
+		qDebug() << "Chomping " << line << " to " << line.mid(0,loc);
+		variable = chomp(line.mid(0, loc));
+		value = chomp(line.mid(loc+1, line.length() - loc - 1));
 		//This is important for cross platform
 		//Currently disabled
 		if (slashConvert == true){

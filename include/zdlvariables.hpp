@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+#if 0 
 #include <string>
 
 class ZDLConf;
@@ -29,14 +29,25 @@ public:
 	ZDLVariables (ZDLConf* parent, int flags);
 	~ZDLVariables();
 	/* Call this to get the variable.  Automatic resolving will be used. */
-	const char *getVariable(const char *lsection, const char *variable, int* status);
-	int hasVariable(const char *lsection, const char *variable, int* status);
+	QString getVariable(QString lsection, QString variable, int* status){
+		const char* rc = getVariableInternal(lsection.toStdString().c_str(), variable.toStdString().c_str(), status);
+		return QString(rc);
+	}
+	const char *getVariableInternal(const char *lsection, const char *variable, int* status);
+
+	int hasVariable(QString lsection, QString variable, int* status){
+		return 0;
+	}
+	int hasVariableInternal(const char *lsection, const char *variable, int* status);
 	/* Set usage flags */
 	void setFlags(int flags);
 	/* Set the value of a variable.
 	 * Set the temp flag to not write it out at close
 	 */
-	int setVariable(const char *section, const char *variable, const char *value, int temp);
+	int setVariable(QString section, QString variable, QString value, int temp){
+		return setVariableInternal(section.toStdString().c_str(), variable.toStdString().c_str(), value.toStdString().c_str(), temp);
+	}
+	int setVariableInternal(const char *section, const char *variable, const char *value, int temp);
 private:
 	int containsUnresolved(const char *inBuffer);
 	char *resolveVariable(const char *inBuffer);
@@ -55,4 +66,6 @@ private:
 };
 
 	
+
+#endif
 

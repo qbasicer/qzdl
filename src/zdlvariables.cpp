@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+#if 0 
 #include <iostream>
 #include <list>
 #include <string>
@@ -67,7 +67,7 @@ ZDLVariables::~ZDLVariables ()
 {
 }
 
-int ZDLVariables::hasVariable(const char *lsection, const char *variable, int* status)
+int ZDLVariables::hasVariableInternal(const char *lsection, const char *variable, int* status)
 {
 	*status = 0;
 	//Handle environment requests differently
@@ -84,17 +84,16 @@ int ZDLVariables::hasVariable(const char *lsection, const char *variable, int* s
 		return false;
 	}
 
-	list<ZDLSection*>::iterator itr;
-	for (itr = (_parent->sections).begin(); itr != (_parent->sections).end();itr++){
-		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
+	for(int i = 0; i < _parent->sections.size(); i++){
+		ZDLSection* section = _parent->sections[i];
+		if (section->getName().compare(lsection) == 0){
 			return section->hasVariable(variable);
 		}
 	}
 	return false;
 }
 
-const char *ZDLVariables::getVariable(const char *lsection, const char *variable, int* status)
+const char *ZDLVariables::getVariableInternal(const char *lsection, const char *variable, int* status)
 {
 	*status = 0;
 	int cdepth = depth;
@@ -126,8 +125,8 @@ const char *ZDLVariables::getVariable(const char *lsection, const char *variable
 	list<ZDLSection*>::iterator itr;
 	for (itr = (_parent->sections).begin(); itr != (_parent->sections).end();itr++){
 		ZDLSection* section = (*itr);
-		if (strcmp(section->getName(), lsection) == 0){
-			string rc = section->findVariable(variable);
+		if (section->getName().compare(lsection) == 0){
+			string rc = section->findVariable(variable).toStdString();
 			while (containsUnresolved((char*)rc.c_str())){
 				rc = resolveVariable((char*)rc.c_str());
 			}
@@ -221,3 +220,4 @@ int ZDLVariables::containsUnresolved(const char *inBuffer)
 		return 0;
 	}
 }
+#endif
