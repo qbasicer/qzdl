@@ -157,6 +157,8 @@ void ZDLMainWindow::launch(){
 
 	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, lpStartupInfo, lpProcessInfo);
 	free(cmd);
+	free(execu);
+	free(work);
 	if(rc == FALSE){
 		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
