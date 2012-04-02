@@ -138,8 +138,8 @@ void ZDLMainWindow::launch(){
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
 	wcscpy(cmd,compose.toStdWString().c_str());
 	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
-	wchar_t execu = (wchar_t*)malloc((exec.length()+1)*sizeof(wchar_t)*4);
-	wchar_t work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
+	wchar_t* execu = (wchar_t*)malloc((exec.length()+1)*sizeof(wchar_t)*4);
+	wchar_t* work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
 	wcscpy(execu, exec.toStdWString().c_str());
 	wcscpy(work, workingDirectory.toStdWString().c_str());
