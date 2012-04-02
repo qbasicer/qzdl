@@ -135,21 +135,33 @@ void ZDLMainWindow::launch(){
 
 #ifdef Q_WS_WIN
 	QString compose = args.join(" ");
-	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t));
-	swprintf(cmd,L"%ls",compose.toStdWString().c_str());
-
+	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
+	wcscpy(cmd,compose.toStdWString().c_str());
+	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
+	wchar_t execu = (wchar_t*)malloc((exec.length()+1)*sizeof(wchar_t)*4);
+	wchar_t work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
+	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
+	wcscpy(execu, exec.toStdWString().c_str());
+	wcscpy(work, workingDirectory.toStdWString().c_str());
 	// From http://www.cplusplus.com/forum/lounge/17684/
 	LPSTARTUPINFO lpStartupInfo;
 	LPPROCESS_INFORMATION lpProcessInfo;
 	memset(&lpStartupInfo, 0, sizeof(lpStartupInfo));
 	memset(&lpProcessInfo, 0, sizeof(lpProcessInfo));
 
-	BOOL rc = CreateProcess(exec.toStdWString().c_str(), cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, workingDirectory.toStdWString().c_str(), lpStartupInfo, lpProcessInfo);
+	if(execu == NULL || cmd == NULL || work == NULL){
+		ZDLConfigurationManager::setInfobarMessage("Internal error preparing to launch",1);
+                ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
+		return;
+	}
+
+	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, lpStartupInfo, lpProcessInfo);
 	free(cmd);
 	if(rc == FALSE){
 		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
+		return;
 	}else{
 		return;
 	}
