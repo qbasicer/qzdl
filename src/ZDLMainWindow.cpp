@@ -134,7 +134,7 @@ void ZDLMainWindow::launch(){
 
 #ifdef Q_WS_WIN
 	QString compose = exec + " " + args.join(" ");
-	char* cmd = malloc(compose.length()+1);
+	char* cmd = (char*)malloc(compose.length()+1);
 	snprintf(cmd,compose.length()+1,"%s",compose.toStdString().c_str());
 	int rc = WinExec(cmd,SW_NORMAL);
 	free(cmd);
