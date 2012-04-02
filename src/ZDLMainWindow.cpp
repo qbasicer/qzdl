@@ -26,6 +26,10 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
 
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
+
 extern QApplication *qapp;
 extern QString versionString;
 
