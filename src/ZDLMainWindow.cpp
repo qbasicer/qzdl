@@ -342,6 +342,13 @@ QStringList ZDLMainWindow::getArguments(){
 			}
 		}
 	}
+#ifdef Q_WS_WIN
+	// To escape quotes correctly on windows
+	for(int i = 0; i < ourString.length(); i++){
+		QString arg = ourString[i].replace("\"", "\\\"");
+		ourString[i] = arg;
+	}
+#endif
 
 	return ourString;
 }
