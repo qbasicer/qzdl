@@ -105,6 +105,7 @@ void ZDLListWidget::dropEvent(QDropEvent *event){
 	const QMimeData *mimeData = event->mimeData();
 	if (mimeData->hasUrls()) {
 		newDrop(mimeData->urls());
+		event->accept();
 	}
 }
 
