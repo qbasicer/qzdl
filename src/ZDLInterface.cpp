@@ -278,17 +278,18 @@ void ZDLInterface::showCommandline(){
 void ZDLInterface::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
-		zconf->setValue("zdl.save", "efirst", extraArgs->text().toStdString().c_str());
+		zconf->setValue("zdl.save", "extra", extraArgs->text().toStdString().c_str());
+		
 	}else{
-		zconf->deleteValue("zdl.save", "efirst");
+		zconf->deleteValue("zdl.save", "extra");
 	}
 }
 
 void ZDLInterface::bottomPaneNewConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	if(zconf->hasValue("zdl.save", "efirst")){
+	if(zconf->hasValue("zdl.save", "extra")){
 		int stat;
-		string rc = zconf->getValue("zdl.save", "efirst", &stat);
+		string rc = zconf->getValue("zdl.save", "extra", &stat);
 		if(rc.length() > 0){
 			extraArgs->setText(rc.c_str());
 		}
@@ -348,5 +349,6 @@ void ZDLInterface::startRead(){
 }
 
 void ZDLInterface::writeConfig(){
+	rebuild();
 	emit buildChildren(this);
 }

@@ -84,6 +84,7 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	qact2 = new QAction(widget);
 	qact2->setShortcut(Qt::Key_Escape);
 	widget->addAction(qact2);
+
 	connect(qact2, SIGNAL(triggered()), this, SLOT(quit()));
 	
 	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
