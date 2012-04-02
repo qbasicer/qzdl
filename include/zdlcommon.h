@@ -29,12 +29,12 @@ using namespace std;
 
 #ifdef Q_WS_WIN
 
-#define ZDL_VERSION_STRING	"3.0.5.3q (Windows Beta) - git"
+#define ZDL_VERSION_STRING	"3.0.5.3q"
 #define ZDL_VERSION_ID		23
 
 #else
 
-#define ZDL_VERSION_STRING	"3.0.5.3q - git"
+#define ZDL_VERSION_STRING	"3.0.5.3q"
 #define ZDL_VERSION_ID		20
 
 #endif

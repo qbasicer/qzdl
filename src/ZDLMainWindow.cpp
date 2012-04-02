@@ -412,7 +412,7 @@ void ZDLMainWindow::startRead(){
 	settings->startRead();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
-	zconf->setValue("zdl.general", "version", ZDL_VERSION_STRING);
+	zconf->setValue("zdl.general", "version", versionString.toStdString().c_str());
 	
 	QString windowTitle = ZDL_ENGINE_NAME;
 	windowTitle += " " + versionString + " - " + ZDLConfigurationManager::getConfigFileName();

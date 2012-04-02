@@ -22,7 +22,7 @@
 #include "ZDLInfoBar.h"
 #include <iostream>
 using namespace std;
-
+extern QString versionString;
 ZDLUpdater::ZDLUpdater(){
 	http = new QHttp(this);
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
@@ -100,9 +100,7 @@ void ZDLUpdater::fetch(int doAnyways){
 #endif
 		url += QString::number(ZDL_VERSION_ID);
 		QHttpRequestHeader qreq("GET", url);
-		QString ua = ZDL_ENGINE_NAME;
-		ua += " ";
-		ua += ZDL_VERSION_STRING;
+		QString ua = versionString;
 		ua += " (";
 #ifdef Q_WS_WIN
 		if (QSysInfo::WindowsVersion & QSysInfo::WV_DOS_based){

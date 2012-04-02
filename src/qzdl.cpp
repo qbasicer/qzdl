@@ -33,9 +33,15 @@ int main( int argc, char **argv ){
     QApplication a( argc, argv );
 	qapp = &a;
 
-
-	versionString = ZDL_VERSION_STRING + QString("/") + QString(ZDL_BUILD);
-	
+#if defined(Q_WS_WIN)
+	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
+#elif defined(Q_WS_MAC)
+	versionString = ZDL_VERSION_STRING + QString(" (mac/") + QString(ZDL_BUILD)+QString(")");
+#elif defined(Q_WS_X11)
+	versionString = ZDL_VERSION_STRING + QString(" (linux/") + QString(ZDL_BUILD)+QString(")");
+#else
+	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD)+QString(")");
+#endif
 	QDir cwd = QDir::current();
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
