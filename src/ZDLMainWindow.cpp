@@ -135,8 +135,8 @@ void ZDLMainWindow::launch(){
 
 #ifdef Q_WS_WIN
 	QString compose = args.join(" ");
-	wchar_t* cmd = (char*)malloc((compose.length()+1)*sizeof(wchar_t));
-	swprintf(cmd,compose.length()+1,"%s",compose.toStdString().c_str());
+	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t));
+	swprintf(cmd,"%ls",compose.toStdWString().c_str());
 
 	// From http://www.cplusplus.com/forum/lounge/17684/
 	LPSTARTUPINFO lpStartupInfo;
