@@ -51,6 +51,21 @@ AC_MSG_ERROR(error appending to file)
 fi
 AC_MSG_RESULT(yes)
 
+AC_MSG_CHECKING(static link libgcc)
+bnv_try_15="echo \"win32 {\" >> qzdl.pro"
+bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc\" >> qzdl.pro"
+bnv_try_17="echo \"}\" >> qzdl.pro"
+
+AC_TRY_EVAL(bnv_try_15)
+AC_TRY_EVAL(bnv_try_16)
+AC_TRY_EVAL(bnv_try_17)
+
+if test "$ac_status" != 0; then
+AC_MSG_ERROR(error appending to file)
+fi
+AC_MSG_RESULT(yes)
+
+
 AC_MSG_CHECKING(Using qmake to build Makefile)
 bnv_try_2="qmake"
 AC_TRY_EVAL(bnv_try_2)
