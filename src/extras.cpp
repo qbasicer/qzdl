@@ -25,7 +25,8 @@ using namespace std;
 
 QString chomp(QString in)
 {
-	return in.trimmed();
+	QString ret = in.trimmed();
+	return ret;
 #if 0
 	while (in.length() > 0){
 		if (in[0] == ' ' || in[0] == '\n' || in[0] == '\r' || in[0] == '\t'){

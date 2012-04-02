@@ -23,13 +23,13 @@
 using namespace std;
 #include <zdlcommon.h>
 
-extern char* chomp(QString in);
+QString chomp(QString in);
 
 ZDLLine::ZDLLine(QString inLine)
 {
 	reads = 0;
 	writes = 1;
-	line = chomp(inLine);
+	line = QString(chomp(inLine));
 	if (line[0] == ';' || line[0] == '#'){
 		type = 2;
 	}else{
@@ -64,13 +64,9 @@ QString ZDLLine::getLine()
 
 int ZDLLine::setValue(QString inValue)
 {
-	line = "";
-	line.append(variable);
-	line.append("=");
-	line.append(inValue);
+	line = variable + QString("=") + inValue;
 	if(comment.size() > 0){
-		line.append("     ");
-		line.append(comment);
+		line = line + QString("     ") + comment;
 	}
 	parse();
 	writes++;
@@ -107,7 +103,6 @@ void ZDLLine::parse()
 	
 	int loc = line.indexOf("=", 0);
 	if (loc > -1){
-		qDebug() << "Chomping " << line << " to " << line.mid(0,loc);
 		variable = chomp(line.mid(0, loc));
 		value = chomp(line.mid(loc+1, line.length() - loc - 1));
 		//This is important for cross platform
