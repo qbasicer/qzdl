@@ -207,8 +207,8 @@ QStringList ZDLMainWindow::getArguments(){
 	
 	bool ok;
 	int stat;
-	if(zconf->hasValue("zdl.save", "efirst")){
-		string rc = zconf->getValue("zdl.save", "efirst", &stat);
+	if(zconf->hasValue("zdl.save", "extra")){
+		string rc = zconf->getValue("zdl.save", "extra", &stat);
 		if(rc.length() > 0){
 			ourString << rc.c_str();
 		}

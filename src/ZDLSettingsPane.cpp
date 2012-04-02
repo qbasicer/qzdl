@@ -104,6 +104,11 @@ void ZDLSettingsPane::rebuild(){
 	}else{
 		zconf->setValue("zdl.general","autoclose", "0");
 	}
+	if(alwaysArgs->text().isEmpty()){
+		zconf->deleteValue("zdl.general", "alwaysadd");
+	}else{
+		zconf->setValue("zdl.general", "alwaysadd", alwaysArgs->text().toStdString().c_str());
+	}
 }
 
 void ZDLSettingsPane::newConfig(){
@@ -128,7 +133,14 @@ void ZDLSettingsPane::newConfig(){
 		//Default to on if it's not listed
 		updater->setCheckState(Qt::Checked);
 	}
-	
+	if(zconf->hasValue("zdl.general","alwaysadd")){
+		int ok;
+		string rc = zconf->getValue("zdl.general","alwaysadd", &ok);
+		if(ok == 0){
+			QString val = QString::fromStdString(rc);
+			alwaysArgs->setText(val);
+		}
+	}
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
