@@ -143,7 +143,7 @@ void ZDLMainWindow::launch(){
 	memset(&lpStartupInfo, 0, sizeof(lpStartupInfo));
 	memset(&lpProcessInfo, 0, sizeof(lpProcessInfo));
 
-	BOOL rc = CreateProcess(exec.toStdString().c_str(), cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, workingDirectory.toStdString().c_str(), lpStartupInfo, lpProcessInformation);
+	BOOL rc = CreateProcess(exec.toStdString().c_str(), cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, workingDirectory.toStdString().c_str(), lpStartupInfo, lpProcessInfo);
 	free(cmd);
 	if(rc == FALSE){
 		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
