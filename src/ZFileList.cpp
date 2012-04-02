@@ -31,7 +31,13 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 	for (int i = 0; i < urlList.size() && i < 32; ++i) {
 		QUrl url = urlList.at(i);
 		if(url.scheme() == "file"){
-			QFileInfo urlDecoder(url.path());
+			QString path = url.path();
+#ifdef Q_WS_WIN	
+			if(path[i] == '/'){
+				path.remove(0,1);
+			}	
+#endif
+			QFileInfo urlDecoder(path);
 			ZFileListable *zList = new ZFileListable(pList, 1001, urlDecoder.absoluteFilePath());
 			insert(zList, -1);
 		}
