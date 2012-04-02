@@ -115,8 +115,6 @@ void ZDLMainWindow::launch(){
 		return;
 	}
 	
-	QProcess *proc = new QProcess(this);
-
 	//Find the executable
 	QStringList executablePath = exec.split("/");
 
@@ -129,6 +127,22 @@ void ZDLMainWindow::launch(){
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
+
+#ifdef Q_WS_WIN
+	QString compose = exec + " " + args.join(" ");
+	char* cmd = malloc(compose.length()+1);
+	snprintf(cmd,compose.length()+1,"%s",compose.toStdString().c_str());
+	int rc = WinExec(cmd,SW_NORMAL);
+	free(cmd);
+	if(rc <= 31){
+		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
+		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
+		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
+	}else{
+		return;
+	}
+#endif
+	QProcess *proc = new QProcess(this);
 
 	//Set the working directory to that directory
 	proc->setWorkingDirectory(workingDirectory);
@@ -151,7 +165,6 @@ void ZDLMainWindow::launch(){
 // 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 // 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
 // 	}
-	
 }
 
 void ZDLMainWindow::badLaunch(){
@@ -342,14 +355,6 @@ QStringList ZDLMainWindow::getArguments(){
 			}
 		}
 	}
-#ifdef Q_WS_WIN
-	// To escape quotes correctly on windows
-	for(int i = 0; i < ourString.length(); i++){
-		QString arg = ourString[i].replace("\"", "\\\"");
-		ourString[i] = arg;
-	}
-#endif
-
 	return ourString;
 }
 
