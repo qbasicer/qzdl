@@ -135,8 +135,8 @@ void ZDLMainWindow::launch(){
 
 #ifdef Q_WS_WIN
 	QString compose = args.join(" ");
-	char* cmd = (char*)malloc(compose.length()+1);
-	snprintf(cmd,compose.length()+1,"%s",compose.toStdString().c_str());
+	wchar_t* cmd = (char*)malloc((compose.length()+1)*sizeof(wchar_t));
+	swprintf(cmd,compose.length()+1,"%s",compose.toStdString().c_str());
 
 	// From http://www.cplusplus.com/forum/lounge/17684/
 	LPSTARTUPINFO lpStartupInfo;
@@ -144,7 +144,7 @@ void ZDLMainWindow::launch(){
 	memset(&lpStartupInfo, 0, sizeof(lpStartupInfo));
 	memset(&lpProcessInfo, 0, sizeof(lpProcessInfo));
 
-	BOOL rc = CreateProcess(exec.toStdString().c_str(), cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, workingDirectory.toStdString().c_str(), lpStartupInfo, lpProcessInfo);
+	BOOL rc = CreateProcess(exec.toStdWString().c_str(), cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, workingDirectory.toStdString().c_str(), lpStartupInfo, lpProcessInfo);
 	free(cmd);
 	if(rc == FALSE){
 		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
