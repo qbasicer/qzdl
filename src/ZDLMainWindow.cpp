@@ -143,6 +143,7 @@ void ZDLMainWindow::launch(){
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
 	wcscpy(execu, exec.toStdWString().c_str());
 	wcscpy(work, workingDirectory.toStdWString().c_str());
+	QMessageBox::warning(NULL,"Failed to Start", "Executable: "+exec+"\nArguments: "+args.join(" ")+"\nWorking Directory: "+workingDirectory,QMessageBox::Ok,QMessageBox::Ok);
 	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
 	STARTUPINFOW siStartupInfo; 
 	PROCESS_INFORMATION piProcessInfo; 
