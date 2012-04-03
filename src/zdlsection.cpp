@@ -138,7 +138,6 @@ int ZDLSection::streamWrite(QIODevice *stream)
 		for(int i = 0; i < lines.size(); i++){
 			ZDLLine *line = lines[i];
 			tstream << line->getLine() << endl;
-			qDebug() << "Line: " << line->getLine();
 		}
 	}
 	return 0;
