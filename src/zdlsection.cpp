@@ -127,17 +127,26 @@ int ZDLSection::setValue(QString variable, QString value)
 
 int ZDLSection::streamWrite(QIODevice *stream)
 {
+
+#if defined(Q_WS_WIN)
+	QString el("\r\n");
+#define ENDOFLINE el
+#else
+	QString el("\n");
+#define ENDOFLINE el
+#endif
+
 	QTextStream tstream(stream);
 	//Write only if we have stuff to write
 	if (lines.size() > 0){
 		writes++;
 		//Global's don't have a section name
 		if (sectionName.length() > 0){
-			tstream << "[" << sectionName << "]" << endl;
+			tstream << "[" << sectionName << "]" << ENDOFLINE;
 		}
 		for(int i = 0; i < lines.size(); i++){
 			ZDLLine *line = lines[i];
-			tstream << line->getLine() << endl;
+			tstream << line->getLine() << ENDOFLINE;
 		}
 	}
 	return 0;

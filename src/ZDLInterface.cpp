@@ -185,6 +185,7 @@ void ZDLInterface::buttonPaneNewConfig(){
 }
 
 void ZDLInterface::mclick(){
+	writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
 	if(zconf->hasValue("zdl.save","dlgmode")){
@@ -200,7 +201,7 @@ void ZDLInterface::mclick(){
 		btnEpr->setIcon(QPixmap(adown));
 		zconf->setValue("zdl.save", "dlgmode", "open");
 	}
-	ZDLConfigurationManager::getInterface()->newConfig();
+	startRead();
 }
 
 void ZDLInterface::ampclick(){
