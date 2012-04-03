@@ -144,13 +144,13 @@ void ZDLSettingsPane::newConfig(){
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
 		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "enabled"){
-			pathQuote->setCheckState(Qt::Checked);
-		}else{
+		if(rc == "disabled"){
 			pathQuote->setCheckState(Qt::Unchecked);
+		}else{
+			pathQuote->setCheckState(Qt::Checked);
 		}	
 	}else{
-		pathQuote->setCheckState(Qt::Unchecked);
+		pathQuote->setCheckState(Qt::Checked);
 	}
 	
 	if(zconf->hasValue("zdl.general","autoclose")){
