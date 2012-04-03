@@ -134,7 +134,7 @@ void ZDLMainWindow::launch(){
 	workingDirectory = cwd.absolutePath();
 
 #ifdef Q_WS_WIN
-	QString compose = args.join(" ");
+	QString compose = exec + QString(" ") + args.join(" ");
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
 	wcscpy(cmd,compose.toStdWString().c_str());
 	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
