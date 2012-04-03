@@ -132,7 +132,7 @@ void ZDLMainWindow::launch(){
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
-
+	QMessageBox::warning(NULL,"Failed to Start", "Executable: "+exec+"\nArguments: "+args.join(" ")+"\nWorking Directory: "+workingDirectory,QMessageBox::Ok,QMessageBox::Ok);
 #ifdef Q_WS_WIN
 	QString compose = exec + QString(" ") + args.join(" ");
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
@@ -143,7 +143,6 @@ void ZDLMainWindow::launch(){
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
 	wcscpy(execu, exec.toStdWString().c_str());
 	wcscpy(work, workingDirectory.toStdWString().c_str());
-	QMessageBox::warning(NULL,"Failed to Start", "Executable: "+exec+"\nArguments: "+args.join(" ")+"\nWorking Directory: "+workingDirectory,QMessageBox::Ok,QMessageBox::Ok);
 	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
 	STARTUPINFOW siStartupInfo; 
 	PROCESS_INFORMATION piProcessInfo; 
