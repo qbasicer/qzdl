@@ -143,11 +143,12 @@ void ZDLMainWindow::launch(){
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
 	wcscpy(execu, exec.toStdWString().c_str());
 	wcscpy(work, workingDirectory.toStdWString().c_str());
-	// From http://www.cplusplus.com/forum/lounge/17684/
-	LPSTARTUPINFO lpStartupInfo;
-	LPPROCESS_INFORMATION lpProcessInfo;
-	memset(&lpStartupInfo, 0, sizeof(lpStartupInfo));
-	memset(&lpProcessInfo, 0, sizeof(lpProcessInfo));
+	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
+	STARTUPINFOW siStartupInfo; 
+	PROCESS_INFORMATION piProcessInfo; 
+	memset(&siStartupInfo, 0, sizeof(siStartupInfo)); 
+	memset(&piProcessInfo, 0, sizeof(piProcessInfo)); 
+	siStartupInfo.cb = sizeof(siStartupInfo); 
 
 	if(execu == NULL || cmd == NULL || work == NULL){
 		ZDLConfigurationManager::setInfobarMessage("Internal error preparing to launch",1);
@@ -155,7 +156,7 @@ void ZDLMainWindow::launch(){
 		return;
 	}
 
-	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, lpStartupInfo, lpProcessInfo);
+	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, &siStartupInfo, &piProcessInfo);
 	free(cmd);
 	free(execu);
 	free(work);
