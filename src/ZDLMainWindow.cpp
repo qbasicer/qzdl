@@ -152,7 +152,7 @@ void ZDLMainWindow::launch(){
 		}
 	}
 	//If quotefiles is enabled, and the executable contains a space, quote it
-	if(doQuotes && exec.contains(" ")){
+	if(doquotes && exec.contains(" ")){
 		QString newExec = QString("\"").append(exec).append("\"");
 		exec = newExec;
 	}
