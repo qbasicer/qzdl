@@ -33,7 +33,7 @@ ZDLLine::ZDLLine(QString inLine)
 	//Convert slashes on Windows
 #if defined(Q_WS_WIN)
 	//If the line already contains slashes, don't mess with it
-	if(line.contains("/") >= 0){
+	if(line.contains("/")){
 		slashConvert = false;
 	}else{
 		slashConvert = true;

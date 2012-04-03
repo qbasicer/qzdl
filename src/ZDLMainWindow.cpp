@@ -120,7 +120,7 @@ void ZDLMainWindow::launch(){
 		return;
 	}
 
-	if(exec.contains("\\") >= 0){
+	if(exec.contains("\\")){
 		exec.replace("\\","/");
 	}
 	
@@ -376,7 +376,7 @@ QStringList ZDLMainWindow::getArguments(){
         }
 	if(doquotes){
 		for(int i = 0; i < ourString.length(); i++){
-			if(ourString[i].contains(" ") >= 0){
+			if(ourString[i].contains(" ")){
 				QString newString = QString("\"") + ourString[i] + QString("\"");
 				ourString[i] = newString;
 			}
@@ -396,7 +396,7 @@ QString ZDLMainWindow::getExecutable(){
                 QVector<ZDLLine*> fileVctr;
                 section->getRegex("^p[0-9]+n$", fileVctr);
 
-                for(int i = 0; i < fileVctr.size(); i++){
+                	for(int i = 0; i < fileVctr.size(); i++){
                         ZDLLine *line = fileVctr[i];
                         if(line->getValue().compare(portName) == 0){
                                 QString var = line->getVariable();
