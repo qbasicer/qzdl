@@ -128,6 +128,8 @@ void ZDLUpdater::fetch(int doAnyways){
 				ua += "Windows Server 2003";
 			}else if (QSysInfo::WindowsVersion == QSysInfo::WV_VISTA){
 				ua += "Windows Vista";
+			}else if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS7){
+				ua += "Windows 7"
 			}else{
 				ua += "Windows Unknown";
 			}
@@ -161,25 +163,29 @@ void ZDLUpdater::fetch(int doAnyways){
 			ua += "MacOSX 10.4 Tiger";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_5){
 			ua += "MacOSX 10.5 Leopard";
+		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_SNOWLEOPARD){
+			ua += "MaxOSX 10.6 Snow Leopard";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_Unknown){
 			ua += "Mac Unknown";
 		}else{
 			ua += "Mac Unknown";
 		}
 #else
-			ua += "Linux ";
-			QFile kernel("/proc/sys/kernel/osrelease");
-			if (kernel.exists() && kernel.open(QIODevice::ReadOnly)){
-				QString lkv = kernel.readLine();
-				ua += lkv.section("\n", 0, 0);
-			}else{
-				ua += "Unknown";
-			}
+		ua += "Linux ";
+		QFile kernel("/proc/sys/kernel/osrelease");
+		if (kernel.exists() && kernel.open(QIODevice::ReadOnly)){
+			QString lkv = kernel.readLine();
+			ua += lkv.section("\n", 0, 0);
+		}else{
+			ua += "Unknown";
+		}
 				
 #endif
 #endif
+#if defined(USE_UID)
 		ua += "; UID:";
 		ua += ZDL_UID;
+#endif
 		ua += ")";
 		
 		//cout << "User agent:" << ua.toStdString() << endl;
