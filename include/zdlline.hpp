@@ -29,6 +29,7 @@ public:
 	QString getVariable();
 	QString getLine();
 	int setValue(QString inValue);
+	int isSlashConverting(){return (slashConvert != 0);}
 private:
 	int reads;
 	int writes;

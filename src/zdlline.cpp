@@ -30,14 +30,23 @@ ZDLLine::ZDLLine(QString inLine)
 	reads = 0;
 	writes = 1;
 	line = QString(chomp(inLine));
+	//Convert slashes on Windows
+#if defined(Q_WS_WIN)
+	//If the line already contains slashes, don't mess with it
+	if(line.contains("/") >= 0){
+		slashConvert = false;
+	}else{
+		slashConvert = true;
+	}
+#else
+	slashConvert = false;
+#endif
+	comment = "";
 	if (line[0] == ';' || line[0] == '#'){
 		type = 2;
 	}else{
 		parse();
 	}
-	slashConvert = false;
-	comment = "";
-	
 }
 
 ZDLLine::~ZDLLine()
@@ -46,29 +55,45 @@ ZDLLine::~ZDLLine()
 
 QString ZDLLine::getValue()
 {
-	return QString(value);
 	reads++;
+	if(!slashConvert){
+		return value;
+	}
+	return QString(value).replace("\\","/");
 }
 
 QString ZDLLine::getVariable()
 {
-	return QString(variable);
 	reads++;
+	if(!slashConvert){
+		return variable;
+	}
+	return QString(variable).replace("\\","/");
 }
 
 QString ZDLLine::getLine()
 {
-	return QString(line);
 	reads++;
+	if(!slashConvert){
+		return line;
+	}
+	return QString(line).replace("\\","/");;
 }
 
 int ZDLLine::setValue(QString inValue)
 {
+	if(slashConvert){
+		inValue.replace("/","\\");
+	}
+	// Don't overwrite if the string is the same!
+	if(inValue.compare(value, Qt::CaseInsensitive) == 0){
+		return 0;
+	}
 	line = variable + QString("=") + inValue;
 	if(comment.size() > 0){
 		line = line + QString("     ") + comment;
 	}
-	parse();
+	value = inValue;
 	writes++;
 	return 0;
 }
