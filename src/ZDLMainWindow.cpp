@@ -143,10 +143,25 @@ void ZDLMainWindow::launch(){
 		return;
 	}*/
 #ifdef Q_WS_WIN
+	int doquotes = 1;
+	if(zconf->hasValue("zdl.general","quotefiles")){
+		int ok;
+		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
+		if(rc == "disabled"){
+			doquotes = 0;
+		}
+	}
+	//If quotefiles is enabled, and the executable contains a space, quote it
+	if(doQuotes && exec.contains(" ")){
+		QString newExec = QString("\"").append(exec).append("\"");
+		exec = newExec;
+	}
+
 	QString compose = exec + QString(" ") + args.join(" ");
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
 	wcscpy(cmd,compose.toStdWString().c_str());
 	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
+
 	wchar_t* execu = (wchar_t*)malloc((exec.length()+1)*sizeof(wchar_t)*4);
 	wchar_t* work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
@@ -375,7 +390,7 @@ QStringList ZDLMainWindow::getArguments(){
                 }
         }
 	if(doquotes){
-		for(int i = 0; i < ourString.length(); i++){
+		for(int i = 0; i < ourString.size(); i++){
 			if(ourString[i].contains(" ")){
 				QString newString = QString("\"") + ourString[i] + QString("\"");
 				ourString[i] = newString;
