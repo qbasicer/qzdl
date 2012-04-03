@@ -129,7 +129,7 @@ void ZDLUpdater::fetch(int doAnyways){
 			}else if (QSysInfo::WindowsVersion == QSysInfo::WV_VISTA){
 				ua += "Windows Vista";
 			}else if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS7){
-				ua += "Windows 7"
+				ua += "Windows 7";
 			}else{
 				ua += "Windows Unknown";
 			}
