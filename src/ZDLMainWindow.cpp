@@ -222,12 +222,6 @@ QStringList ZDLMainWindow::getArguments(){
 	
 	bool ok;
 	int stat;
-	if(zconf->hasValue("zdl.save", "extra")){
-		QString rc = zconf->getValue("zdl.save", "extra", &stat);
-		if(rc.length() > 0){
-			ourString << rc;
-		}
-	}
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int index = 0;
@@ -272,10 +266,6 @@ QStringList ZDLMainWindow::getArguments(){
 		ourString << zconf->getValue("zdl.save", "skill", &stat);
 	}
 	
-	if (zconf->hasValue("zdl.general", "alwaysadd")){
-		ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
-	}
-	
 	if (zconf->hasValue("zdl.save", "warp")){
 		ourString << "+map";
 		ourString << zconf->getValue("zdl.save", "warp", &stat);
@@ -314,6 +304,10 @@ QStringList ZDLMainWindow::getArguments(){
 			}
 		}
 	}
+
+        if (zconf->hasValue("zdl.general", "alwaysadd")){
+                ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
+        }
 	
 	if (zconf->hasValue("zdl.save", "extra")){
 		ourString << zconf->getValue("zdl.save", "extra", &stat);
