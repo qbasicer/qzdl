@@ -56,6 +56,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
 	
 	
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
+	box->addWidget(new QLabel("Huge thanks to NeuralStunner.  Without his help, none of this would be possible.", this));
 	box->addWidget(new QLabel("Special thanks to Risen, Enjay, DRDTeam.org, ZDoom.org",this));
 	
 	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
