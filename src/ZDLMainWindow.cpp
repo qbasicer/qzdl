@@ -209,7 +209,7 @@ QStringList ZDLMainWindow::getArguments(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
 	
-	unsigned int iwadIndex = 0;
+	QString iwadName = "";
 	int doquotes = 0;
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){
@@ -227,10 +227,7 @@ QStringList ZDLMainWindow::getArguments(){
 		int index = 0;
 		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
-		}
-		if (index >= 0){
-			iwadIndex = index;
+			iwadName = rc;
 		}else{
 			QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
 			return ourString;
@@ -243,20 +240,22 @@ QStringList ZDLMainWindow::getArguments(){
 	section = zconf->getSection("zdl.iwads");
 	if (section){
 		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^i[0-9]+f$", fileVctr);
+		section->getRegex("^i[0-9]+n$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
-			if (i == iwadIndex){
-				ourString << "-iwad";
-				if(doquotes){
-					QString temp = "\"";
-					temp += fileVctr[i]->getValue();
-					temp += "\"";
-					ourString << temp;
-				}else{
-					ourString << fileVctr[i]->getValue();
+		for(int i = 0; i < fileVctr.size(); i++){
+			ZDLLine *line = fileVctr[i];
+			if(line->getValue().compare(iwadName) == 0){
+				QString var = line->getVariable();
+				if(var.length() >= 3){
+					var = var.mid(1,var.length()-2);
+					QVector<ZDLLine*> nameVctr;
+					var = QString("i") + var + QString("f");
+					section->getRegex("^" + var + "$",nameVctr);
+					if(nameVctr.size() == 1){
+						ourString << "-iwad";
+						ourString << nameVctr[0]->getValue();
+					}
 				}
-				break;
 			}
 		}
 	}
@@ -382,36 +381,30 @@ QStringList ZDLMainWindow::getArguments(){
 QString ZDLMainWindow::getExecutable(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
-	unsigned int portIndex = 0;
+	QString portName = "";
 	if(zconf->hasValue("zdl.save", "port")){
-		int index = 0;
-		QString rc = zconf->getValue("zdl.save", "port", &stat);
-		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
-		}
-		if (index >= 0){
-			portIndex = index;
-		}else{
-			zconf->setValue("zdl.save", "port", 0);
-			portIndex = 0;
-		}
-	}else{
-		return "";
+		ZDLSection *section = zconf->getSection("zdl.ports");
+		portName = zconf->getValue("zdl.save", "port", &stat);
+                QVector<ZDLLine*> fileVctr;
+                section->getRegex("^p[0-9]+n$", fileVctr);
+
+                for(int i = 0; i < fileVctr.size(); i++){
+                        ZDLLine *line = fileVctr[i];
+                        if(line->getValue().compare(portName) == 0){
+                                QString var = line->getVariable();
+                                if(var.length() >= 3){
+                                        var = var.mid(1,var.length()-2);
+                                        QVector<ZDLLine*> nameVctr;
+                                        var = QString("p") + var + QString("f");
+                                        section->getRegex("^" + var + "$",nameVctr);
+                                        if(nameVctr.size() == 1){
+						return QString(nameVctr[0]->getValue());
+                                        }
+                                }
+                        }
+                }
 	}
-	
-	ZDLSection *section = zconf->getSection("zdl.ports");
-	if (section){
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^p[0-9]+f$", fileVctr);
-		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
-			if (i == portIndex){
-				return fileVctr[i]->getValue();
-			}
-			
-		}
-	}
-	return "";
+	return QString("");
 }
 
 
