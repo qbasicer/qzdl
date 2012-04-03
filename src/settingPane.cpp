@@ -87,7 +87,7 @@ void settingPane::rebuild(){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex(QString("^p[0-9]+f$"), fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
 			
 			QString number = "^p";
@@ -98,7 +98,7 @@ void settingPane::rebuild(){
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
 				if (sourceList->currentIndex() == count){
-					zconf->setValue("zdl.save", "port", value.mid(1, value.length()-2));
+					zconf->setValue("zdl.save", "port", nameVctr[0]->getValue());
 					break;
 				}
 				count++;
@@ -111,8 +111,8 @@ void settingPane::rebuild(){
 		int count = 0;
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
-		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+			
+		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
 			
 			QString number = "^i";
@@ -123,7 +123,7 @@ void settingPane::rebuild(){
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
 				if (IWADList->currentRow() == count){
-					zconf->setValue("zdl.save", "iwad", value.mid(1, value.length()-2));
+					zconf->setValue("zdl.save", "iwad", nameVctr[0]->getValue());
 					
 					break;
 				}
@@ -172,7 +172,7 @@ void settingPane::newConfig(){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
 			
 			QString number = "^p";
@@ -188,18 +188,22 @@ void settingPane::newConfig(){
 	}
 	
 	if(zconf->hasValue("zdl.save", "port")){
-		int index = 0;
+		int set = 0;
 		int stat;
 		QString rc = zconf->getValue("zdl.save", "port", &stat);
-		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
-		}
-		if (index >= 0 && index < sourceList->count()){
-			sourceList->setCurrentIndex(index);
-		}else{
-			zconf->setValue("zdl.save", "port", 0);
-			sourceList->setCurrentIndex(0);
-		}
+
+		if(rc.length() > 0){
+			for(int i = 0; i < sourceList->count(); i++){
+				if(sourceList->itemText(i).compare(rc) == 0){
+					sourceList->setCurrentIndex(i);
+					set = 1;
+					break;
+				}
+			}
+			if(set == 0){
+				sourceList->setCurrentIndex(0);
+			}
+		}	
 	}else{
 		//cout << "Don't have port" << endl;
 	}
@@ -210,7 +214,7 @@ void settingPane::newConfig(){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
 			
 			QString number = "^i";
@@ -226,19 +230,29 @@ void settingPane::newConfig(){
 	}
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
-		int index = 0;
+		int set = 0;
 		int stat;
 		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
+			for(int i = 0; i < IWADList->count(); i++){
+				QListWidgetItem *item = IWADList->item(i);
+				QString text = item->text();
+				if(text.compare(rc) == 0){
+					set = 1;
+					IWADList->setCurrentRow(i);
+					break;
+				}	
+			}
 		}
-		if (index >= 0 && index < IWADList->count()){
-			IWADList->setCurrentRow(index);
-		}else{
-			zconf->setValue("zdl.save", "iwad", 0);
-			IWADList->setCurrentRow(0);
+		if(!set){
+			if(IWADList->count() == 0){
+				zconf->deleteValue("zdl.save", "iwad");
+			}else{
+				IWADList->setCurrentRow(0);
+				QListWidgetItem *item = IWADList->item(0);
+				zconf->setValue("zdl.save","iwad",item->text());
+			}
 		}
 	}
-	
 
 }
