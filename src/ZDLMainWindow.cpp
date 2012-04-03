@@ -119,6 +119,10 @@ void ZDLMainWindow::launch(){
 	if (args.join("").length() < 1){
 		return;
 	}
+
+	if(exec.contains("\\") >= 0){
+		exec.replace("\\","/");
+	}
 	
 	//Find the executable
 	QStringList executablePath = exec.split("/");
@@ -132,7 +136,6 @@ void ZDLMainWindow::launch(){
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
-	QMessageBox::warning(NULL,"Failed to Start", "Executable: "+exec+"\nArguments: "+args.join(" ")+"\nWorking Directory: "+workingDirectory,QMessageBox::Ok,QMessageBox::Ok);
 #ifdef Q_WS_WIN
 	QString compose = exec + QString(" ") + args.join(" ");
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
