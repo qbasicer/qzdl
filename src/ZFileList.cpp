@@ -85,9 +85,12 @@ void ZFileList::rebuild(){
 
 void ZFileList::addButton(){
 	QStringList filters;
-	filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
+	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
          << "WAD Files (*.wad)"
-         << "pk3 Files (*.pk3)"
+         << "PK3 Files (*.pk3)"
+	 << "PK7 Files (*.pk7)"
+	 << "PKZ Files (*.pkz)"
+	 << "P7Z Files (*.pk7)"
          << "zip Files (*.zip)"
          << "Any files (*)";
 	QFileDialog dialog(this);
