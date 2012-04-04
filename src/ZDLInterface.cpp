@@ -110,12 +110,15 @@ QLayout *ZDLInterface::getButtonPane(){
 	QAction *showCommandline = actions->addAction("Show Command Line");
 	actions->addAction("Clear PWAD list");
 	actions->addAction("Clear all fields");
-	QAction *newDMFlagger = actions->addAction("New DMFlag picker");
+	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 	
 	context->addMenu(actions);
 	context->addSeparator();
-	QAction *loadAction = context->addAction("Load Config");
-	QAction *saveAction = context->addAction("Save Config");
+	QAction *loadZdlFile = context->addAction("Load .zdl");
+	QAction *saveZdlFile = context->addAction("Save .zdl");
+	context->addSeparator();
+	QAction *loadAction = context->addAction("Load .ini");
+	QAction *saveAction = context->addAction("Save .ini");
 	context->addSeparator();
 	QAction *aboutAction = context->addAction("About");
 	
@@ -123,7 +126,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
-	connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
+	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
 	
 	btnZDL->setMenu(context);
