@@ -69,6 +69,7 @@ void ZDLUpdater::fetch(){
 }
 
 void ZDLUpdater::fetch(int doAnyways){
+	Q_UNUSED(doAnyways);
 	//cout << "fetch" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
@@ -76,14 +77,14 @@ void ZDLUpdater::fetch(int doAnyways){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			if (fileVctr[i]->getValue().compare("disabled") == 0){
-				ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
-				ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-				connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
-				if(doAnyways == 0){
-					return;
-				}
+				//ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
+				//ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
+				//connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
+				//if(doAnyways == 0){
+				//	return;
+				//}
 			}
 		}
 		
@@ -229,14 +230,19 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 }
 
 void ZDLUpdater::readyRead ( const QHttpResponseHeader & resp ){
-	//cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
-	QByteArray inBytes = http->readAll();
-	buffer.append(inBytes);
+	if(resp.statusCode() == 200){
+		//cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
+		QByteArray inBytes = http->readAll();
+		buffer.append(inBytes);
+	}
 }
 
 void ZDLUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
 	//cout << "readResponseHeader" << endl;
 	errorCode = responseHeader.statusCode();
 	//cout << "Error code: " << errorCode << endl;
+	if(errorCode != 200){
+		ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);	
+	}
 	
 }
