@@ -44,6 +44,8 @@ private slots:
 	void showCommandline();
 	void showNewDMFlagger();
 	void exitzdl();
+	void loadZdlFile();
+	void saveZdlFile();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();

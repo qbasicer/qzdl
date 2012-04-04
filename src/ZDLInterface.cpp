@@ -114,8 +114,8 @@ QLayout *ZDLInterface::getButtonPane(){
 	
 	context->addMenu(actions);
 	context->addSeparator();
-	QAction *loadZdlFile = context->addAction("Load .zdl");
-	QAction *saveZdlFile = context->addAction("Save .zdl");
+	QAction *loadZdlFileAction = context->addAction("Load .zdl");
+	QAction *saveZdlFileAction = context->addAction("Save .zdl");
 	context->addSeparator();
 	QAction *loadAction = context->addAction("Load .ini");
 	QAction *saveAction = context->addAction("Save .ini");
@@ -124,6 +124,8 @@ QLayout *ZDLInterface::getButtonPane(){
 	
 	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
+	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
+	connect(saveZdlFileAction, SIGNAL(triggered()), this, SLOT(saveZdlFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
@@ -222,8 +224,7 @@ void ZDLInterface::saveConfigFile(){
 	sendSignals();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
-	filters << "ZDL/ini (*.zdl *.ini)"
-			<< "ZDL files (*.zdl)"
+	filters << "ini (*.ini)"
 			<< "ini Files (*.ini)"
 			<< "Any files (*)";
 	QFileDialog dialog(this,"Save");
@@ -233,7 +234,7 @@ void ZDLInterface::saveConfigFile(){
 		fileNames = dialog.selectedFiles();
 		for(int i = 0; i < fileNames.size(); i++){
 			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
-			zconf->writeINI(fileNames[i].toStdString().c_str());
+			zconf->writeINI(fileNames[i]);
 		}
 		mw->startRead();
 	}
@@ -243,8 +244,7 @@ void ZDLInterface::saveConfigFile(){
 void ZDLInterface::loadConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
-	filters << "ZDL/ini (*.zdl *.ini)"
-			<< "ZDL files (*.zdl)"
+	filters << "ini (*.ini)"
 			<< "ini Files (*.ini)"
 			<< "Any files (*)";
 	QFileDialog dialog(this);
@@ -257,11 +257,75 @@ void ZDLInterface::loadConfigFile(){
 			delete zconf;
 			ZDLConf* tconf = new ZDLConf();
 			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
-			tconf->readINI(fileNames[i].toStdString().c_str());
+			tconf->readINI(fileNames[i]);
 			ZDLConfigurationManager::setActiveConfiguration(tconf);
 			
 		}
 		mw->startRead();
+	}
+	
+}
+
+void ZDLInterface::loadZdlFile(){
+	QStringList filters;
+	filters << "ZDL (*.zdl)" << "Any files (*)";
+	QFileDialog dialog(this,"Load");
+	dialog.setFilters(filters);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	QStringList fileNames;
+	if(dialog.exec()){
+		fileNames = dialog.selectedFiles();
+		if(fileNames.size() == 1){
+			ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
+			for(int i = 0; i < current->sections.size(); i++){
+				if(current->sections[i]->getName().compare("zdl.save") == 0){
+					ZDLSection *section = current->sections[i];
+					current->sections.remove(i);
+					delete section;
+					break;
+				}
+			}
+			QString fileName = fileNames[0];
+			ZDLConf *newConf = new ZDLConf();
+			newConf->readINI(fileName);
+			for(int i = 0; i < newConf->sections.size(); i++){
+				if(newConf->sections[i]->getName().compare("zdl.save") == 0){
+					ZDLSection *section = newConf->sections[i];
+					current->addSection(section->clone());
+					break;
+				}
+			}
+			delete newConf;
+			mw->startRead();
+		}else{
+			QMessageBox::critical(this,ZDL_ENGINE_NAME " Load .ZDL Error", "You must select one and only one .zdl file at a time to load",QMessageBox::Ok,QMessageBox::Ok);
+		}
+	}
+}
+
+void ZDLInterface::saveZdlFile(){
+	sendSignals();
+	QStringList filters;
+	filters << "ZDL (*.zdl)" << "Any files (*)";
+	QFileDialog dialog(this,"Save");
+	dialog.setFilters(filters);
+	QStringList fileNames;
+	if(dialog.exec()){
+		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
+		ZDLConf *copy = new ZDLConf();
+		for(int i = 0; i < current->sections.size(); i++){
+			if(current->sections[i]->getName().compare("zdl.save") == 0){
+				copy->addSection(current->sections[i]->clone());
+				fileNames = dialog.selectedFiles();
+				for(int i = 0; i < fileNames.size(); i++){
+					QString fileName = fileNames[i];
+					if(!fileName.contains(".")){
+						fileName = fileName + QString(".zdl");
+					}
+					copy->writeINI(fileNames[i]);
+				}
+			}
+		}
 	}
 	
 }
