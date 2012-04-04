@@ -80,9 +80,9 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 
 void ZDLSettingsPane::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+#if !defined(NO_UPDATER)
 	ZDLSection *section = zconf->getSection("zdl.net");
 	//Delete old configs
-#if !defined(NO_UPDATER)
 	if (section){
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^updateManager$", vctr);
@@ -116,8 +116,8 @@ void ZDLSettingsPane::rebuild(){
 
 void ZDLSettingsPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.net");
 #if !defined(NO_UPDATER)
+	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
