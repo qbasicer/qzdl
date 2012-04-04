@@ -211,6 +211,7 @@ void ZDLInterface::ampclick(){
 }
 
 void ZDLInterface::sendSignals(){
+	rebuild();
 	emit buildParent(this);
 	emit buildChildren(this);
 }
