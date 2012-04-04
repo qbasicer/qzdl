@@ -6,20 +6,15 @@ Bugs:
   <NeuralStunner> +DeathMatch 1 works, however
   <NeuralStunner> Odd thing is, it uses +Set in the command line for the DMFlags
   - Not sure of issue here
-- <NeuralStunner> When Remove is used on a file in the External Files list, it unselects everything in that box
-  <NeuralStunner> Whereas in 1.3a it leaves the next file selected, so you can just hit Remove repeatedly and clear the list
-- Convert paths with / to \ for ini
-- Drag and drop not working
-- Qt is escaping quotes
-
 
 Here's a short list of future features:
-
+- Process command line arguments correctly
+- Support zdl.general/zdllaunch
+- Change show cmd line to ask for launch
 - Get IWAD Map names (questionable)
 - Config file DMFlags
 - Store IWAD map names in config files (ie m0n=E1M1)
 - Global/local/user based configs
 - A small preview of the map, read this from a screenshot directory
 - Expand ~
-- Implement the 'always add these args' to spec
 
