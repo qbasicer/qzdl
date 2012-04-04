@@ -14,8 +14,8 @@ ZDLConfiguration::ZDLConfiguration(){
 	confs[CONF_USER] = new ZDLConf();
 	confs[CONF_FILE] = new ZDLConf();
 
-	cout << "Global configuration: " << paths[CONF_SYSTEM].toStdString() << endl;
-	cout << "User configuration: " << paths[CONF_USER].toStdString() << endl;
+	//cout << "Global configuration: " << paths[CONF_SYSTEM].toStdString() << endl;
+	//cout << "User configuration: " << paths[CONF_USER].toStdString() << endl;
 
 	//Attempts to create the files.
 	bootstrap(paths[CONF_USER]);
@@ -32,7 +32,7 @@ void ZDLConfiguration::bootstrap(QString path){
 	if(!fileInfo.exists()){
 		QFile file(fileInfo.absoluteFilePath());
 		if(!file.open(QIODevice::ReadWrite)){
-			cerr << "FAILED to create file " << fileInfo.absoluteFilePath().toStdString() << endl;
+			//cerr << "FAILED to create file " << fileInfo.absoluteFilePath().toStdString() << endl;
 		}
 	}
 }

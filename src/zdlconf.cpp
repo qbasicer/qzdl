@@ -55,7 +55,7 @@ int ZDLConf::readINI(QString file)
 		QFile stream(file);
 		stream.open(QIODevice::ReadOnly);
 		if (!stream.isOpen()){
-			cerr << "Unable to open file \"" << file.toStdString() << "\"" << std::endl;
+			//cerr << "Unable to open file \"" << file.toStdString() << "\"" << std::endl;
 			return 1;
 		}
 		while (!stream.atEnd()){
