@@ -34,6 +34,10 @@ public:
 	int streamWrite(QIODevice *stream);
 	int getRegex(QString regex, QVector<ZDLLine*> &vctr);
 	QVector<ZDLLine*> lines;
+	ZDLSection *clone();
+	void addLine(ZDLLine* line){
+		lines.push_back(line);
+	}
 private:
 	int reads;
 	int writes;

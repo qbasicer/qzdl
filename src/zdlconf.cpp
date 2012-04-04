@@ -296,4 +296,15 @@ void ZDLConf::parse(QString in, ZDLSection* current)
 	}
 }
 
+ZDLConf *ZDLConf::clone(){
+	ZDLConf *copy = new ZDLConf();
+	for(int i = 0; i < sections.size(); i++){
+		copy->addSection(sections[i]->clone());
+	}
+	return copy;
+}
+
+
+
+
 

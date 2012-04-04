@@ -187,7 +187,13 @@ int ZDLSection::addLine(QString linedata)
 	
 }
 
-
+ZDLSection *ZDLSection::clone(){
+	ZDLSection *copy = new ZDLSection(sectionName);
+	for(int i = 0; i < lines.size(); i++){
+		copy->addLine(lines[i]->clone());
+	}
+	return copy;
+}
 
 
 

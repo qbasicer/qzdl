@@ -23,6 +23,7 @@ class ZDLLine{
 	friend class ZDLVariables;
 public:
 	ZDLLine(QString inLine);
+	ZDLLine();
 	~ZDLLine();
 	int getType();
 	QString getValue();
@@ -30,6 +31,7 @@ public:
 	QString getLine();
 	int setValue(QString inValue);
 	int isSlashConverting(){return (slashConvert != 0);}
+	ZDLLine *clone();
 private:
 	int reads;
 	int writes;

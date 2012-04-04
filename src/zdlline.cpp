@@ -45,8 +45,20 @@ ZDLLine::ZDLLine(QString inLine)
 	if (line[0] == ';' || line[0] == '#'){
 		type = 2;
 	}else{
+		type = 0;
 		parse();
 	}
+}
+
+ZDLLine::ZDLLine()
+{
+	reads = 0;
+	writes = 1;
+	line = "";
+	comment = "";
+	value = "";
+	variable = "";
+	type = 2;
 }
 
 ZDLLine::~ZDLLine()
@@ -143,7 +155,18 @@ void ZDLLine::parse()
 
 }
 
-
+ZDLLine *ZDLLine::clone(){
+	ZDLLine *copy = new ZDLLine();
+	copy->variable = variable;
+	copy->comment = comment;
+	copy->line = line;
+	copy->value = value;
+	copy->slashConvert = slashConvert;
+	copy->type = type;
+	reads += 6;
+	copy->writes += 6;
+	return copy;
+}
 
 
 

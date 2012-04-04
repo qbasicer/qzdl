@@ -51,6 +51,10 @@ public:
 	int writeStream(QIODevice *stream);
 	ZDLSection *getSection(QString section);
 	void deleteSection(QString section);
+	ZDLConf *clone();
+	void addSection(ZDLSection *section){
+		sections.push_back(section);
+	}
 private:
 	int mode;
 	int reads;
