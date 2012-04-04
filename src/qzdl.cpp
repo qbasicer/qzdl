@@ -59,9 +59,9 @@ int main( int argc, char **argv ){
 	ZDLConfigurationManager::setConfigFileName("");
 
 	//If the user has specified an alternative .ini
-	if(args.length() > 0){
-		if(args[args.length()-1].endsWith(".ini")){
-			ZDLConfigurationManager::setConfigFileName(args[args.length()-1]);
+	if(args.size() > 0){
+		if(args[args.size()-1].endsWith(".ini")){
+			ZDLConfigurationManager::setConfigFileName(args[args.size()-1]);
 		}
 	}
 
