@@ -85,6 +85,7 @@ void ZDLListWidget::doDragDrop(int enabled){
 }
 
 void ZDLListWidget::newDrop(QList<QUrl> urlList){
+	Q_UNUSED(urlList);
 }
 
 void ZDLListWidget::dragEnterEvent(QDragEnterEvent *event){

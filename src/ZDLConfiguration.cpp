@@ -13,17 +13,17 @@ ZDLConfiguration::ZDLConfiguration(){
 	confs[CONF_SYSTEM] = new ZDLConf();
 	confs[CONF_USER] = new ZDLConf();
 	confs[CONF_FILE] = new ZDLConf();
-	
+
 	cout << "Global configuration: " << paths[CONF_SYSTEM].toStdString() << endl;
 	cout << "User configuration: " << paths[CONF_USER].toStdString() << endl;
-	
+
 	//Attempts to create the files.
 	bootstrap(paths[CONF_USER]);
 	bootstrap(paths[CONF_SYSTEM]);
-	
+
 	confs[CONF_SYSTEM]->readINI(paths[CONF_SYSTEM].toStdString().c_str());
 	confs[CONF_USER]->readINI(paths[CONF_USER].toStdString().c_str());
-	
+
 
 }
 
@@ -52,23 +52,45 @@ ZDLConf* ZDLConfiguration::getConf(ConfScope scope){
 }
 
 QString ZDLConfiguration::getString(QString section, QString key, int *ok,ConfScope scope, ScopeRules rules){
+	Q_UNUSED(section);
+	Q_UNUSED(key);
+	Q_UNUSED(scope);
+	Q_UNUSED(rules);
 	if(ok){*ok = FALSE;}
 	return QString();
 }
 
 int ZDLConfiguration::getInt(QString section, QString key, int *ok, ConfScope scope, ScopeRules rules){
+	Q_UNUSED(section);
+	Q_UNUSED(key);
+	Q_UNUSED(scope);
+	Q_UNUSED(rules);
 	if(ok){*ok = FALSE;}
 	return 0;
 }
 
 bool ZDLConfiguration::setString(QString section, QString key, QString value, ConfScope scope, ScopeRules rules){
+	Q_UNUSED(section);
+	Q_UNUSED(key);
+	Q_UNUSED(value);
+	Q_UNUSED(scope);
+	Q_UNUSED(rules);
 	return FALSE;
 }
 
 bool ZDLConfiguration::setInt(QString section, QString key, int value, ConfScope scope, ScopeRules rules){
+	Q_UNUSED(section);
+	Q_UNUSED(key);
+	Q_UNUSED(value);
+	Q_UNUSED(scope);
+	Q_UNUSED(rules);
 	return FALSE;
 }
 
 bool ZDLConfiguration::hasVariable(QString section, QString key, ConfScope scope, ScopeRules rules){
+	Q_UNUSED(section);
+	Q_UNUSED(key);
+	Q_UNUSED(scope);
+	Q_UNUSED(rules);
 	return FALSE;
 }

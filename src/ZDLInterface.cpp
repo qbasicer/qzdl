@@ -172,7 +172,7 @@ void ZDLInterface::buttonPaneNewConfig(){
 	if (section){
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^dlgmode$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
+		for(int i = 0; i < vctr.size(); i++){
 			if (vctr[i]->getValue().compare("open",Qt::CaseInsensitive) == 0){
 				btnEpr->setIcon(QPixmap(adown));
 			}else{
@@ -381,7 +381,7 @@ void ZDLInterface::newConfig(){
 		QVector<ZDLLine*> vctr;
 		//Search for our string
 		section->getRegex("^dlgmode$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
+		for(int i = 0; i < vctr.size(); i++){
 			//Are we open?
 			if (vctr[i]->getValue().compare("open", Qt::CaseInsensitive) == 0){
 				// If the multiplayer pane has not been created, create one

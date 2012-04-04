@@ -248,7 +248,6 @@ QStringList ZDLMainWindow::getArguments(){
 	int doquotes = 1;
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
-		int index = 0;
 		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
 			iwadName = rc;

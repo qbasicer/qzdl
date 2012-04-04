@@ -138,7 +138,7 @@ void settingPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
-		int stat;
+		int stat = 0;
 		QString rc = zconf->getValue("zdl.save", "skill", &stat);
 		if (rc.length() > 0){
 			index = atoi((char*)rc.toStdString().c_str());
@@ -153,7 +153,7 @@ void settingPane::newConfig(){
 	}
 	
 	if(zconf->hasValue("zdl.save", "warp")){
-		int stat;
+		int stat = 0;
 		QString rc = zconf->getValue("zdl.save","warp",&stat);
 		if(rc.length() > 0){
 			warpText->setText(rc);
@@ -178,7 +178,7 @@ void settingPane::newConfig(){
 			QString number = "^p";
 			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
-			int stat;
+			int stat = 0;
 			QVector<ZDLLine*> nameVctr;
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
@@ -189,7 +189,7 @@ void settingPane::newConfig(){
 	
 	if(zconf->hasValue("zdl.save", "port")){
 		int set = 0;
-		int stat;
+		int stat = 0;
 		QString rc = zconf->getValue("zdl.save", "port", &stat);
 
 		if(rc.length() > 0){
@@ -231,7 +231,7 @@ void settingPane::newConfig(){
 	
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int set = 0;
-		int stat;
+		int stat = 0;
 		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
 			for(int i = 0; i < IWADList->count(); i++){

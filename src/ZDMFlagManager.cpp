@@ -27,8 +27,8 @@ void ZDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
 }
 
 void ZDMFlagManager::stateChanged(int value){
+	Q_UNUSED(value);
 	int val = getValue();
-	value = 0;
 	emit valueChanged(val);
 }
 

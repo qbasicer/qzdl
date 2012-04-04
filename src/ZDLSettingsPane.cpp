@@ -86,7 +86,7 @@ void ZDLSettingsPane::rebuild(){
 	if (section){
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^updateManager$", vctr);
-		for(unsigned int i = 0; i < vctr.size(); i++){
+		for(int i = 0; i < vctr.size(); i++){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 	}
@@ -122,7 +122,7 @@ void ZDLSettingsPane::newConfig(){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			if (fileVctr[i]->getValue().compare("disabled") == 0){
 				updater->setCheckState(Qt::Unchecked);
 			}else{

@@ -35,7 +35,7 @@ void ZDLIWadList::newConfig(){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
 		
-		for(unsigned int i = 0; i < fileVctr.size(); i++){
+		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
 			
 			QString number = "^i";
