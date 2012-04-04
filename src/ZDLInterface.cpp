@@ -47,8 +47,7 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 	QLayout *tpane = getTopPane();
 	QLayout *bpane = getBottomPane();
 	
-	mpane = new ZDLMultiPane(this);
-	mpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
+	mpane = NULL;
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
@@ -317,27 +316,34 @@ void ZDLInterface::newConfig(){
 		for(unsigned int i = 0; i < vctr.size(); i++){
 			//Are we open?
 			if (vctr[i]->getValue().compare("open", Qt::CaseInsensitive) == 0){
-				//cout << "Opening config" << endl;
+				// If the multiplayer pane has not been created, create one
+				if(mpane == NULL){
+					mpane = new ZDLMultiPane(this);
+					mpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
+				}
 				box->addWidget(mpane);
 				mpane->setVisible(true);
 			//No?
 			}else{
-				//cout << "Removing config" << endl;
-				box->removeWidget(mpane);
-				mpane->setVisible(false);
-				mpane->hide();
+				if(mpane){
+					box->removeWidget(mpane);
+					mpane->setVisible(false);
+					mpane->hide();
+				}
 			}
 		}
 		//Do we have the section, but not the key?
 		if (vctr.size() < 1){
-			//cout << "Removing config (no line present)" << endl;
-			box->removeWidget(mpane);
-			mpane->setVisible(false);
+			if(mpane){
+				box->removeWidget(mpane);
+				mpane->setVisible(false);
+			}
 		}
 	//Do we not even have the section?
 	}else{
-		//cout << "Removing config (no section present)" << endl;
-		box->removeWidget(mpane);
+		if(mpane){
+			box->removeWidget(mpane);
+		}
 	}
 	this->update();
 }
