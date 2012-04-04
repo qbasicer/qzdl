@@ -153,14 +153,27 @@ void ZDLMultiPane::newConfig(){
 
 void ZDLMultiPane::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+
 	if (tHostAddy->text().length() > 0){
-		zconf->setValue("zdl.save", "host", tHostAddy->text().toStdString().c_str());
+		zconf->setValue("zdl.save", "host", tHostAddy->text());
 	}
+
 	if (tFragLimit->text().length() > 0){
-		zconf->setValue("zdl.save", "fraglimit", tFragLimit->text().toStdString().c_str());
+		zconf->setValue("zdl.save", "fraglimit", tFragLimit->text());
 	}
-	zconf->setValue("zdl.save", "dmflags", bDMFlags->text().toStdString().c_str());
-	zconf->setValue("zdl.save", "dmflags2", bDMFlags2->text().toStdString().c_str());
+
+	if(bDMFlags->text() != "0"){
+		zconf->setValue("zdl.save", "dmflags", bDMFlags->text());
+	}else{
+		zconf->deleteValue("zdl.save", "dmflags");
+	}
+
+	if(bDMFlags2->text() != "0"){
+		zconf->setValue("zdl.save", "dmflags2", bDMFlags2->text());
+	}else{
+		zconf->deleteValue("zdl.save", "dmflags2");
+	}
+
 	zconf->setValue("zdl.save", "gametype", gMode->currentIndex());
 	zconf->setValue("zdl.save", "players", gPlayers->currentIndex());
 }
