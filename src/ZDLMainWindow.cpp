@@ -310,14 +310,6 @@ QStringList ZDLMainWindow::getArguments(){
 			}
 		}
 	}
-
-        if (zconf->hasValue("zdl.general", "alwaysadd")){
-                ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
-        }
-	
-	if (zconf->hasValue("zdl.save", "extra")){
-		ourString << zconf->getValue("zdl.save", "extra", &stat);
-	}
 	
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype",&stat);
@@ -396,6 +388,14 @@ QStringList ZDLMainWindow::getArguments(){
 				ourString[i] = newString;
 			}
 		}
+	}
+	
+	if (zconf->hasValue("zdl.general", "alwaysadd")){
+			ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
+	}
+	
+	if (zconf->hasValue("zdl.save", "extra")){
+		ourString << zconf->getValue("zdl.save", "extra", &stat);
 	}
 
 	return ourString;
