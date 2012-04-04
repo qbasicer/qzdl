@@ -30,8 +30,12 @@ QString versionString;
 ZDLMainWindow *mw;
 
 int main( int argc, char **argv ){
-    QApplication a( argc, argv );
+    	QApplication a( argc, argv );
 	qapp = &a;
+	QStringList args;
+	for(int i = 1; i < argc; i++){
+		args << QString(argv[i]);
+	}
 
 #if defined(Q_WS_WIN)
 	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
@@ -46,15 +50,26 @@ int main( int argc, char **argv ){
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
-	ZDLUpdater *zup = new ZDLUpdater();
+	ZDLUpdater *zup = NULL;
+#if !defined(NO_UPDATER)
+	zup = new ZDLUpdater();
+#endif
 	
 	ZDLConf* tconf = new ZDLConf();
-	if (argc == 2){
-		ZDLConfigurationManager::setConfigFileName(argv[1]);
-	}else{
+	ZDLConfigurationManager::setConfigFileName("");
+
+	//If the user has specified an alternative .ini
+	if(args.length() > 0){
+		if(args[args.length()-1].endsWith(".ini")){
+			ZDLConfigurationManager::setConfigFileName(args[args.length()-1]);
+		}
+	}
+
+	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
 		ZDLConfigurationManager::setConfigFileName("zdl.ini");
 	}
-	tconf->readINI(ZDLConfigurationManager::getConfigFileName().toStdString().c_str());
+
+	tconf->readINI(ZDLConfigurationManager::getConfigFileName());
 	ZDLConfigurationManager::setActiveConfiguration(tconf);
 	
 	mw = new ZDLMainWindow();
@@ -63,8 +78,10 @@ int main( int argc, char **argv ){
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
-	
-	zup->fetch();
+
+	if(zup){	
+		zup->fetch();
+	}
 	
     int ret = a.exec();
 	if (ret != 0){

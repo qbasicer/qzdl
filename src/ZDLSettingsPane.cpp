@@ -62,7 +62,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 	sections->addLayout(lrpane);
 	sections->addWidget(launchClose);
 	sections->addWidget(pathQuote);
-	
+#if !defined(NO_UPDATER)	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
 	QPushButton *btnCheckNow = new QPushButton("Check now",this);
@@ -72,6 +72,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 	hbox->addWidget(btnCheckNow);
 	
 	sections->addLayout(hbox);
+#endif
 	
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -81,6 +82,7 @@ void ZDLSettingsPane::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
 	//Delete old configs
+#if !defined(NO_UPDATER)
 	if (section){
 		QVector<ZDLLine*> vctr;
 		section->getRegex("^updateManager$", vctr);
@@ -92,6 +94,7 @@ void ZDLSettingsPane::rebuild(){
 	if (updater->checkState() == Qt::Unchecked){
 		zconf->setValue("zdl.net", "updateManager", "disabled");
 	}
+#endif
 	
 	if (pathQuote->checkState() == Qt::Unchecked){
 		zconf->setValue("zdl.general", "quotefiles", "disabled");
@@ -114,6 +117,7 @@ void ZDLSettingsPane::rebuild(){
 void ZDLSettingsPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.net");
+#if !defined(NO_UPDATER)
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
@@ -133,6 +137,8 @@ void ZDLSettingsPane::newConfig(){
 		//Default to on if it's not listed
 		updater->setCheckState(Qt::Checked);
 	}
+#endif
+
 	if(zconf->hasValue("zdl.general","alwaysadd")){
 		int ok;
 		QString rc = zconf->getValue("zdl.general","alwaysadd", &ok);
@@ -167,7 +173,9 @@ void ZDLSettingsPane::newConfig(){
 
 void ZDLSettingsPane::checkNow(){
 	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
-	zup->fetch(1);
+	if(zup){
+		zup->fetch(1);
+	}
 }
 
 void ZDLSettingsPane::startRead(){

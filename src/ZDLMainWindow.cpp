@@ -34,25 +34,33 @@ extern QApplication *qapp;
 extern QString versionString;
 
 ZDLMainWindow::~ZDLMainWindow(){
-	delete zup;
+	if(zup){
+		delete zup;
+	}
 }
 
 void ZDLMainWindow::manageUpdate(){
-	if (zup->hasUpdate()){
-		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-		ZDLConfigurationManager::setInfobarMessage("There is an update available.",2);
-		connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
+	if(zup){
+		if (zup->hasUpdate()){
+			ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
+			ZDLConfigurationManager::setInfobarMessage("There is an update available.",2);
+			connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
+		}
 	}
 }
 
 void ZDLMainWindow::newUpdate(){
-	QString engine = ZDL_ENGINE_NAME;
-	QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
+	if(zup){
+		QString engine = ZDL_ENGINE_NAME;
+		QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
+	}
 }
 
 void ZDLMainWindow::setUpdater(ZDLUpdater *zup){
 	this->zup = zup;
-	connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
+	if(zup){
+		connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
+	}
 }
 
 ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
