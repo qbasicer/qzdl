@@ -40,9 +40,11 @@ ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
 	vbox->addWidget(title);
 	vbox->addWidget(new QLabel(QString("Build: ")+QString(ZDL_BUILD),this));
 	vbox->addWidget(new QLabel(QString("Revision: ")+QString(ZDL_REVISION),this));
+#if defined(ZDL_BUILD_NUMBER)
 	if(ZDL_BUILD_NUMBER > 0){
 		vbox->addWidget(new QLabel(QString("Build #: ")+QString::number(ZDL_BUILD_NUMBER),this));
 	}
+#endif
 #if defined(ZDL_BUILD_JOB)
 	vbox->addWidget(new QLabel(QString("Build job: ")+QString(ZDL_BUILD_JOB),this));
 #endif
