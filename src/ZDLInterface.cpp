@@ -108,8 +108,8 @@ QLayout *ZDLInterface::getButtonPane(){
 	QMenu *actions = new QMenu("Actions",context);
 	
 	QAction *showCommandline = actions->addAction("Show Command Line");
-	actions->addAction("Clear PWAD list");
-	actions->addAction("Clear all fields");
+	QAction *clearAllPWadsAction = actions->addAction("Clear PWAD list");
+	QAction *clearAllFieldsAction = actions->addAction("Clear all fields");
 	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 	
 	context->addMenu(actions);
@@ -127,6 +127,10 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
 	connect(saveZdlFileAction, SIGNAL(triggered()), this, SLOT(saveZdlFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
+
+	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
+	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
+
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
@@ -155,6 +159,30 @@ QLayout *ZDLInterface::getButtonPane(){
 	
 	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
 	return box;
+}
+
+void ZDLInterface::clearAllPWads(){
+	mw->writeConfig();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if(!section){
+		return;
+	}
+	for(int i = 0; i < section->lines.size(); i++){
+		if(section->lines[i]->getVariable().startsWith("file")){
+			ZDLLine *line = section->lines[i];
+			section->lines.remove(i--);
+			delete line;
+		}
+	}
+	mw->startRead();
+}
+
+void ZDLInterface::clearAllFields(){
+	mw->writeConfig();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	zconf->deleteSectionByName("zdl.save");
+	mw->startRead();
 }
 
 void ZDLInterface::showNewDMFlagger(){

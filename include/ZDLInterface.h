@@ -46,6 +46,8 @@ private slots:
 	void exitzdl();
 	void loadZdlFile();
 	void saveZdlFile();
+	void clearAllFields();
+	void clearAllPWads();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();
