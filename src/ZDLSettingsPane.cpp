@@ -58,8 +58,10 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
 	
 	launchClose = new QCheckBox("Close on launch",this);
 	pathQuote = new QCheckBox("Quote paths",this);
+	launchZDL = new QCheckBox("Automatically launch .ZDL Files", this);
 	sections->addWidget(alwaysArgs);
 	sections->addLayout(lrpane);
+	sections->addWidget(launchZDL);
 	sections->addWidget(launchClose);
 	sections->addWidget(pathQuote);
 #if !defined(NO_UPDATER)	
@@ -107,10 +109,15 @@ void ZDLSettingsPane::rebuild(){
 	}else{
 		zconf->setValue("zdl.general","autoclose", "0");
 	}
+	if(launchZDL->checkState() == Qt::Checked){
+		zconf->setValue("zdl.general","zdllaunch", "1");
+	}else{
+		zconf->setValue("zdl.general","zdllaunch", "0");
+	}
 	if(alwaysArgs->text().isEmpty()){
 		zconf->deleteValue("zdl.general", "alwaysadd");
 	}else{
-		zconf->setValue("zdl.general", "alwaysadd", alwaysArgs->text().toStdString().c_str());
+		zconf->setValue("zdl.general", "alwaysadd", alwaysArgs->text());
 	}
 }
 
@@ -167,6 +174,17 @@ void ZDLSettingsPane::newConfig(){
 		}else{
 			launchClose->setCheckState(Qt::Unchecked);
 		}
+	}
+	if(zconf->hasValue("zdl.general","zdllaunch")){
+		int ok;
+		QString closeSetting = zconf->getValue("zdl.general","zdllaunch",&ok);
+		if(closeSetting == "1"){
+			launchZDL->setCheckState(Qt::Checked);
+		}else{
+			launchZDL->setCheckState(Qt::Unchecked);
+		}
+	}else{
+		launchZDL->setCheckState(Qt::Unchecked);
 	}
 	
 }

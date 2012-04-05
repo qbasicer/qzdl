@@ -29,6 +29,35 @@ QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
 
+static void addFile(QString file, ZDLConf* zconf){
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if(!section){
+		return;
+	}
+	QVector<ZDLLine*> vctr;
+	section->getRegex("^file[0-9]+$", vctr);
+	if(vctr.size() == 0){
+		zconf->setValue("zdl.save", "file0", file);
+		return;
+	}
+	QVector<int> numbers;
+	for(int i = 0; i < vctr.size(); i++){
+		bool ok = false;
+		QString value = vctr[i]->getVariable();
+		value.remove(0,4);
+		int val = value.toInt(&ok);
+		if(!ok){
+			qDebug() << "Unable to parse " << value;
+			return;
+		}
+		numbers.push_back(val);
+	}
+	qSort(numbers);
+	int highest = numbers.last();
+	zconf->setValue("zdl.save", "file"+QString::number(highest+1), file);
+	return;
+}
+
 int main( int argc, char **argv ){
     	QApplication a( argc, argv );
 	qapp = &a;
@@ -57,11 +86,14 @@ int main( int argc, char **argv ){
 	
 	ZDLConf* tconf = new ZDLConf();
 	ZDLConfigurationManager::setConfigFileName("");
+	QStringList eatenArgs(args);
 
 	//If the user has specified an alternative .ini
-	if(args.size() > 0){
-		if(args[args.size()-1].endsWith(".ini")){
-			ZDLConfigurationManager::setConfigFileName(args[args.size()-1]);
+	for(int i = 0; i < eatenArgs.size(); i++){
+		if(eatenArgs[i].endsWith(".ini")){
+			ZDLConfigurationManager::setConfigFileName(eatenArgs[i]);
+			eatenArgs.removeAt(i);
+			break;
 		}
 	}
 
@@ -71,6 +103,33 @@ int main( int argc, char **argv ){
 
 	tconf->readINI(ZDLConfigurationManager::getConfigFileName());
 	ZDLConfigurationManager::setActiveConfiguration(tconf);
+
+	bool hasZDLFile = false;
+
+	for(int i = 0; i < eatenArgs.size(); i++){
+		if(eatenArgs[i].endsWith(".zdl")){
+			tconf->deleteSectionByName("zdl.save");
+			ZDLConf zdlFile;
+			zdlFile.readINI(eatenArgs[i]);
+			ZDLSection *section = zdlFile.getSection("zdl.save");
+			if(section){
+				tconf->addSection(section->clone());
+				hasZDLFile = true;
+			}
+			eatenArgs.removeAt(i);
+			break;
+		}
+	}
+
+
+	for(int i = 0; i < eatenArgs.size(); i++){
+		if(!(eatenArgs[i].endsWith(".zdl") || eatenArgs[i].endsWith(".ini"))){
+			addFile(eatenArgs[i], tconf);
+			eatenArgs.removeAt(i);
+			i--;
+		}
+	}
+
 	
 	mw = new ZDLMainWindow();
 	mw->setUpdater(zup);
@@ -78,6 +137,19 @@ int main( int argc, char **argv ){
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
+
+	if(hasZDLFile){
+		if(tconf->hasValue("zdl.general", "zdllaunch")){
+			int ok = 0;
+			QString rc = tconf->getValue("zdl.general", "zdllaunch", &ok);
+			if(rc.length() > 0){
+				if(rc.compare("1") == 0){
+					mw->launch();
+					return 0;
+				}
+			}
+		}
+	}
 
 	if(zup){	
 		zup->fetch();

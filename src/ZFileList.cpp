@@ -75,9 +75,8 @@ void ZFileList::rebuild(){
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZFileListable* fitm = (ZFileListable*)itm;
-		char szBuffer[256];
-		snprintf(szBuffer, 256, "file%d", i);
-		zconf->setValue("zdl.save", szBuffer, fitm->getFile());
+		QString name = QString("file").append(QString::number(i));
+		zconf->setValue("zdl.save", name, fitm->getFile());
 	
 	}
 	

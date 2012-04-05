@@ -24,26 +24,16 @@
 
 using namespace std;
 
-ZFileListable::ZFileListable( QListWidget *parent, int type, const char* file):ZDLListable(parent, type){
-
-	QFileInfo qfile(file);
-	QString cname = qfile.fileName();
-	QString list = QString("%1 [%2]").arg(cname).arg(file);
-	setName(list.toStdString().c_str());
-	fileName = file;
-
-}
-
 ZFileListable::ZFileListable( QListWidget *parent, int type, QString file):ZDLListable(parent, type){
 	QFileInfo qfile(file);
 	QString cname = qfile.fileName();
 	QString list = QString("%1 [%2]").arg(cname).arg(file);
-	setName(list.toStdString().c_str());
+	setName(list);
 	fileName = file;
 }
 
-const char* ZFileListable::getFile(){
-	return fileName.toStdString().c_str();
+QString ZFileListable::getFile(){
+	return fileName;
 }
 	
 

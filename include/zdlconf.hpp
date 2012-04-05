@@ -52,6 +52,7 @@ public:
 	ZDLSection *getSection(QString section);
 	void deleteSection(QString section);
 	ZDLConf *clone();
+	void deleteSectionByName(QString section);
 	void addSection(ZDLSection *section){
 		sections.push_back(section);
 	}

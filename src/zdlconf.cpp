@@ -304,7 +304,15 @@ ZDLConf *ZDLConf::clone(){
 	return copy;
 }
 
-
+void ZDLConf::deleteSectionByName(QString section){
+	for(int i = 0; i < sections.size(); i++){
+		if(sections[i]->getName().compare(section) == 0){
+			ZDLSection *sect = sections[i];
+			sections.remove(i);
+			delete sect;
+		}
+	}
+}
 
 
 

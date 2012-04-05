@@ -39,5 +39,6 @@ private:
 	ZDLSourcePortList *sourceList;
 	QCheckBox *updater;
 	QCheckBox *pathQuote;
+	QCheckBox *launchZDL;
 	
 };
