@@ -306,16 +306,31 @@ QStringList ZDLMainWindow::getArguments(){
 	}
 	
 	section = zconf->getSection("zdl.save");
+	QStringList pwads;
+	QStringList dhacked;
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^file[0-9]+$", fileVctr);
 		
 		if (fileVctr.size() > 0){
-			ourString << "-file";
 			for(int i = 0; i < fileVctr.size(); i++){
-				ourString << fileVctr[i]->getValue();
+				if(fileVctr[i].endsWith(".deh") || fileVctr[i].endsWith(".bex")){
+					dhacked << fileVctr[i]->getValue();
+				}else{
+					pwads << fileVctr[i]->getValue();
+				}
 			}
 		}
+	}
+	
+	if(pwads.size() > 0){
+		ourString << "-file";
+		ourString << pwads;
+	}
+
+	if(dhacked.size() > 0){
+		ourString << "-deh";
+		ourString << dhacked;
 	}
 	
 	if(zconf->hasValue("zdl.save","gametype")){
