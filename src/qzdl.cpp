@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
@@ -28,6 +28,7 @@
 QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
+
 
 static void addFile(QString file, ZDLConf* zconf){
 	ZDLSection *section = zconf->getSection("zdl.save");
@@ -47,7 +48,6 @@ static void addFile(QString file, ZDLConf* zconf){
 		value.remove(0,4);
 		int val = value.toInt(&ok);
 		if(!ok){
-			qDebug() << "Unable to parse " << value;
 			return;
 		}
 		numbers.push_back(val);
@@ -59,7 +59,7 @@ static void addFile(QString file, ZDLConf* zconf){
 }
 
 int main( int argc, char **argv ){
-    	QApplication a( argc, argv );
+	QApplication a( argc, argv );
 	qapp = &a;
 	QStringList args;
 	for(int i = 1; i < argc; i++){
@@ -83,17 +83,40 @@ int main( int argc, char **argv ){
 #if !defined(NO_UPDATER)
 	zup = new ZDLUpdater();
 #endif
-	
+
 	ZDLConf* tconf = new ZDLConf();
 	ZDLConfigurationManager::setConfigFileName("");
 	QStringList eatenArgs(args);
+
+	ZDLConfigurationManager::setWhy(ZDLConfigurationManager::UNKNOWN);
 
 	//If the user has specified an alternative .ini
 	for(int i = 0; i < eatenArgs.size(); i++){
 		if(eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive)){
 			ZDLConfigurationManager::setConfigFileName(eatenArgs[i]);
 			eatenArgs.removeAt(i);
+			ZDLConfigurationManager::setWhy(ZDLConfigurationManager::USER_SPECIFIED);
 			break;
+		}
+	}
+
+	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
+		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
+		if(conf){
+			QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
+			if(QFile::exists(userConfPath)){
+				QFile cfile(userConfPath);
+				if(cfile.size() > 20){
+					ZDLConf conf;
+					conf.readINI(userConfPath);
+					if(!conf.hasValue("zdl.general","nouserconf")){
+						ZDLConfigurationManager::setConfigFileName(userConfPath);
+					}			
+				}else{
+				}
+			}else{
+			}
+		}else{
 		}
 	}
 
@@ -106,6 +129,15 @@ int main( int argc, char **argv ){
 		path.removeLast();
 		if(QFile::exists(path.join("/")+"/zdl.ini")){
 			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
+		}else if(QFile::exists("zdl.ini")){
+			ZDLConfigurationManager::setConfigFileName("zdl.ini");
+		}
+	}
+
+	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
+		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
+		if(conf){
+			ZDLConfigurationManager::setConfigFileName(conf->getPath(ZDLConfiguration::CONF_USER));
 		}else{
 			ZDLConfigurationManager::setConfigFileName("zdl.ini");
 		}
@@ -140,7 +172,7 @@ int main( int argc, char **argv ){
 		}
 	}
 
-	
+
 	mw = new ZDLMainWindow();
 	mw->setUpdater(zup);
 	ZDLConfigurationManager::setUpdater(zup);
@@ -164,8 +196,10 @@ int main( int argc, char **argv ){
 	if(zup){	
 		zup->fetch();
 	}
-	
-    int ret = a.exec();
+
+	mw->handleImport();
+
+	int ret = a.exec();
 	if (ret != 0){
 		return ret;
 	}

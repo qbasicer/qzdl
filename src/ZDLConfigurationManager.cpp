@@ -43,6 +43,16 @@ ZQWidget* ZDLConfigurationManager::infobar;
 QString ZDLConfigurationManager::filename;
 ZDLUpdater *ZDLConfigurationManager::zupper;
 ZDLConfiguration *ZDLConfigurationManager::conf;
+ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::why;
+
+void ZDLConfigurationManager::setWhy(ZDLConfigurationManager::WhyConfig conf){
+	ZDLConfigurationManager::why = conf;
+}
+
+ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::getWhy(){
+	return ZDLConfigurationManager::why;
+}
+
 
 void ZDLConfigurationManager::setInterface(ZQWidget *widget){
 	interface  = widget;

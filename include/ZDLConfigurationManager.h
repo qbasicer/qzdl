@@ -31,10 +31,13 @@ using namespace std;
 
 class ZDLConfigurationManager{
 	public:
+		enum WhyConfig {UNKNOWN, USER_SPECIFIED, USER_CONF, IN_EXEC_DIR, IN_CWD};
 		static void init();
 		static ZQWidget* getInterface();
 		static void setInterface(ZQWidget *widget);
-		
+		static void setWhy(WhyConfig conf);		
+		static WhyConfig getWhy();	
+
 		// Deprecating this soon!
 		static void setActiveConfiguration(ZDLConf *zconf);
 		static ZDLConf* getActiveConfiguration();
@@ -59,6 +62,7 @@ class ZDLConfigurationManager{
 		static string cdir;
 		static ZDLUpdater *zupper;
 		static ZDLConfiguration *conf;
+		static WhyConfig why;
 };
 
 #endif

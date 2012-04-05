@@ -37,6 +37,8 @@ public:
 	void setUpdater(ZDLUpdater *zup);
 	QStringList getArguments();
 	QString getExecutable();
+	void handleImport();
+	QString getWindowTitle();
 public slots:
 	void launch();
 	void quit();
