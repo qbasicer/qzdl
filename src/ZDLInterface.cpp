@@ -336,11 +336,40 @@ void ZDLInterface::aboutClick(){
 }
 
 void ZDLInterface::showCommandline(){
-	sendSignals();
-	QStringList cmdLst = mw->getArguments();
-	QString cmd = cmdLst.join(" ");
+	writeConfig();
 	
-	QMessageBox::information(this,ZDL_ENGINE_NAME " Commandline", "Command line to be executed:\n\n"+mw->getExecutable()+" " +cmd,QMessageBox::Ok,QMessageBox::Ok);
+	QString exec = mw->getExecutable();
+	if (exec.length() < 1){
+		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
+		return;
+	}
+	QStringList args = mw->getArguments();
+	if (args.join("").length() < 1){
+		return;
+	}
+
+	if(exec.contains("\\")){
+		exec.replace("\\","/");
+	}
+	
+	//Find the executable
+	QStringList executablePath = exec.split("/");
+
+	//Remove the last item, which will be the .exe
+	executablePath.removeLast();
+
+	//Re-create the string
+	QString workingDirectory = executablePath.join("/");
+
+	//Resolve the path to an absolute directory
+	QDir cwd(workingDirectory);
+	workingDirectory = cwd.absolutePath();
+	// Turns on launch confirmation
+	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	if(btnrc == QMessageBox::Yes){
+		mw->launch();
+		return;
+	}
 }
 
 void ZDLInterface::rebuild(){

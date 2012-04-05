@@ -8,8 +8,6 @@ Bugs:
   - Not sure of issue here
 
 Here's a short list of future features:
-- Process command line arguments correctly
-- Support zdl.general/zdllaunch
 - Change show cmd line to ask for launch
 - Get IWAD Map names (questionable)
 - Config file DMFlags
