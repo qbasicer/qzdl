@@ -8,7 +8,6 @@ Bugs:
   - Not sure of issue here
 
 Here's a short list of future features:
-- Change show cmd line to ask for launch
 - Get IWAD Map names (questionable)
 - Config file DMFlags
 - Store IWAD map names in config files (ie m0n=E1M1)

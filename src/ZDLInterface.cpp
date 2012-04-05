@@ -110,6 +110,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	QAction *showCommandline = actions->addAction("Show Command Line");
 	QAction *clearAllPWadsAction = actions->addAction("Clear PWAD list");
 	QAction *clearAllFieldsAction = actions->addAction("Clear all fields");
+	QAction *clearEverythingAction = actions->addAction("Clear everything");
 	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 	
 	context->addMenu(actions);
@@ -130,6 +131,7 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
 	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
+	connect(clearEverythingAction, SIGNAL(triggered()), this, SLOT(clearEverything()));
 
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
@@ -176,6 +178,19 @@ void ZDLInterface::clearAllPWads(){
 		}
 	}
 	mw->startRead();
+}
+
+void ZDLInterface::clearEverything(){
+	QString text("Warning!\n\nIf you proceed, you will lose <b>EVERYTHING</b>!\n All IWAD, PWAD, and source port settings will be wiped.\n\nWould you like to continue?");
+	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	if(btnrc != QMessageBox::Yes){
+		return;
+	}
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLConfigurationManager::setActiveConfiguration(new ZDLConf());
+	delete zconf;
+	mw->startRead();
+	
 }
 
 void ZDLInterface::clearAllFields(){
