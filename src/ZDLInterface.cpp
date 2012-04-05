@@ -171,7 +171,7 @@ void ZDLInterface::clearAllPWads(){
 		return;
 	}
 	for(int i = 0; i < section->lines.size(); i++){
-		if(section->lines[i]->getVariable().startsWith("file")){
+		if(section->lines[i]->getVariable().startsWith("file", Qt::CaseInsensitive)){
 			ZDLLine *line = section->lines[i];
 			section->lines.remove(i--);
 			delete line;

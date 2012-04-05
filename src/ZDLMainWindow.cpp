@@ -314,7 +314,7 @@ QStringList ZDLMainWindow::getArguments(){
 		
 		if (fileVctr.size() > 0){
 			for(int i = 0; i < fileVctr.size(); i++){
-				if(fileVctr[i].endsWith(".deh") || fileVctr[i].endsWith(".bex")){
+				if(fileVctr[i]->getValue().endsWith(".deh",Qt::CaseInsensitive) || fileVctr[i]->getValue().endsWith(".bex",Qt::CaseInsensitive)){
 					dhacked << fileVctr[i]->getValue();
 				}else{
 					pwads << fileVctr[i]->getValue();

@@ -90,7 +90,7 @@ int main( int argc, char **argv ){
 
 	//If the user has specified an alternative .ini
 	for(int i = 0; i < eatenArgs.size(); i++){
-		if(eatenArgs[i].endsWith(".ini")){
+		if(eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive)){
 			ZDLConfigurationManager::setConfigFileName(eatenArgs[i]);
 			eatenArgs.removeAt(i);
 			break;
@@ -107,7 +107,7 @@ int main( int argc, char **argv ){
 	bool hasZDLFile = false;
 
 	for(int i = 0; i < eatenArgs.size(); i++){
-		if(eatenArgs[i].endsWith(".zdl")){
+		if(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive)){
 			tconf->deleteSectionByName("zdl.save");
 			ZDLConf zdlFile;
 			zdlFile.readINI(eatenArgs[i]);
@@ -123,7 +123,7 @@ int main( int argc, char **argv ){
 
 
 	for(int i = 0; i < eatenArgs.size(); i++){
-		if(!(eatenArgs[i].endsWith(".zdl") || eatenArgs[i].endsWith(".ini"))){
+		if(!(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive) || eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive))){
 			addFile(eatenArgs[i], tconf);
 			eatenArgs.removeAt(i);
 			i--;
