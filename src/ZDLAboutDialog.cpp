@@ -43,6 +43,8 @@ ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
 	if(ZDL_BUILD_NUMBER > 0){
 		vbox->addWidget(new QLabel(QString("Build #: ")+QString::number(ZDL_REVISION),this));
 	}
+#if defined(ZDL_BUILD_JOB)
+	vbox->addWidget(new QLabel(QString("Build job: ")+QString(ZDL_BUILD_JOB),this));
 	vbox->addWidget(new QLabel(QString("Source: ")+QString(ZDL_SOURCE),this));
 	vbox->addWidget(new QLabel("C Version Copyright (C) BioHazard 2005",this));
 	vbox->addWidget(new QLabel("C# Version Copyright (C) QBasicer 2007",this));
