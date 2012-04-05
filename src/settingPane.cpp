@@ -76,7 +76,7 @@ void settingPane::rebuild(){
 	}
 	
 	if(warpText->text().length() > 0){
-		zconf->setValue("zdl.save", "warp", warpText->text().toStdString().c_str());
+		zconf->setValue("zdl.save", "warp", warpText->text());
 	}else{
 		zconf->deleteValue("zdl.save", "warp");
 	}

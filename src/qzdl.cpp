@@ -207,7 +207,7 @@ int main( int argc, char **argv ){
 	QString qscwd = ZDLConfigurationManager::getCurrentDirectory();
 	tconf = ZDLConfigurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
-	tconf->writeINI(ZDLConfigurationManager::getConfigFileName().toStdString().c_str());
+	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	return ret;
 }
 

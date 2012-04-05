@@ -66,11 +66,8 @@ void ZDLIWadList::rebuild(){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLNameListable* fitm = (ZDLNameListable*)itm;
 		
-		char szBuffer[256];
-		snprintf(szBuffer, 256, "i%dn", i);
-		zconf->setValue("zdl.iwads", szBuffer, fitm->getName().toStdString().c_str());
-		snprintf(szBuffer, 256, "i%df", i);
-		zconf->setValue("zdl.iwads", szBuffer, fitm->getFile().toStdString().c_str());
+		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("i"), fitm->getName());
+		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("f"), fitm->getFile());
 		
 		
 	}

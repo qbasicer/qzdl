@@ -27,23 +27,6 @@ QString chomp(QString in)
 {
 	QString ret = in.trimmed();
 	return ret;
-#if 0
-	while (in.length() > 0){
-		if (in[0] == ' ' || in[0] == '\n' || in[0] == '\r' || in[0] == '\t'){
-			in.erase(0);
-		}else{
-			break;
-		}
-	}
-	while (in.length() > 0){
-		if (in[in.length()-1] == ' ' || in[in.length()-1] == '\n' || in[in.length()-1] == '\r' || in[in.length()-1] == '\t'){
-			in.erase(in.length()-1);
-		}else{
-			break;
-		}
-	}
-	return (char*)in.c_str();
-#endif
 }
 
 int countLines(ZDLConf *cnf)

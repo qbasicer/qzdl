@@ -164,7 +164,7 @@ void ZDLAdvancedMultiplayerDialog::save(){
 	}
 	
 	if(portNo->text().length() > 0){
-		zconf->setValue("zdl.net", "port", portNo->text().toStdString().c_str());
+		zconf->setValue("zdl.net", "port", portNo->text());
 	}else{
 		if(zconf->hasValue("zdl.net","port")){
 			zconf->deleteValue("zdl.net","port");

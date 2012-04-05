@@ -420,7 +420,7 @@ void ZDLInterface::showCommandline(){
 void ZDLInterface::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
-		zconf->setValue("zdl.save", "extra", extraArgs->text().toStdString().c_str());
+		zconf->setValue("zdl.save", "extra", extraArgs->text());
 		
 	}else{
 		zconf->deleteValue("zdl.save", "extra");
