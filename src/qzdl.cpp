@@ -100,7 +100,7 @@ int main( int argc, char **argv ){
 	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
 		QString exec = argv[0];
 #if defined(Q_WS_WIN)
-		exec = QString(argv.replace("\\","/"));
+		exec = QString(exec.replace("\\","/"));
 #endif
 		QStringList path = exec.split("/");
 		path.removeLast();
