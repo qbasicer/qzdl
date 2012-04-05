@@ -98,7 +98,17 @@ int main( int argc, char **argv ){
 	}
 
 	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
-		ZDLConfigurationManager::setConfigFileName("zdl.ini");
+		QString exec = argv[0];
+#if defined(Q_WS_WIN)
+		exec = QString(argv.replace("\\","/"));
+#endif
+		QStringList path = exec.split("/");
+		path.removeLast();
+		if(QFile::exists(path.join("/")+"/zdl.ini")){
+			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
+		}else{
+			ZDLConfigurationManager::setConfigFileName("zdl.ini");
+		}
 	}
 
 	tconf->readINI(ZDLConfigurationManager::getConfigFileName());
