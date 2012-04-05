@@ -33,6 +33,9 @@ public:
 	void writeConfig();
 	virtual void newConfig();
 	virtual void rebuild();
+public slots:
+	void loadZdlFile();
+	void saveZdlFile();
 private slots:
 	void sendSignals();
 	void mclick();
@@ -44,8 +47,6 @@ private slots:
 	void showCommandline();
 	void showNewDMFlagger();
 	void exitzdl();
-	void loadZdlFile();
-	void saveZdlFile();
 	void clearAllFields();
 	void clearAllPWads();
 	void clearEverything();

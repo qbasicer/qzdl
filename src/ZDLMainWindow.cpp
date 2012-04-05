@@ -95,6 +95,16 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 
 	connect(qact2, SIGNAL(triggered()), this, SLOT(quit()));
 	
+	QAction *saveAction = new QAction(widget);
+	saveAction->setShortcut(QKeySequence::Save);
+
+	connect(saveAction, SIGNAL(triggered()), intr, SLOT(saveZdlFile()));
+
+	QAction *openAction = new QAction(widget);
+	openAction->setShortcut(QKeySequence::Open);
+
+	connect(openAction, SIGNAL(triggered()), intr, SLOT(loadZdlFile())); 
+	
 	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
 	
 }
