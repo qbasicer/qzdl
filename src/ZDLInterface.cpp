@@ -64,6 +64,7 @@ QLayout *ZDLInterface::getTopPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
 	ZDLQSplitter *split = new ZDLQSplitter(this);
+	split->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ));
 	QSplitter *rsplit = split->getSplit();
 	
 
@@ -80,6 +81,7 @@ QLayout *ZDLInterface::getTopPane(){
 QLayout *ZDLInterface::getBottomPane(){
 	QVBoxLayout *box = new QVBoxLayout();
 	QLabel *ecla = new QLabel("Extra command line arguments",this);
+	ecla->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed));
 	extraArgs = new QLineEdit(this);
 	QLayout *pan = getButtonPane();
 	layout()->setContentsMargins(0,0,0,0);
