@@ -182,7 +182,7 @@ void ZDLInterface::clearAllPWads(){
 
 void ZDLInterface::clearEverything(){
 	QString text("Warning!\n\nIf you proceed, you will lose <b>EVERYTHING</b>!\n All IWAD, PWAD, and source port settings will be wiped.\n\nWould you like to continue?");
-	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 	if(btnrc != QMessageBox::Yes){
 		return;
 	}
