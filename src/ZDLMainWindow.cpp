@@ -317,7 +317,6 @@ void ZDLMainWindow::launch(){
 
 	if(execu == NULL || cmd == NULL || work == NULL){
 		ZDLConfigurationManager::setInfobarMessage("Internal error preparing to launch",1);
-		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 		return;
 	}
 
@@ -341,6 +340,7 @@ void ZDLMainWindow::launch(){
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 	proc->start(exec, args);
+	procerr = proc->error();
 #endif
 	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
@@ -350,8 +350,6 @@ void ZDLMainWindow::launch(){
 			close();
 		}
 	}
-
-	procerr = proc->error();
 
 	// 	if(proc->state() != QProcess::NotRunning){
 	// 		std::cout << "ERROR!" << std::endl;
