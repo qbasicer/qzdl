@@ -35,9 +35,11 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 		if(url.scheme() == "file"){
 			QString path = url.path();
 #ifdef Q_WS_WIN	
-			if(path[i] == '/'){
+			LOGDATAO() << "path: " << path[i] << endl;
+			if(path[2] == ':'){
 				path.remove(0,1);
-			}	
+			}
+			LOGDATAO() << "path: " << path[i] << endl;
 #endif
 			QFileInfo urlDecoder(path);
 			LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
