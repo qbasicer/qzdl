@@ -28,7 +28,7 @@
 #include "ZDLInfoBar.h"
 #include "ZDLMainWindow.h"
 #include "ZDLFilePane.h"
-#include "settingPane.h"
+#include "ZDLSettingsPane.h"
 #include "ZDLQSplitter.h"
 #include "ZDMFlagPicker.h"
 
@@ -70,7 +70,7 @@ QLayout *ZDLInterface::getTopPane(){
 	
 
 	ZDLFilePane *fpane = new ZDLFilePane(rsplit);
-	settingPane *spane = new settingPane(rsplit);
+	ZDLSettingsPane *spane = new ZDLSettingsPane(rsplit);
 	
 	split->addChild(fpane);
 	split->addChild(spane);

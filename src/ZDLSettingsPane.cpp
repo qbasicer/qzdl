@@ -21,10 +21,10 @@
 #include <QComboBox>
 
 #include "ZDLConfigurationManager.h"
-#include "settingPane.h"
+#include "ZDLSettingsPane.h"
 
-settingPane::settingPane(QWidget *parent):ZDLWidget(parent){
-	LOGDATAO() << "New settingPane" << endl;
+ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
+	LOGDATAO() << "New ZDLSettingsPane" << endl;
 	QVBoxLayout *box = new QVBoxLayout(this);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -68,7 +68,7 @@ settingPane::settingPane(QWidget *parent):ZDLWidget(parent){
 	
 }
 
-void settingPane::rebuild(){
+void ZDLSettingsPane::rebuild(){
 	LOGDATAO() << "Saving config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(diffList->currentIndex() > 0){
@@ -136,7 +136,7 @@ void settingPane::rebuild(){
 
 }
 
-void settingPane::newConfig(){
+void ZDLSettingsPane::newConfig(){
 	LOGDATAO() << "Loading new config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){

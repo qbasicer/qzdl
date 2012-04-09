@@ -20,10 +20,10 @@
 #include <QObject>
 #include "ZDLWidget.h"
 
-class settingPane: public ZDLWidget{
+class ZDLSettingsPane: public ZDLWidget{
 Q_OBJECT
 public: 
-	settingPane( QWidget *parent=0);
+	ZDLSettingsPane( QWidget *parent=0);
 	virtual void rebuild();
 	virtual void newConfig();
 protected:
