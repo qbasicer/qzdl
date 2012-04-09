@@ -58,6 +58,7 @@ extern QDebug *zdlDebug;
 #endif
 #else
 #define LOGDATA() (*zdlDebug)
+#define LOGDATAO() (*zdlDebug)
 #define DPTR(ptr) QString("")
 #endif
 
