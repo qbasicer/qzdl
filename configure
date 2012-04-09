@@ -2987,8 +2987,8 @@ else
   use_logger=no
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if logger is disabled" >&5
-$as_echo_n "checking checking if logger is disabled... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if logger is enabled" >&5
+$as_echo_n "checking checking if logger is enabled... " >&6; }
 if test "$use_logger" = yes; then
 	bnv_try_15="echo \"DEFINES += ZDL_BLACKBOX\" >> qzdl.pro"
         { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
