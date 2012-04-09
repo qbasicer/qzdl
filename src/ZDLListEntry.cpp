@@ -5,7 +5,7 @@ ZDLListEntry::ZDLListEntry(QString originator, QString type){
 	this->type = type;
 }
 
-ZDLListEntry::ZDLListEntry(ZQWidget originator, QString type){
+ZDLListEntry::ZDLListEntry(ZDLWidget originator, QString type){
 	/* Default until I change this class */
 	Q_UNUSED(originator);
 	this->originator = "net.vectec.zdlsharp.qzdl.zqwidget";

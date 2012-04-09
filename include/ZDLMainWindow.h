@@ -22,7 +22,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLInterface.h"
 #include "ZDLSettingsPane.h"
 #include "ZDLUpdater.h"

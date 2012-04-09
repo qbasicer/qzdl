@@ -23,16 +23,16 @@
 #include <QMetaObject>
 
 
-ZDLQSplitter::ZDLQSplitter(ZQWidget *parent):ZQWidget(parent){
+ZDLQSplitter::ZDLQSplitter(ZDLWidget *parent):ZDLWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
-	//std::cout << "SPLIT: Using ZQWidget as parent" << std::endl;
+	//std::cout << "SPLIT: Using ZDLWidget as parent" << std::endl;
 	box->addWidget(split);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-ZDLQSplitter::ZDLQSplitter(QWidget *parent):ZQWidget(parent){
+ZDLQSplitter::ZDLQSplitter(QWidget *parent):ZDLWidget(parent){
 	box = new QVBoxLayout(this);
 	split = new QSplitter(this);
 	//std::cout << "SPLIT: Using QWidget as parent" << std::endl;
@@ -45,7 +45,7 @@ QSplitter *ZDLQSplitter::getSplit(){
 	return split;
 }
 
-void ZDLQSplitter::addChild(ZQWidget *child){
+void ZDLQSplitter::addChild(ZDLWidget *child){
 	split->addWidget(child);
 	//Hook the child up with our internal signal handling
 	child->setZParent(this);

@@ -18,11 +18,11 @@
  
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLSourcePortList.h"
 #include "ZDLIWadList.h"
 
-class ZDLSettingsPane: public ZQWidget{
+class ZDLSettingsPane: public ZDLWidget{
 Q_OBJECT
 public: 
 	ZDLSettingsPane(QWidget *parent);

@@ -20,12 +20,12 @@
 #define _ZDMFLAGPICKER_H_
 
 #include <QtGui>
-#include <ZQWidget.h>
+#include <ZDLWidget.h>
 
 class ZDMFlagPicker : public QDialog{
 Q_OBJECT
 	public:
-		ZDMFlagPicker(ZQWidget *parent);
+		ZDMFlagPicker(ZDLWidget *parent);
 };
 
 #endif

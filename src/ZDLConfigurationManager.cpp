@@ -38,8 +38,8 @@ void ZDLConfigurationManager::init(){
 
 ZDLConf *ZDLConfigurationManager::activeConfig;
 string ZDLConfigurationManager::cdir;
-ZQWidget* ZDLConfigurationManager::interface;
-ZQWidget* ZDLConfigurationManager::infobar;
+ZDLWidget* ZDLConfigurationManager::interface;
+ZDLWidget* ZDLConfigurationManager::infobar;
 QString ZDLConfigurationManager::filename;
 ZDLUpdater *ZDLConfigurationManager::zupper;
 ZDLConfiguration *ZDLConfigurationManager::conf;
@@ -54,10 +54,10 @@ ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::getWhy(){
 }
 
 
-void ZDLConfigurationManager::setInterface(ZQWidget *widget){
+void ZDLConfigurationManager::setInterface(ZDLWidget *widget){
 	interface  = widget;
 }
-ZQWidget* ZDLConfigurationManager::getInterface(){
+ZDLWidget* ZDLConfigurationManager::getInterface(){
 	return interface;
 }
 
@@ -74,7 +74,7 @@ void ZDLConfigurationManager::setCurrentDirectory(string dir){
 	cdir = dir;
 }
 
-void ZDLConfigurationManager::setInfobar(ZQWidget *widget){
+void ZDLConfigurationManager::setInfobar(ZDLWidget *widget){
 	infobar = widget;
 }
 
@@ -82,7 +82,7 @@ QPixmap ZDLConfigurationManager::getIcon(){
 	return QPixmap(zdlicon);
 }
 
-ZQWidget* ZDLConfigurationManager::getInfobar(){
+ZDLWidget* ZDLConfigurationManager::getInfobar(){
 	return infobar;
 }
 

@@ -23,7 +23,7 @@
 #include "ZDLConfigurationManager.h"
 #include "settingPane.h"
 
-settingPane::settingPane(QWidget *parent):ZQWidget(parent){
+settingPane::settingPane(QWidget *parent):ZDLWidget(parent){
 	LOGDATAO() << "New settingPane" << endl;
 	QVBoxLayout *box = new QVBoxLayout(this);
 	setContentsMargins(0,0,0,0);

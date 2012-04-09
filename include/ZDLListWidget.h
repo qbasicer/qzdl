@@ -22,15 +22,15 @@
 #include <QtGui>
 #include <QObject>
 #include <vector>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLListable.h"
 
 using namespace std;
 
-class ZDLListWidget: public ZQWidget{
+class ZDLListWidget: public ZDLWidget{
 	Q_OBJECT
 	public: 
-		ZDLListWidget(ZQWidget *parent);
+		ZDLListWidget(ZDLWidget *parent);
 		virtual void insert(ZDLListable *item, int index);
 		virtual int count();
 		virtual void remove(int index);

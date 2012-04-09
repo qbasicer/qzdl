@@ -21,7 +21,7 @@
 #include "ZDLListWidget.h"
 class ZDLSourcePortList : public ZDLListWidget{
 public:
-	ZDLSourcePortList(ZQWidget *parent);
+	ZDLSourcePortList(ZDLWidget *parent);
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();

@@ -21,12 +21,12 @@
 
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
-class ZDLInfoBar : public ZQWidget{
+class ZDLInfoBar : public ZDLWidget{
 Q_OBJECT
 	public: 
-		ZDLInfoBar( ZQWidget *parent=0);
+		ZDLInfoBar( ZDLWidget *parent=0);
 		void setMessage(const char* messgae, int icon);
 	protected:
 		QLabel *txtlbl;

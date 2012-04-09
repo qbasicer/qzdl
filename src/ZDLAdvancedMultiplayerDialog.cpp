@@ -20,7 +20,7 @@
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 
-ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZQWidget *parent):QDialog(parent){
+ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QDialog(parent){
 	setWindowTitle(ZDL_ENGINE_NAME " Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QGridLayout *form = new QGridLayout();

@@ -25,7 +25,7 @@
 #include <iostream>
 using namespace std;
 
-ZDLSourcePortList::ZDLSourcePortList(ZQWidget *parent): ZDLListWidget(parent){
+ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
 }
 
 void ZDLSourcePortList::newConfig(){

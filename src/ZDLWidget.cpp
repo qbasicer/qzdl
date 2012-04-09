@@ -19,37 +19,37 @@
 #include <iostream>
 #include <QtGui>
 #include <QApplication>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include <QMetaObject>
 
 
-ZQWidget::ZQWidget(ZQWidget *parent):QWidget(parent){
+ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
 	setZParent(parent);
-	//std::cout << "Using ZQWidget as parent" << std::endl;
+	//std::cout << "Using ZDLWidget as parent" << std::endl;
 	setContentsMargins(0,0,0,0);
 }
 
-void ZQWidget::setZParent(ZQWidget *parent){
+void ZDLWidget::setZParent(ZDLWidget *parent){
 	zparent = parent;
-	connect(parent, SIGNAL( buildChildren(ZQWidget*) ), this, SLOT(notifyFromParent(ZQWidget*)));
-	connect(this, SIGNAL(buildParent(ZQWidget*)), parent, SLOT(notifyFromChild(ZQWidget*)));
-	connect(parent, SIGNAL( readChildren(ZQWidget*) ), this, SLOT(readFromParent(ZQWidget*)));
-	connect(this, SIGNAL(readParent(ZQWidget*)), parent, SLOT(readFromChild(ZQWidget*)));
+	connect(parent, SIGNAL( buildChildren(ZDLWidget*) ), this, SLOT(notifyFromParent(ZDLWidget*)));
+	connect(this, SIGNAL(buildParent(ZDLWidget*)), parent, SLOT(notifyFromChild(ZDLWidget*)));
+	connect(parent, SIGNAL( readChildren(ZDLWidget*) ), this, SLOT(readFromParent(ZDLWidget*)));
+	connect(this, SIGNAL(readParent(ZDLWidget*)), parent, SLOT(readFromChild(ZDLWidget*)));
 }
 
-ZQWidget::ZQWidget(){
+ZDLWidget::ZDLWidget(){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
 	//std::cout << "Using QWidget as parent" << std::endl;
 }
 
-ZQWidget::ZQWidget(QWidget *parent):QWidget(parent){
+ZDLWidget::ZDLWidget(QWidget *parent):QWidget(parent){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
 	//std::cout << "Using QWidget as parent" << std::endl;
 }
 
-void ZQWidget::notifyFromChild(ZQWidget *origin){
+void ZDLWidget::notifyFromChild(ZDLWidget *origin){
 	if (origin != this){
 		emit buildChildren(origin);
 		emit buildParent(origin);
@@ -60,7 +60,7 @@ void ZQWidget::notifyFromChild(ZQWidget *origin){
 	}
 }
 
-void ZQWidget::notifyFromParent(ZQWidget *origin){
+void ZDLWidget::notifyFromParent(ZDLWidget *origin){
 	if (origin != this){
 		emit buildChildren(origin);
 		//fromUpstream(origin);
@@ -70,7 +70,7 @@ void ZQWidget::notifyFromParent(ZQWidget *origin){
 	}
 }
 
-void ZQWidget::readFromChild(ZQWidget *origin){
+void ZDLWidget::readFromChild(ZDLWidget *origin){
 	if (origin != this){
 		emit readChildren(origin);
 		emit readParent(origin);
@@ -80,7 +80,7 @@ void ZQWidget::readFromChild(ZQWidget *origin){
 	}
 }
 
-void ZQWidget::readFromParent(ZQWidget *origin){
+void ZDLWidget::readFromParent(ZDLWidget *origin){
 	if (origin != this){
 		emit readChildren(origin);
 		newConfig();
@@ -89,16 +89,16 @@ void ZQWidget::readFromParent(ZQWidget *origin){
 	}
 }
 
-//void ZQWidget::fromDownstream(ZQWidget *origin){
+//void ZDLWidget::fromDownstream(ZDLWidget *origin){
 //}
 
-//void ZQWidget::fromUpstream(ZQWidget *origin){
+//void ZDLWidget::fromUpstream(ZDLWidget *origin){
 //}
 
-void ZQWidget::rebuild(){
+void ZDLWidget::rebuild(){
 }
 
-void ZQWidget::newConfig(){
+void ZDLWidget::newConfig(){
 }
 
 

@@ -18,9 +18,9 @@
  
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
-class settingPane: public ZQWidget{
+class settingPane: public ZDLWidget{
 Q_OBJECT
 public: 
 	settingPane( QWidget *parent=0);

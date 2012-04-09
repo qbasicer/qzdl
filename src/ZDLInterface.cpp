@@ -38,7 +38,7 @@
 extern ZDLMainWindow *mw;
 extern QApplication *qapp;
 
-ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
+ZDLInterface::ZDLInterface(QWidget *parent):ZDLWidget(parent){
 	LOGDATAO() << "New ZDLInterface" << endl;
 	ZDLConfigurationManager::setInterface(this);
 	

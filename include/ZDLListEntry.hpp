@@ -2,7 +2,7 @@
 #define _ZLISTENTRY_HPP_
 
 #include <QtCore>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
 class ZDLListEntry {
 	public:
@@ -10,7 +10,7 @@ class ZDLListEntry {
 		/* Type is something descriptive but FQDN-like */
 		/* ie net.vectec.qzdl.lists.iwad */
 		ZDLListEntry(QString originator, QString type);
-		ZDLListEntry(ZQWidget originator, QString type);
+		ZDLListEntry(ZDLWidget originator, QString type);
 		
 		/* Be stupidly flexible and allow any data */
 		/* to be added without restricting */

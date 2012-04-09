@@ -21,16 +21,16 @@
 #define _ZQSPLIT_H_
 #include <QObject>
 #include <QtGui>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
 
-class ZDLQSplitter: public virtual ZQWidget{
+class ZDLQSplitter: public virtual ZDLWidget{
 Q_OBJECT
 	public:
-		ZDLQSplitter(ZQWidget *parent);
+		ZDLQSplitter(ZDLWidget *parent);
 		ZDLQSplitter(QWidget *parent);
 		virtual void addChild(QWidget *child);
-		virtual void addChild(ZQWidget *child);
+		virtual void addChild(ZDLWidget *child);
 		virtual QSplitter* getSplit();
 	protected:
 		QSplitter *split;

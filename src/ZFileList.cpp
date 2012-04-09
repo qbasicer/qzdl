@@ -23,7 +23,7 @@
 #include <iostream>
 using namespace std;
 
-ZFileList::ZFileList(ZQWidget *parent): ZDLListWidget(parent){
+ZFileList::ZFileList(ZDLWidget *parent): ZDLListWidget(parent){
 	LOGDATAO() << "ZFileList" << endl;
 }
 

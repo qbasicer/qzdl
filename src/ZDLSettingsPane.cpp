@@ -24,7 +24,7 @@
 #include "ZDLListWidget.h"
 #include "ZDLSettingsPane.h"
 
-ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
+ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLSettingsPane" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	

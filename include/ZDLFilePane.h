@@ -18,10 +18,10 @@
  
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZFileList.h"
 
-class ZDLFilePane: public ZQWidget{
+class ZDLFilePane: public ZDLWidget{
 Q_OBJECT
 public: 
 	ZDLFilePane( QWidget *parent=0);

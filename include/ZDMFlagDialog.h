@@ -21,13 +21,13 @@
 
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLDMFlagManager.h"
 
 class ZDMFlagDialog: public QDialog{
 Q_OBJECT
 public: 
-	ZDMFlagDialog(ZQWidget *parent=0);
+	ZDMFlagDialog(ZDLWidget *parent=0);
 	void setValue(int val);
 	void setValue2(int val);
 	int value();

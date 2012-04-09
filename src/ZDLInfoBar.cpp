@@ -26,7 +26,7 @@
 
 #include "ZDLInfoBar.h"
 
-ZDLInfoBar::ZDLInfoBar(ZQWidget *parent): ZQWidget(parent){
+ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLInfoBar" << endl;
 	QPalette p(palette());
 	normal = p.color(QPalette::Background);

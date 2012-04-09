@@ -21,12 +21,12 @@
 
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
-class ZDLMultiPane: public ZQWidget{
+class ZDLMultiPane: public ZDLWidget{
 Q_OBJECT
 public: 
-	ZDLMultiPane( ZQWidget *parent=0);
+	ZDLMultiPane( ZDLWidget *parent=0);
 	virtual void newConfig();
 	virtual void rebuild();
 private:

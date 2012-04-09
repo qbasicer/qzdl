@@ -25,7 +25,7 @@
 #include "ZDLFilePane.h"
 
 
-ZDLFilePane::ZDLFilePane(QWidget *parent):ZQWidget(parent){
+ZDLFilePane::ZDLFilePane(QWidget *parent):ZDLWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->setSpacing(2);
 

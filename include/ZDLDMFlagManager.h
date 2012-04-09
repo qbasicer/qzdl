@@ -21,7 +21,7 @@
 
 #include <QtCore>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLDMFlagCheckbox.h"
 #include <QVector>
 

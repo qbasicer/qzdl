@@ -21,7 +21,7 @@
 #include "ZDLListWidget.h"
 class ZDLIWadList : public ZDLListWidget{
 public:
-	ZDLIWadList(ZQWidget *parent);
+	ZDLIWadList(ZDLWidget *parent);
 	virtual void addButton();
 	virtual void rebuild();
 	virtual void newConfig();

@@ -19,7 +19,7 @@
 #include "ZDMFlagPicker.h"
 #include "zdlcommon.h"
 
-ZDMFlagPicker::ZDMFlagPicker(ZQWidget *parent):QDialog(parent){
+ZDMFlagPicker::ZDMFlagPicker(ZDLWidget *parent):QDialog(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QString engineName = ZDL_ENGINE_NAME;
 	setWindowTitle(engineName+" DMFlag Editor");

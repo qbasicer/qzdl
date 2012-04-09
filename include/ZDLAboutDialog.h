@@ -21,12 +21,12 @@
 
 #include <QtGui>
 #include <QObject>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 
 class ZDLAboutDialog: public QDialog{
 Q_OBJECT
 public: 
-	ZDLAboutDialog(ZQWidget *parent=0);
+	ZDLAboutDialog(ZDLWidget *parent=0);
 	protected slots:
 		void close();
 		

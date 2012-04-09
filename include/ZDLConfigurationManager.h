@@ -21,7 +21,7 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include "ZQWidget.h"
+#include "ZDLWidget.h"
 #include "ZDLUpdater.h"
 #include "ZDLConfiguration.h"
 
@@ -33,8 +33,8 @@ class ZDLConfigurationManager{
 	public:
 		enum WhyConfig {UNKNOWN, USER_SPECIFIED, USER_CONF, IN_EXEC_DIR, IN_CWD};
 		static void init();
-		static ZQWidget* getInterface();
-		static void setInterface(ZQWidget *widget);
+		static ZDLWidget* getInterface();
+		static void setInterface(ZDLWidget *widget);
 		static void setWhy(WhyConfig conf);		
 		static WhyConfig getWhy();	
 
@@ -46,8 +46,8 @@ class ZDLConfigurationManager{
 		
 		static void setCurrentDirectory(string dir);
 		static const char* getCurrentDirectory();
-		static void setInfobar(ZQWidget *zib);
-		static ZQWidget *getInfobar();
+		static void setInfobar(ZDLWidget *zib);
+		static ZDLWidget *getInfobar();
 		static QPixmap getIcon();
 		static void setInfobarMessage(const char* msg, int icon = 0);
 		static QString getConfigFileName();
@@ -56,8 +56,8 @@ class ZDLConfigurationManager{
 		static ZDLUpdater *getUpdater();
 	protected:
 		static QString filename;
-		static ZQWidget* interface;
-		static ZQWidget* infobar;
+		static ZDLWidget* interface;
+		static ZDLWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
 		static ZDLUpdater *zupper;

@@ -24,7 +24,7 @@
 
 extern QString versionString;
 
-ZDLAboutDialog::ZDLAboutDialog(ZQWidget *parent):QDialog(parent){
+ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	setWindowTitle("About "ZDL_ENGINE_NAME);
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QHBoxLayout *hbox = new QHBoxLayout();

@@ -23,7 +23,7 @@
 #include "ZDMFlagDialog.h"
 
 
-ZDLMultiPane::ZDLMultiPane(ZQWidget *parent): ZQWidget(parent){
+ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
 
 	gMode = new QComboBox(this);
