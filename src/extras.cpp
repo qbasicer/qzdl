@@ -53,7 +53,8 @@ void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* comman
 
 void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex){
 	LOGDATA() << "Registering extension " << extension << endl;
-	QString toDelete("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\").append("ext");
+	QString toDelete("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\");
+	toDelete += "ext";
 
 	// Remove old data
 	SHDeleteKey(HKEY_CURRENT_USER,toDelete.toStdWString().c_str());
@@ -62,12 +63,14 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 
 	// Add new keys
 	RegSetValue(HKEY_CLASSES_ROOT,extension.toStdWString().c_str(),REG_SZ,type.toStdWString().c_str(),type.length());
-	RegSetValue(HKEY_CLASSES_ROOT,type.toStdWString().c_str(),REG_SZ,nicetype.toStdWString().c_str(),nicetype.length());
+	RegSetValue(HKEY_CLASSES_ROOT,type.toStdWString().c_str(),REG_SZ,niceType.toStdWString().c_str(),niceType.length());
 
 	// Set up ICON
-	QString regIconPath(type).append("\\DefaultIcon");
-	QString iconLocation("").append(exec).append(QString::number(icon);
-	RegSetValue(HKEY_CLASSES_ROOT,regIconPath.toStdWString().c_str(),REG_SZ,iconLocation.toStdWString().c_str(),iconLocation.length()));
+	QString regIconPath(type);
+	regIconPath += "\\DefaultIcon";
+	QString iconLocation(exec);
+	iconLocation += "," + QString::number(icon);
+	RegSetValue(HKEY_CLASSES_ROOT,regIconPath.toStdWString().c_str(),REG_SZ,iconLocation.toStdWString().c_str(),iconLocation.length());
 
 	// Set up command
 	QString regCmdPath(type).append("\\shell\\open\\command");
