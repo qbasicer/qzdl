@@ -96,6 +96,19 @@ int main( int argc, char **argv ){
 #else
 	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD)+QString(")");
 #endif
+	LOGDATA() << "ZDL Version" << versionString << endl;
+	LOGDATA() << "Source: " << ZDL_SOURCE << endl;
+	LOGDATA() << "Build: " << ZDL_BUILD << endl;
+	LOGDATA() << "Revision: " << ZDL_REVISION << endl;
+#if defined(ZDL_BUILD_NUMBER)
+        if(ZDL_BUILD_NUMBER > 0){
+		LOGDATA() << "Build #: " << QString::number(ZDL_BUILD_NUMBER) << endl;
+        }
+#endif
+#if defined(ZDL_BUILD_JOB)
+	LOGDATA() << "Build job: " << ZDL_BUILD_JOB << endl;
+#endif
+
 	QDir cwd = QDir::current();
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
