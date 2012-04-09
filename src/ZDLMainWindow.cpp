@@ -35,6 +35,7 @@ extern QApplication *qapp;
 extern QString versionString;
 
 ZDLMainWindow::~ZDLMainWindow(){
+	LOGDATAO() << "Closing main window" << endl;
 	if(zup){
 		delete zup;
 	}
@@ -43,15 +44,19 @@ ZDLMainWindow::~ZDLMainWindow(){
 void ZDLMainWindow::manageUpdate(){
 	if(zup){
 		if (zup->hasUpdate()){
+			LOGDATAO() << "Update available" << endl;
 			ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 			ZDLConfigurationManager::setInfobarMessage("There is an update available.",2);
 			connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
+		}else{
+			LOGDATAO() << "No updates" << endl;
 		}
 	}
 }
 
 void ZDLMainWindow::newUpdate(){
 	if(zup){
+		LOGDATAO() << "Showing update message" << endl;
 		QString engine = ZDL_ENGINE_NAME;
 		QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 	}
@@ -60,6 +65,7 @@ void ZDLMainWindow::newUpdate(){
 void ZDLMainWindow::setUpdater(ZDLUpdater *zup){
 	this->zup = zup;
 	if(zup){
+		LOGDATAO() << "Set updater" << endl;
 		connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
 	}
 }
@@ -79,11 +85,13 @@ QString ZDLMainWindow::getWindowTitle(){
 	}else{
 		windowTitle += ZDLConfigurationManager::getConfigFileName();
 	}
+	LOGDATAO() << "Returning main window title " << windowTitle << endl;
 	return windowTitle;
 
 }
 
 ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
+	LOGDATAO() << "New main window " << DPTR(this) << endl;
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);
 
@@ -127,6 +135,7 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	widget->addAction(openAction);
 
 	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
+	LOGDATAO() << "Main window created." << endl;
 }
 
 void ZDLMainWindow::handleImport(){
@@ -136,33 +145,40 @@ void ZDLMainWindow::handleImport(){
 		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
 		QString currentConf = ZDLConfigurationManager::getConfigFileName();
 		if(userConfPath != currentConf){
+			LOGDATAO() << "Not currently using user conf" << endl;
 			ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 			if(zconf->hasValue("zdl.general", "donotimportthis")){
 				int ok = 0;
 				if(zconf->getValue("zdl.general", "donotimportthis", &ok) == "1"){
+					LOGDATAO() << "Don't import current config" << endl;
 					return;
 				}
 			}
 			QFile userFile(userConfPath);
 			ZDLConf userconf;
 			if(userFile.exists()){
+				LOGDATAO() << "Reading user conf" << endl;
 				userconf.readINI(userConfPath);
 			}
 			if(userconf.hasValue("zdl.general", "nouserconf")){
 				int ok = 0;
 				if(userconf.getValue("zdl.general", "nouserconf", &ok) == "1"){
+					LOGDATAO() << "Do not use user conf" << endl;
 					return;
 				}
 			}
 			if(ZDLConfigurationManager::getWhy() == ZDLConfigurationManager::USER_SPECIFIED){
+				LOGDATA() << "The user asked for this ini, don't go forward" << endl;
 				return;
 			}
 			if(userFile.size() < 10){
+				LOGDATA() << "User conf is small, assuming empty" << endl;
 				ZDLImportDialog importd(this);
 				importd.exec();
 				if(importd.result() == QDialog::Accepted){
 					switch(importd.getImportAction()){
 						case ZDLImportDialog::IMPORTNOW:
+							LOGDATAO() << "Importing now" << endl;
 							if(!userFile.exists()){
 								QStringList path = userConfPath.split("/");
 								path.removeLast();
@@ -180,9 +196,11 @@ void ZDLMainWindow::handleImport(){
 							ZDLConfigurationManager::setConfigFileName(userConfPath);
 							break;
 						case ZDLImportDialog::DONOTIMPORTTHIS:
+							LOGDATAO() << "Tagging this config as not importable" << endl;
 							zconf->setValue("zdl.general", "donotimportthis", "1");
 							break;
 						case ZDLImportDialog::NEVERIMPORT:
+							LOGDATAO() << "Setting NEVERi IMPORT" << endl;
 							userconf.setValue("zdl.general", "nouserconf", "1");
 							if(!userFile.exists()){
 								QStringList path = userConfPath.split("/");
@@ -199,6 +217,7 @@ void ZDLMainWindow::handleImport(){
 
 						case ZDLImportDialog::UNKNOWN:
 						default:
+							LOGDATAO() << "Not setting anything" << endl;
 							break;
 					}
 				}
@@ -209,6 +228,7 @@ void ZDLMainWindow::handleImport(){
 }
 
 void ZDLMainWindow::tabChange(int newTab){
+	LOGDATAO() << "Tab changed to " << newTab << endl;
 	if(newTab == 0){
 		settings->notifyFromParent(NULL);
 		intr->readFromParent(NULL);
@@ -219,11 +239,13 @@ void ZDLMainWindow::tabChange(int newTab){
 }
 
 void ZDLMainWindow::quit(){
+	LOGDATAO() << "quitting" << endl;
 	writeConfig();
 	close();
 }
 
 void ZDLMainWindow::launch(){
+	LOGDATAO() << "Launching" << endl;
 	writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 
@@ -253,6 +275,7 @@ void ZDLMainWindow::launch(){
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
+	LOGDATAO() << "Working directory: " << workingDirectory << endl;
 	// Turns on launch confirmation
 	/*QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	  if(btnrc == QMessageBox::No){
@@ -275,6 +298,7 @@ void ZDLMainWindow::launch(){
 	}
 
 	QString compose = exec + QString(" ") + args.join(" ");
+	LOGDATAO() << "Launching: " << compose << endl;
 	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
 	wcscpy(cmd,compose.toStdWString().c_str());
 	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
@@ -309,7 +333,7 @@ void ZDLMainWindow::launch(){
 	}else{
 		return;
 	}
-#endif
+#else
 	QProcess *proc = new QProcess(this);
 
 	//Set the working directory to that directory
@@ -317,10 +341,12 @@ void ZDLMainWindow::launch(){
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 	proc->start(exec, args);
+#endif
 	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
 		QString append = zconf->getValue("zdl.general", "autoclose",&stat);
 		if (append == "1" || append == "true"){
+			LOGDATAO() << "Asked to exit... closing" << endl;
 			close();
 		}
 	}
@@ -336,6 +362,7 @@ void ZDLMainWindow::launch(){
 }
 
 void ZDLMainWindow::badLaunch(){
+	LOGDATAO() << "badLaunch message box" << endl;
 	if(procerr == QProcess::FailedToStart){
 		QMessageBox::warning(NULL,"Failed to Start", "Failed to launch the application executable.",QMessageBox::Ok,QMessageBox::Ok);
 	}else if(procerr == QProcess::Crashed){
@@ -346,6 +373,7 @@ void ZDLMainWindow::badLaunch(){
 }
 
 QStringList ZDLMainWindow::getArguments(){
+	LOGDATAO() << "Getting arguments" << endl;
 	QStringList ourString;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
@@ -528,11 +556,12 @@ QStringList ZDLMainWindow::getArguments(){
 	if (zconf->hasValue("zdl.save", "extra")){
 		ourString << zconf->getValue("zdl.save", "extra", &stat);
 	}
-
+	LOGDATAO() << "args: " << ourString << endl;
 	return ourString;
 }
 
 QString ZDLMainWindow::getExecutable(){
+	LOGDATAO() << "Getting exec" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	int stat;
 	QString portName = "";
@@ -552,18 +581,21 @@ QString ZDLMainWindow::getExecutable(){
 					var = QString("p") + var + QString("f");
 					section->getRegex("^" + var + "$",nameVctr);
 					if(nameVctr.size() == 1){
+						LOGDATAO() << "Executable: " << nameVctr[0]->getValue() << endl;
 						return QString(nameVctr[0]->getValue());
 					}
 				}
 			}
 		}
 	}
+	LOGDATAO() << "No executable" << endl;
 	return QString("");
 }
 
 
 //Pass through functions.
 void ZDLMainWindow::startRead(){
+	LOGDATAO() << "Starting to read configuration" << endl;
 	intr->startRead();
 	settings->startRead();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -574,6 +606,7 @@ void ZDLMainWindow::startRead(){
 }
 
 void ZDLMainWindow::writeConfig(){
+	LOGDATAO() << "Writing configuration" << endl;
 	intr->writeConfig();
 	settings->writeConfig();
 }

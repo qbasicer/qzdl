@@ -39,6 +39,7 @@ extern ZDLMainWindow *mw;
 extern QApplication *qapp;
 
 ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
+	LOGDATAO() << "New ZDLInterface" << endl;
 	ZDLConfigurationManager::setInterface(this);
 	
 	box = new QVBoxLayout(this);
@@ -57,7 +58,7 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZQWidget(parent){
 	ZDLConfigurationManager::setInfobar(zib);
 	box->addLayout(tpane);
 	box->addLayout(bpane);
-	
+	LOGDATAO() << "Done creating interface" << endl;
 }
 
 QLayout *ZDLInterface::getTopPane(){
@@ -94,6 +95,7 @@ QLayout *ZDLInterface::getBottomPane(){
 }
 
 void ZDLInterface::exitzdl(){
+	LOGDATAO() << "Closing ZDL" << endl;
 	mw->close();
 }
 
@@ -166,6 +168,7 @@ QLayout *ZDLInterface::getButtonPane(){
 }
 
 void ZDLInterface::clearAllPWads(){
+	LOGDATAO() << "Clearing all PWads" << endl;
 	mw->writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
@@ -183,31 +186,38 @@ void ZDLInterface::clearAllPWads(){
 }
 
 void ZDLInterface::clearEverything(){
+	LOGDATAO() << "Clearing everything question" << endl;
 	QString text("Warning!\n\nIf you proceed, you will lose <b>EVERYTHING</b>!\n All IWAD, PWAD, and source port settings will be wiped.\n\nWould you like to continue?");
 	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 	if(btnrc != QMessageBox::Yes){
 		return;
 	}
+	LOGDATAO() << "They said yes, clearing..." << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLConfigurationManager::setActiveConfiguration(new ZDLConf());
 	delete zconf;
+	LOGDATAO() << "Clearing done" << endl;
 	mw->startRead();
 	
 }
 
 void ZDLInterface::clearAllFields(){
+	LOGDATAO() << "Clearing all of zdl.save" << endl;
 	mw->writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	zconf->deleteSectionByName("zdl.save");
 	mw->startRead();
+	LOGDATAO() << "Complete" << endl;
 }
 
 void ZDLInterface::showNewDMFlagger(){
+	LOGDATAO() << "New DMFlag picker" << endl;
 	ZDMFlagPicker dialog(this);
 	dialog.exec();
 }
 
 void ZDLInterface::launch(){
+	LOGDATAO() << "Launching" << endl;
 	mw->launch();
 }
 
@@ -254,6 +264,7 @@ void ZDLInterface::mclick(){
 }
 
 void ZDLInterface::ampclick(){
+	LOGDATAO() << "Advanced multiplayer opening" << endl;
 	ZDLAdvancedMultiplayerDialog *zampd = new ZDLAdvancedMultiplayerDialog(this);
 	zampd->exec();
 	delete zampd;
@@ -266,6 +277,7 @@ void ZDLInterface::sendSignals(){
 }
 
 void ZDLInterface::saveConfigFile(){
+	LOGDATAO() << "Saving config file" << endl;
 	sendSignals();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
@@ -287,6 +299,7 @@ void ZDLInterface::saveConfigFile(){
 }
 
 void ZDLInterface::loadConfigFile(){
+	LOGDATAO() << "Loading config file" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ini (*.ini)"
@@ -312,6 +325,7 @@ void ZDLInterface::loadConfigFile(){
 }
 
 void ZDLInterface::loadZdlFile(){
+	LOGDATAO() << "Loading ZDL file" << endl;
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	QFileDialog dialog(this,"Load");
@@ -349,6 +363,7 @@ void ZDLInterface::loadZdlFile(){
 }
 
 void ZDLInterface::saveZdlFile(){
+	LOGDATAO() << "Saving ZDL File" << endl;
 	sendSignals();
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
@@ -376,11 +391,13 @@ void ZDLInterface::saveZdlFile(){
 }
 
 void ZDLInterface::aboutClick(){
+	LOGDATAO() << "Opening About dialog" << endl;
 	ZDLAboutDialog zad(this);
 	zad.exec();
 }
 
 void ZDLInterface::showCommandline(){
+	LOGDATAO() << "Showing command line" << endl;
 	writeConfig();
 	
 	QString exec = mw->getExecutable();
@@ -412,12 +429,15 @@ void ZDLInterface::showCommandline(){
 	// Turns on launch confirmation
 	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	if(btnrc == QMessageBox::Yes){
+		LOGDATAO() << "Asked to launch" << endl;
 		mw->launch();
 		return;
 	}
+	LOGDATAO() << "Done" << endl;
 }
 
 void ZDLInterface::rebuild(){
+	LOGDATAO() << "Saving config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
 		zconf->setValue("zdl.save", "extra", extraArgs->text());
@@ -444,6 +464,7 @@ void ZDLInterface::bottomPaneNewConfig(){
 //The button changed the configuration, and then notifies us that we need
 //to look at the configuration to see what we need to do.
 void ZDLInterface::newConfig(){
+	LOGDATAO() << "Loading new config" << endl;
 	buttonPaneNewConfig();
 	bottomPaneNewConfig();
 	//Grab our configuration

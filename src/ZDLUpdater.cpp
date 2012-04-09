@@ -24,6 +24,7 @@
 using namespace std;
 extern QString versionString;
 ZDLUpdater::ZDLUpdater(){
+	LOGDATAO() << "New updater" << endl;
 	http = new QHttp(this);
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
 			this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
@@ -36,13 +37,16 @@ ZDLUpdater::ZDLUpdater(){
 	port = 80;
 	updateCode = 0;
 	httpGetId = 0;
+	LOGDATAO() << "Done" << endl;
 }
 
 ZDLUpdater::~ZDLUpdater(){
+	LOGDATAO() << "Destroying updater" << endl;
 	delete http;
 }
 
 void ZDLUpdater::setHost(const char* host, const int port){
+	LOGDATAO() << "setHost " << host << port << endl;
 	this->host = host;
 	this->port = port;
 }
@@ -69,6 +73,7 @@ void ZDLUpdater::fetch(){
 }
 
 void ZDLUpdater::fetch(int doAnyways){
+	LOGDATAO() << "fetching updates, doAnyways: " << doAnyways << endl;
 	Q_UNUSED(doAnyways);
 	//cout << "fetch" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -184,11 +189,12 @@ void ZDLUpdater::fetch(int doAnyways){
 #endif
 #endif
 #if defined(USE_UID)
+		LOGDATAO() << "UID: " << ZDL_UID << endl;
 		ua += "; UID:";
 		ua += ZDL_UID;
 #endif
 		ua += ")";
-		
+		LOGDATAO() << "User-Agent: " << ua << endl;
 		//cout << "User agent:" << ua.toStdString() << endl;
 		qreq.setValue("Host", this->host);
 		qreq.setValue("User-Agent", ua);
@@ -199,13 +205,16 @@ void ZDLUpdater::fetch(int doAnyways){
 }
 
 void ZDLUpdater::httpRequestFinished(int requestId, bool error){
+	LOGDATAO() << "Finished request" << endl;
 	//cout << "httpRequestFinished" << endl;
 	if (requestId != httpGetId)
+		LOGDATAO() << "Internal HTTP error" << endl;
 		return;
 	if (error){
 		//cout << "error" << endl;
 	}
 	QString str(buffer);
+	LOGDATAO() << "Got: " << str << endl;
 	//cout << "Buffer " << str.toStdString() << endl;
 	if (str == "MISMATCH"){
 		//cout << "There is an update" << endl;
@@ -240,6 +249,7 @@ void ZDLUpdater::readyRead ( const QHttpResponseHeader & resp ){
 void ZDLUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
 	//cout << "readResponseHeader" << endl;
 	errorCode = responseHeader.statusCode();
+	LOGDATAO() << "HTTP Header code: " << errorCode << endl;
 	//cout << "Error code: " << errorCode << endl;
 	if(errorCode != 200){
 		ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);	

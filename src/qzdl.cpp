@@ -25,14 +25,19 @@
 #include "ZDLMainWindow.h"
 #include "ZDLVersion.h"
 
+#if !defined(ZDL_BLACKBOX)
+#include "ZDLNullDevice.h"
+#endif
+
 QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
 
-
 static void addFile(QString file, ZDLConf* zconf){
+	LOGDATA() << "Adding " << file << " to " << (void*)zconf << endl;
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if(!section){
+		zconf->setValue("zdl.save", "file0", file);
 		return;
 	}
 	QVector<ZDLLine*> vctr;
@@ -58,7 +63,23 @@ static void addFile(QString file, ZDLConf* zconf){
 	return;
 }
 
+QDebug *zdlDebug;
+
 int main( int argc, char **argv ){
+#if defined(ZDL_BLACKBOX)
+	QFile loggingFile("zdl.log");
+	if(loggingFile.exists()){
+		loggingFile.remove();
+	}
+	loggingFile.open(QIODevice::ReadWrite);
+	zdlDebug = new QDebug(&loggingFile);
+#else
+	ZDLNullDevice nullDev;
+	zdlDebug = new QDebug(&nullDev);
+#endif
+
+	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
+
 	QApplication a( argc, argv );
 	qapp = &a;
 	QStringList args;
@@ -93,6 +114,7 @@ int main( int argc, char **argv ){
 	//If the user has specified an alternative .ini
 	for(int i = 0; i < eatenArgs.size(); i++){
 		if(eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive)){
+			LOGDATA() << "Loading command line INI configuration " << eatenArgs[i] << endl;
 			ZDLConfigurationManager::setConfigFileName(eatenArgs[i]);
 			eatenArgs.removeAt(i);
 			ZDLConfigurationManager::setWhy(ZDLConfigurationManager::USER_SPECIFIED);
@@ -111,26 +133,32 @@ int main( int argc, char **argv ){
 					conf.readINI(userConfPath);
 					if(!conf.hasValue("zdl.general","nouserconf")){
 						ZDLConfigurationManager::setConfigFileName(userConfPath);
+						LOGDATA() << "Using user-level config file at " << userConfPath << endl;
+					}else{
+						LOGDATA() << "Config file specified nouserconf" << endl;
 					}			
 				}else{
+					LOGDATA() << "User config file is small" << endl;
 				}
 			}else{
+				LOGDATA() << "User conf file doesn't exist" << endl;
 			}
 		}else{
+			LOGDATA() << "No conf yet" << endl;
 		}
 	}
 
 	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
 		QString exec = argv[0];
+		LOGDATA() << "Executable is " << exec << endl;
 #if defined(Q_WS_WIN)
 		exec = QString(exec.replace("\\","/"));
 #endif
 		QStringList path = exec.split("/");
 		path.removeLast();
 		if(QFile::exists(path.join("/")+"/zdl.ini")){
+			LOGDATA() << "Using zdl.ini at " << (path.join("/")+"/zdl.ini") << endl;
 			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
-		}else if(QFile::exists("zdl.ini")){
-			ZDLConfigurationManager::setConfigFileName("zdl.ini");
 		}
 	}
 
@@ -138,8 +166,10 @@ int main( int argc, char **argv ){
 		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 		if(conf){
 			ZDLConfigurationManager::setConfigFileName(conf->getPath(ZDLConfiguration::CONF_USER));
+			LOGDATA() << "Falling back on user config at " << conf->getPath(ZDLConfiguration::CONF_USER) << endl;
 		}else{
 			ZDLConfigurationManager::setConfigFileName("zdl.ini");
+			LOGDATA() << "No conf, going to have to use local zdl.ini" << endl;
 		}
 	}
 
@@ -150,6 +180,7 @@ int main( int argc, char **argv ){
 
 	for(int i = 0; i < eatenArgs.size(); i++){
 		if(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive)){
+			LOGDATA() << "Found a .zdl on the command line, replacing current zdl.save" << endl;
 			tconf->deleteSectionByName("zdl.save");
 			ZDLConf zdlFile;
 			zdlFile.readINI(eatenArgs[i]);
@@ -181,26 +212,33 @@ int main( int argc, char **argv ){
 	mw->startRead();
 
 	if(hasZDLFile){
+		LOGDATA() << "A .zdl file as passed as a command line option" << endl;
 		if(tconf->hasValue("zdl.general", "zdllaunch")){
 			int ok = 0;
 			QString rc = tconf->getValue("zdl.general", "zdllaunch", &ok);
 			if(rc.length() > 0){
 				if(rc.compare("1") == 0){
+					LOGDATA() << "Launching configuration NOW" << endl;
 					mw->launch();
+					LOGDATA() << "ZDL QUIT" << endl;
 					return 0;
 				}
 			}
 		}
 	}
 
-	if(zup){	
+	if(zup){
+		LOGDATA() << "Checking for updates" << endl;
 		zup->fetch();
 	}
 
 	mw->handleImport();
-
+	LOGDATA() << "-----------------------------------" << endl;
 	int ret = a.exec();
+	LOGDATA() << "-----------------------------------" << endl;
+	LOGDATA() << "Starting shutdown" << endl;
 	if (ret != 0){
+		LOGDATA() << "ZDL QUIT, ERROR CONDITION" << endl;
 		return ret;
 	}
 	mw->writeConfig();
@@ -208,6 +246,7 @@ int main( int argc, char **argv ){
 	tconf = ZDLConfigurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
+	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;
 }
 

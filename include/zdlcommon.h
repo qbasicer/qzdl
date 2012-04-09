@@ -42,4 +42,24 @@ using namespace std;
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
 #define ZDL_ENGINE_NAME		"ZDLSharp"
 #define ZDL_UID				"XXXX-XXXX-XXXX-XXXX"
+
+extern QDebug *zdlDebug;
+
+
+#if defined(ZDL_BLACKBOX)
+#include <QtCore>
+#define LOGDATA() (*zdlDebug) << (QDateTime::currentDateTime().toString("[yyyy:MM:dd/hh:mm:ss.zzz]").append("@").append(__PRETTY_FUNCTION__).append("@").append(__FILE__).append(":").append(QString::number(__LINE__)).append("\t"))
+#define LOGDATAO() (*zdlDebug) << (QDateTime::currentDateTime().toString("[yyyy:MM:dd/hh:mm:ss.zzz]").append("@").append(__PRETTY_FUNCTION__).append("@").append(__FILE__).append(":").append(QString::number(__LINE__)).append("#this=").append(DPTR(this)).append("\t"))
+#if UINTPTR_MAX == 0xffffffff
+#warning 32bit
+#define DPTR(ptr) QString("0x").append(QString("%1").arg((qulong)ptr, 0, 8, 16)
+#else
+#define DPTR(ptr) QString("0x").append(QString::number((qulonglong)ptr,16))
+#endif
+#else
+#define LOGDATA() (*zdlDebug)
+#define DPTR(ptr) QString("")
+#endif
+
+
 #endif

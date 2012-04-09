@@ -24,12 +24,14 @@
 using namespace std;
 
 ZFileList::ZFileList(ZQWidget *parent): ZDLListWidget(parent){
+	LOGDATAO() << "ZFileList" << endl;
 }
 
 void ZFileList::newDrop(QList<QUrl> urlList){
-	
+	LOGDATAO() << "newDrop" << endl;	
 	for (int i = 0; i < urlList.size() && i < 32; ++i) {
 		QUrl url = urlList.at(i);
+		LOGDATAO() << "url " << i << "=" << url.toString() << endl;
 		if(url.scheme() == "file"){
 			QString path = url.path();
 #ifdef Q_WS_WIN	
@@ -38,6 +40,7 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 			}	
 #endif
 			QFileInfo urlDecoder(path);
+			LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
 			ZFileListable *zList = new ZFileListable(pList, 1001, urlDecoder.absoluteFilePath());
 			insert(zList, -1);
 		}
@@ -45,6 +48,7 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 }
 
 void ZFileList::newConfig(){
+	LOGDATAO() << "Reading new config" << endl;
 	pList->clear();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
@@ -60,6 +64,7 @@ void ZFileList::newConfig(){
 }
 
 void ZFileList::rebuild(){
+	LOGDATAO() << "Saving config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if (section){
@@ -83,6 +88,7 @@ void ZFileList::rebuild(){
 }
 
 void ZFileList::addButton(){
+	LOGDATAO() << "Adding new file" << endl;
 	QStringList filters;
 	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
          << "WAD Files (*.wad)"
@@ -99,6 +105,7 @@ void ZFileList::addButton(){
 	if(dialog.exec()){
 		fileNames = dialog.selectedFiles();
 		for(int i = 0; i < fileNames.size(); i++){
+			LOGDATAO() << "Adding file " << fileNames[i] << endl;
 			ZFileListable *zList = new ZFileListable(pList, 1001, fileNames[i]);
 			insert(zList, -1);
 		}

@@ -614,6 +614,7 @@ ac_user_opts='
 enable_option_checking
 enable_updater
 enable_importer
+enable_logger
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1239,6 +1240,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-updater       Disable the Vectec Auto Updater
   --disable-importer       Disable configuration import dialog
+ --enable-logger         Enable the data logger
 
 Some influential environment variables:
   CC          C compiler command
@@ -2956,13 +2958,39 @@ fi
 if test "${enable_importer+set}" = set; then :
   enableval=$enable_importer; use_import=no
 else
-  is_import=yes
+  use_import=yes
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if importer is disabled" >&5
 $as_echo_n "checking checking if importer is disabled... " >&6; }
 if test "$use_updater" = no; then
         bnv_try_15="echo \"DEFINES += NO_IMPORT\" >> qzdl.pro"
+        { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
+  (eval $bnv_try_15) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+        if test "$ac_status" != 0; then
+                as_fn_error $? "error appending to file" "$LINENO" 5
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+# Check whether --enable-logger was given.
+if test "${enable_logger+set}" = set; then :
+  enableval=$enable_logger; use_logger=yes
+else
+  use_logger=no
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if logger is disabled" >&5
+$as_echo_n "checking checking if logger is disabled... " >&6; }
+if test "$use_logger" = yes; then
+	bnv_try_15="echo \"DEFINES += ZDL_BLACKBOX\" >> qzdl.pro"
         { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
   (eval $bnv_try_15) 2>&5
   ac_status=$?

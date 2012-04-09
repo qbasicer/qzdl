@@ -25,6 +25,7 @@
 #include "ZDLSettingsPane.h"
 
 ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZQWidget(parent){
+	LOGDATAO() << "New ZDLSettingsPane" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	
 	QVBoxLayout *iwadl = new QVBoxLayout();
@@ -190,18 +191,22 @@ void ZDLSettingsPane::newConfig(){
 }
 
 void ZDLSettingsPane::checkNow(){
+	LOGDATAO() << "checking for updates" << endl;
 	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
 	if(zup){
+		
 		zup->fetch(1);
 	}
 }
 
 void ZDLSettingsPane::startRead(){
+	LOGDATAO() << "Reading new configuration" << endl;
 	emit readChildren(this);
 	newConfig();
 }
 
 void ZDLSettingsPane::writeConfig(){
+	LOGDATAO() << "Writing configuration" << endl;
 	emit buildChildren(this);
 	rebuild();
 }

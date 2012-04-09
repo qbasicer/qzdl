@@ -24,6 +24,7 @@
 #include "settingPane.h"
 
 settingPane::settingPane(QWidget *parent):ZQWidget(parent){
+	LOGDATAO() << "New settingPane" << endl;
 	QVBoxLayout *box = new QVBoxLayout(this);
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -63,11 +64,12 @@ settingPane::settingPane(QWidget *parent):ZQWidget(parent){
 	diffList->addItem("Medium");
 	diffList->addItem("Hard");
 	diffList->addItem("V. Hard");
-
+	LOGDATAO() << "Done" << endl;
 	
 }
 
 void settingPane::rebuild(){
+	LOGDATAO() << "Saving config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(diffList->currentIndex() > 0){
 		zconf->setValue("zdl.save", "skill", diffList->currentIndex());
@@ -135,6 +137,7 @@ void settingPane::rebuild(){
 }
 
 void settingPane::newConfig(){
+	LOGDATAO() << "Loading new config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
