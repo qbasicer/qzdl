@@ -53,7 +53,7 @@ AC_MSG_RESULT(yes)
 
 AC_MSG_CHECKING(static link libgcc)
 bnv_try_15="echo \"win32 {\" >> qzdl.pro"
-bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc -g\" >> qzdl.pro"
+bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc -g -lshlwapi\" >> qzdl.pro"
 bnv_try_17="echo \"RC_FILE = res/zdl.rc\" >> qzdl.pro"
 bnv_try_18="echo \"}\" >> qzdl.pro"
 
