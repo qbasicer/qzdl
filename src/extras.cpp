@@ -46,28 +46,36 @@ int countLines(ZDLConf *cnf)
 #include <direct.h>
 #include <shlwapi.h>
 
+void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex);
 void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* command,int icon){
-	int i=0;
-	char *tmp=0,*tmp2=0;
-	i=strlen(command)+strlen(exe)+MAX_PATH;
-	memset((tmp=malloc(i*sizeof(char))),0,i*sizeof(char));
-	memset((tmp2=malloc(i*sizeof(char))),0,i*sizeof(char));
-	// Delete the old extensions
-	snprintf(tmp,i,"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\%s",ext);
-	SHDeleteKey(HKEY_CURRENT_USER,tmp);
-	SHDeleteKey(HKEY_CLASSES_ROOT,ext);
-	SHDeleteKey(HKEY_CLASSES_ROOT,type);
+	RegisterFileTypeQt(QString(ext), QString(type), QString(nicetype), QString(exe), QString(command), icon);
+}
+
+void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex){
+	LOGDATA() << "Registering extension " << extension << endl;
+	QString toDelete("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\").append("ext");
+
+	// Remove old data
+	SHDeleteKey(HKEY_CURRENT_USER,toDelete.toStdWString().c_str());
+	SHDeleteKey(HKEY_CLASSES_ROOT,extension.toStdWString().c_str());
+	SHDeleteKey(HKEY_CLASSES_ROOT,type.toStdWString().c_str());
+
 	// Add new keys
-	RegSetValue(HKEY_CLASSES_ROOT,ext,REG_SZ,type,strlen(type));
-	RegSetValue(HKEY_CLASSES_ROOT,type,REG_SZ,nicetype,strlen(nicetype));
-	snprintf(tmp,i,"%s\\DefaultIcon",type);
-	snprintf(tmp2,i,"%s,%d",_pgmptr,icon);
-	RegSetValue(HKEY_CLASSES_ROOT,tmp,REG_SZ,tmp2,strlen(tmp2));
-	snprintf(tmp,i,"%s\\shell\\open\\command",type);
-	snprintf(tmp2,i,"\"%s\" %s",exe,command);
-	RegSetValue(HKEY_CLASSES_ROOT,tmp,REG_SZ,tmp2,strlen(tmp2));
-	// Free crap
-	free(tmp);free(tmp2);
+	RegSetValue(HKEY_CLASSES_ROOT,extension.toStdWString().c_str(),REG_SZ,type.toStdWString().c_str(),type.length());
+	RegSetValue(HKEY_CLASSES_ROOT,type.toStdWString().c_str(),REG_SZ,nicetype.toStdWString().c_str(),nicetype.length());
+
+	// Set up ICON
+	QString regIconPath(type).append("\\DefaultIcon");
+	QString iconLocation("").append(exec).append(QString::number(icon);
+	RegSetValue(HKEY_CLASSES_ROOT,regIconPath.toStdWString().c_str(),REG_SZ,iconLocation.toStdWString().c_str(),iconLocation.length()));
+
+	// Set up command
+	QString regCmdPath(type).append("\\shell\\open\\command");
+	QString command("\"");
+	command += exe + "\" " + command;
+	RegSetValue(HKEY_CLASSES_ROOT,regCmdPath.toStdWString().c_str(),REG_SZ,command.toStdWString().c_str(), command.length());
+
+	//Done
 }
 
 
