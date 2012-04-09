@@ -63,4 +63,8 @@ extern QDebug *zdlDebug;
 #endif
 
 
+#if defined(Q_WS_WIN)
+extern void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* command,int icon);
+#endif
+
 #endif
