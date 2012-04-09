@@ -103,7 +103,7 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	QTabWidget *widget = new QTabWidget(this);
 
 	intr = new ZDLInterface(this);
-	settings = new ZDLSettingsPane(this);
+	settings = new ZDLSettingsTab(this);
 
 	setCentralWidget(widget);
 	widget->addTab(intr, "Main");

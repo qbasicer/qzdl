@@ -22,10 +22,10 @@
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
-#include "ZDLSettingsPane.h"
+#include "ZDLSettingsTab.h"
 
-ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZDLWidget(parent){
-	LOGDATAO() << "New ZDLSettingsPane" << endl;
+ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
+	LOGDATAO() << "New ZDLSettingsTab" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	
 	QVBoxLayout *iwadl = new QVBoxLayout();
@@ -81,7 +81,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent): ZDLWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-void ZDLSettingsPane::rebuild(){
+void ZDLSettingsTab::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 #if !defined(NO_UPDATER)
 	ZDLSection *section = zconf->getSection("zdl.net");
@@ -122,7 +122,7 @@ void ZDLSettingsPane::rebuild(){
 	}
 }
 
-void ZDLSettingsPane::newConfig(){
+void ZDLSettingsTab::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 #if !defined(NO_UPDATER)
 	ZDLSection *section = zconf->getSection("zdl.net");
@@ -190,7 +190,7 @@ void ZDLSettingsPane::newConfig(){
 	
 }
 
-void ZDLSettingsPane::checkNow(){
+void ZDLSettingsTab::checkNow(){
 	LOGDATAO() << "checking for updates" << endl;
 	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
 	if(zup){
@@ -199,13 +199,13 @@ void ZDLSettingsPane::checkNow(){
 	}
 }
 
-void ZDLSettingsPane::startRead(){
+void ZDLSettingsTab::startRead(){
 	LOGDATAO() << "Reading new configuration" << endl;
 	emit readChildren(this);
 	newConfig();
 }
 
-void ZDLSettingsPane::writeConfig(){
+void ZDLSettingsTab::writeConfig(){
 	LOGDATAO() << "Writing configuration" << endl;
 	emit buildChildren(this);
 	rebuild();
