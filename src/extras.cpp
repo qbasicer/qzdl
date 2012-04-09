@@ -69,14 +69,15 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 	QString regIconPath(type);
 	regIconPath += "\\DefaultIcon";
 	QString iconLocation(exec);
-	iconLocation += "," + QString::number(icon);
+	iconLocation += "," + QString::number(iconIndex);
 	RegSetValue(HKEY_CLASSES_ROOT,regIconPath.toStdWString().c_str(),REG_SZ,iconLocation.toStdWString().c_str(),iconLocation.length());
 
 	// Set up command
-	QString regCmdPath(type).append("\\shell\\open\\command");
-	QString command("\"");
-	command += exe + "\" " + command;
-	RegSetValue(HKEY_CLASSES_ROOT,regCmdPath.toStdWString().c_str(),REG_SZ,command.toStdWString().c_str(), command.length());
+	QString regCmdPath(type);
+	type += "\\shell\\open\\command";
+	QString cmd("\"");
+	command += exec + "\" " + command;
+	RegSetValue(HKEY_CLASSES_ROOT,regCmdPath.toStdWString().c_str(),REG_SZ,cmd.toStdWString().c_str(), cmd.length());
 
 	//Done
 }
