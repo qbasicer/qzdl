@@ -2963,7 +2963,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if importer is disabled" >&5
 $as_echo_n "checking checking if importer is disabled... " >&6; }
-if test "$use_updater" = no; then
+if test "$use_importer" = no; then
         bnv_try_15="echo \"DEFINES += NO_IMPORT\" >> qzdl.pro"
         { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
   (eval $bnv_try_15) 2>&5
