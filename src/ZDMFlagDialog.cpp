@@ -29,8 +29,8 @@ ZDMFlagDialog::ZDMFlagDialog(ZQWidget *parent):QDialog(parent){
 	QVBoxLayout *lbox = new QVBoxLayout();
 	QVBoxLayout *rbox = new QVBoxLayout();
 	
-	dmflag = new ZDMFlagManager(this);
-	dmflag2 = new ZDMFlagManager(this);
+	dmflag = new ZDLDMFlagManager(this);
+	dmflag2 = new ZDLDMFlagManager(this);
 	
 	QGroupBox *gDMFlagsL = new QGroupBox("DMFLAGS",this);
 	QGroupBox *gDMFlagsR = new QGroupBox("DMFLAGS (Cont.)",this);

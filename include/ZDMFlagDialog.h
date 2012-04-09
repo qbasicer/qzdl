@@ -22,7 +22,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZQWidget.h"
-#include "ZDMFlagManager.h"
+#include "ZDLDMFlagManager.h"
 
 class ZDMFlagDialog: public QDialog{
 Q_OBJECT
@@ -39,8 +39,8 @@ private slots:
 	void dmflag2Changed(int value);
 		
 protected:
-	ZDMFlagManager *dmflag;
-	ZDMFlagManager *dmflag2;
+	ZDLDMFlagManager *dmflag;
+	ZDLDMFlagManager *dmflag2;
 	QLineEdit *txtDMFlag;
 	QLineEdit *txtDMFlag2;
 };

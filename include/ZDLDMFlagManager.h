@@ -25,10 +25,10 @@
 #include "ZDLDMFlagCheckbox.h"
 #include <QVector>
 
-class ZDMFlagManager: public QObject{
+class ZDLDMFlagManager: public QObject{
 Q_OBJECT
 	public: 
-		ZDMFlagManager(QWidget *parent=0);
+		ZDLDMFlagManager(QWidget *parent=0);
 		void addCheckbox(ZDLDMFlagCheckbox* box);
 		int getValue();
 		void setValue(int value);

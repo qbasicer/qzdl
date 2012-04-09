@@ -16,28 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include "ZDMFlagManager.h"
+#include "ZDLDMFlagManager.h"
 
-ZDMFlagManager::ZDMFlagManager(QWidget *parent) :QObject(parent){
+ZDLDMFlagManager::ZDLDMFlagManager(QWidget *parent) :QObject(parent){
 }
 
-void ZDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
+void ZDLDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
 	connect(box,SIGNAL(stateChanged(int)),this,SLOT(stateChanged(int)));
 	checks.append(box);
 }
 
-void ZDMFlagManager::stateChanged(int value){
+void ZDLDMFlagManager::stateChanged(int value){
 	Q_UNUSED(value);
 	int val = getValue();
 	emit valueChanged(val);
 }
 
-void ZDMFlagManager::forceRecalc(){
+void ZDLDMFlagManager::forceRecalc(){
 	int val = getValue();
 	emit valueChanged(val);
 }
 
-int ZDMFlagManager::getValue(){
+int ZDLDMFlagManager::getValue(){
 	int val = 0;
 	for(int i = 0; i < checks.size(); i++){
 		val = val | checks[i]->getValue();
@@ -45,7 +45,7 @@ int ZDMFlagManager::getValue(){
 	return val;
 }
 
-void ZDMFlagManager::setValue(int value){
+void ZDLDMFlagManager::setValue(int value){
 	for(int i = 0; i < checks.size(); i++){
 		checks[i]->setValue(value);
 	}
