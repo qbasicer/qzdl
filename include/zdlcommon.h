@@ -64,7 +64,16 @@ extern QDebug *zdlDebug;
 
 
 #if defined(Q_WS_WIN)
+#define ASSOCIATE_FILETYPES_AVAILBLE
 extern void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* command,int icon);
+extern void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex);
+#define ASSOCIATE_FILETYPES() {\
+		QString rawExecutablePath = ZDLConfigurationManager::getExec().replace("/","\\");\\
+		RegisterFileTypeQt(".zdl", "ZDL.SaveFile", "ZDL Saved Configuration File", rawExecutablePath, "\"%1\"", 1);\
+	}
+#else
+//Do nothing
+#define ASSOCIATE_FILETYPES() {}
 #endif
 
 #endif

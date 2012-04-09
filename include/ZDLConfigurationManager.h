@@ -54,7 +54,13 @@ class ZDLConfigurationManager{
 		static void setConfigFileName(QString name);
 		static void setUpdater(ZDLUpdater *zup);
 		static ZDLUpdater *getUpdater();
+		static QStringList getArgv();
+		static void setArgv(QStringList args);
+		static QString getExec();
+		static void setExec(QString execu);
 	protected:
+		static QString exec;
+		static QStringList argv;
 		static QString filename;
 		static ZDLWidget* interface;
 		static ZDLWidget* infobar;

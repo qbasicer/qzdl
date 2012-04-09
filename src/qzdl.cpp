@@ -86,6 +86,17 @@ int main( int argc, char **argv ){
 	for(int i = 1; i < argc; i++){
 		args << QString(argv[i]);
 	}
+	ZDLConfigurationManager::setArgv(args);
+	{
+		QString execuatble(argv[0]);
+#if defined(Q_WS_WIN)
+		execuatble.replace("\\", "/");
+#endif
+		QFileInfo fullPath(execuatble);
+		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
+		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
+	}
+
 
 #if defined(Q_WS_WIN)
 	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
@@ -162,11 +173,7 @@ int main( int argc, char **argv ){
 	}
 
 	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
-		QString exec = argv[0];
-		LOGDATA() << "Executable is " << exec << endl;
-#if defined(Q_WS_WIN)
-		exec = QString(exec.replace("\\","/"));
-#endif
+		QString exec = ZDLConfigurationManager::getExec();
 		QStringList path = exec.split("/");
 		path.removeLast();
 		if(QFile::exists(path.join("/")+"/zdl.ini")){
