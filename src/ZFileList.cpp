@@ -17,7 +17,7 @@
  */
  
 #include "ZFileList.h"
-#include "ZFileListable.h"
+#include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
 
 #include <iostream>
@@ -43,7 +43,7 @@ void ZFileList::newDrop(QList<QUrl> urlList){
 #endif
 			QFileInfo urlDecoder(path);
 			LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
-			ZFileListable *zList = new ZFileListable(pList, 1001, urlDecoder.absoluteFilePath());
+			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, urlDecoder.absoluteFilePath());
 			insert(zList, -1);
 		}
 	}
@@ -59,7 +59,7 @@ void ZFileList::newConfig(){
 		section->getRegex("^file[0-9]+$", vctr);
 		//cout << "I got " << vctr.size() << " matches!" << endl;
 		for(int i = 0; i < vctr.size(); i++){
-			ZFileListable *zList = new ZFileListable(pList, 1001, vctr[i]->getValue());
+			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, vctr[i]->getValue());
 			insert(zList, -1);
 		}
 	}
@@ -81,7 +81,7 @@ void ZFileList::rebuild(){
 	//cout << "Building lines" << endl;
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
-		ZFileListable* fitm = (ZFileListable*)itm;
+		ZDLFileListable* fitm = (ZDLFileListable*)itm;
 		QString name = QString("file").append(QString::number(i));
 		zconf->setValue("zdl.save", name, fitm->getFile());
 	
@@ -108,7 +108,7 @@ void ZFileList::addButton(){
 		fileNames = dialog.selectedFiles();
 		for(int i = 0; i < fileNames.size(); i++){
 			LOGDATAO() << "Adding file " << fileNames[i] << endl;
-			ZFileListable *zList = new ZFileListable(pList, 1001, fileNames[i]);
+			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
 			insert(zList, -1);
 		}
 
