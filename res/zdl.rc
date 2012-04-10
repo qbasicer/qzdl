@@ -1,1 +1,5 @@
-IDI_ICON1               ICON    DISCARDABLE     "ico_icon.ico"
+ICO_ICON ICON DISCARDABLE "ico_icon.ico"
+ICO_SAVE ICON DISCARDABLE "ico_save.ico"
+ICO_WAD ICON DISCARDABLE "ico_wad.ico"
+ICO_PATCH ICON DISCARDABLE "ico_patch.ico"
+ICO_ZDL ICON DISCARDABLE "ico_zdl.ico"

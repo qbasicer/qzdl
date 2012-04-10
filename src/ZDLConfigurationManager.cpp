@@ -44,6 +44,24 @@ QString ZDLConfigurationManager::filename;
 ZDLUpdater *ZDLConfigurationManager::zupper;
 ZDLConfiguration *ZDLConfigurationManager::conf;
 ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::why;
+QStringList ZDLConfigurationManager::argv;
+QString ZDLConfigurationManager::exec;
+
+void ZDLConfigurationManager::setExec(QString execu){
+	ZDLConfigurationManager::exec = execu;
+}
+
+QString ZDLConfigurationManager::getExec(){
+	return ZDLConfigurationManager::exec;
+}
+
+QStringList ZDLConfigurationManager::getArgv(){
+	return ZDLConfigurationManager::argv;
+}
+
+void ZDLConfigurationManager::setArgv(QStringList args){
+	ZDLConfigurationManager::argv = args;
+}
 
 void ZDLConfigurationManager::setWhy(ZDLConfigurationManager::WhyConfig conf){
 	ZDLConfigurationManager::why = conf;
