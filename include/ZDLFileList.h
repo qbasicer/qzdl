@@ -19,9 +19,9 @@
 #ifndef _ZFILELIST_H_
 #define _ZFILELIST_H_
 #include "ZDLListWidget.h"
-class ZFileList : public ZDLListWidget{
+class ZDLFileList : public ZDLListWidget{
 	public:
-		ZFileList(ZDLWidget *parent);
+		ZDLFileList(ZDLWidget *parent);
 		virtual void addButton();
 		virtual void rebuild();
 		virtual void newConfig();
