@@ -59,10 +59,19 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	
 	launchClose = new QCheckBox("Close on launch",this);
 	pathQuote = new QCheckBox("Quote paths",this);
-	launchZDL = new QCheckBox("Automatically launch .ZDL Files", this);
 	sections->addWidget(alwaysArgs);
+
+	QHBoxLayout *fileassoc = new QHBoxLayout();
+	launchZDL = new QCheckBox("Launch *.ZDL files transparently", this);
+	fileassoc->addWidget(launchZDL);
+
+#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+	QPushButton *assoc = new QPushButton("Associations", this);
+	fileassoc->addWidget(assoc);
+#endif
+	
+	sections->addLayout(fileassoc);
 	sections->addLayout(lrpane);
-	sections->addWidget(launchZDL);
 	sections->addWidget(launchClose);
 	sections->addWidget(pathQuote);
 #if !defined(NO_UPDATER)	
