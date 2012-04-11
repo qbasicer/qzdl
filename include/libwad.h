@@ -14,13 +14,16 @@ class DoomWad {
 		WadLump *getLump(int index);
 		WadLump *getLumpByName(QString name);
 		bool addLumps(QList<WadLump*> lumps, DoomWad::AddBehaviour behaviour = DoomWad::APPEND_FIXUP);
+		QStringList getLumpNames();
 	protected:
 		int numLumps;
 		int directoryStart;
 		QIODevice *dev;
+		QStringList lumpnames;
 };
 
-class WadLump {
+// This certainly won't compile for now
+class WadLump : public QIODevice{
 	public:
 		QString getName();
 		int getSize();
