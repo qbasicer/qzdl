@@ -76,4 +76,7 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define ASSOCIATE_FILETYPES() {}
 #endif
 
+// Temporarily enable this on all platforms
+#define ASSOCIATE_FILETYPES_AVAILBLE
+
 #endif
