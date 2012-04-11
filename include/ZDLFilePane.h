@@ -19,7 +19,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
-#include "ZFileList.h"
+#include "ZDLFileList.h"
 
 class ZDLFilePane: public ZDLWidget{
 Q_OBJECT
@@ -28,5 +28,5 @@ public:
 	void rebuild();
 private:
 	
-	ZFileList *fList;	
+	ZDLFileList *fList;	
 };

@@ -16,19 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#ifndef _ZFILELIST_H_
-#define _ZFILELIST_H_
-#include "ZDLListWidget.h"
-class ZFileList : public ZDLListWidget{
-	public:
-		ZFileList(ZDLWidget *parent);
-		virtual void addButton();
-		virtual void rebuild();
-		virtual void newConfig();
-		virtual void newDrop(QList<QUrl> urlList);
-		
 
-};
+#include "ZDLListable.h"
+#include "ZDLFileListable.h"
+#include <string>
+#include <QFileInfo>
 
-#endif
+using namespace std;
+
+ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLListable(parent, type){
+	QFileInfo qfile(file);
+	QString cname = qfile.fileName();
+	QString list = QString("%1 [%2]").arg(cname).arg(file);
+	setName(list);
+	fileName = file;
+}
+
+QString ZDLFileListable::getFile(){
+	return fileName;
+}
+	
+
 
