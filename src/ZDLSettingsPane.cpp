@@ -153,6 +153,8 @@ void ZDLSettingsPane::newConfig(){
 			diffList->setCurrentIndex(0);
 		}
 	
+	}else{
+		diffList->setCurrentIndex(0);
 	}
 	
 	if(zconf->hasValue("zdl.save", "warp")){
