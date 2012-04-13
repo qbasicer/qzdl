@@ -53,6 +53,8 @@ void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* comman
 
 void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex){
 	LOGDATA() << "Registering extension " << extension << endl;
+	LOGDATA() << "Type:" << type << ", niceType:" << niceType << " exec:" << exec << " command:" << command << " iconIndex:" << iconIndex << endl;
+
 	QString toDelete("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\");
 	toDelete += "ext";
 
