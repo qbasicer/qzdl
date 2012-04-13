@@ -62,10 +62,16 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 	SHDeleteKey(HKEY_CURRENT_USER,toDelete.toStdWString().c_str());
 	SHDeleteKey(HKEY_CLASSES_ROOT,extension.toStdWString().c_str());
 	SHDeleteKey(HKEY_CLASSES_ROOT,type.toStdWString().c_str());
+	LOGDATA() << "Deleting HKEY_CURRENT_USER\\" << toDelete << endl;
+	LOGDATA() << "Deleting HKEY_CLASSES_ROOT\\" << extension << endl;
+	LOGDATA() << "Deleting HKEY_CLASSES_ROOT\\" << type << endl;
 
 	// Add new keys
 	RegSetValue(HKEY_CLASSES_ROOT,extension.toStdWString().c_str(),REG_SZ,type.toStdWString().c_str(),type.length());
 	RegSetValue(HKEY_CLASSES_ROOT,type.toStdWString().c_str(),REG_SZ,niceType.toStdWString().c_str(),niceType.length());
+
+	LOGDATA() << "Setting HKEY_CLASSES_ROOT\\" << extension << " to " << type << endl;
+	LOGDATA() << "Setting HKEY_CLASSES_ROOT\\" << type << " to " << niceType << endl;
 
 	// Set up ICON
 	QString regIconPath(type);
@@ -74,12 +80,15 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 	iconLocation += "," + QString::number(iconIndex);
 	RegSetValue(HKEY_CLASSES_ROOT,regIconPath.toStdWString().c_str(),REG_SZ,iconLocation.toStdWString().c_str(),iconLocation.length());
 
+	LOGDATA() << "Setting HKEY_CLASSES_ROOT\\" << regIconPath << " to " << iconLocation << endl;
+
 	// Set up command
 	QString regCmdPath(type);
 	type += "\\shell\\open\\command";
 	QString cmd("\"");
-	command += exec + "\" " + command;
+	cmd += exec + "\" " + command;
 	RegSetValue(HKEY_CLASSES_ROOT,regCmdPath.toStdWString().c_str(),REG_SZ,cmd.toStdWString().c_str(), cmd.length());
+	LOGDATA() << "Setting HKEY_CLASSES_ROOT\\" << regCmdPath << " to " << cmd << endl;
 
 	//Done
 }
