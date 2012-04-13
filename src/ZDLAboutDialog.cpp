@@ -87,6 +87,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 		  box->addWidget(systemConf);*/
 
 		QLabel *userConf = new QLabel("User Configuration File: "+userConfPath,this);
+		userConf->setCursor(Qt::IBeamCursor);
 		userConf->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
 		box->addWidget(userConf);
