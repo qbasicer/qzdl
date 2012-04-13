@@ -1,4 +1,6 @@
+#include "ZDLConfigurationManager.h"
 #include "ZDLFileAssociations.h"
+
 #include "zdlcommon.h"
 
 class ZDLButtonGroup {
