@@ -7,6 +7,7 @@ class ZDLFileAssociations : public QDialog {
 	Q_OBJECT
 	public:
 		ZDLFileAssociations(QWidget *parent);
+		virtual ~ZDLFileAssociations();
 	protected slots:
 		void applyChecks();
 	protected:
