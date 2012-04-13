@@ -84,7 +84,7 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 
 	// Set up command
 	QString regCmdPath(type);
-	type += "\\shell\\open\\command";
+	regCmdPath += "\\shell\\open\\command";
 	QString cmd("\"");
 	cmd += exec + "\" " + command;
 	RegSetValue(HKEY_CLASSES_ROOT,regCmdPath.toStdWString().c_str(),REG_SZ,cmd.toStdWString().c_str(), cmd.length());
