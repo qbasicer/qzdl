@@ -31,7 +31,8 @@ public:
 	void startRead();
 	void writeConfig();
 protected slots:
-	void checkNow();	
+	void checkNow();
+	void fileAssociations();
 private:
 	QLineEdit *alwaysArgs;
 	QCheckBox *launchClose;

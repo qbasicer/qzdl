@@ -24,6 +24,10 @@
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
 
+#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+#include "ZDLFileAssociations.h"
+#endif
+
 ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLSettingsTab" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
@@ -68,6 +72,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	QPushButton *assoc = new QPushButton("Associations", this);
 	fileassoc->addWidget(assoc);
+	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
 	sections->addLayout(fileassoc);
@@ -88,6 +93,13 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
+}
+
+void ZDLSettingsTab::fileAssociations(){
+#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+	ZDLFileAssociations assoc(this);
+	assoc.exec();
+#endif
 }
 
 void ZDLSettingsTab::rebuild(){
