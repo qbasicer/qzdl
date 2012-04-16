@@ -29,18 +29,18 @@ using namespace std;
 
 #ifdef Q_WS_WIN
 
-#define ZDL_VERSION_STRING	"3.0.5.3q"
+#define ZDL_VERSION_STRING	"3.0.5.4"
 #define ZDL_VERSION_ID		23
 
 #else
 
-#define ZDL_VERSION_STRING	"3.0.5.3q"
+#define ZDL_VERSION_STRING	"3.0.5.4"
 #define ZDL_VERSION_ID		20
 
 #endif
 
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
-#define ZDL_ENGINE_NAME		"ZDLSharp"
+#define ZDL_ENGINE_NAME		"qZDL"
 #define ZDL_UID				"XXXX-XXXX-XXXX-XXXX"
 
 extern QDebug *zdlDebug;
