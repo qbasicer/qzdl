@@ -26,7 +26,7 @@ public:
 	virtual void rebuild();
 	virtual void newConfig();
 	virtual void editButton(QListWidgetItem * item);
-
+	virtual void newDrop(QStringList fileList);
 };
 
 #endif

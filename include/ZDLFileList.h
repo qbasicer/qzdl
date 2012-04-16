@@ -25,7 +25,7 @@ class ZDLFileList : public ZDLListWidget{
 		virtual void addButton();
 		virtual void rebuild();
 		virtual void newConfig();
-		virtual void newDrop(QList<QUrl> urlList);
+		virtual void newDrop(QStringList fileList);
 		
 
 };

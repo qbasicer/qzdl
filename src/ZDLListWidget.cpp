@@ -84,8 +84,8 @@ void ZDLListWidget::doDragDrop(int enabled){
 	setAcceptDrops(enabled);
 }
 
-void ZDLListWidget::newDrop(QList<QUrl> urlList){
-	Q_UNUSED(urlList);
+void ZDLListWidget::newDrop(QStringList files){
+	Q_UNUSED(files);
 }
 
 void ZDLListWidget::dragEnterEvent(QDragEnterEvent *event){
@@ -105,7 +105,25 @@ void ZDLListWidget::dragLeaveEvent(QDragLeaveEvent *event){
 void ZDLListWidget::dropEvent(QDropEvent *event){
 	const QMimeData *mimeData = event->mimeData();
 	if (mimeData->hasUrls()) {
-		newDrop(mimeData->urls());
+		QList<QUrl> urlList(mimeData->urls());
+		QStringList files;
+        	for (int i = 0; i < urlList.size() && i < 32; ++i) {
+	                QUrl url = urlList.at(i);
+	                LOGDATAO() << "url " << i << "=" << url.toString() << endl;
+	                if(url.scheme() == "file"){
+	                        QString path = url.path();
+#ifdef Q_WS_WIN
+	                        if(path[2] == ':'){
+	                                path.remove(0,1);
+	                        }
+#endif
+	                        QFileInfo urlDecoder(path);
+	                        LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
+				files <<  urlDecoder.absoluteFilePath();
+	                }
+	        }
+
+		newDrop(files);
 		event->accept();
 	}
 }

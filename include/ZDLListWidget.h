@@ -38,7 +38,7 @@ class ZDLListWidget: public ZDLWidget{
 		//virtual vector<ZDLListable*> getList();
 		//virtual void setList(vector<ZDLListable*> *newlist);
 		void doDragDrop(int enabled);
-		virtual void newDrop(QList<QUrl> urlList);
+		virtual void newDrop(QStringList fileList);
 	protected slots:
 		virtual void addButton();
 		virtual void removeButton();

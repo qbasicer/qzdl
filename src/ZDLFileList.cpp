@@ -27,25 +27,11 @@ ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
 	LOGDATAO() << "ZDLFileList" << endl;
 }
 
-void ZDLFileList::newDrop(QList<QUrl> urlList){
+void ZDLFileList::newDrop(QStringList fileList){
 	LOGDATAO() << "newDrop" << endl;	
-	for (int i = 0; i < urlList.size() && i < 32; ++i) {
-		QUrl url = urlList.at(i);
-		LOGDATAO() << "url " << i << "=" << url.toString() << endl;
-		if(url.scheme() == "file"){
-			QString path = url.path();
-#ifdef Q_WS_WIN	
-			LOGDATAO() << "path: " << path[i] << endl;
-			if(path[2] == ':'){
-				path.remove(0,1);
-			}
-			LOGDATAO() << "path: " << path[i] << endl;
-#endif
-			QFileInfo urlDecoder(path);
-			LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
-			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, urlDecoder.absoluteFilePath());
-			insert(zList, -1);
-		}
+	for (int i = 0; i < fileList.size(); i++) {
+		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileList[i]);
+		insert(zList, -1);
 	}
 }
 

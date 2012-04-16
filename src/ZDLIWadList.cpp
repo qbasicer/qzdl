@@ -74,6 +74,29 @@ void ZDLIWadList::rebuild(){
 	
 }
 
+void ZDLIWadList::newDrop(QStringList fileList){
+	for(int i = 0; i < fileList.size(); i++){
+		ZDLNameListable *zList = NULL;
+		QString entry = fileList[i];
+		QStringList pathParts = entry.split("/");
+		if(pathParts.size() > 1){
+			QString file = pathParts.last();
+			QStringList fileParts = file.split(".");
+			if(fileParts.size() > 1){
+				QString name = fileParts[0];
+				zList = new ZDLNameListable(pList, 1001, entry, name);
+			}else{
+				zList = new ZDLNameListable(pList, 1001, entry, file);
+			}
+		}else{
+			zList = new ZDLNameListable(pList, 1001, entry, entry);
+		}
+		if(zList){
+			insert(zList, -1);
+		}
+	}
+}
+
 void ZDLIWadList::addButton(){
 	QStringList filters;
 	filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
