@@ -25,9 +25,7 @@
 #include "ZDLMainWindow.h"
 #include "ZDLVersion.h"
 
-#if !defined(ZDL_BLACKBOX)
 #include "ZDLNullDevice.h"
-#endif
 
 QApplication *qapp;
 QString versionString;
@@ -66,15 +64,29 @@ static void addFile(QString file, ZDLConf* zconf){
 QDebug *zdlDebug;
 
 int main( int argc, char **argv ){
-#if defined(ZDL_BLACKBOX)
-	QFile loggingFile("zdl.log");
-	if(loggingFile.exists()){
-		loggingFile.remove();
+	QStringList args;
+	for(int i = 1; i < argc; i++){
+		args << QString(argv[i]);
 	}
-	loggingFile.open(QIODevice::ReadWrite);
-	zdlDebug = new QDebug(&loggingFile);
-#else
+	QStringList eatenArgs(args);
 	ZDLNullDevice nullDev;
+#if defined(ZDL_BLACKBOX)
+	QFile *loggingFile = NULL;
+	zdlDebug = NULL;
+	int logger = eatenArgs.indexOf("--enable-logger");
+	
+	if(logger >= 0){
+		eatenArgs.removeAt(logger);
+		loggingFile = new QFile("zdl.log");
+		if(loggingFile->exists()){
+			loggingFile->remove();
+		}
+		loggingFile->open(QIODevice::ReadWrite);
+		zdlDebug = new QDebug(loggingFile);
+	}else{
+		zdlDebug = new QDebug(&nullDev);
+	}
+#else
 	zdlDebug = new QDebug(&nullDev);
 #endif
 
@@ -82,10 +94,6 @@ int main( int argc, char **argv ){
 
 	QApplication a( argc, argv );
 	qapp = &a;
-	QStringList args;
-	for(int i = 1; i < argc; i++){
-		args << QString(argv[i]);
-	}
 	ZDLConfigurationManager::setArgv(args);
 	{
 		QString execuatble(argv[0]);
@@ -112,9 +120,9 @@ int main( int argc, char **argv ){
 	LOGDATA() << "Build: " << ZDL_BUILD << endl;
 	LOGDATA() << "Revision: " << ZDL_REVISION << endl;
 #if defined(ZDL_BUILD_NUMBER)
-        if(ZDL_BUILD_NUMBER > 0){
+	if(ZDL_BUILD_NUMBER > 0){
 		LOGDATA() << "Build #: " << QString::number(ZDL_BUILD_NUMBER) << endl;
-        }
+	}
 #endif
 #if defined(ZDL_BUILD_JOB)
 	LOGDATA() << "Build job: " << ZDL_BUILD_JOB << endl;
@@ -131,7 +139,6 @@ int main( int argc, char **argv ){
 
 	ZDLConf* tconf = new ZDLConf();
 	ZDLConfigurationManager::setConfigFileName("");
-	QStringList eatenArgs(args);
 
 	ZDLConfigurationManager::setWhy(ZDLConfigurationManager::UNKNOWN);
 
