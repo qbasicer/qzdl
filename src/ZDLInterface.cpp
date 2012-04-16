@@ -114,18 +114,22 @@ QLayout *ZDLInterface::getButtonPane(){
 	QAction *showCommandline = actions->addAction("Show Command Line");
 	QAction *clearAllPWadsAction = actions->addAction("Clear PWAD list");
 	QAction *clearAllFieldsAction = actions->addAction("Clear all fields");
+	clearAllFieldsAction->setShortcut(QKeySequence::New);
 	QAction *clearEverythingAction = actions->addAction("Clear everything");
 	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 	
 	context->addMenu(actions);
 	context->addSeparator();
 	QAction *loadZdlFileAction = context->addAction("Load .zdl");
+	loadZdlFileAction->setShortcut(QKeySequence::Open);
 	QAction *saveZdlFileAction = context->addAction("Save .zdl");
+	saveZdlFileAction->setShortcut(QKeySequence::Save);
 	context->addSeparator();
 	QAction *loadAction = context->addAction("Load .ini");
 	QAction *saveAction = context->addAction("Save .ini");
 	context->addSeparator();
 	QAction *aboutAction = context->addAction("About");
+	aboutAction->setShortcut(QKeySequence::HelpContents);
 	
 	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
