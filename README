@@ -1,14 +1,14 @@
    _________________________
   /                         /
- / ZDLSharp 3.0.5.3q alpha /
+ /  qZDL 3.0.5.4           /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
-Thank you for trying ZDLSharp 3.0.5.3q alpha!
-Without your help to 'alpha-test', this version
-of ZDLSharp would never be released.
+Thank you for trying qZDL 
+Without your help to beta test, this version
+of qZDL would never be released.
 
 Special Thanks:
 - Ryan "Biohazard" Turner, original ZDL artwork/designer/coder
@@ -16,5 +16,16 @@ Special Thanks:
 - Risen, Enjay, DRDTeam.org, ZDoom.org, for being awesome
 
 On IRC? Join us at #zdl on EsperNET - irc.esper.net
+
+qZDL is released under the GNU Public License v3 (GPLv3).
+
+In short, that means:
+  ...
+  For the developers' and authors' protection, the GPL clearly
+  explains that there is no warranty for this free software. For 
+  both users' and authors' sake, the GPL requires that modified 
+  versions be marked as changed, so that their problems will not 
+  be attributed erroneously to authors of previous versions.
+  ...
 
 
