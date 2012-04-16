@@ -18,11 +18,11 @@ ZDLConfiguration::ZDLConfiguration(){
 	//cout << "User configuration: " << paths[CONF_USER].toStdString() << endl;
 
 	//Attempts to create the files.
-	bootstrap(paths[CONF_USER]);
-	bootstrap(paths[CONF_SYSTEM]);
+	//bootstrap(paths[CONF_USER]);
+	//bootstrap(paths[CONF_SYSTEM]);
 
-	confs[CONF_SYSTEM]->readINI(paths[CONF_SYSTEM].toStdString().c_str());
-	confs[CONF_USER]->readINI(paths[CONF_USER].toStdString().c_str());
+	//confs[CONF_SYSTEM]->readINI(paths[CONF_SYSTEM].toStdString().c_str());
+	//confs[CONF_USER]->readINI(paths[CONF_USER].toStdString().c_str());
 
 
 }
