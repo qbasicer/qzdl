@@ -102,7 +102,7 @@ void ZDLUpdater::fetch(int doAnyways){
 #ifdef Q_WS_WIN
 		QString url = "/check.php?name=qzdl-win32-beta&id=";
 #else
-		QString url = "/check.php?name=qzdl-svn&id=";
+		QString url = "/check.php?name=qzdl-git&id=";
 #endif
 		url += QString::number(ZDL_VERSION_ID);
 		QHttpRequestHeader qreq("GET", url);
