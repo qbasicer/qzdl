@@ -1,6 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 	<qresource>
-		<file alias="zdl3.svg">res/zdl3.svg</file>
+		<file alias="zdl3.svg">zdl3.svg</file>
 	</qresource>
 </RCC>
