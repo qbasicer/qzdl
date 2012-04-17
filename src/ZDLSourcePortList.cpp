@@ -103,8 +103,12 @@ void ZDLSourcePortList::newDrop(QStringList fileList){
 
 void ZDLSourcePortList::addButton(){
 	QStringList filters;
-	filters << "Executable (*.exe *.bin)"
-			<< "All files (*)";
+#if defined(Q_WS_WIN)
+	filters << "Executable (*.exe)";
+#elif defined(Q_WS_MAC)
+	filters << "Application (*.app)";
+#endif
+	filters << "All files (*)";
 	
 	
 	ZDLNameInput diag(this);
