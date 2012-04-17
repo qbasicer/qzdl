@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- This SVG was painstakingly handcrafted by BioHazard. Don't mess it up with Inkscape! :P -->
+<!-- This was originally ZDL4's icon, but this is a ZDL3 version. Edited by BioHazard. -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="64" height="64">
+	<linearGradient id="3g" spreadMethod="reflect" gradientUnits="userSpaceOnUse" x1="34" y1="12" x2="44" y2="24">
+		<stop style="stop-color: #FFF" offset="0" />
+		<stop style="stop-color: #444" offset="1" />
+	</linearGradient>
+	<linearGradient id="ZDLg" gradientUnits="userSpaceOnUse" x1="1" y1="43" x2="56" y2="21">
+		<stop style="stop-color: #800" offset="0" />
+		<stop style="stop-color: #F80" offset="1" />
+	</linearGradient>
+	<g style="fill: url(#3g); stroke: #000; stroke-width: 4" transform="translate(-1, 12)">
+		<path style="stroke-linejoin: round" d="M 28,31 38,29 C 44,40 58,30 46,24 L 42,24 42,16 46,16 C 58,10 44,0 39,11 L 28,9 C 29,4 34,-3 44,-3 64,-3 68,15 57,20 68,25 64,43 44,43 34,43 29,36 28,31 Z" />
+		<g style="fill: url(#ZDLg); stroke-width: 2" transform="translate(1, 0)">
+			<path d="M 1,43 1,39 12,25 1,25 1,21 18,21 18,25 7,39 18,39 18,43 Z" />
+			<path d="M 20,43 20,21 28,21 C 28,21 37,21 37,32.5 37,43 28,43 28,43 Z
+			         M 24,25 24,39 28,39 C 28,39 33,39 33,32.5 33,25 28,25 28,25 Z" />
+			<path d="M 39,43 39,21 43,21 43,39 56,39 56,43 Z" />
+		</g>
+	</g>
+</svg>
+
