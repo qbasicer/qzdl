@@ -26,10 +26,12 @@ public:
 	ZDLSettingsPane( QWidget *parent=0);
 	virtual void rebuild();
 	virtual void newConfig();
+protected slots:
+	void currentRowChanged(int);
 protected:
 	QComboBox *diffList;
 	QComboBox *sourceList;
 	QListWidget *IWADList;
-	QLineEdit *warpText;
+	QComboBox *warpCombo;
 	
 };

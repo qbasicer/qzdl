@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QtGui>
 #include <QApplication>
 
@@ -28,37 +28,37 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *column = new QVBoxLayout(this);
 	pList = new QListWidget(this);
 	pList->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	
+
 	QHBoxLayout *buttonRow = new QHBoxLayout();
-	
+
 	btnAdd = new QPushButton("Add", this);
-	
+
 	QAction* delact = new QAction(this);
 	delact->setShortcut(Qt::Key_Delete);
 	delact->setShortcutContext(Qt::WidgetShortcut);
 	connect(delact, SIGNAL(triggered()), this, SLOT(removeButton()));
-	
+
 	QAction* insact = new QAction(this);
 	insact->setShortcut(Qt::Key_Insert);
 	insact->setShortcutContext(Qt::WidgetShortcut);
 	connect(insact, SIGNAL(triggered()), this, SLOT(addButton()));
-	
+
 	pList->addAction(delact);
 	pList->addAction(insact);
-	
+
 	btnAdd->setMinimumWidth(30);
-	
+
 	btnRem = new QPushButton("Rem", this);
 	btnRem->setMinimumWidth(30);
-	
+
 	btnUp = new QPushButton(this);
 	btnUp->setIcon(QPixmap(aup));
 	btnUp->setMinimumWidth(20);
-	
+
 	btnDn = new QPushButton(this);
 	btnDn->setIcon(QPixmap(adown));
 	btnDn->setMinimumWidth(20);
-	
+
 	buttonRow->addWidget(btnAdd);
 	buttonRow->addWidget(btnRem);
 	buttonRow->addWidget(btnUp);
@@ -67,7 +67,7 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	//Glue it together
 	column->addWidget(pList);
 	column->addLayout(buttonRow);
-	
+
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 
@@ -77,8 +77,18 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	QObject::connect(btnUp, SIGNAL(clicked()), this, SLOT(upButton()));
 	QObject::connect(btnDn, SIGNAL(clicked()), this, SLOT(downButton()));
 	QObject::connect(pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editButton(QListWidgetItem*)));
-	
+	QObject::connect(pList, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChangedInternal(int)));
+	QObject::connect(pList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(currentItemChangedInternal(QListWidgetItem*, QListWidgetItem*)));
 }
+
+void ZDLListWidget::currentItemChangedInternal(QListWidgetItem *current, QListWidgetItem *previous){
+	emit currentItemChangedInternal(current, previous);
+}
+
+void ZDLListWidget::currentRowChangedInternal(int currentRow){
+	emit currentRowChanged(currentRow);
+}
+
 
 void ZDLListWidget::doDragDrop(int enabled){
 	setAcceptDrops(enabled);
@@ -89,8 +99,8 @@ void ZDLListWidget::newDrop(QStringList files){
 }
 
 void ZDLListWidget::dragEnterEvent(QDragEnterEvent *event){
-		setBackgroundRole(QPalette::Highlight);
-		event->acceptProposedAction();
+	setBackgroundRole(QPalette::Highlight);
+	event->acceptProposedAction();
 }
 
 void ZDLListWidget::dragMoveEvent(QDragMoveEvent *event){
@@ -107,21 +117,21 @@ void ZDLListWidget::dropEvent(QDropEvent *event){
 	if (mimeData->hasUrls()) {
 		QList<QUrl> urlList(mimeData->urls());
 		QStringList files;
-        	for (int i = 0; i < urlList.size() && i < 32; ++i) {
-	                QUrl url = urlList.at(i);
-	                LOGDATAO() << "url " << i << "=" << url.toString() << endl;
-	                if(url.scheme() == "file"){
-	                        QString path = url.path();
+		for (int i = 0; i < urlList.size() && i < 32; ++i) {
+			QUrl url = urlList.at(i);
+			LOGDATAO() << "url " << i << "=" << url.toString() << endl;
+			if(url.scheme() == "file"){
+				QString path = url.path();
 #ifdef Q_WS_WIN
-	                        if(path[2] == ':'){
-	                                path.remove(0,1);
-	                        }
+				if(path[2] == ':'){
+					path.remove(0,1);
+				}
 #endif
-	                        QFileInfo urlDecoder(path);
-	                        LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
+				QFileInfo urlDecoder(path);
+				LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
 				files <<  urlDecoder.absoluteFilePath();
-	                }
-	        }
+			}
+		}
 
 		newDrop(files);
 		event->accept();

@@ -51,9 +51,10 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	QVBoxLayout *skillBox = new QVBoxLayout();
 	box2->addLayout(skillBox);
 
-	warpText = new QLineEdit(this);
+	warpCombo = new QComboBox(this);
+	warpCombo->setEditable(true);
 	warpBox->addWidget(new QLabel("Map",this));
-	warpBox->addWidget(warpText);
+	warpBox->addWidget(warpCombo);
 
 	diffList = new QComboBox(this);
 	skillBox->addWidget(new QLabel("Skill",this));
@@ -65,7 +66,43 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	diffList->addItem("Hard");
 	diffList->addItem("V. Hard");
 	LOGDATAO() << "Done" << endl;
+	connect(IWADList, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChanged(int)));
 	
+}
+
+void ZDLSettingsPane::currentRowChanged(int idx){
+	warpCombo->clear();
+	if(idx < 0 || idx >= IWADList->count()){
+		LOGDATAO() << "Index is invalid - " << idx <<endl;
+		return;
+	}
+	QListWidgetItem *item = IWADList->currentItem();
+	if(NULL == item){
+		LOGDATAO() << "Item is NULL" << endl;
+		return;
+	}
+	QVariant data = item->data(32);
+	if(!data.isValid() && !data.isNull()){
+		LOGDATAO() << "Item data is NULL" << endl;
+		return;
+	}
+	QString file = data.toString();
+	if(file.isNull() || file.isEmpty()){
+		LOGDATAO() << "Bad string" << endl;
+		return;
+	}
+	QFileInfo fi(file);
+	if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
+		QStringList maps = getMapNamesForWad(file);
+		if(maps.size() > 0){
+			warpCombo->addItem("");
+			warpCombo->addItems(maps);
+		}else{
+			LOGDATAO() << "No maps in " << file << endl;
+		}
+	}else{
+		LOGDATAO() << "File doesn't exist- " << file << endl;
+	}
 }
 
 void ZDLSettingsPane::rebuild(){
@@ -77,8 +114,8 @@ void ZDLSettingsPane::rebuild(){
 		zconf->deleteValue("zdl.save", "skill");
 	}
 	
-	if(warpText->text().length() > 0){
-		zconf->setValue("zdl.save", "warp", warpText->text());
+	if(warpCombo->currentText().length() > 0){
+		zconf->setValue("zdl.save", "warp", warpCombo->currentText());
 	}else{
 		zconf->deleteValue("zdl.save", "warp");
 	}
@@ -156,17 +193,26 @@ void ZDLSettingsPane::newConfig(){
 	}else{
 		diffList->setCurrentIndex(0);
 	}
-	
+	warpCombo->clear();
 	if(zconf->hasValue("zdl.save", "warp")){
 		int stat = 0;
 		QString rc = zconf->getValue("zdl.save","warp",&stat);
 		if(rc.length() > 0){
-			warpText->setText(rc);
+			QLineEdit *edit = warpCombo->lineEdit();
+			if(edit){
+				edit->setText(rc);
+			}
 		}else{
-			warpText->setText("");
+			QLineEdit *edit = warpCombo->lineEdit();
+			if(edit){
+				edit->setText("");
+			}
 		}
 	}else{
-		warpText->setText("");
+		QLineEdit *edit = warpCombo->lineEdit();
+		if(edit){
+			edit->setText("");
+		}
 	}
 	
 	
@@ -229,7 +275,9 @@ void ZDLSettingsPane::newConfig(){
 			QVector<ZDLLine*> nameVctr;
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
-				IWADList->addItem(nameVctr[0]->getValue());
+				QListWidgetItem *item = new QListWidgetItem(nameVctr[0]->getValue(),IWADList, 1001);
+				item->setData(32,fileVctr[i]->getValue());
+				IWADList->addItem(item);
 			}
 		}
 	}
