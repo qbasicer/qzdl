@@ -53,17 +53,17 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	
 	btnUp = new QPushButton(this);
 	btnUp->setIcon(QPixmap(aup));
-	btnUp->setMinimumWidth(10);
+	btnUp->setMinimumWidth(20);
 	
 	btnDn = new QPushButton(this);
 	btnDn->setIcon(QPixmap(adown));
-	btnDn->setMinimumWidth(10);
+	btnDn->setMinimumWidth(20);
 	
 	buttonRow->addWidget(btnAdd);
 	buttonRow->addWidget(btnRem);
 	buttonRow->addWidget(btnUp);
 	buttonRow->addWidget(btnDn);
-	
+	buttonRow->setSpacing(0);	
 	//Glue it together
 	column->addWidget(pList);
 	column->addLayout(buttonRow);

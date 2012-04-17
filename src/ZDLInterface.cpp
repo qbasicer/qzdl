@@ -149,9 +149,9 @@ QLayout *ZDLInterface::getButtonPane(){
 	
 	int minBtnWidth = 50;
 
-	btnExit->setMinimumWidth(minBtnWidth-20);
-	btnZDL->setMinimumWidth(minBtnWidth-20);
-	btnMSet->setMinimumWidth(minBtnWidth+40);
+	btnExit->setMinimumWidth(minBtnWidth-15);
+	btnZDL->setMinimumWidth(minBtnWidth-15);
+	btnMSet->setMinimumWidth(minBtnWidth+30);
 	btnEpr->setMinimumWidth(20);
 	btnLaunch->setMinimumWidth(minBtnWidth);
 
@@ -165,6 +165,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	box->addWidget(btnMSet);
 	box->addWidget(btnEpr);
 	box->addWidget(btnLaunch);
+	box->setSpacing(1);
 	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
 	
 	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
