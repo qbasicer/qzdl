@@ -83,6 +83,7 @@ int main( int argc, char **argv ){
 		}
 		loggingFile->open(QIODevice::ReadWrite);
 		zdlDebug = new QDebug(loggingFile);
+		qDebug() << "Logger is enabled";
 	}else{
 		zdlDebug = new QDebug(&nullDev);
 	}
