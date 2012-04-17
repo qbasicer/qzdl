@@ -93,6 +93,47 @@ void RegisterFileTypeQt(QString extension, QString type, QString niceType, QStri
 	//Done
 }
 
-
 #endif
+
+/* Lifted straight from ZDL 3.0 */
+ //////////////////////////
+// From DoomDefs.h (by Bio)
+typedef struct{
+	char type[4];	// Either "IWAD" or "PWAD"
+	int lumps;	// Number of lumps in the dir
+	int dir;		// the offset of the start of the dir
+}WADHEAD;
+typedef struct{
+	int start;	// where the lump starts
+	int length;	// how long the lump is
+	char name[8];	// the lump's name (e.g. "MAP01")
+}LUMPHEAD;
+
+int stricmp(const char* a, const char* b){
+	QString qa(a);
+	QString qb(b);
+	return qa.compare(qb,Qt::CaseInsensitive);
+}
+
+QStringList getMapNamesForWad(QString wadFile){
+	QStringList list;
+	int i=0;
+	char temp[9]={0};
+	WADHEAD header;
+	LUMPHEAD lump[2];
+	FILE *fptr=0;
+	if((fptr=fopen(wadFile.toStdString().c_str(),"rb"))){
+		fread(&header,1,sizeof(WADHEAD),fptr);
+		fseek(fptr,header.dir,SEEK_SET);
+		for(i=0;i<header.lumps;i++){
+			fread(&lump,2,sizeof(LUMPHEAD),fptr);
+			if(!stricmp(lump[1].name,"THINGS")){
+				strncpy(temp,lump[0].name,8);
+				list << QString(temp);
+			}else{fseek(fptr,sizeof(LUMPHEAD)-(sizeof(LUMPHEAD)*2),SEEK_CUR);}
+		}
+		fclose(fptr);
+	}
+	return list;
+}
 

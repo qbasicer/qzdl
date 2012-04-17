@@ -19,6 +19,7 @@
 #ifndef _ZDLCOMMON_H_
 #define _ZDLCOMMON_H_
 #include <vector>
+#include <QtCore>
 #include "zdlcommon.h"
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
@@ -77,3 +78,6 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #endif
 
 #endif
+
+extern QStringList getMapNamesForWad(QString wadFile);
+
