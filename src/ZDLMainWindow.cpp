@@ -58,7 +58,7 @@ void ZDLMainWindow::newUpdate(){
 	if(zup){
 		LOGDATAO() << "Showing update message" << endl;
 		QString engine = ZDL_ENGINE_NAME;
-		QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdlsharp.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
+		QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdl.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
 	}
 }
 
