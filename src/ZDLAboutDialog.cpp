@@ -19,7 +19,6 @@
 #include "ZDLAboutDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
-#include <QSvgWidget>
 #include "ZDLVersion.h"
 #if defined(USE_BMP_LOGO)
 #include "bmp_logo.xpm"
