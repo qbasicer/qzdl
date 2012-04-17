@@ -20,9 +20,7 @@
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 #include "ZDLVersion.h"
-#if defined(USE_BMP_LOGO)
 #include "bmp_logo.xpm"
-#endif
 
 extern QString versionString;
 
@@ -46,7 +44,12 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	pic->setPixmap(QPixmap(aboutImg));
 #else
 	QLabel *pic = new QLabel(this);
-        pic->setPixmap(QPixmap(":zdl3.svg"));
+	QPixmap map(":zdl3.svg");
+	if(!map.isNull()){
+	        pic->setPixmap(map);
+	}else{
+		pic->setPixmap(QPixmap(aboutImg));
+	}
 #endif
 
 	hbox->addWidget(pic);
