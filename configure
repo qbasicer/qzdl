@@ -2894,6 +2894,23 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking setting resource build dir" >&5
+$as_echo_n "checking setting resource build dir... " >&6; }
+bnv_try_15="echo \"RCC_DIR += ./rcc\" >> qzdl.pro"
+{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
+  (eval $bnv_try_15) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+if test "$ac_status" != 0; then
+as_fn_error $? "error appending to file" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking static link libgcc" >&5
 $as_echo_n "checking static link libgcc... " >&6; }
 bnv_try_15="echo \"win32 {\" >> qzdl.pro"
@@ -2901,7 +2918,6 @@ bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc -g\" >> qzdl.pro"
 bnv_try_17="echo \"LIBS += -lshlwapi\" >> qzdl.pro"
 bnv_try_18="echo \"RC_FILE = res/zdl.rc\" >> qzdl.pro"
 bnv_try_19="echo \"}\" >> qzdl.pro"
-
 { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
   (eval $bnv_try_15) 2>&5
   ac_status=$?
