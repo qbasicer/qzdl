@@ -271,6 +271,9 @@ void ZDLMainWindow::launch(){
 	  return;
 	  }*/
 #ifdef Q_WS_WIN
+	/* The first argument to CreateProcess must not be quoted */
+	/* TODO: Rewrite this code! */
+	QString unquotedExec = exec;
 	int doquotes = 1;
 	if(zconf->hasValue("zdl.general","quotefiles")){
 		int ok;
@@ -291,10 +294,10 @@ void ZDLMainWindow::launch(){
 	wcscpy(cmd,compose.toStdWString().c_str());
 	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
 
-	wchar_t* execu = (wchar_t*)malloc((exec.length()+1)*sizeof(wchar_t)*4);
+	wchar_t* execu = (wchar_t*)malloc((unquotedExec.length()+1)*sizeof(wchar_t)*4);
 	wchar_t* work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
 	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
-	wcscpy(execu, exec.toStdWString().c_str());
+	wcscpy(execu, unquotedExec.toStdWString().c_str());
 	wcscpy(work, workingDirectory.toStdWString().c_str());
 	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
 	STARTUPINFOW siStartupInfo; 
