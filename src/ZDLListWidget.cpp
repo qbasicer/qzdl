@@ -82,7 +82,7 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 }
 
 void ZDLListWidget::currentItemChangedInternal(QListWidgetItem *current, QListWidgetItem *previous){
-	emit currentItemChangedInternal(current, previous);
+	emit currentItemChanged(current, previous);
 }
 
 void ZDLListWidget::currentRowChangedInternal(int currentRow){
