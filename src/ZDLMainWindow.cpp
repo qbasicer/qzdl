@@ -72,7 +72,7 @@ void ZDLMainWindow::setUpdater(ZDLUpdater *zup){
 
 QString ZDLMainWindow::getWindowTitle(){
 	QString windowTitle = ZDL_ENGINE_NAME;
-	windowTitle += " " + versionString + " - ";
+	windowTitle += " " + ZDL_VERSION_STRING + " - ";
 	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 	if(conf){
 		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
