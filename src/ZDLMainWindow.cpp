@@ -316,9 +316,6 @@ void ZDLMainWindow::launch(){
 		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
-		return;
-	}else{
-		return;
 	}
 #else
 	QProcess *proc = new QProcess(this);
