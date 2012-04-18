@@ -30,7 +30,7 @@ using namespace std;
 #ifdef Q_WS_WIN
 
 #define ZDL_VERSION_STRING	"3.0.5.5 beta"
-#define ZDL_VERSION_ID		24
+#define ZDL_VERSION_ID		27
 
 #else
 
