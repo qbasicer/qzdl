@@ -81,6 +81,7 @@ void ZDLFileList::addButton(){
 	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
          << "WAD Files (*.wad)"
          << "PK3 Files (*.pk3)"
+	 << "Patch Files (*.bex *.deh)"
 	 << "PK7 Files (*.pk7)"
 	 << "PKZ Files (*.pkz)"
 	 << "P7Z Files (*.pk7)"
