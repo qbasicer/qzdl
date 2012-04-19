@@ -1,15 +1,26 @@
    _________________________
   /                         /
- / qZDL 3.0.5.5 beta       /
+ / qZDL 3.0.5.5b beta      /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
+<<<<<<< .merge_file_i45ppi
 * 3.0.5.5 - April 18th, 2012
   * Fixed GHI #5: Autoclose doesn't work on Windows
     https://github.com/qbasicer/qzdl/issues/5
 
+=======
+* 3.0.5.5b - April 19th, 2012
+  * Fixed documentation
+  * Fixed bug in updater where no updates would ever be found
+
+* 3.0.5.5 - April 18th, 2012
+  * Fixed GHI #5: Autoclose doesn't work on Windows
+    https://github.com/qbasicer/qzdl/issues/5
+
+>>>>>>> .merge_file_XOLl0h
   * Fixed GHI #6: Quote Files may have an issue
     https://github.com/qbasicer/qzdl/issues/6
 
