@@ -207,38 +207,40 @@ void ZDLUpdater::fetch(int doAnyways){
 }
 
 void ZDLUpdater::httpRequestFinished(int requestId, bool error){
-	LOGDATAO() << "Finished request" << endl;
-	//cout << "httpRequestFinished" << endl;
-	if (requestId != httpGetId)
-		LOGDATAO() << "Internal HTTP error, " << requestId << " != " << httpGetId << endl;
-		LOGDATAO() << "Buffer was: " << buffer << endl;
+	LOGDATAO() << "Finished request " << requestId << endl;
+	if (requestId != httpGetId){
+		LOGDATAO() << "Internal HTTP error, reqId:" << requestId << " getId:" << httpGetId << " Buffer was: " << buffer << endl;
 		return;
+	}
 	if (error){
 		LOGDATAO() << "Error!" << endl;
 		return;
 	}
 	QString str(buffer);
 	LOGDATAO() << "Got: " << str << endl;
-	//cout << "Buffer " << str.toStdString() << endl;
 	if (str == "MISMATCH"){
-		//cout << "There is an update" << endl;
+		LOGDATAO() << "There is an update available" << endl;
 		updateCode = 1;
 		errorCode = 0;
 	}else if (str == "ERROR-SYNTAX"){
+		LOGDATAO() << "Update syntax error" << endl;
 		updateCode = 0;
 		errorCode = 1;
 	}else if (str == "ERROR-NOID"){
+		LOGDATAO() << "No such ID" << endl;
 		updateCode = 0;
 		errorCode = 2;
 	}else if (str == "OKAY"){
+		LOGDATAO() << "No update available" << endl;
 		updateCode = 0;
 		errorCode = 0;
 	}else{
+		LOGDATAO() << "Unexpected content" << endl;
 		updateCode = 0;
 		errorCode = 3;
 	}
-	//cout << "ErrorCode:" << errorCode << " UpdateCode:" << updateCode << endl;
 	httpGetId = 0;
+	LOGDATAO() << "Reset httpGetId, updateCode:" << updateCode << " errorCode:" << errorCode << endl;
 	emit updateReady();
 }
 
