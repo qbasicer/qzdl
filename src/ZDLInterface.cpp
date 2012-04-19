@@ -153,7 +153,9 @@ QLayout *ZDLInterface::getButtonPane(){
 	clearAllFieldsAction->setShortcut(QKeySequence::New);
 	QAction *clearEverythingAction = actions->addAction("Clear everything");
 	actions->addSeparator();
+#if !defined(NO_IMPORT)
 	QAction *actImportCurrentConfig = actions->addAction("Import current config");
+#endif
 	QAction *clearCurrentGlobalConfig = actions->addAction("Clear current global config");
 	clearCurrentGlobalConfig->setEnabled(false);	
 
@@ -177,7 +179,9 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
 	connect(saveZdlFileAction, SIGNAL(triggered()), this, SLOT(saveZdlFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
+#if !defined(NO_IMPORT)
 	connect(actImportCurrentConfig, SIGNAL(triggered()), this, SLOT(importCurrentConfig()));
+#endif
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
 	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
