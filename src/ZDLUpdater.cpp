@@ -199,7 +199,9 @@ void ZDLUpdater::fetch(int doAnyways){
 		qreq.setValue("Host", this->host);
 		qreq.setValue("User-Agent", ua);
 		httpGetId = http->request(qreq);
-		
+		LOGDATAO() << "Request " << httpGetId << " started" << endl;
+	}else{
+		LOGDATAO() << "Can't start multiple requests" << endl;
 	}
 	
 }
@@ -208,10 +210,12 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 	LOGDATAO() << "Finished request" << endl;
 	//cout << "httpRequestFinished" << endl;
 	if (requestId != httpGetId)
-		LOGDATAO() << "Internal HTTP error" << endl;
+		LOGDATAO() << "Internal HTTP error, " << requestId << " != " << httpGetId << endl;
+		LOGDATAO() << "Buffer was: " << buffer << endl;
 		return;
 	if (error){
-		//cout << "error" << endl;
+		LOGDATAO() << "Error!" << endl;
+		return;
 	}
 	QString str(buffer);
 	LOGDATAO() << "Got: " << str << endl;
@@ -239,6 +243,7 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 }
 
 void ZDLUpdater::readyRead ( const QHttpResponseHeader & resp ){
+	LOGDATAO() << "ReadyRead" << endl;
 	if(resp.statusCode() == 200){
 		//cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
 		QByteArray inBytes = http->readAll();
