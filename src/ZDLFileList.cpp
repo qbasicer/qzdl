@@ -19,6 +19,7 @@
 #include "ZDLFileList.h"
 #include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
+#include "ZDLMapFile.h"
 
 #include <iostream>
 using namespace std;
@@ -97,6 +98,7 @@ void ZDLFileList::addButton(){
 			LOGDATAO() << "Adding file " << fileNames[i] << endl;
 			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
 			insert(zList, -1);
+			ZDLMapFile::getMapFile(fileNames[i]);
 		}
 
 	}
