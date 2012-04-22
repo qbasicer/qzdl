@@ -1,10 +1,14 @@
    _________________________
   /                         /
- / qZDL 3.0.5.5b beta      /
+ / qZDL 3.0.5.6 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
+
+* 3.0.5.6 - April 22nd, 2012
+  * Fixed GHI #10: Multiplayer config isn't read on open
+  * Fixed GHI #11: Alwaysadd configuration option is not loaded
 
 * 3.0.5.5b - April 19th, 2012
   * Fixed documentation
