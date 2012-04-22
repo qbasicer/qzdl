@@ -195,15 +195,14 @@ QString ZDLConf::getValue(QString lsection, QString variable, int *status){
 			//cout << "ZDLConf::getValue using non-variable resolution" << endl;
 			ZDLSection *sect = getSection(lsection);
 			if (sect){
-				*status = 1;
+				*status = 0;
 				return sect->findVariable(variable);
 			}
 	
 		//}
-		*status = 0;
-	}else{
-		*status = 2;
+		*status = 1;
 	}
+	*status = 2;
 	LOGDATAO() << "Failed to get value" << endl;
 	return QString();
 }
