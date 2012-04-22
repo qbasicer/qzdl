@@ -172,7 +172,10 @@ void ZDLSettingsTab::newConfig(){
 		int ok;
 		QString rc = zconf->getValue("zdl.general","alwaysadd", &ok);
 		if(ok == 0){
+			LOGDATAO() << "Set alwaysadd" << endl;
 			alwaysArgs->setText(rc);
+		}else{
+			LOGDATAO() << "Error getting alwaysadd" << endl;
 		}
 	}
 	
