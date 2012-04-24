@@ -272,6 +272,7 @@ int main( int argc, char **argv ){
 	QString qscwd = ZDLConfigurationManager::getCurrentDirectory();
 	tconf = ZDLConfigurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
+	delete mw;
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;
