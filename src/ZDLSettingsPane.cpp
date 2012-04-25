@@ -19,6 +19,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QComboBox>
+#include "ZDLMapFile.h"
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLSettingsPane.h"
@@ -71,37 +72,63 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 }
 
 void ZDLSettingsPane::currentRowChanged(int idx){
-	warpCombo->clear();
-	if(idx < 0 || idx >= IWADList->count()){
-		LOGDATAO() << "Index is invalid - " << idx <<endl;
-		return;
+	reloadMapList();
+}
+
+QStringList ZDLSettingsPane::getFilesMaps(){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(!zconf){
+		return QStringList();
 	}
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if(!section){
+		return QStringList();
+	}
+	QVector<ZDLLine*> vctr;
+	section->getRegex("^file[0-9]+$", vctr);
+	if(vctr.size() <= 0){
+		return QStringList();
+	}
+	QStringList maps;
+	for(int i = vctr.size()-1; i >= 0; i--){
+		ZDLMapFile *mapfile = ZDLMapFile::getMapFile(vctr[i]->getValue());
+		if(!mapfile){
+			continue;
+		}
+		maps += mapfile->getMapNames();
+	}
+	return maps;
+}
+
+void ZDLSettingsPane::reloadMapList(){
+	
+	QStringList iwadMaps;
 	QListWidgetItem *item = IWADList->currentItem();
-	if(NULL == item){
-		LOGDATAO() << "Item is NULL" << endl;
+	if(!item){
 		return;
 	}
 	QVariant data = item->data(32);
 	if(!data.isValid() && !data.isNull()){
-		LOGDATAO() << "Item data is NULL" << endl;
-		return;
-	}
+                LOGDATAO() << "Item data is NULL" << endl;
+                return;
+        }
 	QString file = data.toString();
-	if(file.isNull() || file.isEmpty()){
-		LOGDATAO() << "Bad string" << endl;
-		return;
-	}
-	QFileInfo fi(file);
-	if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
-		QStringList maps = getMapNamesForWad(file);
-		if(maps.size() > 0){
-			warpCombo->addItem("");
-			warpCombo->addItems(maps);
-		}else{
-			LOGDATAO() << "No maps in " << file << endl;
-		}
-	}else{
-		LOGDATAO() << "File doesn't exist- " << file << endl;
+        if(file.isNull() || file.isEmpty()){
+                LOGDATAO() << "Bad string" << endl;
+                return;
+        }
+        QFileInfo fi(file);
+        if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
+                iwadMaps = getMapNamesForWad(file);
+        }else{
+                LOGDATAO() << "File doesn't exist- " << file << endl;
+        }
+	QStringList filesMaps = getFilesMaps();
+	if(filesMaps.size() + iwadMaps.size() > 0){
+		warpCombo->clear();
+		warpCombo->addItem("");
+		warpCombo->addItems(filesMaps);
+		warpCombo->addItems(iwadMaps);
 	}
 }
 
@@ -193,7 +220,7 @@ void ZDLSettingsPane::newConfig(){
 	}else{
 		diffList->setCurrentIndex(0);
 	}
-	warpCombo->clear();
+	reloadMapList();
 	if(zconf->hasValue("zdl.save", "warp")){
 		int stat = 0;
 		QString rc = zconf->getValue("zdl.save","warp",&stat);
