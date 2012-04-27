@@ -171,12 +171,14 @@ void ZDLSettingsTab::newConfig(){
 	if(zconf->hasValue("zdl.general","alwaysadd")){
 		int ok;
 		QString rc = zconf->getValue("zdl.general","alwaysadd", &ok);
-		if(ok == 0){
-			LOGDATAO() << "Set alwaysadd" << endl;
+		if(!rc.isNull()){
 			alwaysArgs->setText(rc);
+			LOGDATAO() << "Set alwaysadd as " << rc << endl;
 		}else{
-			LOGDATAO() << "Error getting alwaysadd" << endl;
+			LOGDATAO() << "alwaysadd was null" << endl;
 		}
+	}else{
+		LOGDATAO() << "No alwaysadd" << endl;
 	}
 	
 	if(zconf->hasValue("zdl.general","quotefiles")){

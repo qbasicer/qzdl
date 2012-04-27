@@ -1,10 +1,15 @@
    _________________________
   /                         /
- / qZDL 3.0.5.6 beta       /
+ / qZDL 3.0.5.7 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
+
+* 3.0.5.7 - April 27th, 2012
+  * Actually fixed GHI #11
+  * Create the configuration folders if they don't exist
+  * Save and restore both window size and location
 
 * 3.0.5.6 - April 22nd, 2012
   * Fixed GHI #10: Multiplayer config isn't read on open

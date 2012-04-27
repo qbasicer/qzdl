@@ -35,6 +35,15 @@ extern QApplication *qapp;
 extern QString versionString;
 
 ZDLMainWindow::~ZDLMainWindow(){
+	QSize sze = this->size();
+	QPoint pt = this->pos();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(zconf){
+		QString str = QString("%1,%2").arg(sze.width()).arg(sze.height());
+		zconf->setValue("zdl.general", "windowsize", str);
+		str = QString("%1,%2").arg(pt.x()).arg(pt.y());
+		zconf->setValue("zdl.general", "windowpos", str);
+	}
 	LOGDATAO() << "Closing main window" << endl;
 	if(zup){
 		delete zup;
@@ -101,6 +110,42 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	setContentsMargins(2,2,2,2);
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
+
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(zconf){
+		int ok = 0;
+		bool qtok = false;
+		if(zconf->hasValue("zdl.general", "windowsize")){
+			QString size = zconf->getValue("zdl.general", "windowsize", &ok);
+			if(size.contains(",")){
+				QStringList list = size.split(",");
+				int w = list[0].toInt(&qtok);
+				if(qtok){
+					int h = list[1].toInt(&qtok);
+					if(qtok){
+						LOGDATAO() << "Resizing to w:" << w << " h:" << h << endl;
+						this->resize(QSize(w,h));
+					}
+				}
+			}
+		}
+		if(zconf->hasValue("zdl.general", "windowpos")){
+			QString size = zconf->getValue("zdl.general", "windowpos", &ok);
+			if(size.contains(",")){
+				QStringList list = size.split(",");
+				int x = list[0].toInt(&qtok);
+				if(qtok){
+					int y = list[1].toInt(&qtok);
+					if(qtok){
+						LOGDATAO() << "Moving to x:" << x << " y:" << y << endl;
+						this->move(QPoint(x,y));
+					}
+				}
+			}
+
+		}
+	}
+
 
 	intr = new ZDLInterface(this);
 	settings = new ZDLSettingsTab(this);

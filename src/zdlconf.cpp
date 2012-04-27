@@ -95,8 +95,19 @@ int ZDLConf::writeINI(QString file)
 		QFile stream(file);
 		stream.open(QIODevice::WriteOnly);
 		if (!stream.isOpen()){
-			LOGDATAO() << "Cannot open file for writing" << endl;
-			return 1;
+			QFileInfo fi(file);
+			QDir dir = fi.dir();
+			if(!dir.exists()){
+				dir.mkpath(".");
+				stream.open(QIODevice::WriteOnly);
+				if (!stream.isOpen()){
+					LOGDATAO() << "Cannot create directory and cannot save file" << endl;
+					return 1;
+				}
+			}else{
+				LOGDATAO() << "Cannot open file for writing" << endl;
+				return 1;
+			}
 		}
 		QIODevice *dev = &stream;
 		writeStream(dev);

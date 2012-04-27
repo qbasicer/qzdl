@@ -28,7 +28,10 @@ public:
 	virtual void newConfig();
 protected slots:
 	void currentRowChanged(int);
+	void reloadMapList();
 protected:
+	QStringList getFilesMaps();
+
 	QComboBox *diffList;
 	QComboBox *sourceList;
 	QListWidget *IWADList;
