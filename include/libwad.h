@@ -14,7 +14,7 @@ class DoomWad : public ZDLMapFile {
 		enum AddBehaviour {REWRITE_WAD, APPEND_FIXUP};
 		DoomWad(QString file);
 		DoomWad(QIODevice *dev);
-		bool open();
+		virtual bool open();
 		int lumps();
 		WadLump *getLump(int index);
 		WadLump *getLumpByName(QString name);
@@ -26,16 +26,22 @@ class DoomWad : public ZDLMapFile {
 		int numLumps;
 		int directoryStart;
 		QIODevice *dev;
-		QStringList lumpnames;
+		QStringList levelnames;
+		QVector<WadLump*> wadLumps;
 };
 
 // This certainly won't compile for now
 class WadLump : public QIODevice{
 	public:
+		WadLump(int start, int size, QString name, DoomWad *par);
 		QString getName();
 		int getSize();
+		virtual qint64 readData(char* buf, qint64 len){return 0;}
+		virtual qint64 writeData(const char* buf, qint64 len){return 0;}
 	protected:
 		int lumpStart;
+		int lumpSize;
+		QString lumpName;
 		DoomWad *parent;
 };
 
