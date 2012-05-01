@@ -39,7 +39,7 @@ private:
 	ZDLIWadList *iwadList;
 	ZDLSourcePortList *sourceList;
 	QCheckBox *updater;
-	QCheckBox *pathQuote;
+	QCheckBox *showPaths;
 	QCheckBox *launchZDL;
 	
 };

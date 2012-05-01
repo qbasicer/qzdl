@@ -62,7 +62,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
 	
 	launchClose = new QCheckBox("Close on launch",this);
-	pathQuote = new QCheckBox("Quote paths",this);
+	showPaths = new QCheckBox("Show files paths in lists",this);
 	sections->addWidget(alwaysArgs);
 
 	QHBoxLayout *fileassoc = new QHBoxLayout();
@@ -78,7 +78,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addLayout(fileassoc);
 	sections->addLayout(lrpane);
 	sections->addWidget(launchClose);
-	sections->addWidget(pathQuote);
+	sections->addWidget(showPaths);
 #if !defined(NO_UPDATER)	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
@@ -120,12 +120,6 @@ void ZDLSettingsTab::rebuild(){
 	}
 #endif
 	
-	if (pathQuote->checkState() == Qt::Unchecked){
-		zconf->setValue("zdl.general", "quotefiles", "disabled");
-	}else{
-		zconf->setValue("zdl.general", "quotefiles", "enabled");
-	}
-	
 	if(launchClose->checkState() == Qt::Checked){
 		zconf->setValue("zdl.general","autoclose", "1");
 	}else{
@@ -140,6 +134,11 @@ void ZDLSettingsTab::rebuild(){
 		zconf->deleteValue("zdl.general", "alwaysadd");
 	}else{
 		zconf->setValue("zdl.general", "alwaysadd", alwaysArgs->text());
+	}
+	if(showPaths->checkState() == Qt::Checked){
+		zconf->setValue("zdl.general", "showpaths", "1");
+	}else{
+		zconf->setValue("zdl.general", "showpaths", "0");
 	}
 }
 
@@ -168,6 +167,22 @@ void ZDLSettingsTab::newConfig(){
 	}
 #endif
 
+	if(zconf->hasValue("zdl.general","showpaths")){
+		int ok = 0;
+		QString setting = zconf->getValue("zdl.general","showpaths", &ok);
+		if(!setting.isNull()){
+			if(setting == "0"){
+				showPaths->setCheckState(Qt::Unchecked);
+			}else{
+				showPaths->setCheckState(Qt::Checked);
+			}
+		}else{
+			showPaths->setCheckState(Qt::Checked);
+		}
+	}else{
+		showPaths->setCheckState(Qt::Checked);
+	}
+
 	if(zconf->hasValue("zdl.general","alwaysadd")){
 		int ok;
 		QString rc = zconf->getValue("zdl.general","alwaysadd", &ok);
@@ -179,18 +194,6 @@ void ZDLSettingsTab::newConfig(){
 		}
 	}else{
 		LOGDATAO() << "No alwaysadd" << endl;
-	}
-	
-	if(zconf->hasValue("zdl.general","quotefiles")){
-		int ok;
-		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			pathQuote->setCheckState(Qt::Unchecked);
-		}else{
-			pathQuote->setCheckState(Qt::Checked);
-		}	
-	}else{
-		pathQuote->setCheckState(Qt::Checked);
 	}
 	
 	if(zconf->hasValue("zdl.general","autoclose")){
