@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _ZDLCONF_HPP_
+#define _ZDLCONF_HPP_
  
 class ZDLVariables;
 
 #include <QtCore>
 #include <iostream>
 #include <list>
+#include "zdlsection.hpp"
 
 class ZDLConf {
 	friend class ZDLVariables;
@@ -63,3 +67,6 @@ private:
 	void parse(QString in, ZDLSection* current);
 	//ZDLVariables *vars;
 };
+
+#endif
+

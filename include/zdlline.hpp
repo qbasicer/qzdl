@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _ZDLLINE_HPP_
+#define _ZDLLINE_HPP_
+
 #include <string>
 #include <QtCore>
  
@@ -44,3 +47,6 @@ private:
 	QString variable;
 	int slashConvert;
 };
+
+#endif
+

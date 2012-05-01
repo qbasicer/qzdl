@@ -20,17 +20,22 @@
 #define _ZNAMELISTABLE_H_
 
 #include "ZDLListable.h"
+#include "zdlconf.hpp"
 
 class ZDLNameListable : public ZDLListable{
+	Q_OBJECT
 	public:
 		ZDLNameListable( QListWidget *parent, int type, QString qfile, QString name);
+		~ZDLNameListable();
 		QString getFile();
 		QString getName();
 		void setDisplayName(QString name);
 		void setFile(QString file);
-
+	protected slots:
+		void configurationChanged(ZDLConf *conf);
 	protected:
 		QString generateName();
+		QString generateName(ZDLConf *zconf);
 		QString fileName;
 		QString displayName;
 };

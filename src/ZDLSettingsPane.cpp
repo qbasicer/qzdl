@@ -72,6 +72,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 }
 
 void ZDLSettingsPane::currentRowChanged(int idx){
+	Q_UNUSED(idx);
 	reloadMapList();
 }
 

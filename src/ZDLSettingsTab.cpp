@@ -62,6 +62,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
 	
 	launchClose = new QCheckBox("Close on launch",this);
+
 	showPaths = new QCheckBox("Show files paths in lists",this);
 	sections->addWidget(alwaysArgs);
 
