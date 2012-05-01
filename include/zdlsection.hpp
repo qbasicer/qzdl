@@ -15,9 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef _ZDLSECTION_HPP_
+#define _ZDLSECTION_HPP_
 
 #include <vector>
 #include <QtCore>
+#include "zdlline.hpp"
 
 class ZDLSection{
 	friend class ZDLVariables;
@@ -45,3 +48,6 @@ private:
 	int flags;
 	QString sectionName;
 };
+
+#endif
+

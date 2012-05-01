@@ -24,11 +24,7 @@
 
 using namespace std;
 
-ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLListable(parent, type){
-	QFileInfo qfile(file);
-	QString cname = qfile.fileName();
-	QString list = QString("%1 [%2]").arg(cname).arg(file);
-	setName(list);
+ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLNameListable(parent, type, QFileInfo(file).fileName(), file){
 	fileName = file;
 }
 

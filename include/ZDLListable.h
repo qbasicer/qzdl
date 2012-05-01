@@ -22,7 +22,8 @@
 #include <QListWidgetItem>
 #include <QObject>
 
-class ZDLListable: public QListWidgetItem{
+class ZDLListable: public QObject, public QListWidgetItem{
+	Q_OBJECT
 public:
 	virtual QString getName();
 	ZDLListable( QListWidget * parent, int type);

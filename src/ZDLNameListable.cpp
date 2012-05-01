@@ -19,10 +19,8 @@
 
 #include "ZDLListable.h"
 #include "ZDLNameListable.h"
-#include <string>
 #include <QFileInfo>
-#include <iostream>
-#include <cstdio>
+#include "ZDLConfigurationManager.h" 
 
 using namespace std;
 
@@ -30,6 +28,17 @@ ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, Q
 	setFile(file);
 	setDisplayName(name);
 	setName(generateName());
+	ZDLConfigurationEvents* events = ZDLConfigurationManager::getEvents();
+	if(events){
+		connect(events, SIGNAL(newConfiguration(ZDLConf*)), this, SLOT(configurationChanged(ZDLConf*)));
+	}
+}
+
+ZDLNameListable::~ZDLNameListable(){
+}
+
+void ZDLNameListable::configurationChanged(ZDLConf *conf){
+	setName(generateName(conf));
 }
 
 QString ZDLNameListable::getFile(){
@@ -51,7 +60,26 @@ void ZDLNameListable::setFile(QString file){
 }
 
 QString ZDLNameListable::generateName(){
-	QString list = QString("%1 [%2]").arg(displayName).arg(fileName);
+	return generateName(ZDLConfigurationManager::getActiveConfiguration());
+}
+
+QString ZDLNameListable::generateName(ZDLConf *zconf){
+	bool showPath = true;
+	if(zconf->hasValue("zdl.general","showpaths")){
+		int ok = 0;
+		QString rc = zconf->getValue("zdl.general", "showpaths", &ok);
+		if(!rc.isNull()){
+			if(rc == "0"){
+				showPath = false;
+			}
+		}
+	}
+	QString list = "";
+	if(showPath){
+		list = QString("%1 [%2]").arg(displayName).arg(fileName);
+	}else{
+		list = displayName;
+	}
 	return list;
 }
 
