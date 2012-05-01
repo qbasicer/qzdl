@@ -79,12 +79,14 @@ void ZDLUpdater::fetch(int doAnyways){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 
 	ZDLSection *section = zconf->getSection("zdl.net");
-	if (section){
+	// Check if updates are disabled only if updates aren't forced
+	if (section && doAnyways == 0){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
 
 		for(int i = 0; i < fileVctr.size(); i++){
 			if (fileVctr[i]->getValue().compare("disabled") == 0){
+				return;
 				//ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
 				//ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
 				//connect(bar,SIGNAL(moreclicked()),this,SLOT(updatesDisabledInfobar()));
@@ -127,6 +129,7 @@ void ZDLUpdater::fetch(int doAnyways){
 							}
 						}
 					}
+					LOGDATAO() << "It's not been 24h since the last update check" << endl;
 					return;
 				}
 			}
@@ -254,6 +257,8 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 		LOGDATAO() << "Error!" << endl;
 		return;
 	}
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	zconf->setValue("zdl.net", "lastchecked", QDateTime::currentDateTime().toString());
 	QString str(buffer);
 	LOGDATAO() << "Got: " << str << endl;
 	if (str == "MISMATCH"){
