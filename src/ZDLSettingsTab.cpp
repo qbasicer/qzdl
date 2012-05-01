@@ -62,16 +62,20 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
 	
 	launchClose = new QCheckBox("Close on launch",this);
+	launchClose->setToolTip("Close "ZDL_ENGINE_NAME" completely when launching a new game");
 
 	showPaths = new QCheckBox("Show files paths in lists",this);
+	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
 	sections->addWidget(alwaysArgs);
 
 	QHBoxLayout *fileassoc = new QHBoxLayout();
 	launchZDL = new QCheckBox("Launch *.ZDL files transparently", this);
+	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
 
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	QPushButton *assoc = new QPushButton("Associations", this);
+	assoc->setToolTip("Associate various file types with "ZDL_ENGINE_NAME);
 	fileassoc->addWidget(assoc);
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
@@ -83,6 +87,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 #if !defined(NO_UPDATER)	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
+	updater->setToolTip("Check for updates at launch at most once a day");
 	QPushButton *btnCheckNow = new QPushButton("Check now",this);
 	connect(btnCheckNow, SIGNAL( clicked() ), this, SLOT(checkNow()));
 	
