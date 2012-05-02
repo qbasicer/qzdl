@@ -2,6 +2,7 @@
 #define _ZDLUPDATEDIALOG_H_
 
 #include <QtGui>
+#include <QHttp>
 #include "zdlcommon.h"
 
 class ZDLUpdateDialog : public QDialog {
@@ -10,6 +11,14 @@ class ZDLUpdateDialog : public QDialog {
 		ZDLUpdateDialog(QWidget *parent);
 	public slots:
 		void remindLater();
+	protected slots:
+		void requestFinished(int id, bool error);
+		void responseHeaderReceived(const QHttpResponseHeader &resp);
+	protected:
+		QHttp *http;
+		int reqid;
+		QBuffer buffer;
+		QPlainTextEdit *edit;
 };
 
 
