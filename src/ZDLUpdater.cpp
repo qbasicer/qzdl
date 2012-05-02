@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QMessageBox>
 #include "ZDLUpdater.h"
 #include "ZDLConfigurationManager.h"
@@ -77,11 +77,12 @@ void ZDLUpdater::fetch(int doAnyways){
 	Q_UNUSED(doAnyways);
 	//cout << "fetch" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+
 	ZDLSection *section = zconf->getSection("zdl.net");
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^updateManager$", fileVctr);
-		
+
 		for(int i = 0; i < fileVctr.size(); i++){
 			if (fileVctr[i]->getValue().compare("disabled") == 0){
 				//ZDLConfigurationManager::setInfobarMessage("Updates are disabled.",1);
@@ -92,9 +93,46 @@ void ZDLUpdater::fetch(int doAnyways){
 				//}
 			}
 		}
-		
+
 	}
-	
+
+	if(zconf && zconf->hasValue("zdl.net", "hasupdate")){
+		int ok = 0;
+		QString rc = zconf->getValue("zdl.net", "hasupdate", &ok);
+		if(!rc.isNull()){
+			if(rc == "1"){
+			}
+		}
+	}
+
+	if(zconf && zconf->hasValue("zdl.net", "lastchecked")){
+		int ok = 0;
+		QString rc = zconf->getValue("zdl.net", "lastchecked", &ok);
+		if(!rc.isNull()){
+			QDateTime lc = QDateTime::fromString(rc);
+			if(!lc.isNull() && lc.isValid()){
+				QDateTime now = QDateTime::currentDateTime();
+				lc = lc.addDays(1);
+				if(lc > now){
+					//It's been less than 24h since the last update
+					if(zconf && zconf->hasValue("zdl.net", "hasupdate")){
+						int ok = 0;
+						QString rc = zconf->getValue("zdl.net", "hasupdate", &ok);
+						if(!rc.isNull()){
+							if(rc == "1"){
+								//If we already have an update, tell the user
+								updateCode = 1;
+								emit updateReady();
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+		}
+	}
+
 	if (httpGetId == 0){
 		buffer.clear();
 		updateCode = 0;
@@ -139,7 +177,7 @@ void ZDLUpdater::fetch(int doAnyways){
 			}else{
 				ua += "Windows Unknown";
 			}
-				
+
 		}else if (QSysInfo::WindowsVersion & QSysInfo::WV_CE_based){
 			if (QSysInfo::WindowsVersion == QSysInfo::WV_CE){
 				ua += "Windows CE";
@@ -148,7 +186,7 @@ void ZDLUpdater::fetch(int doAnyways){
 			}else{
 				ua += "Windows Unknown";
 			}
-			
+
 			ua += "WinCE; ";
 		}else{
 			ua += "WinUnknown";
@@ -185,7 +223,7 @@ void ZDLUpdater::fetch(int doAnyways){
 		}else{
 			ua += "Unknown";
 		}
-				
+
 #endif
 #endif
 #if defined(USE_UID)
@@ -203,7 +241,7 @@ void ZDLUpdater::fetch(int doAnyways){
 	}else{
 		LOGDATAO() << "Can't start multiple requests" << endl;
 	}
-	
+
 }
 
 void ZDLUpdater::httpRequestFinished(int requestId, bool error){
@@ -222,22 +260,30 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 		LOGDATAO() << "There is an update available" << endl;
 		updateCode = 1;
 		errorCode = 0;
-	}else if (str == "ERROR-SYNTAX"){
-		LOGDATAO() << "Update syntax error" << endl;
-		updateCode = 0;
-		errorCode = 1;
-	}else if (str == "ERROR-NOID"){
-		LOGDATAO() << "No such ID" << endl;
-		updateCode = 0;
-		errorCode = 2;
-	}else if (str == "OKAY"){
-		LOGDATAO() << "No update available" << endl;
-		updateCode = 0;
-		errorCode = 0;
+		if(zconf){
+			zconf->setValue("zdl.net", "hasupdate", "1");
+		}
 	}else{
-		LOGDATAO() << "Unexpected content" << endl;
-		updateCode = 0;
-		errorCode = 3;
+		if (str == "ERROR-SYNTAX"){
+			LOGDATAO() << "Update syntax error" << endl;
+			updateCode = 0;
+			errorCode = 1;
+		}else if (str == "ERROR-NOID"){
+			LOGDATAO() << "No such ID" << endl;
+			updateCode = 0;
+			errorCode = 2;
+		}else if (str == "OKAY"){
+			LOGDATAO() << "No update available" << endl;
+			updateCode = 0;
+			errorCode = 0;
+		}else{
+			LOGDATAO() << "Unexpected content" << endl;
+			updateCode = 0;
+			errorCode = 3;
+		}
+		if(zconf){
+			zconf->deleteValue("zdl.net", "hasupdate");
+		}
 	}
 	httpGetId = 0;
 	LOGDATAO() << "Reset httpGetId, updateCode:" << updateCode << " errorCode:" << errorCode << endl;
@@ -261,5 +307,5 @@ void ZDLUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
 	if(errorCode != 200){
 		ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);	
 	}
-	
+
 }
