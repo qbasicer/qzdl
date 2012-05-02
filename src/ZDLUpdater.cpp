@@ -98,16 +98,7 @@ void ZDLUpdater::fetch(int doAnyways){
 
 	}
 
-	if(zconf && zconf->hasValue("zdl.net", "hasupdate")){
-		int ok = 0;
-		QString rc = zconf->getValue("zdl.net", "hasupdate", &ok);
-		if(!rc.isNull()){
-			if(rc == "1"){
-			}
-		}
-	}
-
-	if(zconf && zconf->hasValue("zdl.net", "lastchecked")){
+	if(zconf && zconf->hasValue("zdl.net", "lastchecked") && doAnyways == 0){
 		int ok = 0;
 		QString rc = zconf->getValue("zdl.net", "lastchecked", &ok);
 		if(!rc.isNull()){
