@@ -26,6 +26,7 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
 #include "ZDLImportDialog.hpp"
+#include "ZDLUpdateDialog.h"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -65,9 +66,8 @@ void ZDLMainWindow::manageUpdate(){
 
 void ZDLMainWindow::newUpdate(){
 	if(zup){
-		LOGDATAO() << "Showing update message" << endl;
-		QString engine = ZDL_ENGINE_NAME;
-		QMessageBox::warning(NULL,ZDL_ENGINE_NAME, "There has been an update posted for "+engine+"\n\nPlease visit the "+engine+" website at http://zdl.vectec.net for more information.",QMessageBox::Ok,QMessageBox::Ok);
+		ZDLUpdateDialog zdu(this);
+		zdu.exec();
 	}
 }
 
