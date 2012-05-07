@@ -63,6 +63,10 @@ static void addFile(QString file, ZDLConf* zconf){
 
 QDebug *zdlDebug;
 
+#if defined(Q_WS_WIN)
+__declspec(dllimport) int qt_ntfs_permission_lookup;
+#endif
+
 int main( int argc, char **argv ){
 	QStringList args;
 	for(int i = 1; i < argc; i++){
@@ -91,6 +95,10 @@ int main( int argc, char **argv ){
 #endif
 
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
+
+#if defined(Q_WS_WIN)
+	qt_ntfs_permission_lookup = 0;
+#endif
 
 	QApplication a( argc, argv );
 	qapp = &a;
