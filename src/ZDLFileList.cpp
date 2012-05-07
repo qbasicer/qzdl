@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "ZDLFileList.h"
 #include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
@@ -63,46 +63,35 @@ void ZDLFileList::rebuild(){
 			section->deleteVariable(vctr[i]->getVariable());
 		}
 	}
-	
+
 	//cout << "Building lines" << endl;
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLFileListable* fitm = (ZDLFileListable*)itm;
 		QString name = QString("file").append(QString::number(i));
 		zconf->setValue("zdl.save", name, fitm->getFile());
-	
+
 	}
-	
+
 }
 
 void ZDLFileList::addButton(){
 	LOGDATAO() << "Adding new file" << endl;
 	QStringList filters;
 	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
-         << "WAD Files (*.wad)"
-         << "PK3 Files (*.pk3)"
-	 << "PK7 Files (*.pk7)"
-	 << "PKZ Files (*.pkz)"
-	 << "P7Z Files (*.pk7)"
-         << "zip Files (*.zip)"
-         << "Any files (*)";
-	QFileDialog dialog(this);
-	dialog.setFilters(filters);
-	dialog.setFileMode(QFileDialog::ExistingFiles);
-	QStringList fileNames;
-	if(dialog.exec()){
-		fileNames = dialog.selectedFiles();
-		for(int i = 0; i < fileNames.size(); i++){
-			LOGDATAO() << "Adding file " << fileNames[i] << endl;
-			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
-			insert(zList, -1);
-		}
-
+		<< "WAD Files (*.wad)"
+		<< "PK3 Files (*.pk3)"
+		<< "Patch Files (*.bex *.deh)"
+		<< "PK7 Files (*.pk7)"
+		<< "PKZ Files (*.pkz)"
+		<< "P7Z Files (*.pk7)"
+		<< "zip Files (*.zip)"
+		<< "Any files (*)";
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", QString(), filters.join(";;"));
+	for(int i = 0; i < fileNames.size(); i++){
+		LOGDATAO() << "Adding file " << fileNames[i] << endl;
+		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
+		insert(zList, -1);
 	}
-
-
-	
-
-
 }
 
