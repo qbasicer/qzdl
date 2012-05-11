@@ -32,11 +32,13 @@ using namespace std;
 
 #define ZDL_VERSION_STRING	"3.0.5.7 beta"
 #define ZDL_VERSION_ID		31
+#define ZDL_PRODUCT_ID		"qzdl-win32-beta"
 
 #else
 
 #define ZDL_VERSION_STRING	"3.0.5.7 beta"
 #define ZDL_VERSION_ID		30
+#define ZDL_PRODUCT_ID		"qzdl-git"
 
 #endif
 
