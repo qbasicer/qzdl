@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
@@ -41,20 +41,20 @@ extern QApplication *qapp;
 ZDLInterface::ZDLInterface(QWidget *parent):ZDLWidget(parent){
 	LOGDATAO() << "New ZDLInterface" << endl;
 	ZDLConfigurationManager::setInterface(this);
-	
+
 	box = new QVBoxLayout(this);
-	
-	
+
+
 	QLayout *tpane = getTopPane();
 	QLayout *bpane = getBottomPane();
-	
+
 	mpane = NULL;
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
 	ZDLInfoBar *zib = new ZDLInfoBar(this);
 	box->addWidget(zib);
-	
+
 	ZDLConfigurationManager::setInfobar(zib);
 	box->addLayout(tpane);
 	box->addLayout(bpane);
@@ -67,11 +67,11 @@ QLayout *ZDLInterface::getTopPane(){
 	ZDLQSplitter *split = new ZDLQSplitter(this);
 	split->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ));
 	QSplitter *rsplit = split->getSplit();
-	
+
 
 	ZDLFilePane *fpane = new ZDLFilePane(rsplit);
 	ZDLSettingsPane *spane = new ZDLSettingsPane(rsplit);
-	
+
 	split->addChild(fpane);
 	split->addChild(spane);
 	box->setSpacing(2);
@@ -110,14 +110,14 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	QMenu *context = new QMenu(btnZDL);
 	QMenu *actions = new QMenu("Actions",context);
-	
+
 	QAction *showCommandline = actions->addAction("Show Command Line");
 	QAction *clearAllPWadsAction = actions->addAction("Clear PWAD list");
 	QAction *clearAllFieldsAction = actions->addAction("Clear all fields");
 	clearAllFieldsAction->setShortcut(QKeySequence::New);
 	QAction *clearEverythingAction = actions->addAction("Clear everything");
 	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
-	
+
 	context->addMenu(actions);
 	context->addSeparator();
 	QAction *loadZdlFileAction = context->addAction("Load .zdl");
@@ -130,7 +130,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	context->addSeparator();
 	QAction *aboutAction = context->addAction("About");
 	aboutAction->setShortcut(QKeySequence::HelpContents);
-	
+
 	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
 	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
@@ -144,9 +144,9 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
 	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
-	
+
 	btnZDL->setMenu(context);
-	
+
 	int minBtnWidth = 50;
 
 	btnExit->setMinimumWidth(minBtnWidth-20);
@@ -166,7 +166,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	box->addWidget(btnEpr);
 	box->addWidget(btnLaunch);
 	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
-	
+
 	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
 	return box;
 }
@@ -202,7 +202,7 @@ void ZDLInterface::clearEverything(){
 	delete zconf;
 	LOGDATAO() << "Clearing done" << endl;
 	mw->startRead();
-	
+
 }
 
 void ZDLInterface::clearAllFields(){
@@ -244,7 +244,7 @@ void ZDLInterface::buttonPaneNewConfig(){
 	}else{
 		btnEpr->setIcon(QPixmap(aup));
 	}
-	
+
 }
 
 void ZDLInterface::mclick(){
@@ -286,83 +286,70 @@ void ZDLInterface::saveConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ini (*.ini)"
-			<< "ini Files (*.ini)"
-			<< "Any files (*)";
-	QFileDialog dialog(this,"Save");
-	dialog.setFilters(filters);
-	QStringList fileNames;
-	if(dialog.exec()){
-		fileNames = dialog.selectedFiles();
-		for(int i = 0; i < fileNames.size(); i++){
-			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
-			zconf->writeINI(fileNames[i]);
-		}
+		<< "ini Files (*.ini)"
+		<< "Any files (*)";
+
+	QString filter = filters.join(";;");
+	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", QString(), filter);
+
+	if(!fileName.isNull() && !fileName.isEmpty()){
+		ZDLConfigurationManager::setConfigFileName(fileName);
+		zconf->writeINI(fileName);
 		mw->startRead();
 	}
-	
+
 }
 
 void ZDLInterface::loadConfigFile(){
 	LOGDATAO() << "Loading config file" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	QString filter;
 	QStringList filters;
 	filters << "ini (*.ini)"
-			<< "ini Files (*.ini)"
-			<< "Any files (*)";
-	QFileDialog dialog(this);
-	dialog.setFilters(filters);
-	dialog.setFileMode(QFileDialog::ExistingFile);
-	QStringList fileNames;
-	if(dialog.exec()){
-		fileNames = dialog.selectedFiles();
-		for(int i = 0; i < fileNames.size(); i++){
+		<< "ini Files (*.ini)"
+		<< "Any files (*)";
+	filter = filters.join(";;");
+	QString fileName = QFileDialog::getOpenFileName(this, "Save Configuration", QString(), filter);
+	if(!fileName.isNull() && !fileName.isEmpty()){
 			delete zconf;
 			ZDLConf* tconf = new ZDLConf();
-			ZDLConfigurationManager::setConfigFileName(fileNames[i]);
-			tconf->readINI(fileNames[i]);
+			ZDLConfigurationManager::setConfigFileName(fileName);
+			tconf->readINI(fileName);
 			ZDLConfigurationManager::setActiveConfiguration(tconf);
-			
-		}
+
 		mw->startRead();
 	}
-	
+
 }
 
 void ZDLInterface::loadZdlFile(){
 	LOGDATAO() << "Loading ZDL file" << endl;
 	QStringList filters;
+	QString filter;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
-	QFileDialog dialog(this,"Load");
-	dialog.setFilters(filters);
-	dialog.setFileMode(QFileDialog::ExistingFile);
-	QStringList fileNames;
-	if(dialog.exec()){
-		fileNames = dialog.selectedFiles();
-		if(fileNames.size() == 1){
-			ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
-			for(int i = 0; i < current->sections.size(); i++){
-				if(current->sections[i]->getName().compare("zdl.save") == 0){
-					ZDLSection *section = current->sections[i];
-					current->sections.remove(i);
-					delete section;
-					break;
-				}
+	filter = filters.join(";;");
+	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", QString(), filter);
+	if(!fileName.isNull() && !fileName.isEmpty()){
+		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
+		for(int i = 0; i < current->sections.size(); i++){
+			if(current->sections[i]->getName().compare("zdl.save") == 0){
+				ZDLSection *section = current->sections[i];
+				current->sections.remove(i);
+				delete section;
+				break;
 			}
-			QString fileName = fileNames[0];
-			ZDLConf *newConf = new ZDLConf();
-			newConf->readINI(fileName);
-			for(int i = 0; i < newConf->sections.size(); i++){
-				if(newConf->sections[i]->getName().compare("zdl.save") == 0){
-					ZDLSection *section = newConf->sections[i];
-					current->addSection(section->clone());
-					break;
-				}
-			}
-			delete newConf;
-			mw->startRead();
-		}else{
-			QMessageBox::critical(this,ZDL_ENGINE_NAME " Load .ZDL Error", "You must select one and only one .zdl file at a time to load",QMessageBox::Ok,QMessageBox::Ok);
 		}
+		ZDLConf *newConf = new ZDLConf();
+		newConf->readINI(fileName);
+		for(int i = 0; i < newConf->sections.size(); i++){
+			if(newConf->sections[i]->getName().compare("zdl.save") == 0){
+				ZDLSection *section = newConf->sections[i];
+				current->addSection(section->clone());
+				break;
+			}
+		}
+		delete newConf;
+		mw->startRead();
 	}
 }
 
@@ -371,27 +358,22 @@ void ZDLInterface::saveZdlFile(){
 	sendSignals();
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
-	QFileDialog dialog(this,"Save");
-	dialog.setFilters(filters);
-	QStringList fileNames;
-	if(dialog.exec()){
+	QString filter = filters.join(";;");
+	QString fileName = QFileDialog::getOpenFileName(this, "Save File", QString(), filter);
+	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		ZDLConf *copy = new ZDLConf();
 		for(int i = 0; i < current->sections.size(); i++){
 			if(current->sections[i]->getName().compare("zdl.save") == 0){
 				copy->addSection(current->sections[i]->clone());
-				fileNames = dialog.selectedFiles();
-				for(int i = 0; i < fileNames.size(); i++){
-					QString fileName = fileNames[i];
-					if(!fileName.contains(".")){
-						fileName = fileName + QString(".zdl");
-					}
-					copy->writeINI(fileNames[i]);
+				if(!fileName.contains(".")){
+					fileName = fileName + QString(".zdl");
 				}
+				copy->writeINI(fileName);
 			}
 		}
 	}
-	
+
 }
 
 void ZDLInterface::aboutClick(){
@@ -403,7 +385,7 @@ void ZDLInterface::aboutClick(){
 void ZDLInterface::showCommandline(){
 	LOGDATAO() << "Showing command line" << endl;
 	writeConfig();
-	
+
 	QString exec = mw->getExecutable();
 	if (exec.length() < 1){
 		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
@@ -417,7 +399,7 @@ void ZDLInterface::showCommandline(){
 	if(exec.contains("\\")){
 		exec.replace("\\","/");
 	}
-	
+
 	//Find the executable
 	QStringList executablePath = exec.split("/");
 
@@ -445,7 +427,7 @@ void ZDLInterface::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
 		zconf->setValue("zdl.save", "extra", extraArgs->text());
-		
+
 	}else{
 		zconf->deleteValue("zdl.save", "extra");
 	}
@@ -490,7 +472,7 @@ void ZDLInterface::newConfig(){
 				}
 				box->addWidget(mpane);
 				mpane->setVisible(true);
-			//No?
+				//No?
 			}else{
 				if(mpane){
 					box->removeWidget(mpane);
@@ -506,7 +488,7 @@ void ZDLInterface::newConfig(){
 				mpane->setVisible(false);
 			}
 		}
-	//Do we not even have the section?
+		//Do we not even have the section?
 	}else{
 		if(mpane){
 			box->removeWidget(mpane);

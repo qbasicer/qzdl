@@ -32,11 +32,7 @@ ZDLUpdateDialog::ZDLUpdateDialog(QWidget *parent):QDialog(parent){
 	reqid = 0;
 	http = new QHttp(this);
 	http->setHost("update.vectec.net", QHttp::ConnectionModeHttp);
-#ifdef Q_WS_WIN
-	QString url = "/getchangelog.php?name=qzdl-win32-beta&id=";
-#else
-	QString url = "/getchangelog.php?name=qzdl-git&id=";
-#endif
+	QString url = "/getchangelog.php?name="ZDL_PRODUCT_ID"&id=";
 	connect(http, SIGNAL(requestFinished(int,bool)), this, SLOT(requestFinished(int,bool)));
 	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader&)), this, SLOT(responseHeaderReceived(const QHttpResponseHeader&)));
 	reqid = http->get(url + QString::number(ZDL_VERSION_ID), &buffer);
