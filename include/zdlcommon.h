@@ -31,8 +31,8 @@ using namespace std;
 
 #define ZDL_VERSION_STRING	"3.0.5.8"
 #define ZDL_VERSION_ID		31
-#define ZDL_PRODUCT_ID		"qzdl-win32-beta"
-
+#define ZDL_PRODUCT_ID		"qzdl-win32-stable"
+#define ZDL_STABLE
 #else
 
 #define ZDL_VERSION_STRING	"3.0.5.8"
