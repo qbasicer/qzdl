@@ -30,7 +30,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	QHBoxLayout *hbox = new QHBoxLayout();
 	box->addLayout(hbox);
 	QVBoxLayout *vbox = new QVBoxLayout();
-	QLabel *title = new QLabel(QString(ZDL_ENGINE_NAME)+ZDL_VERSION_STRING,this);
+	QLabel *title = new QLabel(QString(ZDL_ENGINE_NAME)+" "+ZDL_VERSION_STRING,this);
 
 	QFont font;
 	font.setPointSize(24);
