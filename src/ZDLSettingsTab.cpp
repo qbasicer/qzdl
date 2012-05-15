@@ -97,7 +97,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 
 #if defined(ZDL_STABLE)
 	sections->addWidget(new QLabel("You're running ZDL Stable", this));
-	QLabel *web = new QLabel("Visit <a href=http://zdl.vectec.net>zdl.vectec.net</a> to try a beta</a>";
+	QLabel *web = new QLabel("Visit <a href=http://zdl.vectec.net>zdl.vectec.net</a> to try a beta</a>");
 	web->setOpenExternalLinks(true);
 	sections->addWidget(web);
 	
