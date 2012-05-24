@@ -120,6 +120,7 @@ void ZDLUpdater::fetch(int doAnyways){
 							}
 						}
 					}
+					LOGDATAO() << "It's not been 24h since the last update check" << endl;
 					return;
 				}
 			}

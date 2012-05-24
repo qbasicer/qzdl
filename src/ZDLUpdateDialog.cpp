@@ -17,7 +17,9 @@ ZDLUpdateDialog::ZDLUpdateDialog(QWidget *parent):QDialog(parent){
 	edit->setPlainText("Loading...");
 	edit->setReadOnly(true);
 	layout->addWidget(edit);
-	layout->addWidget(createLabel("You can download the newest version at <a href=\"http://zdl.vectec.net\">zdl.vectec.net</a>", this));
+	QLabel *web = createLabel("You can download the newest version at <a href=\"http://zdl.vectec.net\">zdl.vectec.net</a>", this);
+	web->setOpenExternalLinks(true);
+	layout->addWidget(web);
 
 	QDialogButtonBox *btnGrp = new QDialogButtonBox(this);
 	QPushButton *btnOk = new QPushButton("Ok", this);

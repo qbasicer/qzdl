@@ -95,11 +95,5 @@ void ZDLFileList::addButton(){
 		insert(zList, -1);
 		ZDLMapFile::getMapFile(fileNames[i]);
 	}
-
-
-
-
-
-
 }
 
