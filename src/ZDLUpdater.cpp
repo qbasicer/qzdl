@@ -120,6 +120,7 @@ void ZDLUpdater::fetch(int doAnyways){
 							}
 						}
 					}
+					LOGDATAO() << "It's not been 24h since the last update check" << endl;
 					return;
 				}
 			}
@@ -130,11 +131,8 @@ void ZDLUpdater::fetch(int doAnyways){
 		buffer.clear();
 		updateCode = 0;
 		http->setHost(this->host, QHttp::ConnectionModeHttp, this->port);
-#ifdef Q_WS_WIN
-		QString url = "/check.php?name=qzdl-win32-beta&id=";
-#else
-		QString url = "/check.php?name=qzdl-git&id=";
-#endif
+
+		QString url = "/check.php?name="ZDL_PRODUCT_ID"id=";
 		url += QString::number(ZDL_VERSION_ID);
 		QHttpRequestHeader qreq("GET", url);
 		QString ua = QString(ZDL_ENGINE_NAME) + QString(" ") + versionString;

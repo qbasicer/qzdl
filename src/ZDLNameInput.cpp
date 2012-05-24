@@ -56,17 +56,10 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 }
 
 void ZDLNameInput::browse(){
-	QFileDialog dialog(this);
-	dialog.setFilters(filters);
-	dialog.setFileMode(QFileDialog::ExistingFile);
-	QStringList fileNames;
-	if(dialog.exec()){
-		fileNames = dialog.selectedFiles();
-		for(int i = 0; i < fileNames.size(); i++){
-			lfile->setText(fileNames[i]);
-			
-		}
-
+	QString filter = filters.join(";;");
+	QString fileName = QFileDialog::getOpenFileName(this, "Add File", QString(), filter);
+	if(!fileName.isNull() && !fileName.isEmpty()){
+		lfile->setText(fileName);
 	}
 }
 

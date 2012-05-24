@@ -1,10 +1,16 @@
    _________________________
   /                         /
- / qZDL 3.0.5.7 beta       /
+ / qZDL 3.0.5.8            /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
+
+* 3.0.5.8 - May 23rd, 2012
+  * Use native file dialogs instead of Qt
+  * Show a nice GUI for new versions which shows the changelog
+  * Check for updates at most once every 24h unless checked manually
+  * No longer beta
 
 * 3.0.5.7 - April 27th, 2012
   * Actually fixed GHI #11
