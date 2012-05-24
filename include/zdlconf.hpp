@@ -24,6 +24,7 @@ class ZDLVariables;
 #include <QtCore>
 #include <iostream>
 #include <list>
+#include "zdlcommon.h"
 #include "zdlsection.hpp"
 
 class ZDLConf {
@@ -60,11 +61,37 @@ public:
 	void addSection(ZDLSection *section){
 		sections.push_back(section);
 	}
+protected:
+	void readLock(){
+		LOGDATAO() << "ReadLockGet" << endl;
+		GET_READLOCK(mutex);
+	}
+	void writeLock(){
+		LOGDATAO() << "WriteLockGet" << endl;
+		GET_WRITELOCK(mutex);
+	}
+	void releaseReadLock(){
+		LOGDATAO() << "ReadLockRelease" << endl;
+		RELEASE_READLOCK(mutex);
+	}
+	void releaseWriteLock(){
+		LOGDATAO() << "WriteLockRelease" << endl;
+		RELEASE_WRITELOCK(mutex);
+	}
+	bool tryReadLock(int timeout = 999999999){
+		LOGDATAO() << "ReadLockTryGet" << endl;
+		return TRY_READLOCK(mutex, timeout);
+	}
+	bool tryWriteLock(int timeout = 999999999){
+		LOGDATAO() << "WriteLockTryGet" << endl;
+		return TRY_WRITELOCK(mutex, timeout);
+	}
 private:
 	int mode;
 	int reads;
 	int writes;
 	void parse(QString in, ZDLSection* current);
+	LOCK_CLASS *mutex;
 	//ZDLVariables *vars;
 };
 
