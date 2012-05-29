@@ -1,6 +1,9 @@
 #ifndef _ZDLPLUGINAPI_H_
 #define _ZDLPLUGINAPI_H_
 
+#include <QtCore>
+#include "ZDLApiCommon.h"
+
 class ZDLPluginApi {
 	public:
 		virtual QString getPluginName() = 0;
