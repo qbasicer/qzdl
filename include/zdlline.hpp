@@ -35,7 +35,9 @@ public:
 	int setValue(QString inValue);
 	int isSlashConverting(){return (slashConvert != 0);}
 	ZDLLine *clone();
+	void setIsCopy(bool val);
 private:
+	bool isCopy;
 	int reads;
 	int writes;
 	void parse();

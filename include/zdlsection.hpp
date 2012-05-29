@@ -18,7 +18,7 @@
 #ifndef _ZDLSECTION_HPP_
 #define _ZDLSECTION_HPP_
 
-#include <vector>
+#include "zdlcommon.h"
 #include <QtCore>
 #include "zdlline.hpp"
 
@@ -41,9 +41,48 @@ public:
 	void addLine(ZDLLine* line){
 		lines.push_back(line);
 	}
+	void setIsCopy(bool copy){
+		isCopy = copy;
+		for(int i = 0; i < lines.size(); i++){
+			lines[i]->setIsCopy(copy);
+		}
+	}
+protected:
+        void readLock(const char* file, int line){
+                LOGDATAO() << "ReadLockGet@" << file << ":" << line << endl;
+                GET_READLOCK(mutex);
+        }
+        void writeLock(const char* file, int line){
+                LOGDATAO() << "WriteLockGet@" << file << ":" << line << endl;
+                if(isCopy){
+                        qDebug() << "WriteLock on copy from " << file << ":" << line << endl;
+                }
+                GET_WRITELOCK(mutex);
+        }
+        void releaseReadLock(const char* file, int line){
+                LOGDATAO() << "ReadLockRelease@" << file << ":" << line << endl;
+                RELEASE_READLOCK(mutex);
+        }
+        void releaseWriteLock(const char* file, int line){
+                LOGDATAO() << "WriteLockRelease@" << file << ":" << line << endl;
+                RELEASE_WRITELOCK(mutex);
+        }
+        bool tryReadLock(const char* file, int line, int timeout = 999999999){
+                LOGDATAO() << "ReadLockTryGet@" << file << ":" << line << endl;
+                return TRY_READLOCK(mutex, timeout);
+        }
+        bool tryWriteLock(const char* file, int line, int timeout = 999999999){
+                LOGDATAO() << "WriteLockTryGet@" << file << ":" << line << endl;
+		if(isCopy){
+			qDebug() << "WriteLock on copy" << endl;
+		}
+                return TRY_WRITELOCK(mutex, timeout);
+        }
 private:
+        LOCK_CLASS *mutex;
 	int reads;
 	int writes;
+	bool isCopy;
 	ZDLLine *findLine(QString inVar);
 	int flags;
 	QString sectionName;
