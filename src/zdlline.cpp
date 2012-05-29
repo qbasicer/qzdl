@@ -48,6 +48,7 @@ ZDLLine::ZDLLine(QString inLine)
 		type = 0;
 		parse();
 	}
+	isCopy = false;
 }
 
 ZDLLine::ZDLLine()
@@ -59,10 +60,15 @@ ZDLLine::ZDLLine()
 	value = "";
 	variable = "";
 	type = 2;
+	isCopy = false;
 }
 
 ZDLLine::~ZDLLine()
 {
+}
+
+void ZDLLine::setIsCopy(bool val){
+	isCopy = val;
 }
 
 QString ZDLLine::getValue()
@@ -94,6 +100,9 @@ QString ZDLLine::getLine()
 
 int ZDLLine::setValue(QString inValue)
 {
+	if(isCopy){
+		qDebug() << "SETTING A VALUE ON A COPY" << endl;
+	}
 	if(slashConvert){
 		inValue.replace("/","\\");
 	}

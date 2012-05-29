@@ -250,7 +250,9 @@ ZDLSection *ZDLConf::getSection(QString lsection){
                         if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
 				LOGDATAO() << "Got it " << DPTR(section) << endl;
 				releaseReadLock();
-                                return section;
+				ZDLSection *copy = section->clone();
+				copy->setIsCopy(true);
+                                return copy;
                         }
 		}
 		releaseReadLock();

@@ -73,8 +73,6 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define ASSOCIATE_FILETYPES() {}
 #endif
 
-#endif
-
 extern QStringList getMapNamesForWad(QString wadFile);
 
 
@@ -109,3 +107,4 @@ extern QStringList getMapNamesForWad(QString wadFile);
 #include "zdlconf.hpp"
 #include "zdlvariables.hpp"
 
+#endif
