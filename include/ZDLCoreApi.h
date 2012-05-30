@@ -18,6 +18,7 @@ class ZDLCoreApi {
 		virtual bool setValue(QString section, QString variable, QString value) = 0;
 		virtual bool hasSection(QString section) = 0;
 		virtual bool hasVariable(QString section, QString variable) = 0;
+		virtual QStringList getArgs() = 0;
 };
 
 

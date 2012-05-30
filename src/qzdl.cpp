@@ -26,10 +26,13 @@
 #include "ZDLVersion.h"
 
 #include "ZDLNullDevice.h"
+#include "ZDLCoreImpl.h"
+#include "ZDLBootstrapPlugin.h"
 
 QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
+ZDLCoreImpl *core;
 
 static void addFile(QString file, ZDLConf* zconf){
 	LOGDATA() << "Adding " << file << " to " << (void*)zconf << endl;
@@ -94,6 +97,13 @@ int main( int argc, char **argv ){
 #else
 	zdlDebug = new QDebug(&nullDev);
 #endif
+
+	core = new ZDLCoreImpl(args);
+	ZDLBootstrapPlugin *bsp = new ZDLBootstrapPlugin(args);
+	ZPID pz = core->registerPlugin(bsp);
+	if(pz == BAD_ZPID){
+		qDebug() << "Failed to register bootstrap";
+	}
 
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
@@ -283,6 +293,7 @@ int main( int argc, char **argv ){
 	QDir::setCurrent(qscwd);
 	delete mw;
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
+	delete core;
 	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;
 }
