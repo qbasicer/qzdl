@@ -1,8 +1,11 @@
 #ifndef _ZDLCOREAPI_H_
 #define _ZDLCOREAPI_H_
 
+class ZDLCoreApi;
+
 #include <QtCore>
 #include "ZDLApiCommon.h"
+#include "ZDLPluginApi.h"
 
 class ZDLCoreApi {
 	public:
@@ -19,6 +22,8 @@ class ZDLCoreApi {
 		virtual bool hasSection(QString section) = 0;
 		virtual bool hasVariable(QString section, QString variable) = 0;
 		virtual QStringList getArgs() = 0;
+		virtual bool waitForProcessExit(ZPID pid) = 0;
+		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QVector<QVariant> args, bool async) = 0;
 };
 
 

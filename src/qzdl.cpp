@@ -70,6 +70,8 @@ QDebug *zdlDebug;
 __declspec(dllimport) int qt_ntfs_permission_lookup;
 #endif
 
+
+
 int main( int argc, char **argv ){
 	QStringList args;
 	for(int i = 1; i < argc; i++){
@@ -98,32 +100,41 @@ int main( int argc, char **argv ){
 	zdlDebug = new QDebug(&nullDev);
 #endif
 
+        QApplication a( argc, argv );
+        qapp = &a;
+
+        ZDLConfigurationManager::setArgv(args);
+        {
+                QString execuatble(argv[0]);
+#if defined(Q_WS_WIN)
+                execuatble.replace("\\", "/");
+#endif
+                QFileInfo fullPath(execuatble);
+                LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
+                ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
+        }
+
+
+
 	core = new ZDLCoreImpl(args);
 	ZDLBootstrapPlugin *bsp = new ZDLBootstrapPlugin(args);
 	ZPID pz = core->registerPlugin(bsp);
 	if(pz == BAD_ZPID){
 		qDebug() << "Failed to register bootstrap";
+	}else{
+		a.exec();
+		core->waitForProcessExit(pz);
+		qDebug() << "Bootstrap thread finished, dieing off";
 	}
+	return 0;
+}
 
+int uiMain(QStringList args){
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
-
+	QStringList eatenArgs(args);
 #if defined(Q_WS_WIN)
 	qt_ntfs_permission_lookup = 0;
 #endif
-
-	QApplication a( argc, argv );
-	qapp = &a;
-	ZDLConfigurationManager::setArgv(args);
-	{
-		QString execuatble(argv[0]);
-#if defined(Q_WS_WIN)
-		execuatble.replace("\\", "/");
-#endif
-		QFileInfo fullPath(execuatble);
-		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
-		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
-	}
-
 
 #if defined(Q_WS_WIN)
 	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
@@ -254,7 +265,7 @@ int main( int argc, char **argv ){
 	mw->setUpdater(zup);
 	ZDLConfigurationManager::setUpdater(zup);
 	mw->show();
-	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+	QObject::connect(qapp, SIGNAL(lastWindowClosed()), qapp, SLOT(quit()));
 	mw->startRead();
 
 	if(hasZDLFile){
@@ -280,7 +291,10 @@ int main( int argc, char **argv ){
 
 	mw->handleImport();
 	LOGDATA() << "-----------------------------------" << endl;
-	int ret = a.exec();
+	//int ret = qapp->exec();
+//TODO: Fix this leak!
+#if 0
+	int ret = 0;
 	LOGDATA() << "-----------------------------------" << endl;
 	LOGDATA() << "Starting shutdown" << endl;
 	if (ret != 0){
@@ -295,6 +309,7 @@ int main( int argc, char **argv ){
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	delete core;
 	LOGDATA() << "ZDL QUIT" << endl;
-	return ret;
+#endif
+	return 1;
 }
 

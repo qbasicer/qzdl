@@ -1,6 +1,8 @@
 #ifndef _ZDLPLUGINAPI_H_
 #define _ZDLPLUGINAPI_H_
 
+class ZDLPluginApi;
+
 #include <QtCore>
 #include "ZDLApiCommon.h"
 #include "ZDLCoreApi.h"

@@ -1,11 +1,15 @@
 #include "ZDLCoreImpl.h"
 #include "zdlcommon.h"
+#include "ZDLUIThreadRunner.h"
+
+extern ZDLUIThreadRunner *uiRunner; 
 
 ZDLCoreImpl::ZDLCoreImpl(QStringList args){
 	mutex = new QMutex(QMutex::Recursive);
 	LOGDATAO() << "ZDLCoreImpl START" << endl;
 	lastPid = 0;
 	this->args = args;
+	new ZDLUIThreadRunner();
 }
 
 ZPID ZDLCoreImpl::loadPluginPath(QString path){
@@ -15,66 +19,69 @@ ZPID ZDLCoreImpl::loadPluginPath(QString path){
 
 ZPID ZDLCoreImpl::loadPluginName(QString name){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return BAD_ZPID;
+	return BAD_ZPID;
 }
 
 bool ZDLCoreImpl::unloadPlugin(ZPID pid){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 ZPID ZDLCoreImpl::findPluginByName(QString name){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return BAD_ZPID;
+	return BAD_ZPID;
 }
 
 bool ZDLCoreImpl::findPluginsByRegex(QString regex, QVector<ZPID> &result){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QVector<QVariant> args){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return QVariant();
+	return QVariant();
 }
 
 bool ZDLCoreImpl::addTab(QString tabName, QWidget *widget){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 bool ZDLCoreImpl::removeTab(QWidget *widget){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 QString ZDLCoreImpl::getValue(QString section, QString variable){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return QString("");
+	return QString("");
 }
 
 bool ZDLCoreImpl::setValue(QString section, QString variable, QString value){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 bool ZDLCoreImpl::hasSection(QString section){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 bool ZDLCoreImpl::hasVariable(QString section, QString variable){
 	LOGDATAO() << "Unimplemented function" << endl;
-        return false;
+	return false;
 }
 
 ZPID ZDLCoreImpl::registerPlugin(ZDLPluginApi *plugin){
-	LOGDATAO() << "Unimplemented function" << endl;
+	//Lock the core
+	lock();
 	PluginEntry *pe = new PluginEntry();
 	pe->pid = ++lastPid;
 	pe->plugin = plugin;
 	pe->origin = 1;
 	pe->runner = new ZDLPluginRunner(this, plugin);
+	plugins.insert(pe->pid, pe);
+	unlock();
 	pe->runner->start();
 	return pe->pid;
 }
@@ -84,5 +91,63 @@ QStringList ZDLCoreImpl::getArgs(){
 }
 
 void ZDLCoreImpl::fireInternalEvent(int evtid, void* payload){
+	switch(evtid){
+		case CORE_EVENT_PLG_STOP:
+			lock();
+			{
+				ZDLPluginApi *api = (ZDLPluginApi*)payload;
+				QHashIterator<ZPID, PluginEntry*> i(plugins);
+				PluginEntry *tar = NULL;
+				while(i.hasNext()){
+					i.next();
+					PluginEntry *pe = i.value();
+					if(pe){
+						if(pe->plugin == api){
+							tar = pe;
+							break;
+						}
+					}
+				}
+				if(tar != NULL){
+					ZPID pid = tar->pid;
+					tar = plugins.take(pid);
+					delete tar->runlock;
+					delete tar;
+					delete api;
+				}
+			}
+			unlock();
+			break;
+		default:
+			LOGDATAO() << "UNKNOWN EVENT FIRED" << endl;
+			break;
+	}
+}
+
+bool ZDLCoreImpl::waitForProcessExit(ZPID pid){
+	while(1){
+		lock();
+		bool isAlive = plugins.contains(pid);
+		unlock();
+		if(!isAlive){
+			break;
+		}
+		usleep(250);
+	}
+	return true;
+}
+
+bool ZDLCoreImpl::runFunctionInGui(ZDLPluginApi *plugin, QString func, QVector<QVariant> args, bool async){
+	qDebug() << "runFunctionInGui start";
+	QMutex *mutex = NULL;
+	if(!async){
+		mutex = new QMutex();
+		mutex->lock();
+	}
+	uiRunner->runInGui(plugin, func, args, mutex);
+	if(!async){
+		mutex->lock();
+	}	
+	qDebug() << "runFunctionInGui finished";	
 }
 

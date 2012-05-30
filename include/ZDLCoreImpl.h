@@ -1,11 +1,16 @@
 #ifndef _ZDLCOREIMPL_H_
 #define _ZDLCOREIMPL_H_
 
+class ZDLCoreImpl;
+
 #include <QtCore>
 #include "ZDLApiCommon.h"
 #include "ZDLCoreApi.h"
 #include "ZDLPluginApi.h"
 #include "ZDLPluginRunner.h"
+
+#define	CORE_EVENT_PLG_START	0x00001
+#define CORE_EVENT_PLG_STOP	0x00002
 
 class PluginEntry {
 	public:
@@ -13,12 +18,14 @@ class PluginEntry {
 			pid = 0;
 			plugin = NULL;
 			origin = 0;
+			runlock = new QMutex();
 		}
 
 		ZPID pid;
 		ZDLPluginApi *plugin;
 		int origin;
 		ZDLPluginRunner *runner;
+		QMutex *runlock;
 };
 
 class ZDLCoreImpl : public ZDLCoreApi {
@@ -37,6 +44,8 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool hasSection(QString section);
                 virtual bool hasVariable(QString section, QString variable);
 		virtual QStringList getArgs();
+		virtual bool waitForProcessExit(ZPID pid);
+		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QVector<QVariant> args, bool async);
 
 		// Internal private API
 		virtual ZPID registerPlugin(ZDLPluginApi *plugin);
