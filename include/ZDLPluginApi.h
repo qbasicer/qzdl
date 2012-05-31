@@ -10,6 +10,7 @@ class ZDLPluginApi;
 class ZDLPluginApi {
 	public:
 		virtual QString getPluginName() = 0;
+		virtual QString getPluginFQDN() = 0;
 		virtual QString getPluginCreator() = 0;
 		virtual int getPluginVersion() = 0;
 		virtual int pluginMain(ZDLCoreApi *api) = 0;

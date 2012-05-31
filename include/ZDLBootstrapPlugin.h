@@ -7,6 +7,7 @@ class ZDLBootstrapPlugin : public ZDLPluginApi {
 	public:
 		ZDLBootstrapPlugin(QStringList arguments);
 		virtual QString getPluginName(){return QString("BootstrapPlugin");}
+		virtual QString getPluginFQDN(){return QString("net.vectec.zdl.bootstrap");}
 		virtual QString getPluginCreator(){return QString("Cody Harris");}
 		virtual int getPluginVersion(){return 1;}
 		virtual int pluginMain(ZDLCoreApi* api);

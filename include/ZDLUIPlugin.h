@@ -7,6 +7,7 @@ class ZDLUIPlugin : public ZDLPluginApi {
         public:
                 ZDLUIPlugin();
                 virtual QString getPluginName(){return QString("UI Plugin");}
+		virtual QString getPluginFQDN(){return QString("net.vectec.zdl.ui");}
                 virtual QString getPluginCreator(){return QString("Cody Harris");}
                 virtual int getPluginVersion(){return 1;}
                 virtual int pluginMain(ZDLCoreApi* api);

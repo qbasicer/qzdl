@@ -28,7 +28,26 @@ bool ZDLCoreImpl::unloadPlugin(ZPID pid){
 }
 
 ZPID ZDLCoreImpl::findPluginByName(QString name){
-	LOGDATAO() << "Unimplemented function" << endl;
+	lock();
+	QHashIterator<ZPID, PluginEntry*> i(plugins);
+	PluginEntry *tar = NULL;
+	while(i.hasNext()){
+		i.next();
+		PluginEntry *pe = i.value();
+		if(pe == NULL){
+			continue;
+		}
+		ZDLPluginApi *plugin = pe->plugin;
+		if(plugin == NULL){
+			continue;
+		}
+		QString pname = plugin->getPluginFQDN();
+		if(pname == name){
+			unlock();
+			return i.key();
+		}
+	}
+	unlock();
 	return BAD_ZPID;
 }
 
