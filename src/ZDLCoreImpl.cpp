@@ -63,8 +63,15 @@ bool ZDLCoreImpl::findPluginsByRegex(QString regex, QVector<ZPID> &result){
 }
 
 QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QVector<QVariant> args){
-	LOGDATAO() << "Unimplemented function" << endl;
-	return QVariant();
+	lock();
+	PluginEntry *pe = plugins.value(pid);
+	if(pe == NULL){
+		unlock();
+		return QVariant();
+	}
+	ZDLPluginApi *plugin = pe->plugin;
+	unlock();
+	return plugin->pluginCall(func, args);
 }
 
 bool ZDLCoreImpl::addTab(QString tabName, QWidget *widget){
