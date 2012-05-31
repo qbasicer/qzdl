@@ -24,6 +24,7 @@ class ZDLCoreApi {
 		virtual QStringList getArgs() = 0;
 		virtual bool waitForProcessExit(ZPID pid) = 0;
 		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QVector<QVariant> args, bool async) = 0;
+		virtual bool registerAlias(ZDLPluginApi* plugin, QString alias) = 0;
 };
 
 

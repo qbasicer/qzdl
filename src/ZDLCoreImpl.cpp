@@ -43,9 +43,15 @@ ZPID ZDLCoreImpl::findPluginByName(QString name){
 		}
 		QString pname = plugin->getPluginFQDN();
 		if(pname == name){
+			ZPID id = i.key();
 			unlock();
-			return i.key();
+			return id;
 		}
+	}
+	if(aliases.contains(name)){
+		ZPID pid = aliases.value(name);
+		unlock();
+		return pid;
 	}
 	unlock();
 	return BAD_ZPID;
@@ -62,8 +68,15 @@ QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QVector<QVariant> args)
 }
 
 bool ZDLCoreImpl::addTab(QString tabName, QWidget *widget){
-	LOGDATAO() << "Unimplemented function" << endl;
-	return false;
+	ZPID ui = findPluginByName("net.vectec.zdl.ui");
+	if(ui == BAD_ZPID){
+		return false;
+	}
+	QVector<QVariant> args;
+	args.append(tabName);
+	args.append(qVariantFromValue(widget));
+	pluginCall(ui, "addTab", args);
+	return true;
 }
 
 bool ZDLCoreImpl::removeTab(QWidget *widget){
@@ -130,6 +143,16 @@ void ZDLCoreImpl::fireInternalEvent(int evtid, void* payload){
 				if(tar != NULL){
 					ZPID pid = tar->pid;
 					tar = plugins.take(pid);
+					//Deregister any aliases this plugin has
+					if(tar->hasAlias){
+						QHashIterator<QString, ZPID> i(aliases);
+						while(i.hasNext()){
+							i.next();
+							if(i.value() == tar->pid){
+								aliases.remove(i.key());
+							}
+						}
+					}
 					delete tar->runlock;
 					delete tar;
 					delete api;
@@ -168,5 +191,34 @@ bool ZDLCoreImpl::runFunctionInGui(ZDLPluginApi *plugin, QString func, QVector<Q
 		mutex->lock();
 	}	
 	qDebug() << "runFunctionInGui finished";	
+}
+
+bool ZDLCoreImpl::registerAlias(ZDLPluginApi* plugin, QString alias){
+	lock();
+	QHashIterator<ZPID, PluginEntry*> i(plugins);
+	PluginEntry *tar = NULL;
+	//Resolve plugin pointer to ZPID
+	while(i.hasNext()){
+		i.next();
+		PluginEntry *pe = i.value();
+		if(pe){
+			if(pe->plugin == plugin){
+				tar = pe;
+				break;
+			}
+		}
+	}
+	//If we have a match
+	if(tar == NULL){
+		unlock();
+		return false;
+	}
+	// Officially add the alias
+	aliases.insert(alias, tar->pid);
+
+	// Flag this entry as having an alias
+	tar->hasAlias = true;
+	unlock();
+	return true;
 }
 

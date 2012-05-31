@@ -19,6 +19,7 @@ class PluginEntry {
 			plugin = NULL;
 			origin = 0;
 			runlock = new QMutex();
+			hasAlias = false;
 		}
 
 		ZPID pid;
@@ -26,6 +27,7 @@ class PluginEntry {
 		int origin;
 		ZDLPluginRunner *runner;
 		QMutex *runlock;
+		bool hasAlias;
 };
 
 class ZDLCoreImpl : public ZDLCoreApi {
@@ -46,6 +48,7 @@ class ZDLCoreImpl : public ZDLCoreApi {
 		virtual QStringList getArgs();
 		virtual bool waitForProcessExit(ZPID pid);
 		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QVector<QVariant> args, bool async);
+		virtual bool registerAlias(ZDLPluginApi* plugin, QString alias);
 
 		// Internal private API
 		virtual ZPID registerPlugin(ZDLPluginApi *plugin);
@@ -62,6 +65,7 @@ class ZDLCoreImpl : public ZDLCoreApi {
 
 		// Members
 		QHash<ZPID, PluginEntry*> plugins;
+		QHash<QString, ZPID> aliases;
 		QMutex *mutex;
 		ZPID lastPid;
 		QStringList args;
