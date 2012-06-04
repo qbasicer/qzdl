@@ -28,6 +28,7 @@
 #include "ZDLNullDevice.h"
 #include "ZDLCoreImpl.h"
 #include "ZDLBootstrapPlugin.h"
+#include "ZDLWindowDestroyer.h"
 
 QApplication *qapp;
 QString versionString;
@@ -265,7 +266,9 @@ int uiMain(QStringList args){
 	mw->setUpdater(zup);
 	ZDLConfigurationManager::setUpdater(zup);
 	mw->show();
-	QObject::connect(qapp, SIGNAL(lastWindowClosed()), qapp, SLOT(quit()));
+	ZDLWindowDestroyer *zqd = new ZDLWindowDestroyer();
+	//QObject::connect(qapp, SIGNAL(lastWindowClosed()), qapp, SLOT(quit()));
+	QObject::connect(qapp, SIGNAL(lastWindowClosed()), zqd, SLOT(kill()));
 	mw->startRead();
 
 	if(hasZDLFile){

@@ -38,7 +38,7 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool unloadPlugin(ZPID pid);
                 virtual ZPID findPluginByName(QString name);
                 virtual bool findPluginsByRegex(QString regex, QVector<ZPID> &result);
-                virtual QVariant pluginCall(ZPID pid, QString func, QVector<QVariant> args);
+                virtual QVariant pluginCall(ZPID pid, QString func, QList<QVariant> args);
                 virtual bool addTab(QString tabName, QWidget *widget);
                 virtual bool removeTab(QWidget *widget);
                 virtual QString getValue(QString section, QString variable);
@@ -47,7 +47,7 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool hasVariable(QString section, QString variable);
 		virtual QStringList getArgs();
 		virtual bool waitForProcessExit(ZPID pid);
-		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QVector<QVariant> args, bool async);
+		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QList<QVariant> args, bool async);
 		virtual bool registerAlias(ZDLPluginApi* plugin, QString alias);
 
 		// Internal private API

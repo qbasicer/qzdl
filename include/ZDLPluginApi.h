@@ -14,7 +14,7 @@ class ZDLPluginApi {
 		virtual QString getPluginCreator() = 0;
 		virtual int getPluginVersion() = 0;
 		virtual int pluginMain(ZDLCoreApi *api) = 0;
-		virtual QVariant pluginCall(QString func, QVector<QVariant> args) = 0;
+		virtual QVariant pluginCall(QString func, QList<QVariant> args) = 0;
 		virtual void deliverEvent(int eventid) = 0;
 		
 };

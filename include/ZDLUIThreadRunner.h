@@ -7,11 +7,11 @@ class ZDLUIThreadRunner : public QObject {
 	Q_OBJECT
 	public:
 		ZDLUIThreadRunner();
-		void runInGui(ZDLPluginApi *plugin, QString func, QVector<QVariant> args, QMutex *lock);
+		void runInGui(ZDLPluginApi *plugin, QString func, QList<QVariant> args, QMutex *lock);
 	signals:
-		void runLinkage(ZDLPluginApi *plugin, QString func, QVariant args, QMutex *lock);
+		void runLinkage(ZDLPluginApi *plugin, QString *func, QVariant *args, QMutex *lock);
 	protected slots:
-		void runPlugin(ZDLPluginApi *plugin, QString func, QVariant args, QMutex *lock);
+		void runPlugin(ZDLPluginApi *plugin, QString *func, QVariant *args, QMutex *lock);
 };
 
 #endif

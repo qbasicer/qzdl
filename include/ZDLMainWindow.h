@@ -39,6 +39,7 @@ public:
 	QString getExecutable();
 	void handleImport();
 	QString getWindowTitle();
+	bool addTab(QString text, QWidget *widget);
 public slots:
 	void launch();
 	void quit();
@@ -51,7 +52,7 @@ protected:
 	ZDLInterface* intr;
 	ZDLSettingsTab* settings;
 	ZDLUpdater* zup;
-	
+	QTabWidget *tabWidget;
 	int procerr;
 	QAction *qact2;
 };

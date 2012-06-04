@@ -62,7 +62,7 @@ bool ZDLCoreImpl::findPluginsByRegex(QString regex, QVector<ZPID> &result){
 	return false;
 }
 
-QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QVector<QVariant> args){
+QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QList<QVariant> args){
 	lock();
 	PluginEntry *pe = plugins.value(pid);
 	if(pe == NULL){
@@ -77,12 +77,22 @@ QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QVector<QVariant> args)
 bool ZDLCoreImpl::addTab(QString tabName, QWidget *widget){
 	ZPID ui = findPluginByName("net.vectec.zdl.ui");
 	if(ui == BAD_ZPID){
+		qDebug() << "*** Failed to find UI PID";
 		return false;
 	}
-	QVector<QVariant> args;
-	args.append(tabName);
+	QList<QVariant> args;
+	args.append(QString(tabName));
 	args.append(qVariantFromValue(widget));
-	pluginCall(ui, "addTab", args);
+	lock();
+	PluginEntry *pe = plugins.value(ui);
+	if(pe == NULL){
+		unlock();
+		qDebug() << "*** Failed to find UI object";
+		return false;
+	}
+	ZDLPluginApi *plugin = pe->plugin;
+	unlock();
+	runFunctionInGui(plugin, QString("addTab"), QList<QVariant>(args), false);
 	return true;
 }
 
@@ -186,18 +196,18 @@ bool ZDLCoreImpl::waitForProcessExit(ZPID pid){
 	return true;
 }
 
-bool ZDLCoreImpl::runFunctionInGui(ZDLPluginApi *plugin, QString func, QVector<QVariant> args, bool async){
-	qDebug() << "runFunctionInGui start";
+bool ZDLCoreImpl::runFunctionInGui(ZDLPluginApi *plugin, QString func, QList<QVariant> args, bool async){
 	QMutex *mutex = NULL;
 	if(!async){
 		mutex = new QMutex();
 		mutex->lock();
+	}else{
+		printf("ERROR: ASYNC CALLS ARE NOT IMPLEMENTED\n");
 	}
 	uiRunner->runInGui(plugin, func, args, mutex);
 	if(!async){
 		mutex->lock();
 	}	
-	qDebug() << "runFunctionInGui finished";	
 }
 
 bool ZDLCoreImpl::registerAlias(ZDLPluginApi* plugin, QString alias){

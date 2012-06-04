@@ -34,6 +34,7 @@
 
 extern QApplication *qapp;
 extern QString versionString;
+extern QMutex *windowMutex;
 
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
@@ -49,6 +50,16 @@ ZDLMainWindow::~ZDLMainWindow(){
 	if(zup){
 		delete zup;
 	}
+	printf("Main window going down\n");
+	windowMutex->unlock();
+}
+
+bool ZDLMainWindow::addTab(QString text, QWidget *widget){
+	if(widget == NULL){
+		return false;
+	}
+	tabWidget->addTab(widget, text);
+	return true;
 }
 
 void ZDLMainWindow::manageUpdate(){
@@ -101,6 +112,7 @@ QString ZDLMainWindow::getWindowTitle(){
 
 ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	LOGDATAO() << "New main window " << DPTR(this) << endl;
+	printf("I am mainWindow %p\n", this);
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);
 
@@ -110,6 +122,7 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	setContentsMargins(2,2,2,2);
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
+	tabWidget = widget;
 
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf){
