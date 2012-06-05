@@ -47,8 +47,8 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool hasVariable(QString section, QString variable);
 		virtual QStringList getArgs();
 		virtual bool waitForProcessExit(ZPID pid);
-		virtual bool runFunctionInGui(ZDLPluginApi* plugin, QString func, QList<QVariant> args, bool async);
-		virtual bool registerAlias(ZDLPluginApi* plugin, QString alias);
+		virtual bool runFunctionInGui(QString func, QList<QVariant> args, bool async);
+		virtual bool registerAlias(QString alias);
 
 		// Internal private API
 		virtual ZPID registerPlugin(ZDLPluginApi *plugin);
@@ -63,9 +63,13 @@ class ZDLCoreImpl : public ZDLCoreApi {
 			mutex->unlock();
 		}
 
+		PluginEntry *getEntryForCurrentThread();
+		virtual bool runFunctionInGuiInternal(ZDLPluginApi* plugin, QString func, QList<QVariant> args, bool async);
+
 		// Members
 		QHash<ZPID, PluginEntry*> plugins;
 		QHash<QString, ZPID> aliases;
+		QHash<QThread*, ZPID> threads;
 		QMutex *mutex;
 		ZPID lastPid;
 		QStringList args;

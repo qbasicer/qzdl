@@ -5,7 +5,7 @@ ZDLTestPlugin::ZDLTestPlugin(){
 }
 
 int ZDLTestPlugin::pluginMain(ZDLCoreApi* api){
-	api->runFunctionInGui(this, "createGui", QList<QVariant>(), false);
+	api->runFunctionInGui("createGui", QList<QVariant>(), false);
 	if(this->gui != NULL){
 		qDebug() << "Adding tab";
 		printf("Widget is 0x%p\n", (QWidget*)this->gui);

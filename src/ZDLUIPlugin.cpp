@@ -18,7 +18,7 @@ int ZDLUIPlugin::pluginMain(ZDLCoreApi* api){
 	QList<QVariant> args;
 	args.append(api->getArgs());
 	cout << "UI calling gui" << endl;
-	api->runFunctionInGui(this, "uiMain", args, false);
+	api->runFunctionInGui("uiMain", args, false);
 	cout << "UI done creating" << endl;
 	windowMutex->lock();
 	cout << "UI died, UI plugin about to die" << endl;
