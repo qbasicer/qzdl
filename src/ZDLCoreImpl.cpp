@@ -4,6 +4,16 @@
 
 extern ZDLUIThreadRunner *uiRunner; 
 
+
+//Taken from http://lists.trolltech.com/qt-interest/2007-01/thread00120-0.html
+class Helper: public QThread {
+public:
+	static void msleep(int ms)
+	{
+		QThread::msleep(ms);
+	}
+};
+
 ZDLCoreImpl::ZDLCoreImpl(QStringList args){
 	mutex = new QMutex(QMutex::Recursive);
 	LOGDATAO() << "ZDLCoreImpl START" << endl;
@@ -191,7 +201,7 @@ bool ZDLCoreImpl::waitForProcessExit(ZPID pid){
 		if(!isAlive){
 			break;
 		}
-		usleep(250);
+		Helper::msleep(250);
 	}
 	return true;
 }
