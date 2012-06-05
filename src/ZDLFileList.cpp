@@ -61,7 +61,9 @@ void ZDLFileList::rebuild(){
 		section->getRegex("^file[0-9]+$", vctr);
 		//cout << "I got " << vctr.size() << " matches!" << endl;
 		for(int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
+			// Can't use the section to perform this operation
+			// Section is a clone of the real section
+			zconf->deleteValue("zdl.save", vctr[i]->getVariable());
 		}
 	}
 
