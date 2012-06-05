@@ -17,7 +17,6 @@ int ZDLBootstrapPlugin::pluginMain(ZDLCoreApi* api){
 		qDebug() << "Failed to register bootstrap";
 		return -1;
 	}
-	sleep(5);
 	ZDLTestPlugin *test = new ZDLTestPlugin();
 	impl->registerPlugin(test);
 	api->waitForProcessExit(pz);
