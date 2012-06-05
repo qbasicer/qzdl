@@ -87,7 +87,7 @@ void ZDLFileList::addButton(){
 		<< "Patch Files (*.bex *.deh)"
 		<< "PK7 Files (*.pk7)"
 		<< "PKZ Files (*.pkz)"
-		<< "P7Z Files (*.pk7)"
+		<< "P7Z Files (*.p7z)"
 		<< "zip Files (*.zip)"
 		<< "Any files (*)";
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", QString(), filters.join(";;"));
