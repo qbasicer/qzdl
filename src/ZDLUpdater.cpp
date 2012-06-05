@@ -132,7 +132,7 @@ void ZDLUpdater::fetch(int doAnyways){
 		updateCode = 0;
 		http->setHost(this->host, QHttp::ConnectionModeHttp, this->port);
 
-		QString url = "/check.php?name="ZDL_PRODUCT_ID"id=";
+		QString url = "/check.php?name="ZDL_PRODUCT_ID"&id=";
 		url += QString::number(ZDL_VERSION_ID);
 		QHttpRequestHeader qreq("GET", url);
 		QString ua = QString(ZDL_ENGINE_NAME) + QString(" ") + versionString;
