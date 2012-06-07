@@ -24,14 +24,14 @@ using namespace std;
 
 #ifdef Q_WS_WIN
 
-#define ZDL_VERSION_STRING	"3.0.5.8 plugin"
-#define ZDL_VERSION_ID		32
+#define ZDL_VERSION_STRING	"3.0.5.9 plugin"
+#define ZDL_VERSION_ID		33
 #define ZDL_PRODUCT_ID		"qzdl-win32-stable"
 #define ZDL_STABLE
 #else
 
-#define ZDL_VERSION_STRING	"3.0.5.8 plugin"
-#define ZDL_VERSION_ID		30
+#define ZDL_VERSION_STRING	"3.0.5.9 plugin"
+#define ZDL_VERSION_ID		34
 #define ZDL_PRODUCT_ID		"qzdl-git"
 
 #endif

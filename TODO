@@ -1,18 +1,5 @@
-Bugs:
-- Map field stored lower case
-  - Not sure of issue here
-- +Set does not appear to work
-  <NeuralStunner> "+Set DeathMatch 1" will not start a game as DM (3.1a does)
-  <NeuralStunner> +DeathMatch 1 works, however
-  <NeuralStunner> Odd thing is, it uses +Set in the command line for the DMFlags
-  - Not sure of issue here
-
 Here's a short list of future features:
-- User level config file for linux
-- Get IWAD Map names (questionable)
 - Config file DMFlags
 - Store IWAD map names in config files (ie m0n=E1M1)
-- Global/local/user based configs
 - A small preview of the map, read this from a screenshot directory
-- Expand ~
 
