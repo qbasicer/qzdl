@@ -469,6 +469,7 @@ void ZDLInterface::newConfig(){
 				if(mpane == NULL){
 					mpane = new ZDLMultiPane(this);
 					mpane->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Maximum ));
+					mpane->newConfig();
 				}
 				box->addWidget(mpane);
 				mpane->setVisible(true);

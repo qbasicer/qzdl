@@ -156,10 +156,14 @@ void ZDLMultiPane::rebuild(){
 
 	if (tHostAddy->text().length() > 0){
 		zconf->setValue("zdl.save", "host", tHostAddy->text());
+	}else{
+		zconf->deleteValue("zdl.save", "host");
 	}
 
 	if (tFragLimit->text().length() > 0){
 		zconf->setValue("zdl.save", "fraglimit", tFragLimit->text());
+	}else{
+		zconf->deleteValue("zdl.save", "fraglimit");
 	}
 
 	if(bDMFlags->text() != "0"){

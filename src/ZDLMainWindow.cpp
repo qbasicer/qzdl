@@ -507,7 +507,7 @@ QStringList ZDLMainWindow::getArguments(){
 			if (tGameType == "2"){
 				ourString << "-deathmath";
 			}
-			int players = -1;
+			int players = 0;
 			if(zconf->hasValue("zdl.save","players")){
 				QString tPlayers = zconf->getValue("zdl.save","players",&stat);
 				players = tPlayers.toInt(&ok, 10);
@@ -518,7 +518,7 @@ QStringList ZDLMainWindow::getArguments(){
 			}else if(players == 0){
 				if(zconf->hasValue("zdl.save","host")){
 					ourString << "-join";
-					zconf->getValue("zdl.save","host",&stat);
+					ourString << zconf->getValue("zdl.save","host",&stat);
 				}
 			}
 			if(zconf->hasValue("zdl.save","fraglimit")){
