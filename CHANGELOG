@@ -6,7 +6,7 @@
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
-* 3.0.5.9 - May 24th, 2012
+* 3.0.5.9 - June 7th, 2012
   * Fix the multiplayer section configuration not loading (issue #17)
   * Fix -join not working (issue #17)
   * Fix host parameter not added to command line (issue #17)
