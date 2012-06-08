@@ -22,22 +22,24 @@
 using namespace std;
 #define ZDL_FLAG_NAMELESS	0x00001
 
-#ifdef Q_WS_WIN
+#define ZDL_VERSION_STRING	"3.2.0.0 beta plugins"
 
-#define ZDL_VERSION_STRING	"3.0.5.9 plugin"
-#define ZDL_VERSION_ID		33
-#define ZDL_PRODUCT_ID		"qzdl-win32-stable"
-#define ZDL_STABLE
+#if defined(Q_WS_WIN)
+// Windows versioning information
+#define ZDL_VERSION_ID		35
+#define ZDL_PRODUCT_ID		"qzdl-win32-beta"
+#elif defined(Q_WS_MAC)
+// Mac information would go here
+#define ZDL_VERSION_ID          34
+#define ZDL_PRODUCT_ID          "qzdl-git"
 #else
-
-#define ZDL_VERSION_STRING	"3.0.5.9 plugin"
+// Other (Linux in reality)
 #define ZDL_VERSION_ID		34
 #define ZDL_PRODUCT_ID		"qzdl-git"
-
 #endif
 
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
-#define ZDL_ENGINE_NAME		"qZDL"
+#define ZDL_ENGINE_NAME		"ZDL"
 #define ZDL_UID				"XXXX-XXXX-XXXX-XXXX"
 
 extern QDebug *zdlDebug;

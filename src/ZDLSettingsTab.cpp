@@ -66,6 +66,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 
 	showPaths = new QCheckBox("Show files paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
+	connect(showPaths,SIGNAL(toggled(bool)),this,SLOT(pathToggled(bool)));
 	sections->addWidget(alwaysArgs);
 
 	QHBoxLayout *fileassoc = new QHBoxLayout();
@@ -108,6 +109,15 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
+}
+
+void ZDLSettingsTab::pathToggled(bool enabled){
+	if(enabled){
+		LOGDATAO() << "Path bracketing enabled" << endl;
+	}else{
+		LOGDATAO() << "Path bracketing disabled" << endl;
+	}
+	reloadConfig();
 }
 
 void ZDLSettingsTab::fileAssociations(){
@@ -232,6 +242,13 @@ void ZDLSettingsTab::newConfig(){
 		launchZDL->setCheckState(Qt::Unchecked);
 	}
 	
+}
+
+void ZDLSettingsTab::reloadConfig(){
+	LOGDATAO() << "Reloading config" << endl;
+	writeConfig();
+	startRead();
+	LOGDATAO() << "Reload complete" << endl;
 }
 
 void ZDLSettingsTab::checkNow(){

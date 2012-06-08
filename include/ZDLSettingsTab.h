@@ -33,6 +33,8 @@ public:
 protected slots:
 	void checkNow();
 	void fileAssociations();
+	void reloadConfig();
+	void pathToggled(bool enabled);
 private:
 	QLineEdit *alwaysArgs;
 	QCheckBox *launchClose;
