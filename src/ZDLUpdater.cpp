@@ -98,6 +98,18 @@ void ZDLUpdater::fetch(int doAnyways){
 
 	}
 
+	// If we haven't specified the version we last checked the version for, force check
+	if(!zconf->hasValue("zdl.net", "hasupdateversion")){
+		doAnyways = 1;
+	}else{
+		int ok = 0;
+		QString rc = zconf->getValue("zdl.net","hasupdateversion", &ok);
+		if(rc != QString::number(ZDL_VERSION_ID)){
+			// Force check if version numbers mismatch (we just updated most likely)
+			doAnyways = 1;
+		}
+	}
+
 	if(zconf && zconf->hasValue("zdl.net", "lastchecked") && doAnyways == 0){
 		int ok = 0;
 		QString rc = zconf->getValue("zdl.net", "lastchecked", &ok);
@@ -254,21 +266,29 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 		updateCode = 1;
 		errorCode = 0;
 		if(zconf){
+			// Update with current version information
 			zconf->setValue("zdl.net", "hasupdate", "1");
+			zconf->setValue("zdl.net", "hasupdateversion", ZDL_VERSION_ID);
 		}
 	}else{
+		// Server didn't understand us
 		if (str == "ERROR-SYNTAX"){
 			LOGDATAO() << "Update syntax error" << endl;
 			updateCode = 0;
 			errorCode = 1;
+		// No ID matching our request
 		}else if (str == "ERROR-NOID"){
 			LOGDATAO() << "No such ID" << endl;
 			updateCode = 0;
 			errorCode = 2;
+		// Current version matches our version, no update
 		}else if (str == "OKAY"){
 			LOGDATAO() << "No update available" << endl;
 			updateCode = 0;
 			errorCode = 0;
+			zconf->setValue("zdl.net", "hasupdateversion", ZDL_VERSION_ID);
+			zconf->setValue("zdl.net", "hasupdate", "0");
+		//Unknown error
 		}else{
 			LOGDATAO() << "Unexpected content" << endl;
 			updateCode = 0;
