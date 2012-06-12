@@ -283,8 +283,8 @@ int main( int argc, char **argv ){
 	QDir::setCurrent(qscwd);
 	delete mw;
 	// Set version information
-	zconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
-	zconf->setValue("zdl.general", "version", versionString);
+	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
+	tconf->setValue("zdl.general", "version", versionString);
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;
