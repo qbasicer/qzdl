@@ -1,10 +1,14 @@
    _________________________
   /                         /
- / qZDL 3.0.5.9            /
+ / qZDL 3.0.5.10           /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
+
+* 3.0.5.10 - June 14th, 2012
+  * Fix using save dialog instead of open dialog for .ZDL file opening (issue #19)
+  * Fix bogus update notification after updating (issue #18)
 
 * 3.0.5.9 - June 7th, 2012
   * Fix the multiplayer section configuration not loading (issue #17)
