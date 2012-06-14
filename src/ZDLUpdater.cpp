@@ -101,10 +101,12 @@ void ZDLUpdater::fetch(int doAnyways){
 	// If we haven't specified the version we last checked the version for, force check
 	if(!zconf->hasValue("zdl.net", "hasupdateversion")){
 		doAnyways = 1;
+		LOGDATAO() << "No hasupdateversion, forcing update" << endl;
 	}else{
 		int ok = 0;
 		QString rc = zconf->getValue("zdl.net","hasupdateversion", &ok);
 		if(rc != QString::number(ZDL_VERSION_ID)){
+			LOGDATAO() << "Mismatched hasupdateversion, forcing update" << endl;
 			// Force check if version numbers mismatch (we just updated most likely)
 			doAnyways = 1;
 		}
