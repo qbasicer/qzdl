@@ -40,6 +40,24 @@ ZDLCoreImpl::ZDLCoreImpl(QStringList args){
 	new ZDLUIThreadRunner();
 }
 
+
+bool ZDLCoreImpl::getAllPlugins(QList<ZPID> &result){
+	lock();
+	QHashIterator<ZPID, PluginEntry*> i(plugins);
+	while(i.hasNext()){
+		i.next();
+		result.append(i.key());
+	}
+	unlock();
+	return true;
+}
+
+bool ZDLCoreImpl::getPluginProperties(ZPID pid, QHash<QString,QVariant> &props){
+	Q_UNUSED(pid);
+	Q_UNUSED(props);
+	return false;
+}
+
 ZPID ZDLCoreImpl::loadPluginPath(QString path){
 	LOGDATAO() << "Unimplemented function" << endl;
 	return BAD_ZPID; 

@@ -13,6 +13,8 @@ class ZDLCoreApi {
 		virtual ZPID loadPluginName(QString name) = 0;
 		virtual bool unloadPlugin(ZPID pid) = 0;
 		virtual ZPID findPluginByName(QString name) = 0;
+		virtual bool getAllPlugins(QList<ZPID> &result) = 0;
+		virtual bool getPluginProperties(ZPID pid, QHash<QString,QVariant> &props) = 0;
 		virtual bool findPluginsByRegex(QString regex, QVector<ZPID> &result) = 0;
 		virtual QVariant pluginCall(ZPID pid, QString func, QList<QVariant> args) = 0;
 		virtual bool addTab(QString tabName, QWidget *widget) = 0;

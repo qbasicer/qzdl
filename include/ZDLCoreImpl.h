@@ -50,6 +50,10 @@ class ZDLCoreImpl : public ZDLCoreApi {
 		virtual bool runFunctionInGui(QString func, QList<QVariant> args, bool async);
 		virtual bool registerAlias(QString alias);
 
+		virtual bool getAllPlugins(QList<ZPID> &result);
+                virtual bool getPluginProperties(ZPID pid, QHash<QString,QVariant> &props);
+
+
 		// Internal private API
 		virtual ZPID registerPlugin(ZDLPluginApi *plugin);
 		virtual void fireInternalEvent(int evtid, void* payload);
