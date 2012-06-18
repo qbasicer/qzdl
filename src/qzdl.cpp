@@ -309,6 +309,9 @@ int uiMain(QStringList args){
 	tconf = ZDLConfigurationManager::getActiveConfiguration();
 	QDir::setCurrent(qscwd);
 	delete mw;
+	// Set version information
+	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
+	tconf->setValue("zdl.general", "version", versionString);
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	delete core;
 	LOGDATA() << "ZDL QUIT" << endl;

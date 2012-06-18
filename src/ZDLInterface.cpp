@@ -356,7 +356,7 @@ void ZDLInterface::loadConfigFile(){
 		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 	filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Save Configuration", QString(), filter);
+	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", QString(), filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 			delete zconf;
 			ZDLConf* tconf = new ZDLConf();
@@ -375,7 +375,7 @@ void ZDLInterface::loadZdlFile(){
 	QString filter;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	filter = filters.join(";;");
-	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", QString(), filter);
+	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", QString(), filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		for(int i = 0; i < current->sections.size(); i++){
@@ -406,7 +406,7 @@ void ZDLInterface::saveZdlFile(){
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Save File", QString(), filter);
+	QString fileName = QFileDialog::getOpenFileName(this, "Save ZDL", QString(), filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		ZDLConf *copy = new ZDLConf();
