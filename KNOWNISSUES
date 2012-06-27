@@ -1,9 +1,10 @@
    _________________________
   /                         /
- / qZDL 3.0.5.10           /
+ / qZDL 3.0.5.11           /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
+* File dialog boxes don't remember their last path (issue #20)
 
