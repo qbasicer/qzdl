@@ -10,3 +10,5 @@ There may be issues around the save/load functionality.  This code has gone unde
 
 As such, either lock ups may be experienced, or failure to save configuartions.
 
+File dialog boxes do not remember their paths, issue #20
+
