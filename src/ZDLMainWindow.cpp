@@ -642,7 +642,6 @@ void ZDLMainWindow::startRead(){
 	LOGDATAO() << "Starting to read configuration" << endl;
 	intr->startRead();
 	settings->startRead();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);
 }

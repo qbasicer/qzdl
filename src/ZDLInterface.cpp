@@ -406,7 +406,7 @@ void ZDLInterface::saveZdlFile(){
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Save ZDL", QString(), filter);
+	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", QString(), filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		ZDLConf *copy = new ZDLConf();
