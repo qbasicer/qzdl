@@ -1,10 +1,16 @@
    _________________________
   /                         /
- /  ZDL 3.2.0.1 beta       /
+ /  ZDL 3.2.0.2 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
+
+* 3.2.0.2 - UNRELEASED
+  * Fix holding of wad files and not closing them (#23)
+  * Removed DMFlag picker (#26)
+  * Fix swapped paths in file list (#22)
+  * Fixed broken advanced multiplayer settings load (#25)
 
 * 3.2.0.1 - June 27th, 2012
   * Fix the inability to save .ZDL files (issue #21)
