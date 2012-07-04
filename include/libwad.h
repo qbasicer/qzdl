@@ -14,6 +14,7 @@ class DoomWad : public ZDLMapFile {
 		enum AddBehaviour {REWRITE_WAD, APPEND_FIXUP};
 		DoomWad(QString file);
 		DoomWad(QIODevice *dev);
+		~DoomWad();
 		virtual bool open();
 		int lumps();
 		WadLump *getLump(int index);
@@ -28,6 +29,7 @@ class DoomWad : public ZDLMapFile {
 		QIODevice *dev;
 		QStringList levelnames;
 		QVector<WadLump*> wadLumps;
+		bool shouldClose;
 };
 
 // This certainly won't compile for now

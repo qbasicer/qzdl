@@ -101,6 +101,7 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 			continue;
 		}
 		maps += mapfile->getMapNames();
+		delete mapfile;
 	}
 	return maps;
 }

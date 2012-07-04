@@ -12,11 +12,21 @@ DoomWad::DoomWad(QString file){
 	QFile *pfile = new QFile(file);
 	dev = pfile;
 	LOGDATAO() << "Opening wad from our own QFile" << endl;
+	shouldClose = true;
 }
 
 DoomWad::DoomWad(QIODevice *dev){
 	LOGDATAO() << "Opening wad from QIODevice" << endl;
 	this->dev = dev;
+	shouldClose = false;
+}
+
+DoomWad::~DoomWad(){
+	if(shouldClose){
+		this->dev->close();
+		delete this->dev;
+		this->dev = NULL;
+	}
 }
 
 bool DoomWad::open(){
