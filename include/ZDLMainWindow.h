@@ -47,7 +47,7 @@ public slots:
 	void manageUpdate();
 	void badLaunch();
 	void newUpdate();
-
+	void endOfLife();
 protected:
 	ZDLInterface* intr;
 	ZDLSettingsTab* settings;

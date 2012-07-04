@@ -95,7 +95,6 @@ void ZDLFileList::addButton(){
 		LOGDATAO() << "Adding file " << fileNames[i] << endl;
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
 		insert(zList, -1);
-		ZDLMapFile::getMapFile(fileNames[i]);
 	}
 }
 

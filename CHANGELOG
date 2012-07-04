@@ -1,22 +1,27 @@
    _________________________
   /                         /
- /  ZDL 3.2.0.1 beta       /
+ /  ZDL 3.2.0.2 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
-<<<<<<< HEAD
+* 3.2.0.2 - UNRELEASED
+  * Fix holding of wad files and not closing them (#23)
+  * Removed DMFlag picker (#26)
+  * Fix swapped paths in file list (#22)
+  * Fixed broken advanced multiplayer settings load (#25)
+
+* 3.2.0.1 - June 27th, 2012
+  * Fix the inability to save .ZDL files (issue #21)
+  * Fix using save dialog instead of open dialog for .ZDL file opening (issue #19)
+  * Fix bogus update notification after updating (issue #18)
+
 * 3.2.0.0 - June 8th, 2012
   * Remove 'quote paths' option
   * Add option to hide paths in lists
   * Populate the maps combobox with map names from the wads
   * Change internal branding to ZDL
-=======
-* 3.0.5.10 - June 14th, 2012
-  * Fix using save dialog instead of open dialog for .ZDL file opening (issue #19)
-  * Fix bogus update notification after updating (issue #18)
->>>>>>> 3.0.5.10
 
 * 3.0.5.9 - June 7th, 2012
   * Fix the multiplayer section configuration not loading (issue #17)
