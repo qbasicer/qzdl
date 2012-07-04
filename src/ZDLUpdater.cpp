@@ -290,6 +290,10 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 			errorCode = 0;
 			zconf->setValue("zdl.net", "hasupdateversion", ZDL_VERSION_ID);
 			zconf->setValue("zdl.net", "hasupdate", "0");
+		}else if (str == "ENDOFLIFE"){
+			LOGDATAO() << "End of life" << endl;
+			updateCode = 2;
+			errorCode = 0;
 		//Unknown error
 		}else{
 			LOGDATAO() << "Unexpected content" << endl;
