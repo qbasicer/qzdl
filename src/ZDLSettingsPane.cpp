@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <QtGui>
 #include <QApplication>
 #include <QComboBox>
@@ -34,8 +34,8 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	box->addWidget(new QLabel("Source Port",this));
 
 	sourceList = new QComboBox(this);
-	
-	
+
+
 	box->addWidget(sourceList);
 
 	box->addWidget(new QLabel("IWAD",this));
@@ -68,12 +68,26 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	diffList->addItem("V. Hard");
 	LOGDATAO() << "Done" << endl;
 	connect(IWADList, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChanged(int)));
-	
+
 }
 
 void ZDLSettingsPane::currentRowChanged(int idx){
 	Q_UNUSED(idx);
+	// Don't overwrite the user's text
+	QString current;
+	if(warpCombo->currentText().length() > 0){
+		current = warpCombo->currentText();
+	}
 	reloadMapList();
+	if(!current.isNull()){
+		QLineEdit *edit = warpCombo->lineEdit();
+		if(edit){
+			LOGDATAO() << "Setting to " << current << endl;
+			edit->setText(current);
+		}
+
+	}
+
 }
 
 QStringList ZDLSettingsPane::getFilesMaps(){
@@ -107,7 +121,7 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 }
 
 void ZDLSettingsPane::reloadMapList(){
-	
+	LOGDATAO() << "reloadMapList START" << endl;
 	QStringList iwadMaps;
 	QListWidgetItem *item = IWADList->currentItem();
 	if(!item){
@@ -115,20 +129,20 @@ void ZDLSettingsPane::reloadMapList(){
 	}
 	QVariant data = item->data(32);
 	if(!data.isValid() && !data.isNull()){
-                LOGDATAO() << "Item data is NULL" << endl;
-                return;
-        }
+		LOGDATAO() << "Item data is NULL" << endl;
+		return;
+	}
 	QString file = data.toString();
-        if(file.isNull() || file.isEmpty()){
-                LOGDATAO() << "Bad string" << endl;
-                return;
-        }
-        QFileInfo fi(file);
-        if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
-                iwadMaps = getMapNamesForWad(file);
-        }else{
-                LOGDATAO() << "File doesn't exist- " << file << endl;
-        }
+	if(file.isNull() || file.isEmpty()){
+		LOGDATAO() << "Bad string" << endl;
+		return;
+	}
+	QFileInfo fi(file);
+	if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
+		iwadMaps = getMapNamesForWad(file);
+	}else{
+		LOGDATAO() << "File doesn't exist- " << file << endl;
+	}
 	QStringList filesMaps = getFilesMaps();
 	if(filesMaps.size() + iwadMaps.size() > 0){
 		warpCombo->clear();
@@ -136,6 +150,7 @@ void ZDLSettingsPane::reloadMapList(){
 		warpCombo->addItems(filesMaps);
 		warpCombo->addItems(iwadMaps);
 	}
+	LOGDATAO() << "reloadMapList END" << endl;
 }
 
 void ZDLSettingsPane::rebuild(){
@@ -146,26 +161,26 @@ void ZDLSettingsPane::rebuild(){
 	}else{
 		zconf->deleteValue("zdl.save", "skill");
 	}
-	
+
 	if(warpCombo->currentText().length() > 0){
 		zconf->setValue("zdl.save", "warp", warpCombo->currentText());
 	}else{
 		zconf->deleteValue("zdl.save", "warp");
 	}
-	
+
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
 		int count = 0;
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex(QString("^p[0-9]+f$"), fileVctr);
-		
+
 		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
-			
+
 			QString number = "^p";
 			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
-			
+
 			QVector<ZDLLine*> nameVctr;
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
@@ -177,26 +192,26 @@ void ZDLSettingsPane::rebuild(){
 			}
 		}
 	}
-	
+
 	section = zconf->getSection("zdl.iwads");
 	if (section){
 		int count = 0;
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
-			
+
 		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
-			
+
 			QString number = "^i";
 			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
-			
+
 			QVector <ZDLLine*> nameVctr;
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
 				if (IWADList->currentRow() == count){
 					zconf->setValue("zdl.save", "iwad", nameVctr[0]->getValue());
-					
+
 					break;
 				}
 				count++;
@@ -222,43 +237,50 @@ void ZDLSettingsPane::newConfig(){
 			zconf->setValue("zdl.save", "skill", 0);
 			diffList->setCurrentIndex(0);
 		}
-	
+
 	}else{
 		diffList->setCurrentIndex(0);
 	}
+	LOGDATAO() << "Reloading map list" << endl;
 	reloadMapList();
+	LOGDATAO() << "Loading map selection" << endl;
 	if(zconf->hasValue("zdl.save", "warp")){
 		int stat = 0;
 		QString rc = zconf->getValue("zdl.save","warp",&stat);
 		if(rc.length() > 0){
 			QLineEdit *edit = warpCombo->lineEdit();
 			if(edit){
+				LOGDATAO() << "Setting to " << rc << endl;
 				edit->setText(rc);
+			}else{
+				LOGDATAO() << "No edit, ignoring" << endl;
 			}
 		}else{
+			LOGDATAO() << "Length is zero or less" << endl;
 			QLineEdit *edit = warpCombo->lineEdit();
 			if(edit){
 				edit->setText("");
 			}
 		}
 	}else{
+		LOGDATAO() << "No map selection" << endl;
 		QLineEdit *edit = warpCombo->lineEdit();
 		if(edit){
 			edit->setText("");
 		}
 	}
-	
-	
+
+
 	sourceList->clear();
-	
+
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^p[0-9]+f$", fileVctr);
-		
+
 		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
-			
+
 			QString number = "^p";
 			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
@@ -270,7 +292,7 @@ void ZDLSettingsPane::newConfig(){
 			}
 		}
 	}
-	
+
 	if(zconf->hasValue("zdl.save", "port")){
 		int set = 0;
 		int stat = 0;
@@ -291,20 +313,20 @@ void ZDLSettingsPane::newConfig(){
 	}else{
 		//cout << "Don't have port" << endl;
 	}
-	
+
 	IWADList->clear();
 	section = zconf->getSection("zdl.iwads");
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+f$", fileVctr);
-		
+
 		for(int i = 0; i < fileVctr.size(); i++){
 			QString value = fileVctr[i]->getVariable();
-			
+
 			QString number = "^i";
 			number.append(value.mid(1, value.length()-2));
 			number.append("n$");
-			
+
 			QVector<ZDLLine*> nameVctr;
 			section->getRegex(number, nameVctr);
 			if (nameVctr.size() == 1){
@@ -314,7 +336,7 @@ void ZDLSettingsPane::newConfig(){
 			}
 		}
 	}
-	
+
 	if(zconf->hasValue("zdl.save", "iwad")){
 		int set = 0;
 		int stat = 0;
