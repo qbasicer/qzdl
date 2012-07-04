@@ -16,11 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+
 #include <QtGui>
 #include <QApplication>
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
+
+#ifdef _DMFLAG_PICKER_
 #include "ZDMFlagDialog.h"
+#endif
 
 
 ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
@@ -47,9 +51,14 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	
 	tFragLimit = new QLineEdit(this);
 	
+	//Per issue #26, remove DMFlag picker
+#ifdef _DMFLAG_PICKER_
 	bDMFlags = new QPushButton("0",this);
-	
 	bDMFlags2 = new QPushButton("0",this);
+#else
+	bDMFlags = new QLineEdit("0", this);
+	bDMFlags2 = new QLineEdit("0", this);
+#endif
 	
 	QGridLayout *topGrid = new QGridLayout();
 	topGrid->addWidget(new QLabel("Game Mode",this),0,0,1,2);
@@ -69,10 +78,11 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	topGrid->setSpacing(0);
 
 	layout()->setContentsMargins(0,0,0,0);
-	
+
+#ifdef _DMFLAG_PICKER_
 	connect(bDMFlags, SIGNAL(clicked()), this, SLOT(dmflags()));
 	connect(bDMFlags2, SIGNAL(clicked()), this, SLOT(dmflags2()));
-
+#endif
 }
 
 void ZDLMultiPane::newConfig(){
@@ -184,6 +194,8 @@ void ZDLMultiPane::rebuild(){
 
 
 void ZDLMultiPane::dmflags(){
+	//Per issue #26, remove DMFlag picker
+#if 0
 	ZDMFlagDialog dialog(this);
 	bool ok;
 	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
@@ -193,6 +205,7 @@ void ZDLMultiPane::dmflags(){
 		bDMFlags->setText(QString::number(dialog.value()));
 		bDMFlags2->setText(QString::number(dialog.value2()));
 	}
+#endif
 }
 
 void ZDLMultiPane::dmflags2(){
