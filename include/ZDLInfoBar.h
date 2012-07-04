@@ -23,6 +23,10 @@
 #include <QObject>
 #include "ZDLWidget.h"
 
+#define INFOBAR_NORMAL	0
+#define INFOBAR_WARNING	1
+#define INFOBAR_INFO	2
+
 class ZDLInfoBar : public ZDLWidget{
 Q_OBJECT
 	public: 

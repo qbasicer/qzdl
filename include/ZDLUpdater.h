@@ -23,6 +23,10 @@
 #include <QObject>
 #include <QHttp>
 
+#define UPDATE_NOUPDATE		0
+#define UPDATE_MISMATCH		1
+#define UPDATE_ENDOFLIFE	2
+
 class ZDLUpdater: public QObject{
 Q_OBJECT
 	public:
