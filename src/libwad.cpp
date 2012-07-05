@@ -78,7 +78,7 @@ bool DoomWad::open(){
 		last = lumpName;
 		
 	}
-	return false;
+	return true;
 }
 
 int DoomWad::lumps(){

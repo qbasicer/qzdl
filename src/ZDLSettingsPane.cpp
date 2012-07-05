@@ -145,8 +145,13 @@ void ZDLSettingsPane::reloadMapList(){
 		if(mapfile){
 			if(mapfile->open()){
 				iwadMaps = mapfile->getMapNames();
+				LOGDATAO() << "Maps: " << iwadMaps << endl;
+			}else{
+				LOGDATAO() << "Failed to open file" << endl;
 			}
 			delete mapfile;
+		}else{
+			LOGDATAO() << "Failed to read map names" << endl;
 		}
 	}else{
 		LOGDATAO() << "File doesn't exist- " << file << endl;
