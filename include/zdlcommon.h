@@ -75,9 +75,6 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define ASSOCIATE_FILETYPES() {}
 #endif
 
-extern QStringList getMapNamesForWad(QString wadFile);
-
-
 #if QT_VERSION < 0x94040
 #define LOCK_CLASS		QMutex
 #define LOCK_BUILDER()		new QMutex(QMutex::Recursive)

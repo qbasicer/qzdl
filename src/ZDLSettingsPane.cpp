@@ -106,11 +106,12 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 	}
 	QStringList maps;
 	for(int i = vctr.size()-1; i >= 0; i--){
+		LOGDATAO() << "Getting maps for " << vctr[i]->getValue() << endl;
 		ZDLMapFile *mapfile = ZDLMapFile::getMapFile(vctr[i]->getValue());
 		if(!mapfile){
 			continue;
 		}
-		if(~mapfile->open()){
+		if(!mapfile->open()){
 			delete mapfile;
 			continue;
 		}
@@ -139,10 +140,18 @@ void ZDLSettingsPane::reloadMapList(){
 	}
 	QFileInfo fi(file);
 	if(fi.exists() && file.endsWith(".wad", Qt::CaseInsensitive)){
-		iwadMaps = getMapNamesForWad(file);
+		LOGDATAO() << "Getting iwad maps from " << file << endl;
+		ZDLMapFile *mapfile = ZDLMapFile::getMapFile(file);
+		if(mapfile){
+			if(mapfile->open()){
+				iwadMaps = mapfile->getMapNames();
+			}
+			delete mapfile;
+		}
 	}else{
 		LOGDATAO() << "File doesn't exist- " << file << endl;
 	}
+	LOGDATAO() << "Getting files maps" << endl;
 	QStringList filesMaps = getFilesMaps();
 	if(filesMaps.size() + iwadMaps.size() > 0){
 		warpCombo->clear();
