@@ -1,2 +1,3 @@
 include/ZDLApiCommon.h
 include/ZDLCoreApi.h
+include/ZDLPluginApi.h
