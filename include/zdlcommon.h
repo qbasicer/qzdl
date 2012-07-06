@@ -30,13 +30,13 @@ using namespace std;
 #ifdef Q_WS_WIN
 
 #define ZDL_VERSION_STRING	"3.0.5.12"
-#define ZDL_VERSION_ID		37
+#define ZDL_VERSION_ID		41
 #define ZDL_PRODUCT_ID		"qzdl-win32-stable"
 #define ZDL_STABLE
 #else
 
 #define ZDL_VERSION_STRING	"3.0.5.12"
-#define ZDL_VERSION_ID		39
+#define ZDL_VERSION_ID		42
 #define ZDL_PRODUCT_ID		"qzdl-git"
 
 #endif
