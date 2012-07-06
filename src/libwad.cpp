@@ -26,7 +26,9 @@ DoomWad::~DoomWad(){
 		this->dev->close();
 		delete this->dev;
 		this->dev = NULL;
+		LOGDATAO() << "Closing device" << endl;
 	}
+	LOGDATAO() << "Deleteing DoomWad" << endl;
 }
 
 bool DoomWad::open(){
@@ -76,7 +78,7 @@ bool DoomWad::open(){
 		last = lumpName;
 		
 	}
-	return false;
+	return true;
 }
 
 int DoomWad::lumps(){

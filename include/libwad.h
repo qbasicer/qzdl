@@ -14,7 +14,7 @@ class DoomWad : public ZDLMapFile {
 		enum AddBehaviour {REWRITE_WAD, APPEND_FIXUP};
 		DoomWad(QString file);
 		DoomWad(QIODevice *dev);
-		~DoomWad();
+		virtual ~DoomWad();
 		virtual bool open();
 		int lumps();
 		WadLump *getLump(int index);
