@@ -4,8 +4,8 @@
 class ZDLPluginApi;
 
 #include <QtCore>
-#include "ZDLApiCommon.h"
-#include "ZDLCoreApi.h"
+#include <ZDLApiCommon.h>
+#include <ZDLCoreApi.h>
 
 class ZDLPluginApi {
 	public:
