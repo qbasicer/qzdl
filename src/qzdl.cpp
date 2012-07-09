@@ -118,6 +118,7 @@ int main( int argc, char **argv ){
 
 
 	core = new ZDLCoreImpl(args);
+	core->registerGuiThread();
 	ZDLBootstrapPlugin *bsp = new ZDLBootstrapPlugin(args);
 	ZPID pz = core->registerPlugin(bsp);
 	if(pz == BAD_ZPID){

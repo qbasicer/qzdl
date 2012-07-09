@@ -36,6 +36,7 @@ ZDLCoreImpl::ZDLCoreImpl(QStringList args){
 	mutex = new QMutex(QMutex::Recursive);
 	LOGDATAO() << "ZDLCoreImpl START" << endl;
 	lastPid = 0;
+	guiThread = NULL;
 	this->args = args;
 	new ZDLUIThreadRunner();
 }
@@ -365,4 +366,46 @@ bool ZDLCoreImpl::registerAlias(QString alias){
 	unlock();
 	return true;
 }
+
+bool ZDLCoreImpl::deregisterAlias(QString alias){
+	return false;
+}
+
+ZPID ZDLCoreImpl::getCurrentZPID(){
+	lock();
+	PluginEntry *callee = getEntryForCurrentThread();
+	if(callee == NULL){
+		unlock();
+		return BAD_ZPID;
+	}
+	ZPID pid = callee->pid;
+	unlock();
+	return pid;
+}
+
+bool ZDLCoreImpl::attachThread(QThread *peer){
+	return false;
+}
+
+bool ZDLCoreImpl::detatchThread(QThread *peer){
+	return false;
+}
+
+unsigned int ZDLCoreImpl::getSequence(){
+	return 0;
+}
+
+void ZDLCoreImpl::registerGuiThread(){
+	if(guiThread != NULL){
+		return;
+	}
+	QThread *currentThread = QThread::currentThread();
+	guiThread = currentThread;
+}
+
+bool ZDLCoreImpl::isGuiThread(){
+	QThread *currentThread = QThread::currentThread();
+	return (currentThread == guiThread);
+}
+
 
