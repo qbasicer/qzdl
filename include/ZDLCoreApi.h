@@ -27,6 +27,22 @@ class ZDLCoreApi {
 		virtual bool waitForProcessExit(ZPID pid) = 0;
 		virtual bool runFunctionInGui(QString func, QList<QVariant> args, bool async) = 0;
 		virtual bool registerAlias(QString alias) = 0;
+		virtual bool deregisterAlias(QString alias) = 0;
+
+		/* Return the current ZPID of the plugin */
+		virtual ZPID getCurrentZPID() = 0;
+
+		/* Attach peer to the current process */
+		virtual bool attachThread(QThread *peer) = 0;
+
+		/* Detach peer from the current process, main thread may not be detached */
+		virtual bool detatchThread(QThread *peer) = 0;
+
+		/* Get SEQ #, used for caching purposes */
+		virtual unsigned int getSequence() = 0;
+
+		/* isGuiThread(), special thread to determine if we have GUI access */
+		virtual bool isGuiThread() = 0;
 };
 
 
