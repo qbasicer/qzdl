@@ -60,7 +60,15 @@ bool ZDLCoreImpl::getPluginProperties(ZPID pid, QHash<QString,QVariant> &props){
 }
 
 ZPID ZDLCoreImpl::loadPluginPath(QString path){
-	LOGDATAO() << "Unimplemented function" << endl;
+	QPluginLoader *bootstrapPlugin = new QPluginLoader(path);
+	if (bootstrapPlugin->load()){
+		QObject *obj = bootstrapPlugin->instance();
+		ZDLPluginApi *plg = qobject_cast<ZDLPluginApi *>(obj);
+		if(plg == NULL){
+			return BAD_ZPID;
+		}
+		return registerPlugin(plg);
+	}
 	return BAD_ZPID; 
 }
 

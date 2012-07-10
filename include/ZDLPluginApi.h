@@ -19,6 +19,10 @@ class ZDLPluginApi {
 		
 };
 
+Q_DECLARE_METATYPE(ZDLPluginApi*);
+
+Q_DECLARE_INTERFACE(ZDLPluginApi, "net.vectec.zdl.qzdl.ZDLPluginApi/1.0")
+
 
 #endif
 
