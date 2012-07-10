@@ -21,6 +21,7 @@
 #define _ZQWIDGET_H_
 #include <QObject>
 #include <QWidget>
+#include <ZDLCoreApi.h>
 
 
 class ZDLWidget: public QWidget{
@@ -45,9 +46,12 @@ public slots:
 //protected:
 //	virtual void fromUpstream(ZDLWidget *origin);
 //	virtual void fromDownstream(ZDLWidget *origin);
+protected:
+	ZDLCoreApi* getApi();
 
 private:
 	ZDLWidget *zparent;
+	ZDLCoreApi *api;
 };
 #endif
 

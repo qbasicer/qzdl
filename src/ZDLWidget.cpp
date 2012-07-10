@@ -27,6 +27,7 @@ ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
 	setZParent(parent);
 	/* Try to compact the interface */
 	setContentsMargins(0,0,0,0);
+	api = NULL;
 }
 
 
@@ -60,11 +61,13 @@ void ZDLWidget::setZParent(ZDLWidget *parent){
 ZDLWidget::ZDLWidget(){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
+	api = NULL;
 }
 
 ZDLWidget::ZDLWidget(QWidget *parent):QWidget(parent){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
+	api = NULL;
 }
 
 void ZDLWidget::notifyFromChild(ZDLWidget *origin){
@@ -102,6 +105,20 @@ void ZDLWidget::readFromParent(ZDLWidget *origin){
 		newConfig();
 	}
 }
+
+ZDLCoreApi* ZDLWidget::getApi(){
+	// If we have one, return it
+	if (api != NULL){
+		return api;
+	}
+	// If we have a parent, ask them
+	if (zparent != NULL){
+		return zparent->getApi();
+	}
+	// If we don't know, return nothing
+	return NULL;
+}
+
 
 void ZDLWidget::rebuild(){
 }
