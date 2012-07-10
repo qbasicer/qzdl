@@ -6,7 +6,7 @@
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
-* 3.2.0.2 - UNRELEASED
+* 3.2.0.2 - July 10th, 2012
   * Fix holding of wad files and not closing them (#23)
   * Removed DMFlag picker (#26)
   * Fix swapped paths in file list (#22)
