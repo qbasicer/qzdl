@@ -120,8 +120,9 @@ QString ZDLMainWindow::getWindowTitle(){
 
 }
 
-ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
+ZDLMainWindow::ZDLMainWindow(ZDLCoreApi *api, QWidget *parent): QMainWindow(parent){
 	LOGDATAO() << "New main window " << DPTR(this) << endl;
+	this->api = api;
 	printf("I am mainWindow %p\n", this);
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);

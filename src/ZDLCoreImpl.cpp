@@ -60,15 +60,20 @@ bool ZDLCoreImpl::getPluginProperties(ZPID pid, QHash<QString,QVariant> &props){
 }
 
 ZPID ZDLCoreImpl::loadPluginPath(QString path){
+	LOGDATAO() << "Loading plugin from " << path << endl;
 	QPluginLoader *bootstrapPlugin = new QPluginLoader(path);
 	if (bootstrapPlugin->load()){
+		LOGDATAO() << "Plugin loaded" << endl;
 		QObject *obj = bootstrapPlugin->instance();
 		ZDLPluginApi *plg = qobject_cast<ZDLPluginApi *>(obj);
 		if(plg == NULL){
+			LOGDATAO() << "Failed to cast the plugin" << endl;
 			return BAD_ZPID;
 		}
+		LOGDATAO() << "Handing plugin over to registrar" << endl;
 		return registerPlugin(plg);
 	}
+	LOGDATAO() << "Failed to load() the plugin:" << bootstrapPlugin->errorString() <<  endl;
 	return BAD_ZPID; 
 }
 

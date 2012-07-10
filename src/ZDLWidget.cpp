@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include "ZDLWidget.h"
 #include <QMetaObject>
+
+// For magic
+#include "ZDLMainWindow.h"
 
 /* Our parent is a ZDLWidget, connect our signals up */
 ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
@@ -67,7 +69,15 @@ ZDLWidget::ZDLWidget(){
 ZDLWidget::ZDLWidget(QWidget *parent):QWidget(parent){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
-	api = NULL;
+
+	// Do magic
+	ZDLMainWindow *mw = qobject_cast<ZDLMainWindow *>(parent);
+	if (mw != NULL){
+		printf("Getting API from ZDLMainWindow\n");
+		api = mw->getApi();
+	} else {
+		api = NULL;
+	}
 }
 
 void ZDLWidget::notifyFromChild(ZDLWidget *origin){

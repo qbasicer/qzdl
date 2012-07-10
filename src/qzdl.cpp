@@ -131,7 +131,7 @@ int main( int argc, char **argv ){
 	return 0;
 }
 
-int uiMain(QStringList args){
+int uiMain(QStringList args, ZDLCoreApi *api){
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
 	QStringList eatenArgs(args);
 #if defined(Q_WS_WIN)
@@ -263,7 +263,7 @@ int uiMain(QStringList args){
 	}
 
 
-	mw = new ZDLMainWindow();
+	mw = new ZDLMainWindow(api);
 	mw->setUpdater(zup);
 	ZDLConfigurationManager::setUpdater(zup);
 	mw->show();

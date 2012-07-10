@@ -4,7 +4,7 @@
 
 using namespace std;
 
-extern int uiMain(QStringList args);
+extern int uiMain(QStringList args, ZDLCoreApi *api);
 extern ZDLMainWindow *mw;
 QMutex *windowMutex;
 
@@ -13,6 +13,7 @@ ZDLUIPlugin::ZDLUIPlugin(){
 	windowMutex = new QMutex();
 }
 int ZDLUIPlugin::pluginMain(ZDLCoreApi* api){
+	this->api = api;
 	windowMutex->lock();
 	cout << "UI running" << endl;
 	QList<QVariant> args;
@@ -29,7 +30,7 @@ int ZDLUIPlugin::pluginMain(ZDLCoreApi* api){
 QVariant ZDLUIPlugin::pluginCall(QString func, QList<QVariant> args){
 	qDebug() << "ZDLUIPlugin::pluginCall";
 	if(func == "uiMain"){
-		uiMain(args[0].toStringList());
+		uiMain(args[0].toStringList(), api);
 		return QVariant();
 	}
 	if(func.compare(QString("addTab")) == 0){
