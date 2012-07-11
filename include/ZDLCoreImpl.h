@@ -57,6 +57,11 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool detatchThread(QThread *peer);
                 virtual unsigned int getSequence();
                 virtual bool isGuiThread();
+                virtual ZPID getPidForService(QString service);
+                virtual bool getAllPidsForServices(QList<ZPID> &list);
+                virtual bool registerServiceHandler(QString service);
+                virtual bool deregisterServiceHandler(QString service);
+                virtual bool getAllServices(QStringList &list);
 
 
 		// Internal private API

@@ -13,6 +13,7 @@ class ZDLUIPlugin : public ZDLPluginApi {
                 virtual int pluginMain(ZDLCoreApi* api);
                 virtual QVariant pluginCall(QString func, QList<QVariant> args);
                 virtual void deliverEvent(int evtid){Q_UNUSED(evtid);return;}
+		virtual bool handleService(QString, QHash<QString, QVariant>){return false;}
 	protected:
 		ZDLCoreApi *api;
 

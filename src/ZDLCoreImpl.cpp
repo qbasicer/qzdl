@@ -421,4 +421,25 @@ bool ZDLCoreImpl::isGuiThread(){
 	return (currentThread == guiThread);
 }
 
+ZPID ZDLCoreImpl::getPidForService(QString service){
+	return BAD_ZPID;
+}
+
+bool ZDLCoreImpl::getAllPidsForServices(QList<ZPID> &list){
+	return false;
+}
+
+bool ZDLCoreImpl::registerServiceHandler(QString service){
+	return false;
+}
+
+bool ZDLCoreImpl::deregisterServiceHandler(QString service){
+	return false;
+}
+
+bool ZDLCoreImpl::getAllServices(QStringList &list){
+	return false;
+}
+
+
 
