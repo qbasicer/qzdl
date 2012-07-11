@@ -196,6 +196,25 @@ void ZDLListWidget::upButton(){
 			insert((ZDLListable*)item, oldRow-1);
 			pList->setCurrentRow(oldRow-1);
 		}
+	} else if (pList->selectedItems().size() > 1){
+		QList<QListWidgetItem*> items = pList->selectedItems();
+		for(int i = 0; i < items.size(); i++) {
+			QListWidgetItem* item = items[i];
+			int row = pList->row(item);
+			// Make sure we don't move up and out of the list
+			if(row <= 0){
+				return;
+			}
+		}
+		for(int i = 0; i < items.size(); i++) {
+			QListWidgetItem* item = items[i];
+			int row = pList->row(item);
+			item = pList->takeItem(row);
+			pList->insertItem(row - 1, item);
+		}
+		for(int i = 0; i < items.size(); i++) {
+			pList->setCurrentItem(items[i], QItemSelectionModel::Select);
+		}
 	}
 }
 
@@ -208,7 +227,27 @@ void ZDLListWidget::downButton(){
 			insert((ZDLListable*)item, oldRow+1);
 			pList->setCurrentRow(oldRow+1);
 		}
-	}
+	}else if (pList->selectedItems().size() > 1){
+                QList<QListWidgetItem*> items = pList->selectedItems();
+		int max = pList->count();
+                for(int i = 0; i < items.size(); i++) {
+                        QListWidgetItem* item = items[i];
+                        int row = pList->row(item);
+			// Make sure we don't run off the end
+                        if(row >= max - 1){
+                                return;
+                        }
+                }
+                for(int i = 0; i < items.size(); i++) {
+                        QListWidgetItem* item = items[i];
+                        int row = pList->row(item);
+			item = pList->takeItem(row);
+                        pList->insertItem(row + 1, item);
+                }
+		for(int i = 0; i < items.size(); i++) {
+                        pList->setCurrentItem(items[i], QItemSelectionModel::Select);
+                }
+        }
 }
 
 void ZDLListWidget::editButton(QListWidgetItem * item){
