@@ -43,6 +43,21 @@ class ZDLCoreApi {
 
 		/* isGuiThread(), special thread to determine if we have GUI access */
 		virtual bool isGuiThread() = 0;
+
+		/* Given a service name, get a service handler for it */
+		virtual ZPID getPidForService(QString service) = 0;
+
+		/* For a given service, get all pids that could handle it */
+		virtual bool getAllPidsForServices(QList<ZPID> &list) = 0;
+
+		/* For a given service, register plugin as a service handler */
+		virtual bool registerServiceHandler(QString service) = 0;
+
+		/* Remove plugin from list of handlers for server */
+		virtual bool deregisterServiceHandler(QString service) = 0;
+
+		/* Return the list of all available services */
+		virtual bool getAllServices(QStringList &list) = 0;
 };
 
 
