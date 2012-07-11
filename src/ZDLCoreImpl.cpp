@@ -441,5 +441,7 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 	return false;
 }
 
-
+bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> payload){
+	return false;
+}
 

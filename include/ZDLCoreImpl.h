@@ -62,6 +62,7 @@ class ZDLCoreImpl : public ZDLCoreApi {
                 virtual bool registerServiceHandler(QString service);
                 virtual bool deregisterServiceHandler(QString service);
                 virtual bool getAllServices(QStringList &list);
+		virtual bool runService(ZPID pid, QString service, QHash<QString, QVariant> payload);
 
 
 		// Internal private API
