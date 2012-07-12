@@ -26,11 +26,12 @@
 #include "ZDLInterface.h"
 #include "ZDLSettingsTab.h"
 #include "ZDLUpdater.h"
+#include "ZDLCoreApi.h"
 
 class ZDLMainWindow: public QMainWindow{
     Q_OBJECT
 public:
-	ZDLMainWindow( QWidget *parent=0);
+	ZDLMainWindow(ZDLCoreApi *api = NULL, QWidget *parent = NULL);
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
@@ -39,6 +40,8 @@ public:
 	QString getExecutable();
 	void handleImport();
 	QString getWindowTitle();
+	bool addTab(QString text, QWidget *widget);
+	ZDLCoreApi *getApi(){return api;}
 public slots:
 	void launch();
 	void quit();
@@ -51,8 +54,9 @@ protected:
 	ZDLInterface* intr;
 	ZDLSettingsTab* settings;
 	ZDLUpdater* zup;
-	
+	QTabWidget *tabWidget;
 	int procerr;
 	QAction *qact2;
+	ZDLCoreApi *api;
 };
 #endif

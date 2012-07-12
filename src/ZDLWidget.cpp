@@ -16,19 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include "ZDLWidget.h"
 #include <QMetaObject>
 
+// For magic
+#include "ZDLMainWindow.h"
 
+/* Our parent is a ZDLWidget, connect our signals up */
 ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
 	setZParent(parent);
-	//std::cout << "Using ZDLWidget as parent" << std::endl;
+	/* Try to compact the interface */
 	setContentsMargins(0,0,0,0);
+	api = NULL;
 }
 
+
+/*
+ * This is the guts of the 'magic'.  If a child widget triggers a 'buildChildren(this)' or a 'buildParent(this)',
+ * the widgets get triggered along the tree.  Signalling a parent propagates the signal up, and signals all their children
+ * back down, eventually signalling all children.  It is required to call both buildChildren and buildParent, buildParent
+ * a child will prevent signals from passing through it if they're the originators.  Using buildChildren may be useful when you only want
+ * to save the configuration of children. Creating a new ZDLWidget and setting it's parent to be another ZDLWidget will
+ * automatically enroll the new widget into the saving process.  There is special logic inside ZDLMainWindow to 'jumper'
+ * save events between tabs, since ZDLMainWindow, in itself, is not a ZDLWidget.  When switching away from a tab, ZDLMainWindow
+ * forces a save of the tab being left, and a load on the tab being switched to.  This is to ensure that changes in one tab
+ * get reflected in another tab, such as adding an IWAD.
+ *
+ * This system is designed so that the widgets internally hold their own state, and only save their state when an event happens
+ * such as an exit condition, launch condition, or tab change.  This is an attempt to improve responsiveness and reduce the
+ * number of read operations that must be done.  For example, every time a user moves a file in a list, it shouldn't be required
+ * to resave that data into the configuration file.
+ *
+ * At no point is configuration designed to be written to a file on the fly.  ZDLConfig serves as an in-memory database.
+ * While ZDLConfig has been improved for multithreaded access, it should not be generally considered thread safe.
+ */
 void ZDLWidget::setZParent(ZDLWidget *parent){
 	zparent = parent;
 	connect(parent, SIGNAL( buildChildren(ZDLWidget*) ), this, SLOT(notifyFromParent(ZDLWidget*)));
@@ -40,33 +63,41 @@ void ZDLWidget::setZParent(ZDLWidget *parent){
 ZDLWidget::ZDLWidget(){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
-	//std::cout << "Using QWidget as parent" << std::endl;
+	api = NULL;
 }
 
 ZDLWidget::ZDLWidget(QWidget *parent):QWidget(parent){
 	setContentsMargins(0,0,0,0);
 	zparent = NULL;
-	//std::cout << "Using QWidget as parent" << std::endl;
+
+	// Do magic
+	ZDLMainWindow *mw = qobject_cast<ZDLMainWindow *>(parent);
+	if (mw != NULL){
+		printf("Getting API from ZDLMainWindow\n");
+		api = mw->getApi();
+	} else {
+		api = NULL;
+	}
 }
 
 void ZDLWidget::notifyFromChild(ZDLWidget *origin){
+	/* If we didn't send this request */
 	if (origin != this){
+		/* Tell our children */
 		emit buildChildren(origin);
+		/* And our parent, since we're sending upwards */
 		emit buildParent(origin);
-		//fromDownstream(origin);
+		/* And save ourselves */
 		rebuild();
-		//const QMetaObject * qmo = metaObject();
-		//std::cout << "Notify from child (I am " << qmo->className() << ")" << std::endl;
 	}
 }
 
 void ZDLWidget::notifyFromParent(ZDLWidget *origin){
 	if (origin != this){
+		/* Our parent told us to save, build our children */ 
 		emit buildChildren(origin);
-		//fromUpstream(origin);
+		/* And save ourselves */
 		rebuild();
-		//const QMetaObject * qmo = metaObject();
-		//std::cout << "Notify from parent (I am " << qmo->className() << ")" << std::endl;
 	}
 }
 
@@ -75,8 +106,6 @@ void ZDLWidget::readFromChild(ZDLWidget *origin){
 		emit readChildren(origin);
 		emit readParent(origin);
 		newConfig();
-		//const QMetaObject * qmo = metaObject();
-		//std::cout << "Notify from child (of new config) (I am " << qmo->className() << ")" << std::endl;
 	}
 }
 
@@ -84,16 +113,22 @@ void ZDLWidget::readFromParent(ZDLWidget *origin){
 	if (origin != this){
 		emit readChildren(origin);
 		newConfig();
-		//const QMetaObject * qmo = metaObject();
-		//std::cout << "Notify from parent (of new config) (I am " << qmo->className() << ")" << std::endl;
 	}
 }
 
-//void ZDLWidget::fromDownstream(ZDLWidget *origin){
-//}
+ZDLCoreApi* ZDLWidget::getApi(){
+	// If we have one, return it
+	if (api != NULL){
+		return api;
+	}
+	// If we have a parent, ask them
+	if (zparent != NULL){
+		return zparent->getApi();
+	}
+	// If we don't know, return nothing
+	return NULL;
+}
 
-//void ZDLWidget::fromUpstream(ZDLWidget *origin){
-//}
 
 void ZDLWidget::rebuild(){
 }

@@ -98,9 +98,37 @@ void ZDLInterface::exitzdl(){
 	mw->close();
 }
 
+void ZDLInterface::loadPlugin(){
+	QString text("Are you sure you'd like to load a plugin? It may lead to unstability including crashes or data loss.");
+	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	if(btnrc != QMessageBox::Yes){
+		return;
+	}
+	QStringList filters;
+#if defined(Q_WS_WIN)
+        filters << "Windows DLLs (*.dll)"
+#else
+	filters << "Linux SOs (*.so)"
+#endif
+                << "ZDL PluginData Files (*.zpd)"
+                << "Any files (*)";
+        QString filter = filters.join(";;");
+
+	QString fileName = QFileDialog::getOpenFileName(this, "Load Plugin", QString(), filter);
+	if(!fileName.isNull()){
+		ZDLCoreApi *api = getApi();
+		ZPID pid = api->loadPluginPath(fileName);
+		if (pid == BAD_ZPID){
+			QMessageBox::warning(this, ZDL_ENGINE_NAME, "Failed to load plugin");
+		}else{
+			QMessageBox::warning(this, ZDL_ENGINE_NAME, "Plugin has been loaded");
+		}
+	}
+}
+
 void ZDLInterface::importCurrentConfig(){
 	LOGDATAO() << "Asking if they'd really like to import" << endl;
-	QString text("Are you sure you'd like to <b>replace</b> the current <b>global</b> configurationw with the one currently loaded?");
+	QString text("Are you sure you'd like to <b>replace</b> the current <b>global</b> configuration with the one currently loaded?");
 	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 	if(btnrc != QMessageBox::Yes){
 		LOGDATAO() << "They said no, bailing" << endl;
@@ -155,8 +183,17 @@ QLayout *ZDLInterface::getButtonPane(){
 #if !defined(NO_IMPORT)
 	QAction *actImportCurrentConfig = actions->addAction("Import current config");
 #endif
+
 	QAction *clearCurrentGlobalConfig = actions->addAction("Clear current global config");
 	clearCurrentGlobalConfig->setEnabled(false);	
+	actions->addSeparator();
+
+	ZDLCoreApi *api = getApi();
+	QAction *actLoadPlugin = NULL;
+	if (api){
+		actLoadPlugin = actions->addAction("Load plugin");
+	}
+
 
 	context->addMenu(actions);
 	context->addSeparator();
@@ -179,6 +216,10 @@ QLayout *ZDLInterface::getButtonPane(){
 #if !defined(NO_IMPORT)
 	connect(actImportCurrentConfig, SIGNAL(triggered()), this, SLOT(importCurrentConfig()));
 #endif
+
+	if(actLoadPlugin){
+		connect(actLoadPlugin, SIGNAL(triggered()), this, SLOT(loadPlugin()));
+	}
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
 	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
@@ -351,11 +392,11 @@ void ZDLInterface::loadConfigFile(){
 	filter = filters.join(";;");
 	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", QString(), filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-			delete zconf;
-			ZDLConf* tconf = new ZDLConf();
-			ZDLConfigurationManager::setConfigFileName(fileName);
-			tconf->readINI(fileName);
-			ZDLConfigurationManager::setActiveConfiguration(tconf);
+		delete zconf;
+		ZDLConf* tconf = new ZDLConf();
+		ZDLConfigurationManager::setConfigFileName(fileName);
+		tconf->readINI(fileName);
+		ZDLConfigurationManager::setActiveConfiguration(tconf);
 
 		mw->startRead();
 	}
