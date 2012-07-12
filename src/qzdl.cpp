@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDir>
+#include <QtXml>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
@@ -68,6 +69,7 @@ __declspec(dllimport) int qt_ntfs_permission_lookup;
 #endif
 
 int main( int argc, char **argv ){
+	QXmlSimpleReader();
 	QStringList args;
 	for(int i = 1; i < argc; i++){
 		args << QString(argv[i]);

@@ -30,7 +30,6 @@
 #include "ZDLFilePane.h"
 #include "ZDLSettingsPane.h"
 #include "ZDLQSplitter.h"
-#include "ZDMFlagPicker.h"
 
 #include "aup.xpm"
 #include "adown.xpm"
@@ -159,8 +158,6 @@ QLayout *ZDLInterface::getButtonPane(){
 	QAction *clearCurrentGlobalConfig = actions->addAction("Clear current global config");
 	clearCurrentGlobalConfig->setEnabled(false);	
 
-	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
-
 	context->addMenu(actions);
 	context->addSeparator();
 	QAction *loadZdlFileAction = context->addAction("Load .zdl");
@@ -188,7 +185,6 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(clearEverythingAction, SIGNAL(triggered()), this, SLOT(clearEverything()));
 
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
-	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
 
 	btnZDL->setMenu(context);
@@ -262,9 +258,6 @@ void ZDLInterface::clearAllFields(){
 }
 
 void ZDLInterface::showNewDMFlagger(){
-	LOGDATAO() << "New DMFlag picker" << endl;
-	ZDMFlagPicker dialog(this);
-	dialog.exec();
 }
 
 void ZDLInterface::launch(){
