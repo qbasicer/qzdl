@@ -430,11 +430,56 @@ bool ZDLCoreImpl::getAllPidsForServices(QList<ZPID> &list){
 }
 
 bool ZDLCoreImpl::registerServiceHandler(QString service){
-	return false;
+	ZPID pid = getCurrentZPID();
+	if(pid == BAD_ZPID){
+		return false;
+	}
+	lock();
+	//QHash<QString, ZDLServiceList*> services;	
+	ZDLServiceList* serviceList = NULL;
+	if(services.contains(service)){
+		serviceList = services.value(service);
+	}else{
+		serviceList = new ZDLServiceList(service);
+		if(serviceList){
+			services.insert(service,serviceList);
+		}
+	}
+	if(!serviceList){
+		unlock();
+		return false;
+	}
+
+	serviceList->addHandler(pid);
+
+	unlock();
+	return true;
 }
 
 bool ZDLCoreImpl::deregisterServiceHandler(QString service){
-	return false;
+	ZPID pid = getCurrentZPID();
+	if(pid == BAD_ZPID){
+		return false;
+	}
+	lock();
+	ZDLServiceList* serviceList = NULL;
+	if(!services.contains(service)){
+		// Pretend we actually removed them
+		unlock();
+		return true;
+	}
+	serviceList = services.value(service);
+	if(!serviceList){
+		unlock();
+		return false;
+	}
+
+	serviceList->removeHandler(pid);
+
+	//TODO: Delete empty service lists
+
+	unlock();
+	return true;
 }
 
 bool ZDLCoreImpl::getAllServices(QStringList &list){
@@ -444,4 +489,45 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> payload){
 	return false;
 }
+
+
+ZDLServiceList::ZDLServiceList(QString serviceName){
+	this->serviceName = serviceName;
+	preferred = BAD_ZPID;
+}
+
+void ZDLServiceList::addHandler(ZPID pid, bool preferred){
+	if(!serviceHandlers.contains(pid)){
+		serviceHandlers.append(pid);
+	}
+	if(preferred || this->preferred == BAD_ZPID){
+		this->preferred = pid;
+	}
+}
+
+void ZDLServiceList::removeHandler(ZPID pid){
+	if(!serviceHandlers.contains(pid)){
+		return;
+	}
+	serviceHandlers.removeOne(pid);
+	if(this->preferred = pid){
+		if(serviceHandlers.isEmpty()){
+			this->preferred = BAD_ZPID;
+		}else{
+			this->preferred = serviceHandlers.last();
+		}
+	}
+}
+
+ZPID ZDLServiceList::getPreferred(){
+	return preferred;
+}
+
+void ZDLServiceList::setPreferred(ZPID pid){
+	if(!serviceHandlers.contains(pid)){
+		return;
+	}
+	this->preferred = pid;
+}
+
 
