@@ -422,7 +422,15 @@ bool ZDLCoreImpl::isGuiThread(){
 }
 
 ZPID ZDLCoreImpl::getPidForService(QString service){
-	return BAD_ZPID;
+	lock();
+	if(!services.contains(service)){
+		unlock();
+		return BAD_ZPID;
+	}
+	ZDLServiceList* serviceList = services.value(service);
+	ZPID pid = serviceList->getPid();
+	unlock();
+	return pid;
 }
 
 bool ZDLCoreImpl::getAllPidsForServices(QList<ZPID> &list){
@@ -487,7 +495,25 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 }
 
 bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> payload){
-	return false;
+	if(pid == BAD_ZPID || pid == 0){
+		pid = getPidForService(service);
+	}
+	if(pid == BAD_ZPID){
+		return false;
+	}
+	lock();
+	if(!plugins.contains(pid)){
+		unlock();
+		return false;
+	}
+	PluginEntry *pe = plugins.value(pid);
+        if(pe == NULL){
+                unlock();
+                return false;
+        }
+	ZDLPluginApi *plugin = pe->plugin;
+	unlock();
+	return plugin->handleService(service,payload);
 }
 
 
@@ -517,6 +543,16 @@ void ZDLServiceList::removeHandler(ZPID pid){
 			this->preferred = serviceHandlers.last();
 		}
 	}
+}
+
+ZPID ZDLServiceList::getPid(){
+	if(getPreferred() != BAD_ZPID){
+		return getPreferred();
+	}
+	if(serviceHandlers.size() == 0){
+		return BAD_ZPID;
+	}
+	return serviceHandlers.last();
 }
 
 ZPID ZDLServiceList::getPreferred(){

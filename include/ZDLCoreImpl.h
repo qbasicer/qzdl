@@ -105,6 +105,7 @@ class ZDLServiceList {
 		void removeHandler(ZPID pid);
 		ZPID getPreferred();
 		void setPreferred(ZPID pid);
+		ZPID getPid();
 	private:
 		QString serviceName;
 		QList<ZPID> serviceHandlers;
