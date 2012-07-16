@@ -190,8 +190,10 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	ZDLCoreApi *api = getApi();
 	QAction *actLoadPlugin = NULL;
+	QAction *actDmFlagPicker = NULL;
 	if (api){
 		actLoadPlugin = actions->addAction("Load plugin");
+		actDmFlagPicker = actions->addAction("DM Flag Picker");
 	}
 
 
@@ -219,6 +221,9 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	if(actLoadPlugin){
 		connect(actLoadPlugin, SIGNAL(triggered()), this, SLOT(loadPlugin()));
+	}
+	if (actDmFlagPicker){
+		connect(actDmFlagPicker, SIGNAL(triggered()), this, SLOT(showNewDMFlagger()));
 	}
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
@@ -299,6 +304,17 @@ void ZDLInterface::clearAllFields(){
 }
 
 void ZDLInterface::showNewDMFlagger(){
+	ZDLCoreApi *api = getApi();
+	if(!api){
+		return;
+	}
+	QHash<QString,QVariant> args;
+	ZPID service = api->getPidForService("net.vectec.zdl.qzdl.dmflagpicker");
+	if(service == BAD_ZPID){
+		QMessageBox::critical(this, ZDL_ENGINE_NAME, "No valid PID for service");
+		return;
+	}
+	api->runService(service, "net.vectec.zdl.qzdl.dmflagpicker", args);
 }
 
 void ZDLInterface::launch(){
