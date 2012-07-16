@@ -304,8 +304,10 @@ void ZDLInterface::clearAllFields(){
 }
 
 void ZDLInterface::showNewDMFlagger(){
+	qDebug() << "ZDLInterface::showNewDMFlagger";
 	ZDLCoreApi *api = getApi();
 	if(!api){
+		qDebug() << "No API";
 		return;
 	}
 	QHash<QString,QVariant> args;
@@ -314,6 +316,7 @@ void ZDLInterface::showNewDMFlagger(){
 		QMessageBox::critical(this, ZDL_ENGINE_NAME, "No valid PID for service");
 		return;
 	}
+	qDebug() << "Running service " << service;
 	api->runService(service, "net.vectec.zdl.qzdl.dmflagpicker", args);
 }
 

@@ -5,6 +5,7 @@ ZDLDMFlagPickerPlugin::ZDLDMFlagPickerPlugin(){
 }
 
 int ZDLDMFlagPickerPlugin::pluginMain(ZDLCoreApi* api){
+	api->registerServiceHandler("net.vectec.zdl.qzdl.dmflagpicker");
 	this->api = api;
 }
 
@@ -13,6 +14,7 @@ QVariant ZDLDMFlagPickerPlugin::pluginCall(QString func, QList<QVariant> args){
 }
 
 bool ZDLDMFlagPickerPlugin::handleService(QString service, QHash<QString, QVariant> args){
+	qDebug() << "ZDLDMFlagPickerPlugin::handleService";
 	if(service == "net.vectec.zdl.qzdl.dmflagpicker"){
 		ZDLDMFlagPickerDialog *dialog = NULL;
 		if(args.contains("parentWidget")){
@@ -28,9 +30,11 @@ bool ZDLDMFlagPickerPlugin::handleService(QString service, QHash<QString, QVaria
 			dialog = new ZDLDMFlagPickerDialog();
 		}
 		if(dialog == NULL){
+			qDebug() << "No dialoag";
 			return false;
 		}
 		dialog->exec();
+		qDebug() << "Dialog done";
 		return true;
 	}
 	return false;

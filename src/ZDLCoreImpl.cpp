@@ -424,6 +424,7 @@ bool ZDLCoreImpl::isGuiThread(){
 ZPID ZDLCoreImpl::getPidForService(QString service){
 	lock();
 	if(!services.contains(service)){
+		qDebug() << "No service handler for " << service;
 		unlock();
 		return BAD_ZPID;
 	}
@@ -495,24 +496,30 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 }
 
 bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> payload){
+	qDebug() << "ZDLCoreImpl::runService";
 	if(pid == BAD_ZPID || pid == 0){
+		qDebug() << "Resolving a plugin";
 		pid = getPidForService(service);
 	}
 	if(pid == BAD_ZPID){
+		qDebug() << "No plugin";
 		return false;
 	}
 	lock();
 	if(!plugins.contains(pid)){
+		qDebug() << "No such plugin " << pid;
 		unlock();
 		return false;
 	}
 	PluginEntry *pe = plugins.value(pid);
         if(pe == NULL){
+		qDebug() << "No such plugin entry";
                 unlock();
                 return false;
         }
 	ZDLPluginApi *plugin = pe->plugin;
 	unlock();
+	qDebug() << "Running service handler";
 	return plugin->handleService(service,payload);
 }
 
