@@ -30,6 +30,8 @@ class PluginEntry {
 		bool hasAlias;
 };
 
+class ZDLServiceList;
+
 class ZDLCoreImpl : public ZDLCoreApi {
 	public:
 		ZDLCoreImpl(QStringList args);
@@ -86,10 +88,27 @@ class ZDLCoreImpl : public ZDLCoreApi {
 		QHash<ZPID, PluginEntry*> plugins;
 		QHash<QString, ZPID> aliases;
 		QHash<QThread*, ZPID> threads;
+
+		QHash<QString, ZDLServiceList*> services;
+
+
 		QMutex *mutex;
 		ZPID lastPid;
 		QStringList args;
 		QThread *guiThread;
+};
+
+class ZDLServiceList {
+	public:
+		ZDLServiceList(QString serviceName);
+		void addHandler(ZPID pid, bool preferred = false);
+		void removeHandler(ZPID pid);
+		ZPID getPreferred();
+		void setPreferred(ZPID pid);
+	private:
+		QString serviceName;
+		QList<ZPID> serviceHandlers;
+		ZPID preferred;
 };
 
 #endif
