@@ -14,6 +14,10 @@ ZDLUpdateDialog::ZDLUpdateDialog(QWidget *parent):QDialog(parent){
 	layout->addWidget(createLabel("There's an update available for "ZDL_ENGINE_NAME"!", this));
 	layout->addWidget(createLabel("Here's a summary of the updates in the latest version: ", this));
 	edit = new QPlainTextEdit(this);
+	QFont fnt(edit->font());
+	fnt.setFamily("Courier");
+	fnt.setFixedPitch(true);
+	edit->setFont(fnt);
 	edit->setPlainText("Loading...");
 	edit->setReadOnly(true);
 	layout->addWidget(edit);
