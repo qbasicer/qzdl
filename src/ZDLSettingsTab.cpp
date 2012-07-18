@@ -117,7 +117,8 @@ void ZDLSettingsTab::pathToggled(bool enabled){
 	}else{
 		LOGDATAO() << "Path bracketing disabled" << endl;
 	}
-	reloadConfig();
+	iwadList->rebuild();
+	sourceList->rebuild();
 }
 
 void ZDLSettingsTab::fileAssociations(){
@@ -229,7 +230,10 @@ void ZDLSettingsTab::newConfig(){
 		}else{
 			launchClose->setCheckState(Qt::Unchecked);
 		}
+	}else{
+		launchClose->setCheckState(Qt::Unchecked);
 	}
+
 	if(zconf->hasValue("zdl.general","zdllaunch")){
 		int ok;
 		QString closeSetting = zconf->getValue("zdl.general","zdllaunch",&ok);

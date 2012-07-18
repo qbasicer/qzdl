@@ -22,19 +22,19 @@
 using namespace std;
 #define ZDL_FLAG_NAMELESS	0x00001
 
-#define ZDL_VERSION_STRING	"3.2.0.2 beta plugin"
+#define ZDL_VERSION_STRING	"3.2.1.0 beta plugin"
 
 #if defined(Q_WS_WIN)
 // Windows versioning information
-#define ZDL_VERSION_ID		43
+#define ZDL_VERSION_ID		45
 #define ZDL_PRODUCT_ID		"qzdl-win32-beta"
 #elif defined(Q_WS_MAC)
 // Mac information would go here
-#define ZDL_VERSION_ID          44
+#define ZDL_VERSION_ID          46
 #define ZDL_PRODUCT_ID          "qzdl-git-beta"
 #else
 // Other (Linux in reality)
-#define ZDL_VERSION_ID		44
+#define ZDL_VERSION_ID		46
 #define ZDL_PRODUCT_ID		"qzdl-git-beta"
 #endif
 
