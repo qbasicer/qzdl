@@ -30,7 +30,6 @@
 #include "ZDLFilePane.h"
 #include "ZDLSettingsPane.h"
 #include "ZDLQSplitter.h"
-#include "ZDMFlagPicker.h"
 
 #include "aup.xpm"
 #include "adown.xpm"
@@ -191,12 +190,12 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	ZDLCoreApi *api = getApi();
 	QAction *actLoadPlugin = NULL;
+	QAction *actDmFlagPicker = NULL;
 	if (api){
 		actLoadPlugin = actions->addAction("Load plugin");
+		actDmFlagPicker = actions->addAction("DM Flag Picker");
 	}
 
-
-	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
 
 	context->addMenu(actions);
 	context->addSeparator();
@@ -223,13 +222,15 @@ QLayout *ZDLInterface::getButtonPane(){
 	if(actLoadPlugin){
 		connect(actLoadPlugin, SIGNAL(triggered()), this, SLOT(loadPlugin()));
 	}
+	if (actDmFlagPicker){
+		connect(actDmFlagPicker, SIGNAL(triggered()), this, SLOT(showNewDMFlagger()));
+	}
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
 	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
 	connect(clearEverythingAction, SIGNAL(triggered()), this, SLOT(clearEverything()));
 
 	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
-	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
 	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
 
 	btnZDL->setMenu(context);
@@ -303,9 +304,20 @@ void ZDLInterface::clearAllFields(){
 }
 
 void ZDLInterface::showNewDMFlagger(){
-	LOGDATAO() << "New DMFlag picker" << endl;
-	ZDMFlagPicker dialog(this);
-	dialog.exec();
+	qDebug() << "ZDLInterface::showNewDMFlagger";
+	ZDLCoreApi *api = getApi();
+	if(!api){
+		qDebug() << "No API";
+		return;
+	}
+	QHash<QString,QVariant> args;
+	ZPID service = api->getPidForService("net.vectec.zdl.qzdl.dmflagpicker");
+	if(service == BAD_ZPID){
+		QMessageBox::critical(this, ZDL_ENGINE_NAME, "No valid PID for service");
+		return;
+	}
+	qDebug() << "Running service " << service;
+	api->runService(service, "net.vectec.zdl.qzdl.dmflagpicker", args);
 }
 
 void ZDLInterface::launch(){
