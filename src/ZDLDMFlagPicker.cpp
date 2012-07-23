@@ -13,7 +13,7 @@ QVariant ZDLDMFlagPickerPlugin::pluginCall(QString func, QList<QVariant> args){
 	return QVariant();
 }
 
-bool ZDLDMFlagPickerPlugin::handleService(QString service, QHash<QString, QVariant> args){
+bool ZDLDMFlagPickerPlugin::handleService(QString service, QHash<QString, QVariant> &args){
 	qDebug() << "ZDLDMFlagPickerPlugin::handleService";
 	if(service == "net.vectec.zdl.qzdl.dmflagpicker"){
 		ZDLDMFlagPickerDialog *dialog = NULL;

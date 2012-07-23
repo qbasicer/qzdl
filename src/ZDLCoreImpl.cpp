@@ -330,10 +330,20 @@ bool ZDLCoreImpl::waitForProcessExit(ZPID pid){
 bool ZDLCoreImpl::runFunctionInGui(QString func, QList<QVariant> args, bool async){
         PluginEntry *callee = getEntryForCurrentThread();
 	ZDL_ASSERT_NOT_EQUALS(0, callee);
-	return runFunctionInGuiInternal(callee->plugin, func, args, async);
+	if(!isGuiThread()){
+		return runFunctionInGuiInternal(callee->plugin, func, args, async);
+	}else{
+		pluginCall(callee->pid, func, args);
+		return true;
+	}
 }
 
 bool ZDLCoreImpl::runFunctionInGuiInternal(ZDLPluginApi *plugin, QString func, QList<QVariant> args, bool async){
+	if(isGuiThread()){
+		// If we're already in the gui thread, jump straight to running
+		plugin->pluginCall(func, args);
+		return true;
+	}
 	QMutex *mutex = NULL;
 	if(!async){
 		mutex = new QMutex();
@@ -495,7 +505,7 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 	return false;
 }
 
-bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> payload){
+bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> &payload){
 	qDebug() << "ZDLCoreImpl::runService";
 	if(pid == BAD_ZPID || pid == 0){
 		qDebug() << "Resolving a plugin";

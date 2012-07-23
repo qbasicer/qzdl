@@ -60,7 +60,7 @@ class ZDLCoreApi {
 		virtual bool getAllServices(QStringList &list) = 0;
 
 		/* Ask pid to run the service.  If pid is BAD_ZPID, automatically select an appropriate service pid */
-		virtual bool runService(ZPID pid, QString service, QHash<QString, QVariant> payload) = 0;
+		virtual bool runService(ZPID pid, QString service, QHash<QString, QVariant> &payload) = 0;
 };
 
 
