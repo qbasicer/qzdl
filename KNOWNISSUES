@@ -1,14 +1,10 @@
    _________________________
   /                         /
- /  ZDL 3.2.1.0 beta       /
+ /  ZDL 3.2.1.1 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) Vectec Software 2012
 
-There may be issues around the save/load functionality.  This code has gone under a major rework to support concurrent accesses (thread safeness).
 
-As such, either lock ups may be experienced, or failure to save configuartions.
-
-File dialog boxes do not remember their paths, issue #20
 
