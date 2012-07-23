@@ -327,6 +327,25 @@ void ZDLInterface::sendSignals(){
 	emit buildChildren(this);
 }
 
+static QString getLastDir(ZDLConf *zconf){
+	qDebug() << "Loading last dir";
+	QString lastDir;
+	if (zconf->hasValue("zdl.save", "lastDir")) {
+		int ok = 0;
+		lastDir = zconf->getValue("zdl.save", "lastDir", &ok);
+		qDebug() << "Loaded dir " << lastDir;
+	}else{
+		qDebug() << "No last dir";
+	}
+	return lastDir;
+}
+
+static void saveLastDir(ZDLConf *zconf, QString fileName){
+	QFileInfo fi(fileName);
+	zconf->setValue("zdl.save", "lastDir", fi.absolutePath());
+	qDebug() << "Saving last dir" << fi.absolutePath();
+}
+
 void ZDLInterface::saveConfigFile(){
 	LOGDATAO() << "Saving config file" << endl;
 	sendSignals();
@@ -337,10 +356,12 @@ void ZDLInterface::saveConfigFile(){
 		<< "Any files (*)";
 
 	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", QString(), filter);
+	QString lastDir = getLastDir(zconf);
+	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", lastDir, filter);
 
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConfigurationManager::setConfigFileName(fileName);
+		saveLastDir(zconf,fileName);
 		zconf->writeINI(fileName);
 		mw->startRead();
 	}
@@ -352,17 +373,20 @@ void ZDLInterface::loadConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString filter;
 	QStringList filters;
+	
 	filters << "ini (*.ini)"
 		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 	filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", QString(), filter);
+	QString lastDir = getLastDir(zconf);
+	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-			delete zconf;
-			ZDLConf* tconf = new ZDLConf();
-			ZDLConfigurationManager::setConfigFileName(fileName);
-			tconf->readINI(fileName);
-			ZDLConfigurationManager::setActiveConfiguration(tconf);
+		delete zconf;
+		ZDLConf* tconf = new ZDLConf();
+		ZDLConfigurationManager::setConfigFileName(fileName);
+		tconf->readINI(fileName);
+		saveLastDir(zconf,fileName);
+		ZDLConfigurationManager::setActiveConfiguration(tconf);
 
 		mw->startRead();
 	}
@@ -375,7 +399,8 @@ void ZDLInterface::loadZdlFile(){
 	QString filter;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", QString(), filter);
+	QString lastDir = getLastDir(ZDLConfigurationManager::getActiveConfiguration());
+	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		for(int i = 0; i < current->sections.size(); i++){
@@ -395,6 +420,7 @@ void ZDLInterface::loadZdlFile(){
 				break;
 			}
 		}
+		saveLastDir(current, fileName);
 		delete newConf;
 		mw->startRead();
 	}
@@ -406,7 +432,8 @@ void ZDLInterface::saveZdlFile(){
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", QString(), filter);
+	QString lastDir = getLastDir(ZDLConfigurationManager::getActiveConfiguration());
+	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		ZDLConf *copy = new ZDLConf();
@@ -416,6 +443,7 @@ void ZDLInterface::saveZdlFile(){
 				if(!fileName.contains(".")){
 					fileName = fileName + QString(".zdl");
 				}
+				saveLastDir(current, fileName);
 				copy->writeINI(fileName);
 			}
 		}

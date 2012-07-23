@@ -18,7 +18,30 @@
  
 #include <QtGui>
 #include "ZDLNameInput.h"
+#include "ZDLConfigurationManager.h"
 #include <string>
+
+static QString getLastDir(){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(!zconf){
+		return QString();
+	}
+        QString lastDir;
+        if (zconf->hasValue("zdl.save", "lastDir")) {
+                int ok = 0;
+                lastDir = zconf->getValue("zdl.save", "lastDir", &ok);
+        }
+        return lastDir;
+}
+
+static void saveLastDir(QString fileName){
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(!zconf){
+		return;
+	}
+        QFileInfo fi(fileName);
+        zconf->setValue("zdl.save", "lastDir", fi.absolutePath());
+}
 
 ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 	QVBoxLayout *lays = new QVBoxLayout(this);
@@ -57,9 +80,11 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 
 void ZDLNameInput::browse(){
 	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Add File", QString(), filter);
+	QString lastDir = getLastDir();
+	QString fileName = QFileDialog::getOpenFileName(this, "Add File", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		lfile->setText(fileName);
+		saveLastDir(fileName);
 	}
 }
 
