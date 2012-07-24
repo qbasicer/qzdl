@@ -95,6 +95,13 @@ int main( int argc, char **argv ){
 	zdlDebug = new QDebug(&nullDev);
 #endif
 
+	// Remove all arguments that start with -
+	for(int i = 0; i < eatenArgs.size(); i++){
+		if(eatenArgs[i].startsWith("-")){
+			eatenArgs.removeAt(i--);
+		}
+	}
+
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 #if defined(Q_WS_WIN)
