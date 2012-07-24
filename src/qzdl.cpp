@@ -285,6 +285,20 @@ int main( int argc, char **argv ){
 	// Set version information
 	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	tconf->setValue("zdl.general", "version", versionString);
+
+	bool doSave = false;
+	if (tconf->hasValue("zdl.general", "rememberSave")){
+		int ok = 0;
+		QString val = tconf->getValue("zdl.general", "rememberSave", &ok);
+		if (val == "1"){
+			doSave = true;
+		} else {
+			tconf->deleteValue("zdl.general", "rememberSave");
+		}
+	}
+	if (!doSave){
+		tconf->deleteSectionByName("zdl.save");
+	}
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;

@@ -73,7 +73,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchZDL = new QCheckBox("Launch *.ZDL files transparently", this);
 	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
-
+	
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	QPushButton *assoc = new QPushButton("Associations", this);
 	assoc->setToolTip("Associate various file types with "ZDL_ENGINE_NAME);
@@ -81,10 +81,15 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
+	savePaths = new QCheckBox("Save/Load PWAD list automatically", this);
+	savePaths->setToolTip("Save the zdl.save section (PWADS) when closing");
+
 	sections->addLayout(fileassoc);
 	sections->addLayout(lrpane);
 	sections->addWidget(launchClose);
 	sections->addWidget(showPaths);
+	sections->addWidget(savePaths);
+	
 #if !defined(NO_UPDATER)	
 	QHBoxLayout *hbox = new QHBoxLayout();
 	updater = new QCheckBox("Enable Update Notifier", this);
@@ -166,6 +171,11 @@ void ZDLSettingsTab::rebuild(){
 	}else{
 		zconf->setValue("zdl.general", "showpaths", "0");
 	}
+	if(savePaths->checkState() == Qt::Checked){
+		zconf->setValue("zdl.general", "rememberSave", "1");
+	}else{
+		zconf->setValue("zdl.general", "rememberSave", "0");
+	}
 }
 
 void ZDLSettingsTab::newConfig(){
@@ -244,6 +254,17 @@ void ZDLSettingsTab::newConfig(){
 		}
 	}else{
 		launchZDL->setCheckState(Qt::Unchecked);
+	}
+	if(zconf->hasValue("zdl.general", "rememberSave")){
+		int ok;
+		QString val = zconf->getValue("zdl.general", "rememberSave", &ok);
+		if(val == "1"){
+			savePaths->setCheckState(Qt::Checked);
+		}else{
+			savePaths->setCheckState(Qt::Unchecked);
+		}
+	}else{
+		savePaths->setCheckState(Qt::Unchecked);
 	}
 	
 }
