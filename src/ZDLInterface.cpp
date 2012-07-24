@@ -330,9 +330,9 @@ void ZDLInterface::sendSignals(){
 static QString getLastDir(ZDLConf *zconf){
 	qDebug() << "Loading last dir";
 	QString lastDir;
-	if (zconf->hasValue("zdl.save", "lastDir")) {
+	if (zconf->hasValue("zdl.general", "lastDir")) {
 		int ok = 0;
-		lastDir = zconf->getValue("zdl.save", "lastDir", &ok);
+		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
 		qDebug() << "Loaded dir " << lastDir;
 	}else{
 		qDebug() << "No last dir";
@@ -342,7 +342,7 @@ static QString getLastDir(ZDLConf *zconf){
 
 static void saveLastDir(ZDLConf *zconf, QString fileName){
 	QFileInfo fi(fileName);
-	zconf->setValue("zdl.save", "lastDir", fi.absolutePath());
+	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 	qDebug() << "Saving last dir" << fi.absolutePath();
 }
 

@@ -27,9 +27,9 @@ static QString getLastDir(){
 		return QString();
 	}
         QString lastDir;
-        if (zconf->hasValue("zdl.save", "lastDir")) {
+        if (zconf->hasValue("zdl.general", "lastDir")) {
                 int ok = 0;
-                lastDir = zconf->getValue("zdl.save", "lastDir", &ok);
+                lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
         }
         return lastDir;
 }
@@ -40,7 +40,7 @@ static void saveLastDir(QString fileName){
 		return;
 	}
         QFileInfo fi(fileName);
-        zconf->setValue("zdl.save", "lastDir", fi.absolutePath());
+        zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
 ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
