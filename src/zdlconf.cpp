@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -48,9 +48,9 @@ int ZDLConf::readINI(QString file)
 		reads++;
 		QString line;
 		/* We allow lines to be outside of any section (ie header comments)
-		* We use a global section to read this.  We also keep track of
-		* which section we're in.  We do that with a pointer (current)
-		*/
+		 * We use a global section to read this.  We also keep track of
+		 * which section we're in.  We do that with a pointer (current)
+		 */
 		ZDLSection *current = new ZDLSection("");
 		current->setSpecial(ZDL_FLAG_NAMELESS);
 		sections.push_back(current);
@@ -68,7 +68,7 @@ int ZDLConf::readINI(QString file)
 			current = sections.back();
 		}
 		stream.close();
-		
+
 		QFileInfo info(file);
 		if(!info.isWritable()){
 			LOGDATAO() << "File is unwriteable, writes will be ignored" << endl;
@@ -178,13 +178,13 @@ void ZDLConf::deleteSection(QString lsection){
 	writeLock();
 	for(int i = 0; i < sections.size(); i++){
 		ZDLSection* section = sections[i];
-                QString secName = section->getName();
-                if (secName == lsection){
+		QString secName = section->getName();
+		if (secName == lsection){
 			LOGDATAO() << "Found and removed" << endl;
-                        sections.remove(i);
+			sections.remove(i);
 			releaseWriteLock();
-                        return;
-                }
+			return;
+		}
 	}
 	releaseWriteLock();
 	LOGDATAO() << "No such section" << endl;
@@ -197,12 +197,12 @@ void ZDLConf::deleteValue(QString lsection, QString variable){
 		writes++;
 		for(int i = 0; i < sections.size(); i++){
 			ZDLSection* section = sections[i];
-                        if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
+			if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
 				LOGDATAO() << "Found section" << endl;
-                                section->deleteVariable(variable);
+				section->deleteVariable(variable);
 				releaseWriteLock();
 				return;
-                        }
+			}
 
 		}
 	}
@@ -214,20 +214,12 @@ QString ZDLConf::getValue(QString lsection, QString variable, int *status){
 	if((mode & ReadOnly) != 0){
 		readLock();
 		reads++;
-		//if (vars){
-		//	//cout << "ZDLConf::getValue using variable resolution" << endl;
-		//	QString rc = vars->getVariable(lsection, variable, status);
-		//	return rc;
-		//}else{
-			//cout << "ZDLConf::getValue using non-variable resolution" << endl;
-			ZDLSection *sect = getSection(lsection);
-			if (sect){
-				*status = 0;
-				releaseReadLock();
-				return sect->findVariable(variable);
-			}
-	
-		//}
+		ZDLSection *sect = getSection(lsection);
+		if (sect){
+			*status = 0;
+			releaseReadLock();
+			return sect->findVariable(variable);
+		}
 		*status = 1;
 		releaseReadLock();
 	}
@@ -236,25 +228,19 @@ QString ZDLConf::getValue(QString lsection, QString variable, int *status){
 	return QString();
 }
 
-//char *ZDLConf::getValue(QString lsection, QString variable){
-//	int stat;
-//	string temp = getValue(lsection, variable, &stat);
-//	return (char*)temp.c_str();
-//}
-
 ZDLSection *ZDLConf::getSection(QString lsection){
 	LOGDATAO() << "getting section " << lsection << endl;
 	if((mode & ReadOnly) != 0){
 		readLock();
 		for(int i = 0; i < sections.size(); i++){
 			ZDLSection* section = sections[i];
-                        if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+			if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
 				LOGDATAO() << "Got it " << DPTR(section) << endl;
 				releaseReadLock();
 				ZDLSection *copy = section->clone();
 				copy->setIsCopy(true);
-                                return copy;
-                        }
+				return copy;
+			}
 		}
 		releaseReadLock();
 	}
@@ -266,23 +252,16 @@ int ZDLConf::hasValue(QString lsection, QString variable){
 	LOGDATAO() << "hasValue: " << lsection << "/" << variable << endl;
 	if((mode & ReadOnly) != 0){
 		reads++;
-		//If we actually have a variable resolver, lets use that.
-		//if (vars){
-		//	int nRc = 0;
-		//	return vars->hasVariable(lsection, variable, &nRc);
-		//Otherwise, lets look for it ourself.
-		//}else{
-			readLock();
-			for(int i = 0; i < sections.size(); i++){
-				ZDLSection* section = sections[i];
-                                if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
-					releaseReadLock();
-                                        return section->hasVariable(variable);
-                                }
-
+		readLock();
+		for(int i = 0; i < sections.size(); i++){
+			ZDLSection* section = sections[i];
+			if (section->getName().compare(lsection, Qt::CaseInsensitive) == 0){
+				releaseReadLock();
+				return section->hasVariable(variable);
 			}
-			releaseReadLock();
-		//}
+
+		}
+		releaseReadLock();
 	}
 	LOGDATAO () << "No matching sections" << endl;
 	return false;
@@ -302,7 +281,7 @@ int ZDLConf::setValue(QString lsection, QString variable, QString szBuffer)
 	LOGDATAO() << "setValue: " << lsection << "/" << variable << " = " << szBuffer << endl;
 	if((mode & WriteOnly) != 0){
 		QString value = szBuffer;
-		
+
 		//Better handing of variables.  Don't overwrite if you don't have to.
 		writeLock();
 		if(hasValue(lsection,variable)){
@@ -314,16 +293,16 @@ int ZDLConf::setValue(QString lsection, QString variable, QString szBuffer)
 				return 0;
 			}
 		}
-		
+
 		writes++;
 		for(int i = 0; i < sections.size(); i++){
 			ZDLSection* section = sections[i];
-                        if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
-                                section->setValue(variable, value);
+			if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+				section->setValue(variable, value);
 				LOGDATAO() << "Asked section to set variable" << endl;
 				releaseWriteLock();
-                                return 0;
-                        }
+				return 0;
+			}
 
 		}
 		LOGDATAO() << "No such section, creating" << endl;
@@ -387,5 +366,29 @@ void ZDLConf::deleteSectionByName(QString section){
 	LOGDATAO() << "No such section" << endl;
 }
 
+int ZDLConf::getFlagsForValue(QString lsection, QString var){
+	readLock();
+	for(int i = 0; i < sections.size(); i++){
+		ZDLSection* section = sections[i];
+		if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+			releaseReadLock();
+			return section->getFlagsForValue(var);
+		}
+	}
+	releaseReadLock();
+	return -1;
+}
 
+bool ZDLConf::setFlagsForValue(QString lsection, QString var, int value){
+	readLock();
+	for(int i = 0; i < sections.size(); i++){
+		ZDLSection* section = sections[i];
+		if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+			releaseReadLock();
+			return section->setFlagsForValue(var,value);
+		}
+	}
+	releaseReadLock();
+	return false;
+}
 
