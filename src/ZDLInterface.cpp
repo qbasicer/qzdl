@@ -352,7 +352,6 @@ void ZDLInterface::saveConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ini (*.ini)"
-		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 
 	QString filter = filters.join(";;");
@@ -360,6 +359,10 @@ void ZDLInterface::saveConfigFile(){
 	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", lastDir, filter);
 
 	if(!fileName.isNull() && !fileName.isEmpty()){
+		QFileInfo fi(fileName);
+		if(!fi.fileName().contains(".")){
+			fileName += ".ini";
+		}
 		ZDLConfigurationManager::setConfigFileName(fileName);
 		saveLastDir(zconf,fileName);
 		zconf->writeINI(fileName);
@@ -375,12 +378,15 @@ void ZDLInterface::loadConfigFile(){
 	QStringList filters;
 	
 	filters << "ini (*.ini)"
-		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 	filter = filters.join(";;");
 	QString lastDir = getLastDir(zconf);
 	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
+		QFileInfo fi(fileName);
+                if(!fi.fileName().contains(".")){
+                        fileName += ".ini";
+                }
 		delete zconf;
 		ZDLConf* tconf = new ZDLConf();
 		ZDLConfigurationManager::setConfigFileName(fileName);
