@@ -5,6 +5,7 @@
 using namespace std;
 
 ZDLConfiguration::ZDLConfiguration(){
+	//TODO These need to migrate
 	QSettings system(QSettings::IniFormat,QSettings::SystemScope,"Vectec Software","qZDL",NULL);
 	QSettings user(QSettings::IniFormat,QSettings::UserScope,"Vectec Software","qZDL",NULL);
 	paths[CONF_SYSTEM] = system.fileName();
