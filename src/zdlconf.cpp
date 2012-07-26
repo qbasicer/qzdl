@@ -91,6 +91,7 @@ int ZDLConf::numberOfSections()
 
 int ZDLConf::writeINI(QString file)
 {
+	setValue("zdl.general", "conflib", "sunrise");
 	LOGDATAO() << "Writing file to " << file << endl;
 	if((mode & ZDLConf::FileWrite) != 0){
 		writes++;
