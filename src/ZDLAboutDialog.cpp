@@ -78,10 +78,10 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	QFrame *hrMid = new QFrame(this);
 	hrMid->setFrameStyle(QFrame::HLine);
 	box->addWidget(hrMid);
-
+	
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
 	box->addWidget(new QLabel("Huge thanks to NeuralStunner.  Without his help, none of this would be possible.", this));
-	box->addWidget(new QLabel("Special thanks to Risen, Enjay, DRDTeam.org, ZDoom.org",this));
+	box->addWidget(new QLabel("Special thanks to Blzut3, Risen, Enjay, DRDTeam.org, ZDoom.org",this));
 
 	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 	if(conf){
