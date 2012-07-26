@@ -1,10 +1,16 @@
    _________________________
   /                         /
- /  ZDL 3.2.1.0 beta       /
+ /  ZDL 3.2.2.0 beta       /
 /_________________________/
 
 http://zdl.vectec.net
-(C) Vectec Software 2012
+(C) ZDL Software Foundation
+
+* 3.2.2.0 - UNRELEASED
+  * Option to toggle saving/loading of the PWAD list
+
+* 3.2.1.1 - July 24th, 2012
+  * Save the last directory used in the file open/save dialogs into zdl.save/lastDir (#20)
 
 * 3.2.1.0 - July 18th, 2012
   * Fix auto-close not being loaded properly if 'show paths' was checked (#30)

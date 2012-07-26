@@ -2917,7 +2917,8 @@ bnv_try_15="echo \"win32 {\" >> qzdl.pro"
 bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc -g\" >> qzdl.pro"
 bnv_try_17="echo \"LIBS += -lshlwapi\" >> qzdl.pro"
 bnv_try_18="echo \"RC_FILE = res/zdl.rc\" >> qzdl.pro"
-bnv_try_19="echo \"}\" >> qzdl.pro"
+bnv_try_19="echo \"TARGET = ZDL\" >> qzdl.pro"
+bnv_try_20="echo \"}\" >> qzdl.pro"
 { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
   (eval $bnv_try_15) 2>&5
   ac_status=$?
@@ -2943,6 +2944,31 @@ bnv_try_19="echo \"}\" >> qzdl.pro"
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
+{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_20\""; } >&5
+  (eval $bnv_try_20) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+bnv_try_15="echo \"unix {\" >> qzdl.pro"
+bnv_try_19="echo \"TARGET = zdl\" >> qzdl.pro"
+bnv_try_20="echo \"}\" >> qzdl.pro"
+{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
+  (eval $bnv_try_15) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_19\""; } >&5
+  (eval $bnv_try_19) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_20\""; } >&5
+  (eval $bnv_try_20) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
 
 if test "$ac_status" != 0; then
 as_fn_error $? "error appending to file" "$LINENO" 5

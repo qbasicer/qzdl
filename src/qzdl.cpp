@@ -94,7 +94,6 @@ int main( int argc, char **argv ){
 #else
 	zdlDebug = new QDebug(&nullDev);
 #endif
-
 	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 #if defined(Q_WS_WIN)
@@ -232,7 +231,7 @@ int main( int argc, char **argv ){
 
 
 	for(int i = 0; i < eatenArgs.size(); i++){
-		if(!(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive) || eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive))){
+		if(!(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive) || eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive) || eatenArgs.startsWith("-"))){
 			addFile(eatenArgs[i], tconf);
 			eatenArgs.removeAt(i);
 			i--;
@@ -285,6 +284,20 @@ int main( int argc, char **argv ){
 	// Set version information
 	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	tconf->setValue("zdl.general", "version", versionString);
+
+	bool doSave = false;
+	if (tconf->hasValue("zdl.general", "rememberSave")){
+		int ok = 0;
+		QString val = tconf->getValue("zdl.general", "rememberSave", &ok);
+		if (val == "1"){
+			doSave = true;
+		} else {
+			tconf->deleteValue("zdl.general", "rememberSave");
+		}
+	}
+	if (!doSave){
+		tconf->deleteSectionByName("zdl.save");
+	}
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	LOGDATA() << "ZDL QUIT" << endl;
 	return ret;
