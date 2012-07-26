@@ -58,9 +58,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	hrTop->setFrameStyle(QFrame::HLine);
 	box->addWidget(hrTop);
 	box->addWidget(new QLabel(QString("Source: ")+QString(ZDL_SOURCE),this));
-	box->addWidget(new QLabel("C Version Copyright (C) BioHazard 2005",this));
-	box->addWidget(new QLabel("C# Version Copyright (C) QBasicer 2007",this));
-	box->addWidget(new QLabel("Qt Version Copyright (C) Cody Harris 2007-2012",this));
+	box->addWidget(new QLabel("Copyright (C) ZDL Software Foundation 2004-2012", this);
 	QLabel *url = new QLabel("<a href=http://zdl.vectec.net>http://zdl.vectec.net</a>",this);
 	url->setOpenExternalLinks(true);
 	box->addWidget(url);
