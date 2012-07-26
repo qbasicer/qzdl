@@ -6,8 +6,15 @@
 http://zdl.vectec.net
 (C) ZDL Software Foundation
 
-* 3.2.2.0 - UNRELEASED
-  * Option to toggle saving/loading of the PWAD list
+* 3.2.2.0 - July 26th, 2012
+  * Option to toggle saving/loading of the PWAD list (31)
+  * Move lastDir from zdl.save to zdl.general
+  * Ignore arguments starting with -
+  * Append .ini file when saving configuration if there is no extension
+  * ZDL now under the "ZDL Software Foundation"
+  * Rebrand more to ZDL instead of qZDL
+  * Specify the configuration backend of libzdl to sunrise
+  * Add (currently unused) options to libzdl to prevent writing and cloning and accessor APIs
 
 * 3.2.1.1 - July 24th, 2012
   * Save the last directory used in the file open/save dialogs into zdl.save/lastDir (#20)

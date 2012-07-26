@@ -28,15 +28,15 @@ using namespace std;
 
 #if defined(Q_WS_WIN)
 // Windows versioning information
-#define ZDL_VERSION_ID		47
+#define ZDL_VERSION_ID		49
 #define ZDL_PRODUCT_ID		"qzdl-win32-beta"
 #elif defined(Q_WS_MAC)
 // Mac information would go here
-#define ZDL_VERSION_ID          48
+#define ZDL_VERSION_ID          50
 #define ZDL_PRODUCT_ID          "qzdl-git-beta"
 #else
 // Other (Linux in reality)
-#define ZDL_VERSION_ID		48
+#define ZDL_VERSION_ID		50
 #define ZDL_PRODUCT_ID		"qzdl-git-beta"
 #endif
 

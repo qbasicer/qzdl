@@ -22,6 +22,11 @@
 #include <string>
 #include <QtCore>
  
+#define FLAG_NORMAL	0	// Normal flag
+#define FLAG_VIRTUAL	1	// Does not get read/written, not cloned
+#define FLAG_NOWRITE	2	// Can not write to this value
+#define FLAG_TEMP	4	// Read/write and cloned, but not written
+
 class ZDLLine{
 	friend class ZDLVariables;
 public:
@@ -36,6 +41,8 @@ public:
 	int isSlashConverting(){return (slashConvert != 0);}
 	ZDLLine *clone();
 	void setIsCopy(bool val);
+	bool setFlags(int val);
+	int getFlags(){return flags;}
 private:
 	bool isCopy;
 	int reads;
@@ -48,6 +55,7 @@ private:
 	QString value;
 	QString variable;
 	int slashConvert;
+	int flags;
 };
 
 #endif
