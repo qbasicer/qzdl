@@ -383,9 +383,9 @@ void ZDLInterface::sendSignals(){
 static QString getLastDir(ZDLConf *zconf){
 	qDebug() << "Loading last dir";
 	QString lastDir;
-	if (zconf->hasValue("zdl.save", "lastDir")) {
+	if (zconf->hasValue("zdl.general", "lastDir")) {
 		int ok = 0;
-		lastDir = zconf->getValue("zdl.save", "lastDir", &ok);
+		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
 		qDebug() << "Loaded dir " << lastDir;
 	}else{
 		qDebug() << "No last dir";
@@ -395,7 +395,7 @@ static QString getLastDir(ZDLConf *zconf){
 
 static void saveLastDir(ZDLConf *zconf, QString fileName){
 	QFileInfo fi(fileName);
-	zconf->setValue("zdl.save", "lastDir", fi.absolutePath());
+	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 	qDebug() << "Saving last dir" << fi.absolutePath();
 }
 
@@ -405,7 +405,6 @@ void ZDLInterface::saveConfigFile(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QStringList filters;
 	filters << "ini (*.ini)"
-		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 
 	QString filter = filters.join(";;");
@@ -413,6 +412,10 @@ void ZDLInterface::saveConfigFile(){
 	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", lastDir, filter);
 
 	if(!fileName.isNull() && !fileName.isEmpty()){
+		QFileInfo fi(fileName);
+		if(!fi.fileName().contains(".")){
+			fileName += ".ini";
+		}
 		ZDLConfigurationManager::setConfigFileName(fileName);
 		saveLastDir(zconf,fileName);
 		zconf->writeINI(fileName);
@@ -428,12 +431,15 @@ void ZDLInterface::loadConfigFile(){
 	QStringList filters;
 	
 	filters << "ini (*.ini)"
-		<< "ini Files (*.ini)"
 		<< "Any files (*)";
 	filter = filters.join(";;");
 	QString lastDir = getLastDir(zconf);
 	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
+		QFileInfo fi(fileName);
+                if(!fi.fileName().contains(".")){
+                        fileName += ".ini";
+                }
 		delete zconf;
 		ZDLConf* tconf = new ZDLConf();
 		ZDLConfigurationManager::setConfigFileName(fileName);

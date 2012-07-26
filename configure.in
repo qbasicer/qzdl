@@ -67,12 +67,22 @@ bnv_try_15="echo \"win32 {\" >> qzdl.pro"
 bnv_try_16="echo \"QMAKE_LFLAGS += -static-libgcc -g\" >> qzdl.pro"
 bnv_try_17="echo \"LIBS += -lshlwapi\" >> qzdl.pro"
 bnv_try_18="echo \"RC_FILE = res/zdl.rc\" >> qzdl.pro"
-bnv_try_19="echo \"}\" >> qzdl.pro"
+bnv_try_19="echo \"TARGET = ZDL\" >> qzdl.pro"
+bnv_try_20="echo \"}\" >> qzdl.pro"
 AC_TRY_EVAL(bnv_try_15)
 AC_TRY_EVAL(bnv_try_16)
 AC_TRY_EVAL(bnv_try_17)
 AC_TRY_EVAL(bnv_try_18)
 AC_TRY_EVAL(bnv_try_19)
+AC_TRY_EVAL(bnv_try_20)
+
+bnv_try_15="echo \"unix {\" >> qzdl.pro"
+bnv_try_19="echo \"TARGET = zdl\" >> qzdl.pro"
+bnv_try_20="echo \"}\" >> qzdl.pro"
+AC_TRY_EVAL(bnv_try_15)
+AC_TRY_EVAL(bnv_try_19)
+AC_TRY_EVAL(bnv_try_20)
+
 
 if test "$ac_status" != 0; then
 AC_MSG_ERROR(error appending to file)
@@ -133,5 +143,5 @@ if test "$ac_status" != 0; then
 fi
 AC_MSG_RESULT(yes)
 
-AC_VERBOSE(You may now build QZDL with the make command)
+AC_VERBOSE(You may now build ZDL with the make command)
 

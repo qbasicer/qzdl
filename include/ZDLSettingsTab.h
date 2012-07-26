@@ -43,5 +43,5 @@ private:
 	QCheckBox *updater;
 	QCheckBox *showPaths;
 	QCheckBox *launchZDL;
-	
+	QCheckBox *savePaths;
 };
