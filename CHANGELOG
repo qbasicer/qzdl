@@ -1,10 +1,13 @@
    _________________________
   /                         /
- /  ZDL 3.2.2.0 beta       /
+ /  ZDL 3.2.2.1 beta       /
 /_________________________/
 
 http://zdl.vectec.net
 (C) ZDL Software Foundation
+
+* 3.2.2.1 - July 30th, 2012
+  * Fix broken config file saving (#32)
 
 * 3.2.2.0 - July 26th, 2012
   * Option to toggle saving/loading of the PWAD list (31)

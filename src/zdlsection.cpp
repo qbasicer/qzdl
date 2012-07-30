@@ -138,6 +138,7 @@ int ZDLSection::setValue(QString variable, QString value)
 		ZDLLine* line = lines[i];
 		if (line->getVariable().compare(variable) == 0){
 			if((line->getFlags() & FLAG_NOWRITE) == FLAG_NOWRITE){
+				LOGDATAO() << "Cannot change value of FLAG_NOWRITE" << endl;
 				return -1;
 			}
 			line->setValue(value);
@@ -177,8 +178,10 @@ int ZDLSection::streamWrite(QIODevice *stream)
 		}
 		for(int i = 0; i < lines.size(); i++){
 			ZDLLine *line = lines[i];
-			if((line->getFlags() & FLAG_VIRTUAL) != 0 || (line->getFlags() & FLAG_TEMP) != 0){
+			if((line->getFlags() & FLAG_VIRTUAL) == 0 && (line->getFlags() & FLAG_TEMP) == 0){
 				tstream << line->getLine() << ENDOFLINE;
+			}else{
+				LOGDATAO() << "Ignoring FLAG_VIRTUAL and FLAG_TEMP entries" << endl;
 			}
 		}
 	}
@@ -235,6 +238,8 @@ ZDLSection *ZDLSection::clone(){
 		/* Virtual flags do not get cloned */
 		if((lines[i]->getFlags() & FLAG_VIRTUAL) == 0){
 			copy->addLine(lines[i]->clone());
+		}else{
+			LOGDATAO() << "Ignoring clone request for virtual flags" << endl;
 		}
 	}
 	READUNLOCK();

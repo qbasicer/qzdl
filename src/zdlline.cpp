@@ -182,6 +182,7 @@ ZDLLine *ZDLLine::clone(){
 bool ZDLLine::setFlags(int value){
 	// Virtual flags cannot be modified
 	if ((flags & FLAG_NOWRITE) == FLAG_NOWRITE){
+		LOGDATAO() << "Cannot change flags on FLAG_NOWRITE" << endl;
 		return false;
 	}
 	flags = value;
