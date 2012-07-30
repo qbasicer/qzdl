@@ -264,9 +264,7 @@ void ZDLListWidget::downButton(){
 			return;
 		}
 
-		printRows(pList, items);
 		sortItemsByRow(pList, items);
-		printRows(pList, items);
 		int max = pList->count();
                 for(int i = 0; i < items.size(); i++) {
                         QListWidgetItem* item = items[i];
