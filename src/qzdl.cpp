@@ -288,7 +288,7 @@ int main( int argc, char **argv ){
 	bool doSave = true;
 	if (tconf->hasValue("zdl.general", "rememberFilelist")){
 		int ok = 0;
-		QString val = tconf->getValue("zdl.general", "rememberSave", &ok);
+		QString val = tconf->getValue("zdl.general", "rememberFilelist", &ok);
 		if (val == "0"){
 			doSave = false;
 		} else {

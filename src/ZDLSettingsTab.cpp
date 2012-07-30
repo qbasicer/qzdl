@@ -172,9 +172,9 @@ void ZDLSettingsTab::rebuild(){
 		zconf->setValue("zdl.general", "showpaths", "0");
 	}
 	if(savePaths->checkState() == Qt::Checked){
-		zconf->setValue("zdl.general", "rememberFilelist", "0");
-	}else{
 		zconf->setValue("zdl.general", "rememberFilelist", "1");
+	}else{
+		zconf->setValue("zdl.general", "rememberFilelist", "0");
 	}
 }
 
