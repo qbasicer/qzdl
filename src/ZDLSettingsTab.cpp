@@ -262,7 +262,6 @@ void ZDLSettingsTab::newConfig(){
 		if(val == "0"){
 			rememberFilelist = false;
 		}
-		savePaths->setCheckState(Qt::Unchecked);
 	}
 	if (rememberFilelist){
 		savePaths->setCheckState(Qt::Checked);
