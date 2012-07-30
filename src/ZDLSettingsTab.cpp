@@ -172,9 +172,9 @@ void ZDLSettingsTab::rebuild(){
 		zconf->setValue("zdl.general", "showpaths", "0");
 	}
 	if(savePaths->checkState() == Qt::Checked){
-		zconf->setValue("zdl.general", "rememberSave", "1");
+		zconf->setValue("zdl.general", "rememberFilelist", "0");
 	}else{
-		zconf->setValue("zdl.general", "rememberSave", "0");
+		zconf->setValue("zdl.general", "rememberFilelist", "1");
 	}
 }
 
@@ -255,14 +255,17 @@ void ZDLSettingsTab::newConfig(){
 	}else{
 		launchZDL->setCheckState(Qt::Unchecked);
 	}
-	if(zconf->hasValue("zdl.general", "rememberSave")){
+	bool rememberFilelist = true;
+	if(zconf->hasValue("zdl.general", "rememberFilelist")){
 		int ok;
-		QString val = zconf->getValue("zdl.general", "rememberSave", &ok);
-		if(val == "1"){
-			savePaths->setCheckState(Qt::Checked);
-		}else{
-			savePaths->setCheckState(Qt::Unchecked);
+		QString val = zconf->getValue("zdl.general", "rememberFilelist", &ok);
+		if(val == "0"){
+			rememberFilelist = false;
 		}
+		savePaths->setCheckState(Qt::Unchecked);
+	}
+	if (rememberFilelist){
+		savePaths->setCheckState(Qt::Checked);
 	}else{
 		savePaths->setCheckState(Qt::Unchecked);
 	}

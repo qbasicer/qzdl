@@ -49,6 +49,7 @@ public:
 	}
 	int getFlagsForValue(QString var);
 	bool setFlagsForValue(QString var, int value);
+	bool deleteRegex(QString regex);
 protected:
 	void readLock(const char* file, int line){
 		LOGDATAO() << "ReadLockGet@" << file << ":" << line << endl;
