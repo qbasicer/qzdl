@@ -22,7 +22,7 @@
 using namespace std;
 #define ZDL_FLAG_NAMELESS	0x00001
 
-#define ZDL_VERSION_STRING	"3.2.2.1 beta"
+#define ZDL_VERSION_STRING	"3.2.2.2 beta"
 
 #if defined(Q_WS_WIN)
 // Windows versioning information
