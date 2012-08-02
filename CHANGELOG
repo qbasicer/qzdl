@@ -6,10 +6,11 @@
 http://zdl.vectec.net
 (C) ZDL Software Foundation
 
-* 3.2.2.2 - July 31st, 2012
+* 3.2.2.2 - August 2nd, 2012
   * Change behaviour of issue #31, only drop file[0-9]+, changed the option to rememberFilelist
   * Default to remembering file list
   * Add new function to libzdl: deleteRegex(QString section, QString regex)
+  * Fixed buggle multiple-file-moving
 
 * 3.2.2.1 - July 30th, 2012
   * Fix broken config file saving (#32)
