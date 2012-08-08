@@ -22,20 +22,21 @@
 using namespace std;
 #define ZDL_FLAG_NAMELESS	0x00001
 
-#define ZDL_VERSION_STRING	"3.2.2.2 beta"
+#define ZDL_VERSION_STRING	"3.2.2.2"
 
 #if defined(Q_WS_WIN)
 // Windows versioning information
-#define ZDL_VERSION_ID		53
-#define ZDL_PRODUCT_ID		"qzdl-win32-beta"
+#define ZDL_VERSION_ID		55
+#define ZDL_PRODUCT_ID		"qzdl-win32-stable"
+#define ZDL_STABLE
 #elif defined(Q_WS_MAC)
 // Mac information would go here
-#define ZDL_VERSION_ID          54
-#define ZDL_PRODUCT_ID          "qzdl-git-beta"
+#define ZDL_VERSION_ID          56
+#define ZDL_PRODUCT_ID          "qzdl-git"
 #else
 // Other (Linux in reality)
-#define ZDL_VERSION_ID		54
-#define ZDL_PRODUCT_ID		"qzdl-git-beta"
+#define ZDL_VERSION_ID		56
+#define ZDL_PRODUCT_ID		"qzdl-git"
 #endif
 
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
