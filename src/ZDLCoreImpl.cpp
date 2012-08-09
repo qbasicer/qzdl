@@ -550,7 +550,14 @@ bool ZDLCoreImpl::deregisterServiceHandler(QString service){
 }
 
 bool ZDLCoreImpl::getAllServices(QStringList &list){
-	return false;
+	if(services.size() == 0){
+		return false;
+	}
+	lock();
+	QList<QString> servs = services.keys();
+	unlock();
+	list.append(servs);
+	return true;
 }
 
 bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> &payload){
