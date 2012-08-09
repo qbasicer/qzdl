@@ -118,8 +118,37 @@ ZPID ZDLCoreImpl::findPluginByName(QString name){
 }
 
 bool ZDLCoreImpl::findPluginsByRegex(QString regex, QVector<ZPID> &result){
-	LOGDATAO() << "Unimplemented function" << endl;
-	return false;
+	QRegExp rx(regex);
+	lock();
+	QHashIterator<ZPID, PluginEntry*> i(plugins);
+	PluginEntry *tar = NULL;
+	while(i.hasNext()){
+		i.next();
+		PluginEntry *pe = i.value();
+		if(pe == NULL){
+			continue;
+		}
+		ZDLPluginApi *plugin = pe->plugin;
+		if(plugin == NULL){
+			continue;
+		}
+		QString pname = plugin->getPluginFQDN();
+		if(rx.exactMatch(pname)){
+			result.append(pe->pid);
+		}
+	}
+	QHashIterator<QString, ZPID> j(aliases);
+	while(j.hasNext()){
+		j.next();
+		if(rx.exactMatch(j.key())){
+			ZPID pid = j.value();
+			if(!result.contains(pid)){
+				result.append(pid);
+			}
+		}
+	}
+	unlock();
+	return (result.size() > 0);
 }
 
 QVariant ZDLCoreImpl::pluginCall(ZPID pid, QString func, QList<QVariant> args){
