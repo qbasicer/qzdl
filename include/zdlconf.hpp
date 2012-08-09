@@ -63,6 +63,7 @@ public:
 	}
 	int getFlagsForValue(QString section, QString var);
 	bool setFlagsForValue(QString section, QString var, int value);
+	bool deleteRegex(QString section, QString regex);
 protected:
 	void readLock(){
 		LOGDATAO() << "ReadLockGet" << endl;

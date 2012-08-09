@@ -317,19 +317,20 @@ int uiMain(QStringList args, ZDLCoreApi *api){
 	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
 	tconf->setValue("zdl.general", "version", versionString);
 
-	bool doSave = false;
-	if (tconf->hasValue("zdl.general", "rememberSave")){
+	bool doSave = true;
+	if (tconf->hasValue("zdl.general", "rememberFilelist")){
 		int ok = 0;
-		QString val = tconf->getValue("zdl.general", "rememberSave", &ok);
-		if (val == "1"){
-			doSave = true;
+		QString val = tconf->getValue("zdl.general", "rememberFilelist", &ok);
+		if (val == "0"){
+			doSave = false;
 		} else {
-			tconf->deleteValue("zdl.general", "rememberSave");
+			doSave = true;
 		}
 	}
 	if (!doSave){
-		tconf->deleteSectionByName("zdl.save");
+		tconf->deleteRegex("zdl.save", "^file[0-9]+$");
 	}
+
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	delete core;
 	LOGDATA() << "ZDL QUIT" << endl;

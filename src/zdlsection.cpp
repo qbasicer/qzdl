@@ -270,6 +270,22 @@ bool ZDLSection::setFlagsForValue(QString var, int value){
 	return false;
 }
 
+bool ZDLSection::deleteRegex(QString regex){
+	bool rc = false;
+	WRITELOCK();
+	QRegExp rx(regex);
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (rx.exactMatch(line->getVariable())){
+			lines.remove(i--);
+			rc = true;
+			delete line;
+		}
+	}
+
+	WRITEUNLOCK();
+	return rc;
+}
 
 
 

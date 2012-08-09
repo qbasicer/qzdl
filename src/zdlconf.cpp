@@ -392,3 +392,19 @@ bool ZDLConf::setFlagsForValue(QString lsection, QString var, int value){
 	return false;
 }
 
+bool ZDLConf::deleteRegex(QString lsection, QString regex){
+	readLock();
+	for(int i = 0; i < sections.size(); i++){
+		ZDLSection* section = sections[i];
+		if (section->getName().compare(lsection,Qt::CaseInsensitive) == 0){
+			bool rc = section->deleteRegex(regex);
+			releaseReadLock();
+			return rc;
+		}
+	}
+	releaseReadLock();
+	return false;
+
+}
+
+
