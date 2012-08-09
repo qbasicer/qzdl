@@ -407,11 +407,30 @@ ZPID ZDLCoreImpl::getCurrentZPID(){
 }
 
 bool ZDLCoreImpl::attachThread(QThread *peer){
-	return false;
+	lock();
+	PluginEntry *callee = getEntryForCurrentThread();
+	if(callee == NULL){
+		unlock();
+		return false;
+	}
+	threads.insert(peer, callee->pid);
+	unlock();
+	return true;
 }
 
 bool ZDLCoreImpl::detatchThread(QThread *peer){
-	return false;
+	PluginEntry *callee = getEntryForCurrentThread();
+	if(callee == NULL){
+		unlock();
+		return false;
+	}
+	if(!threads.contains(peer)){
+		unlock();
+		return false;
+	}
+	threads.remove(peer);
+	unlock();
+	return true;
 }
 
 unsigned int ZDLCoreImpl::getSequence(){
