@@ -9,9 +9,6 @@ class ZDLCoreImpl;
 #include "ZDLPluginApi.h"
 #include "ZDLPluginRunner.h"
 
-#define	CORE_EVENT_PLG_START	0x00001
-#define CORE_EVENT_PLG_STOP	0x00002
-
 class PluginEntry {
 	public:
 		PluginEntry(){

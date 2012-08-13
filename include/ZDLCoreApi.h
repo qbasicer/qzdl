@@ -7,6 +7,19 @@ class ZDLCoreApi;
 #include "ZDLApiCommon.h"
 #include "ZDLPluginApi.h"
 
+/* Event IDs */
+enum EventID {
+	NOOP,			// No-op, do nothing
+	CORE_EVENT_PLG_START,	// This plugin has been asked to start or a plugin has started
+	CORE_EVENT_PLG_STOP,	// This plugin has been asked to stop or a plugin has ended
+	UI_EVENT_TAB_SHOW,	// Plugin's tab is being shown
+	UI_EVENT_TAB_HIDE,	// Plugin's tab is being hidden
+	CORE_EVENT_LAUNCHING,	// ZDL is launching a game
+	CORE_EVENT_SHUTDOWN,	// ZDL is going down
+	CORE_EVENT_SAVECONFIG,	// Save the configuration
+	CORE_EVENT_LOADCONFIG	// Load the configuration
+};
+
 class ZDLCoreApi {
 	public:
 		virtual ZPID loadPluginPath(QString path) = 0;
