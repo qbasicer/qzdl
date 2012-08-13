@@ -323,6 +323,7 @@ void ZDLCoreImpl::fireInternalEvent(int evtid, void* payload){
 						delete api;
 					}else{
 						tar->loader->unload();
+						delete tar->loader;
 					}
 					delete tar;
 				}
