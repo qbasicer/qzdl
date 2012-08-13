@@ -17,6 +17,7 @@ class PluginEntry {
 			origin = 0;
 			runlock = new QMutex();
 			hasAlias = false;
+			loader = NULL;
 		}
 
 		ZPID pid;
@@ -25,6 +26,7 @@ class PluginEntry {
 		ZDLPluginRunner *runner;
 		QMutex *runlock;
 		bool hasAlias;
+		QPluginLoader *loader;
 };
 
 class ZDLServiceList;

@@ -8,11 +8,11 @@ extern ZDLUIThreadRunner *uiRunner;
 #define ZDL_ASSERT_NOT_EQUALS(expected, actual)     zdl_assert_core_impl_internal_not((void*)(expected), (void*)(actual), __PRETTY_FUNCTION__, __FILE__, __LINE__)
 
 static void zdl_assert_core_impl_internal(void* p1, void* p2, const char* func, const char* file, int line){
-        if(p1 != p2){
-                printf("ASSERT FAILED from %s at %s:%d\n", func, file, line);
-                printf("Execpted: %p got: %p\n", p1, p2);
+	if(p1 != p2){
+		printf("ASSERT FAILED from %s at %s:%d\n", func, file, line);
+		printf("Execpted: %p got: %p\n", p1, p2);
 		LOGDATA() << "ASSERT FAILED FROM " << QString(func) << " at " << QString(file) << ":" << line << endl;
-        }
+	}
 }
 
 static void zdl_assert_core_impl_internal_not(void* p1, void* p2, const char* func, const char* file, int line){
@@ -70,10 +70,24 @@ ZPID ZDLCoreImpl::loadPluginPath(QString path){
 			LOGDATAO() << "Failed to cast the plugin" << endl;
 			return BAD_ZPID;
 		}
+		ZPID pid = BAD_ZPID;
 		LOGDATAO() << "Handing plugin over to registrar" << endl;
-		return registerPlugin(plg);
+		lock();
+		PluginEntry *pe = new PluginEntry();
+		pe->pid = ++lastPid;
+		pid = pe->pid;
+		pe->plugin = plg;
+		pe->origin = 1;
+		pe->runner = new ZDLPluginRunner(this, plg);
+		pe->loader = bootstrapPlugin;
+		plugins.insert(pe->pid, pe);
+		unlock();
+		pe->runner->start();
+
+		return pid;
 	}
 	LOGDATAO() << "Failed to load() the plugin:" << bootstrapPlugin->errorString() <<  endl;
+	qDebug() << "Failed to load plugin: " <<  bootstrapPlugin->errorString();
 	return BAD_ZPID; 
 }
 
@@ -304,9 +318,13 @@ void ZDLCoreImpl::fireInternalEvent(int evtid, void* payload){
 							threads.remove(i.key());
 						}
 					}
-					delete tar->runlock;
+					if(tar->loader == NULL){
+						printf("Deleting plugin: %p\n", api);
+						delete api;
+					}else{
+						tar->loader->unload();
+					}
 					delete tar;
-					delete api;
 				}
 			}
 			unlock();
@@ -357,7 +375,7 @@ bool ZDLCoreImpl::waitForProcessExit(ZPID pid){
 }
 
 bool ZDLCoreImpl::runFunctionInGui(QString func, QList<QVariant> args, bool async){
-        PluginEntry *callee = getEntryForCurrentThread();
+	PluginEntry *callee = getEntryForCurrentThread();
 	ZDL_ASSERT_NOT_EQUALS(0, callee);
 	if(!isGuiThread()){
 		return runFunctionInGuiInternal(callee->plugin, func, args, async);
@@ -561,9 +579,7 @@ bool ZDLCoreImpl::getAllServices(QStringList &list){
 }
 
 bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant> &payload){
-	qDebug() << "ZDLCoreImpl::runService";
 	if(pid == BAD_ZPID || pid == 0){
-		qDebug() << "Resolving a plugin";
 		pid = getPidForService(service);
 	}
 	if(pid == BAD_ZPID){
@@ -577,14 +593,13 @@ bool ZDLCoreImpl::runService(ZPID pid, QString service, QHash<QString, QVariant>
 		return false;
 	}
 	PluginEntry *pe = plugins.value(pid);
-        if(pe == NULL){
+	if(pe == NULL){
 		qDebug() << "No such plugin entry";
-                unlock();
-                return false;
-        }
+		unlock();
+		return false;
+	}
 	ZDLPluginApi *plugin = pe->plugin;
 	unlock();
-	qDebug() << "Running service handler";
 	return plugin->handleService(service,payload);
 }
 

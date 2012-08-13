@@ -19,6 +19,16 @@ int ZDLBootstrapPlugin::pluginMain(ZDLCoreApi* api){
 		return -1;
 	}
 	impl->registerPlugin(picker);
+	QStringList args = api->getArgs();
+	for(int i = 0; i < args.size(); i++){
+		QString arg = args[i];
+		if(arg == "-loadplugin" && i + 1 < args.size()){
+			arg = args[++i];
+			qDebug() << "Loading plugin from " << arg;
+			ZPID pid = api->loadPluginPath(arg);
+			qDebug() << "Loading complete: " << pid;
+		}
+	}
 	api->waitForProcessExit(pz);
 	qDebug() << "UI died, we can exit now";
 	return 0;
