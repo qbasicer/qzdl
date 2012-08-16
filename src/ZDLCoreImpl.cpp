@@ -1,6 +1,7 @@
 #include "ZDLCoreImpl.h"
 #include "zdlcommon.h"
 #include "ZDLUIThreadRunner.h"
+#include "ZDLConfigurationManager.h"
 
 extern ZDLUIThreadRunner *uiRunner; 
 
@@ -229,8 +230,18 @@ bool ZDLCoreImpl::removeTab(QWidget *widget){
 }
 
 QString ZDLCoreImpl::getValue(QString section, QString variable){
-	LOGDATAO() << "Unimplemented function" << endl;
-	return QString("");
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	if(!zconf){
+		LOGDATAO() << "No configuration object!" << endl;
+		return QString();
+	}
+	if(zconf->hasValue(section, variable)){
+		int ok = 0;
+		QString rc = zconf->getValue(section, variable, &ok);
+		return rc;
+	}
+	LOGDATAO() << "No such configuration as " << section << "/" << variable << endl;
+	return QString();
 }
 
 bool ZDLCoreImpl::setValue(QString section, QString variable, QString value){
