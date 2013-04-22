@@ -58,6 +58,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	warpBox->addWidget(warpCombo);
 
 	diffList = new QComboBox(this);
+	diffList->setEditable(true);
 	skillBox->addWidget(new QLabel("Skill",this));
 	skillBox->addWidget(diffList);
 	diffList->addItem("None");
@@ -173,7 +174,12 @@ void ZDLSettingsPane::rebuild(){
 	if(diffList->currentIndex() > 0){
 		zconf->setValue("zdl.save", "skill", diffList->currentIndex());
 	}else{
-		zconf->deleteValue("zdl.save", "skill");
+		QString skillString = diffList->currentText();
+		if (skillString.length() == 0) {
+			zconf->deleteValue("zdl.save", "skill");
+		} else {
+			zconf->setValue("zdl.save", "skill", skillString);
+		}
 	}
 
 	if(warpCombo->currentText().length() > 0){
