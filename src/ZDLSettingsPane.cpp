@@ -246,15 +246,33 @@ void ZDLSettingsPane::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
+		// Not valid until there's text
+		bool valid = false;
 		int stat = 0;
 		QString rc = zconf->getValue("zdl.save", "skill", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
+			// There's text, assume valid unless proven otherwise
+			valid = true;
+			const char* strval = rc.toStdString().c_str();
+			for(int i = 0; i < strlen(strval); i++){
+				char cval = strval[i];
+				// Make sure the value is a number (mostly, won't catch 34-343-3)
+				if(cval != '-' && (cval < '0' || cval > '9')){
+					valid = false;
+					break;
+				}
+			}
+			if(valid){
+				index = atoi((char*)rc.toStdString().c_str());
+			}
 		}
-		if (index >= 0 && index <= 5){
-			diffList->setCurrentIndex(index);
-		}else{
-			zconf->setValue("zdl.save", "skill", 0);
+		if(valid){
+			if (index >= 0 && index <= 5){
+				diffList->setCurrentIndex(index);
+			}else{
+				diffList->setText(rc);
+			}
+		} else {
 			diffList->setCurrentIndex(0);
 		}
 
