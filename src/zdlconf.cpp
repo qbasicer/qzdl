@@ -139,11 +139,10 @@ ZDLConf::ZDLConf(int mode)
 {
 	LOGDATAO() << "New ZDLConf" << endl;
 	this->mode = mode;
-	//cout << "New configuration" << endl;
 	reads = 0;
 	writes = 0;
+	writelock = 0;
 	mutex = LOCK_BUILDER();
-	//vars = new ZDLVariables(this);
 }
 
 /* int ZDLConf::reopen(int mode)

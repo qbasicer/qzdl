@@ -66,30 +66,43 @@ public:
 	bool deleteRegex(QString section, QString regex);
 protected:
 	void readLock(){
-		LOGDATAO() << "ReadLockGet" << endl;
+		if(writelock){
+			return;
+		}
+		LOGDATAO() << "ReadLockGet on " << PTR_ADDR(mutex) << endl;
 		GET_READLOCK(mutex);
 	}
 	void writeLock(){
-		LOGDATAO() << "WriteLockGet" << endl;
+		LOGDATAO() << "WriteLockGet on" << PTR_ADDR(mutex) << endl;
 		GET_WRITELOCK(mutex);
+		writelock = 1;
 	}
 	void releaseReadLock(){
-		LOGDATAO() << "ReadLockRelease" << endl;
+		LOGDATAO() << "ReadLockRelease on " << PTR_ADDR(mutex) << endl;
 		RELEASE_READLOCK(mutex);
 	}
 	void releaseWriteLock(){
-		LOGDATAO() << "WriteLockRelease" << endl;
+		LOGDATAO() << "WriteLockRelease on " << PTR_ADDR(mutex) << endl;
+		writelock = 0;
 		RELEASE_WRITELOCK(mutex);
 	}
 	bool tryReadLock(int timeout = 999999999){
-		LOGDATAO() << "ReadLockTryGet" << endl;
+		if(writelock){
+			return true;
+		}
+		LOGDATAO() << "ReadLockTryGet on " << PTR_ADDR(mutex) << endl;
 		return TRY_READLOCK(mutex, timeout);
 	}
 	bool tryWriteLock(int timeout = 999999999){
-		LOGDATAO() << "WriteLockTryGet" << endl;
-		return TRY_WRITELOCK(mutex, timeout);
+		LOGDATAO() << "WriteLockTryGet on " << PTR_ADDR(mutex) << endl;
+		bool r = TRY_WRITELOCK(mutex, timeout);
+		if(r){
+			writelock = 1;
+		}
+		return r;
 	}
 private:
+	int writelock;
 	int mode;
 	int reads;
 	int writes;

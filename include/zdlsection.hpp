@@ -52,6 +52,9 @@ public:
 	bool deleteRegex(QString regex);
 protected:
 	void readLock(const char* file, int line){
+		if(writelock){
+			return;
+		}
 		LOGDATAO() << "ReadLockGet@" << file << ":" << line << endl;
 		GET_READLOCK(mutex);
 	}
@@ -61,6 +64,7 @@ protected:
 			qDebug() << "WriteLock on copy from " << file << ":" << line << endl;
 		}
 		GET_WRITELOCK(mutex);
+		writelock = true;
 	}
 	void releaseReadLock(const char* file, int line){
 		LOGDATAO() << "ReadLockRelease@" << file << ":" << line << endl;
@@ -68,9 +72,13 @@ protected:
 	}
 	void releaseWriteLock(const char* file, int line){
 		LOGDATAO() << "WriteLockRelease@" << file << ":" << line << endl;
+		writelock = false;
 		RELEASE_WRITELOCK(mutex);
 	}
 	bool tryReadLock(const char* file, int line, int timeout = 999999999){
+		if(writelock){
+			return true;
+		}
 		LOGDATAO() << "ReadLockTryGet@" << file << ":" << line << endl;
 		return TRY_READLOCK(mutex, timeout);
 	}
@@ -79,10 +87,15 @@ protected:
 		if(isCopy){
 			qDebug() << "WriteLock on copy" << endl;
 		}
-		return TRY_WRITELOCK(mutex, timeout);
+		bool r = TRY_WRITELOCK(mutex, timeout);
+		if(r){
+			writelock = true;
+		}
+		return r;
 	}
 	private:
 	LOCK_CLASS *mutex;
+	bool writelock;
 	int reads;
 	int writes;
 	bool isCopy;

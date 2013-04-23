@@ -75,7 +75,7 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define ASSOCIATE_FILETYPES() {}
 #endif
 
-#if QT_VERSION < 0x94040
+#if QT_VERSION < 0x04040
 #define LOCK_CLASS		QMutex
 #define LOCK_BUILDER()		new QMutex(QMutex::Recursive)
 #define GET_READLOCK(mlock)	(mlock)->lock()
@@ -84,7 +84,7 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define RELEASE_WRITELOCK(mlock)	(mlock)->unlock()
 #define TRY_READLOCK(mlock, to)	(mlock)->tryLock(to)
 #define TRY_WRITELOCK(mlock, to) (mlock)->tryLock(to)
-#warning Using Old Locking
+#warning Using old locking, version is QT_VERSION
 
 #else
 
@@ -96,10 +96,11 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define RELEASE_WRITELOCK(lock) (lock)->unlock()
 #define TRY_READLOCK(lock, to)	(lock)->tryLockForRead(to)
 #define TRY_WRITELOCK(lock, to) (lock)->tryLockForWrite(to)
-#warning Using New Locking
 
 #endif	
 
+#define PTR_ADDR(obj)	((void*)obj)
+#define OBJ_ADDR(obj)	((void*)&(obj))
 
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
