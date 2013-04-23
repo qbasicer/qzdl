@@ -186,5 +186,6 @@ bool ZDLLine::setFlags(int value){
 		return false;
 	}
 	flags = value;
+	return true;
 }
 

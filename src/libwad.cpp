@@ -86,14 +86,18 @@ int DoomWad::lumps(){
 }
 
 WadLump *DoomWad::getLump(int index){
+	Q_UNUSED(index);
 	return NULL;
 }
 
 WadLump *DoomWad::getLumpByName(QString name){
+	Q_UNUSED(name);
 	return NULL;
 }
 
 bool DoomWad::addLumps(QList<WadLump*> lumps, DoomWad::AddBehaviour behaviour){
+	Q_UNUSED(lumps);
+	Q_UNUSED(behaviour);
 	return false;
 }
 

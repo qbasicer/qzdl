@@ -38,8 +38,16 @@ class WadLump : public QIODevice{
 		WadLump(int start, int size, QString name, DoomWad *par);
 		QString getName();
 		int getSize();
-		virtual qint64 readData(char* buf, qint64 len){return 0;}
-		virtual qint64 writeData(const char* buf, qint64 len){return 0;}
+		virtual qint64 readData(char* buf, qint64 len){
+			Q_UNUSED(buf);
+			Q_UNUSED(len);
+			return 0;
+		}
+		virtual qint64 writeData(const char* buf, qint64 len){
+			Q_UNUSED(buf);
+			Q_UNUSED(len);
+			return 0;
+		}
 	protected:
 		int lumpStart;
 		int lumpSize;
