@@ -254,7 +254,7 @@ void ZDLSettingsPane::newConfig(){
 			// There's text, assume valid unless proven otherwise
 			valid = true;
 			const char* strval = rc.toStdString().c_str();
-			for(int i = 0; i < strlen(strval); i++){
+			for(unsigned int i = 0; i < strlen(strval); i++){
 				char cval = strval[i];
 				// Make sure the value is a number (mostly, won't catch 34-343-3)
 				if(cval != '-' && (cval < '0' || cval > '9')){
@@ -270,7 +270,7 @@ void ZDLSettingsPane::newConfig(){
 			if (index >= 0 && index <= 5){
 				diffList->setCurrentIndex(index);
 			}else{
-				diffList->setText(rc);
+				diffList->lineEdit()->setText(rc);
 			}
 		} else {
 			diffList->setCurrentIndex(0);
