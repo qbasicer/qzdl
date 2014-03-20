@@ -3069,6 +3069,6 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: You may now build QZDL with the make command" >&5
-$as_echo "You may now build QZDL with the make command" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: You may now build ZDL with the make command" >&5
+$as_echo "You may now build ZDL with the make command" >&6; }
 

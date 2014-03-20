@@ -27,6 +27,7 @@ QString chomp(QString in);
 
 ZDLLine::ZDLLine(QString inLine)
 {
+	flags = FLAG_NORMAL;
 	reads = 0;
 	writes = 1;
 	line = QString(chomp(inLine));
@@ -172,11 +173,18 @@ ZDLLine *ZDLLine::clone(){
 	copy->value = value;
 	copy->slashConvert = slashConvert;
 	copy->type = type;
-	reads += 6;
-	copy->writes += 6;
+	copy->flags = flags;
+	reads += 7;
+	copy->writes += 7;
 	return copy;
 }
 
-
-
+bool ZDLLine::setFlags(int value){
+	// Virtual flags cannot be modified
+	if ((flags & FLAG_NOWRITE) == FLAG_NOWRITE){
+		LOGDATAO() << "Cannot change flags on FLAG_NOWRITE" << endl;
+		return false;
+	}
+	flags = value;
+}
 

@@ -188,6 +188,35 @@ void ZDLListWidget::removeButton(){
 	}
 }
 
+static void sortItemsByRow(QListWidget *pList, QList<QListWidgetItem*> &items){
+	if(items.size() <= 0){
+		return;
+	}
+	QList<QListWidgetItem*> ilist;
+	ilist.append(items.takeLast());
+	while(items.size() > 0){
+		QListWidgetItem* item = items.takeLast();
+		int newRow = pList->row(item);
+		int firstRow = pList->row(ilist.first());
+		int lastRow = pList->row(ilist.last());
+		if(newRow < firstRow){
+			ilist.push_front(item);
+		}else if(newRow > lastRow){
+			ilist.push_back(item);
+		}else{
+			QList<QListWidgetItem*>::iterator i;
+			for (i = ilist.begin(); i != ilist.end(); ++i){
+				int oldRow = pList->row(*i);
+				if(newRow < oldRow){
+					i = ilist.insert(i, item);
+					break;
+				}
+			}
+		}
+	}
+	items.append(ilist);
+}
+
 void ZDLListWidget::upButton(){
 	if (pList->selectedItems().size() == 1){
 		if (pList->currentRow () > 0){
@@ -198,6 +227,7 @@ void ZDLListWidget::upButton(){
 		}
 	} else if (pList->selectedItems().size() > 1){
 		QList<QListWidgetItem*> items = pList->selectedItems();
+		sortItemsByRow(pList, items);
 		for(int i = 0; i < items.size(); i++) {
 			QListWidgetItem* item = items[i];
 			int row = pList->row(item);
@@ -229,6 +259,12 @@ void ZDLListWidget::downButton(){
 		}
 	}else if (pList->selectedItems().size() > 1){
                 QList<QListWidgetItem*> items = pList->selectedItems();
+		// Need this check in here to ensure we don't use an invalid index
+		if(items.size() <= 1){
+			return;
+		}
+
+		sortItemsByRow(pList, items);
 		int max = pList->count();
                 for(int i = 0; i < items.size(); i++) {
                         QListWidgetItem* item = items[i];
@@ -238,7 +274,7 @@ void ZDLListWidget::downButton(){
                                 return;
                         }
                 }
-                for(int i = 0; i < items.size(); i++) {
+                for(int i = items.size()-1; i >= 0; i--) {
                         QListWidgetItem* item = items[i];
                         int row = pList->row(item);
 			item = pList->takeItem(row);

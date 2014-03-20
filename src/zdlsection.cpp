@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -125,7 +125,7 @@ int ZDLSection::getRegex(QString regex, QVector<ZDLLine*> &vctr){
 	}
 	READUNLOCK();
 	return vctr.size();
-	
+
 #endif
 	return 0;
 }
@@ -137,6 +137,10 @@ int ZDLSection::setValue(QString variable, QString value)
 	for(int i = 0; i < lines.size(); i++){
 		ZDLLine* line = lines[i];
 		if (line->getVariable().compare(variable) == 0){
+			if((line->getFlags() & FLAG_NOWRITE) == FLAG_NOWRITE){
+				LOGDATAO() << "Cannot change value of FLAG_NOWRITE" << endl;
+				return -1;
+			}
 			line->setValue(value);
 			WRITEUNLOCK();
 			return 0;
@@ -174,7 +178,11 @@ int ZDLSection::streamWrite(QIODevice *stream)
 		}
 		for(int i = 0; i < lines.size(); i++){
 			ZDLLine *line = lines[i];
-			tstream << line->getLine() << ENDOFLINE;
+			if((line->getFlags() & FLAG_VIRTUAL) == 0 && (line->getFlags() & FLAG_TEMP) == 0){
+				tstream << line->getLine() << ENDOFLINE;
+			}else{
+				LOGDATAO() << "Ignoring FLAG_VIRTUAL and FLAG_TEMP entries" << endl;
+			}
 		}
 	}
 	READUNLOCK();
@@ -220,21 +228,64 @@ int ZDLSection::addLine(QString linedata)
 		WRITEUNLOCK();
 		return 1;
 	}
-	
+
 }
 
 ZDLSection *ZDLSection::clone(){
 	READLOCK();
 	ZDLSection *copy = new ZDLSection(sectionName);
 	for(int i = 0; i < lines.size(); i++){
-		copy->addLine(lines[i]->clone());
+		/* Virtual flags do not get cloned */
+		if((lines[i]->getFlags() & FLAG_VIRTUAL) == 0){
+			copy->addLine(lines[i]->clone());
+		}else{
+			LOGDATAO() << "Ignoring clone request for virtual flags" << endl;
+		}
 	}
 	READUNLOCK();
 	return copy;
 }
 
+int ZDLSection::getFlagsForValue(QString var){
+	READLOCK();
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(var) == 0){
+			return line->getFlags();
+		}
+	}
+	READUNLOCK();
+	return -1;
+}
 
+bool ZDLSection::setFlagsForValue(QString var, int value){
+	READLOCK();
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (line->getVariable().compare(var) == 0){
+			return line->setFlags(value);
+		}
+	}
+	READUNLOCK();
+	return false;
+}
 
+bool ZDLSection::deleteRegex(QString regex){
+	bool rc = false;
+	WRITELOCK();
+	QRegExp rx(regex);
+	for(int i = 0; i < lines.size(); i++){
+		ZDLLine* line = lines[i];
+		if (rx.exactMatch(line->getVariable())){
+			lines.remove(i--);
+			rc = true;
+			delete line;
+		}
+	}
+
+	WRITEUNLOCK();
+	return rc;
+}
 
 
 
