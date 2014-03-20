@@ -100,6 +100,10 @@ int main( int argc, char **argv ){
 	qt_ntfs_permission_lookup = 0;
 #endif
 
+#if defined(Q_WS_MAC)
+	QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
+#endif
+
 	QApplication a( argc, argv );
 	qapp = &a;
 	ZDLConfigurationManager::setArgv(args);
