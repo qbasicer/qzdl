@@ -21,26 +21,26 @@
 #include "ZDLConfigurationManager.h"
 #include <string>
 
-static QString getLastDir(){
+QString getLastDir(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){
 		return QString();
 	}
-        QString lastDir;
-        if (zconf->hasValue("zdl.general", "lastDir")) {
-                int ok = 0;
-                lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
-        }
-        return lastDir;
+	QString lastDir;
+	if (zconf->hasValue("zdl.general", "lastDir")) {
+		int ok = 0;
+		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
+	}
+	return lastDir;
 }
 
-static void saveLastDir(QString fileName){
+void saveLastDir(QString fileName){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){
 		return;
 	}
-        QFileInfo fi(fileName);
-        zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+	QFileInfo fi(fileName);
+	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 }
 
 ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
@@ -73,9 +73,7 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 	
 	connect(btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
 	connect(btnOK, SIGNAL(clicked()), this, SLOT(accept()));
-	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));	
-	
-	
+	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 void ZDLNameInput::browse(){
@@ -96,7 +94,6 @@ void ZDLNameInput::basedOff(ZDLNameListable *listable){
 	if (listable){
 		lfile->setText(listable->getFile());
 		lname->setText(listable->getName());
-		
 	}
 }
 
@@ -104,14 +101,14 @@ void ZDLNameInput::setFilter(QStringList inFilters){
 	filters = inFilters;
 }
 
-QString ZDLNameInput::getName(){
-	if (lname->text().length() > 0){
+QString ZDLNameInput::getName() {
+	if (lname->text().length() > 0) {
 		return lname->text();
-	}else{
+	} else {
 		return lfile->text();
 	}
 }
 
-QString ZDLNameInput::getFile(){
+QString ZDLNameInput::getFile() {
 	return lfile->text();
 }
