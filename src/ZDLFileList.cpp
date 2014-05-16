@@ -24,6 +24,9 @@
 #include <iostream>
 using namespace std;
 
+extern QString getLastDir();
+extern void saveLastDir(QString fileName);
+
 ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
 	LOGDATAO() << "ZDLFileList" << endl;
 }
@@ -90,9 +93,10 @@ void ZDLFileList::addButton(){
 		<< "P7Z Files (*.p7z)"
 		<< "zip Files (*.zip)"
 		<< "Any files (*)";
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", QString(), filters.join(";;"));
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", getLastDir(), filters.join(";;"));
 	for(int i = 0; i < fileNames.size(); i++){
 		LOGDATAO() << "Adding file " << fileNames[i] << endl;
+		saveLastDir(fileNames[i]);
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
 		insert(zList, -1);
 	}
