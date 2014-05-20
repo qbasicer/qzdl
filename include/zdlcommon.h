@@ -26,7 +26,7 @@ using namespace std;
 
 #if defined(Q_WS_WIN)
 // Windows versioning information
-#define ZDL_VERSION_ID		53
+#define ZDL_VERSION_ID		57
 #define ZDL_PRODUCT_ID		"qzdl-win32-beta"
 #elif defined(Q_WS_MAC)
 // Mac information would go here

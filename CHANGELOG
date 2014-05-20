@@ -6,6 +6,9 @@
 http://zdl.vectec.net
 (C) ZDL Software Foundation
 
+* 3.2.2.3 - May 16th, 2014
+  * Remember last directory used in the file pane
+
 * 3.2.2.2 - August 2nd, 2012
   * Change behaviour of issue #31, only drop file[0-9]+, changed the option to rememberFilelist
   * Default to remembering file list
