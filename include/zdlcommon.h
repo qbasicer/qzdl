@@ -30,11 +30,11 @@ using namespace std;
 #define ZDL_PRODUCT_ID		"qzdl-win32-beta"
 #elif defined(Q_WS_MAC)
 // Mac information would go here
-#define ZDL_VERSION_ID          54
+#define ZDL_VERSION_ID          59
 #define ZDL_PRODUCT_ID          "qzdl-git-beta"
 #else
 // Other (Linux in reality)
-#define ZDL_VERSION_ID		54
+#define ZDL_VERSION_ID		58
 #define ZDL_PRODUCT_ID		"qzdl-git-beta"
 #endif
 
