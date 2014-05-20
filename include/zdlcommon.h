@@ -49,12 +49,22 @@ extern QDebug *zdlDebug;
 #include <QtCore>
 #define LOGDATA() (*zdlDebug) << (QDateTime::currentDateTime().toString("[yyyy:MM:dd/hh:mm:ss.zzz]").append("@").append(__PRETTY_FUNCTION__).append("@").append(__FILE__).append(":").append(QString::number(__LINE__)).append("\t"))
 #define LOGDATAO() (*zdlDebug) << (QDateTime::currentDateTime().toString("[yyyy:MM:dd/hh:mm:ss.zzz]").append("@").append(__PRETTY_FUNCTION__).append("@").append(__FILE__).append(":").append(QString::number(__LINE__)).append("#this=").append(DPTR(this)).append("\t"))
+
+#if !defined(Q_WS_MAC)
+
 #if UINTPTR_MAX == 0xffffffff
 #warning 32bit
-#define DPTR(ptr) QString("0x").append(QString("%1").arg((unsigned long)ptr, 0, 8, 16)
+#define DPTR(ptr) QString("0x").append(QString("%1").arg((qulong)ptr, 0, 8, 16)
 #else
-#define DPTR(ptr) QString("0x").append(QString::number((unsigned long long)ptr,16))
+#define DPTR(ptr) QString("0x").append(QString::number((qulonglong)ptr,16))
 #endif
+
+#else
+
+#define DPTR(ptr) QString("0x").append("PTR")
+
+#endif
+
 #else
 #define LOGDATA() (*zdlDebug)
 #define LOGDATAO() (*zdlDebug)
