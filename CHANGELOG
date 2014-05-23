@@ -1,10 +1,13 @@
    _________________________
   /                         /
- /  ZDL 3.2.2.3 beta       /
+ /  ZDL 3.2.2.3            /
 /_________________________/
 
 http://zdl.vectec.net
 (C) ZDL Software Foundation
+
+* 3.2.2.3-stable - May 23rd, 2014
+  * Released
 
 * 3.2.2.3 - May 16th, 2014
   * Remember last directory used in the file pane
