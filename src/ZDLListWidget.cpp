@@ -19,10 +19,16 @@
 #include <QtGui>
 #include <QApplication>
 
+#include <QPushButton>
+#include <QAction>
+#include <QVBoxLayout>
+#include <QMessageBox>
+
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
 #include "adown.xpm"
 #include "aup.xpm"
+
 
 ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *column = new QVBoxLayout(this);

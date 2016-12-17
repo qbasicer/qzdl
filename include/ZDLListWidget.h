@@ -19,8 +19,15 @@
 #ifndef _ZLISTWIDGET_H_
 #define _ZLISTWIDGET_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QStringList>
+#include <QListWidgetItem>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QPushButton>
+#include <QListWidget>
 #include <vector>
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
