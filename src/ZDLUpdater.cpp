@@ -36,7 +36,7 @@ ZDLUpdater::ZDLUpdater(){
 	host = "update.vectec.net";
 	errorCode = 0;
 	port = 80;
-    url = QUrl(QString("http://%1:%2/").arg(host, QString.setNum(port), QUrl::StrictMode));
+    url = QUrl(QString("http://%1:%2/").arg(host, QString().setNum(port)), QUrl::StrictMode);
     http = new QNetworkRequest(url);
     updateCode = 0;
 	LOGDATAO() << "Done" << endl;
@@ -44,15 +44,14 @@ ZDLUpdater::ZDLUpdater(){
 
 ZDLUpdater::~ZDLUpdater(){
 	LOGDATAO() << "Destroying updater" << endl;
-	delete http;
-    if (reply != NULL) {
-        reply->deleteLater();
-    }
+    delete http;
 }
 
 void ZDLUpdater::setHost(const char* host, const int port){
 	LOGDATAO() << "setHost " << host << port << endl;
-    url.setHost(QString("http://%1:%2/").arg(host, QString.setNum(port)));
+    this->host = host;
+    this->port = port;
+    url.setHost(QString("http://%1:%2/").arg(host, QString().setNum(port)));
     http->setUrl(url);
 }
 
@@ -154,7 +153,7 @@ void ZDLUpdater::fetch(int doAnyways){
 
         QString upath("/check.php");
         QString uquery("name=%1&id=%2");
-        uquery.arg(QString(ZDL_PRODUCT_ID), QString.setNum(ZDL_VERSION_ID));
+        uquery.arg(ZDL_PRODUCT_ID, QString().setNum(ZDL_VERSION_ID));
         url.setPath(upath, QUrl::StrictMode);
         url.setQuery(uquery, QUrl::StrictMode);
 
@@ -210,8 +209,7 @@ void ZDLUpdater::fetch(int doAnyways){
 		}else{
 			ua += "WinUnknown";
 		}
-#else
-#ifdef Q_WS_MAC 
+#elif Q_WS_MAC
 		if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
             ua += "Mac OS 9";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_0){
@@ -258,16 +256,21 @@ void ZDLUpdater::fetch(int doAnyways){
 
         bool lsbError = false;
         QString* distro;
-        QProcess lsb("/usr/bin/lsb_release", QStringList() << "-d");
+        QProcess lsb;
+        lsb.start("/usr/bin/lsb_release", QStringList() << "-d");
         connect(lsb, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-                [=](int exitCode, QProcess::ExitStatus exitStatus){
-            QByteArray lsbout = lsb.readAllStandardOutput();
-            lsbout.remove(0, "Description: ".length());
-            distro = new QString(lsbout);
+                [&](int exitCode, QProcess::ExitStatus exitStatus){
+            if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
+                QByteArray lsbout = lsb.readAllStandardOutput();
+                lsbout.remove(0, QString("Description: ").length());
+                distro = new QString(lsbout);
+            } else {
+                lsbError = true;
+            }
         });
-        connect(lsb, &QProcess::errorOccurred, [&lsbError](QProcess::ProcessError error){
+        QObject::connect(&lsb, &QProcess::errorOccurred(QProcess::ProcessError), [&lsbError](QProcess::ProcessError error){
             lsbError = true;
-        }));
+        });
         lsb.waitForFinished(-1);
 
         if (!lsbError) {
@@ -286,8 +289,8 @@ void ZDLUpdater::fetch(int doAnyways){
 		LOGDATAO() << "User-Agent: " << ua << endl;
 		//cout << "User agent:" << ua.toStdString() << endl;
         //qreq.setValue("Host", this->host);
-        http->setHeader("User-Agent", ua);
-        reply = net.get(http);
+        http->setHeader(QNetworkRequest::UserAgentHeader, ua);
+        reply = net.get(*http);
         LOGDATAO() << "Request started" << endl;
     }else{
 		LOGDATAO() << "Can't start multiple requests" << endl;
@@ -358,8 +361,8 @@ void ZDLUpdater::httpRequestFinished(){
 
 void ZDLUpdater::readyRead () {
     LOGDATAO() << "ReadyRead (" << reply->bytesAvailable() << " bytes to read)" << endl;
-    errorCode = reply->header("Status").split(" ", QString::SkipEmptyParts).first().toInt();
-    if (errorCode == 200) {
+    errorCode = reply->error();
+    if (errorCode == QNetworkReply::NoError) {
         buffer.append(reply->readAll());
     } else {
         ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);
