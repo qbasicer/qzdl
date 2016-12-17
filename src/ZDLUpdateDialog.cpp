@@ -2,6 +2,17 @@
 
 #include "ZDLConfigurationManager.h"
 
+#include <QLabel>
+#include <QWidget>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QPlainTextEdit>
+#include <QFont>
+#include <QDateTime>
+#include <QByteArray>
+#include <QString>
+#include <QDialogButtonBox>
+
 // Healper
 static QLabel *createLabel(QString text, QWidget *parent){
 	QLabel *ret = new QLabel(text, parent);
@@ -36,15 +47,21 @@ ZDLUpdateDialog::ZDLUpdateDialog(QWidget *parent):QDialog(parent){
 	setSizeGripEnabled(true);
 	setWindowTitle("Update available for "ZDL_ENGINE_NAME);
 	reqid = 0;
-	http = new QHttp(this);
-	http->setHost("update.vectec.net", QHttp::ConnectionModeHttp);
-	QString url = "/getchangelog.php?name="ZDL_PRODUCT_ID"&id=";
-	connect(http, SIGNAL(requestFinished(int,bool)), this, SLOT(requestFinished(int,bool)));
-	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader&)), this, SLOT(responseHeaderReceived(const QHttpResponseHeader&)));
-	reqid = http->get(url + QString::number(ZDL_VERSION_ID), &buffer);
-	LOGDATAO() << "Starting request " << reqid << endl;
-}
 
+    url = QUrl("update.vectec.net", QUrl::StrictMode);
+    url.setPath("/getchangelog.php");
+    QString uquery("name=%1&id=%2");
+    uquery.arg(ZDL_PRODUCT_ID, QString.setNum(ZDL_VERSION_ID));
+    url.setQuery(uquery);
+
+    http = new QNetworkRequest(url);
+
+    connect(reply, SIGNAL(finished()), this, SLOT(requestFinished()));
+    //connect(reply, SIGNAL(responseHeaderReceived(const QHttpResponseHeader&)), this, SLOT(responseHeaderReceived(const QHttpResponseHeader&)));
+	LOGDATAO() << "Starting request " << reqid << endl;
+    reply = net.get(http);
+}
+/*
 void ZDLUpdateDialog::responseHeaderReceived(const QHttpResponseHeader &resp){
 	LOGDATAO() << "Got response header, " << resp.statusCode() << resp.reasonPhrase() << endl;
 	if(resp.statusCode() != 200){
@@ -52,25 +69,14 @@ void ZDLUpdateDialog::responseHeaderReceived(const QHttpResponseHeader &resp){
 		reqid = -1;
 	}
 }
-
-void ZDLUpdateDialog::requestFinished(int id, bool error){
-	LOGDATAO() << "requestFinished, id:" << id << " error:" << error << endl;
-	if(reqid > id){
-		LOGDATAO() << "Returning, we're supposed to ignore this one" << endl;
-		return;
-	}else if(reqid < 0){
-		LOGDATAO() << "Somebody else has already taken care of this for us" << endl;
-		return;
-	}else if(id != reqid){
-		LOGDATAO() << "Bad request ID. We were expecting" << reqid << endl;
-		edit->setPlainText("Internal HTTP error");
-		return;
-	}else if(error){
-		LOGDATAO() << "HTTP error " << http->errorString() << endl;
-		edit->setPlainText("HTTP Error: "+http->errorString());
+*/
+void ZDLUpdateDialog::requestFinished(){
+    if(reply->error()){
+        LOGDATAO() << "HTTP error " << reply->errorString() << endl;
+        edit->setPlainText("HTTP Error: "+reply->errorString());
 		return;
 	}
-	QByteArray ba = buffer.buffer();
+    QByteArray ba = reply->readAll();
 	QString data(ba);
 	if(!data.isNull()){
 		edit->setPlainText(data);
