@@ -152,9 +152,11 @@ void ZDLUpdater::fetch(int doAnyways){
         url.setHost(host, QUrl::StrictMode);
         url.setPort(port);
 
-        QString upath = "/check.php?name="ZDL_PRODUCT_ID"&id=";
-        upath += QString::number(ZDL_VERSION_ID);
+        QString upath("/check.php");
+        QString uquery("name=%1&id=%2");
+        uquery.arg(QString(ZDL_PRODUCT_ID), QString.setNum(ZDL_VERSION_ID));
         url.setPath(upath, QUrl::StrictMode);
+        url.setQuery(uquery, QUrl::StrictMode);
 
         // Construct UA string
 		QString ua = QString(ZDL_ENGINE_NAME) + QString(" ") + versionString;
