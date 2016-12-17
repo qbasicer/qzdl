@@ -19,8 +19,13 @@
 #ifndef _ZNAMEINPUT_H_
 #define _ZNAMEINPUT_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QDialog>
+#include <QWidget>
+#include <QString>
+#include <QStringList>
+#include <QLineEdit>
+#include <QPushButton>
 #include "ZDLNameListable.h"
 
 class ZDLNameInput: public QDialog{
