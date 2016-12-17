@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include <QtGui>
+
 #include <QObject>
+#include <QCheckBox>
+#include <QLineEdit>
 #include "ZDLWidget.h"
 #include "ZDLSourcePortList.h"
 #include "ZDLIWadList.h"
