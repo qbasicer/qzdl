@@ -16,7 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QFileInfo>
+#include <QLineEdit>
+#include <QString>
+#include <QLabel>
+#include <QFileDialog>
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
 #include <string>
