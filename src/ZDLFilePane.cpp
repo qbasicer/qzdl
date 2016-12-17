@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
+#include <QWidget>
 #include <QApplication>
 #include <QListWidget>
+#include <QVBoxLayout>
+#include <QLabel>
 #include <iostream>
 
 #include "ZDLListWidget.h"
