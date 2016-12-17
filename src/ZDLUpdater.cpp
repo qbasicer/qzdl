@@ -25,18 +25,19 @@ using namespace std;
 extern QString versionString;
 ZDLUpdater::ZDLUpdater(){
 	LOGDATAO() << "New updater" << endl;
-	http = new QHttp(this);
-	connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
+	/*
+    connect(net, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
 			this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
-	connect(http, SIGNAL(requestFinished(int, bool)),
-			this, SLOT(httpRequestFinished(int, bool)));
-	connect(http, SIGNAL(readyRead(const QHttpResponseHeader &)),
-			this, SLOT(readyRead(const QHttpResponseHeader &)));
+    connect(net, SIGNAL(requestFinished(int, bool)),
+            this, SLOT(httpRequestFinished(int, bool)));
+	*/
+    connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
 	host = "update.vectec.net";
 	errorCode = 0;
 	port = 80;
-	updateCode = 0;
-	httpGetId = 0;
+    url = QUrl(QString("http://%1:%2/").arg(host, QString.setNum(port), QUrl::StrictMode));
+	http = new QNetworkRequest(host);
+    updateCode = 0;
 	LOGDATAO() << "Done" << endl;
 }
 
@@ -47,8 +48,7 @@ ZDLUpdater::~ZDLUpdater(){
 
 void ZDLUpdater::setHost(const char* host, const int port){
 	LOGDATAO() << "setHost " << host << port << endl;
-	this->host = host;
-	this->port = port;
+    url.setHost(QString("http://%1:%2/").arg(host, QString.setNum(port)));
 }
 
 int ZDLUpdater::hasError(){
@@ -141,14 +141,17 @@ void ZDLUpdater::fetch(int doAnyways){
 		}
 	}
 
-	if (httpGetId == 0){
+    if (reply == NULL || !reply->isRunning()) {
 		buffer.clear();
 		updateCode = 0;
-		http->setHost(this->host, QHttp::ConnectionModeHttp, this->port);
+        url.setHost(host, QUrl::StrictMode);
+        url.setPort(port);
 
-		QString url = "/check.php?name="ZDL_PRODUCT_ID"&id=";
-		url += QString::number(ZDL_VERSION_ID);
-		QHttpRequestHeader qreq("GET", url);
+        QString upath = "/check.php?name="ZDL_PRODUCT_ID"&id=";
+        upath += QString::number(ZDL_VERSION_ID);
+        url.setPath(upath, QUrl::StrictMode);
+
+        // Construct UA string
 		QString ua = QString(ZDL_ENGINE_NAME) + QString(" ") + versionString;
 		ua += " (";
 #ifdef Q_WS_WIN
@@ -179,6 +182,10 @@ void ZDLUpdater::fetch(int doAnyways){
 				ua += "Windows Vista";
 			}else if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS7){
 				ua += "Windows 7";
+            }else if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS8){
+                ua += "Windows 8";
+            }else if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS10){
+                ua += "Windows 10";
 			}else{
 				ua += "Windows Unknown";
 			}
@@ -199,23 +206,33 @@ void ZDLUpdater::fetch(int doAnyways){
 #else
 #ifdef Q_WS_MAC 
 		if (QSysInfo::MacintoshVersion == QSysInfo::MV_9){
-			ua += "MacOS9";
+            ua += "Mac OS 9";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_0){
-			ua += "MacOSX 10.0 Cheetah";
+            ua += "Mac OS X 10.0 Cheetah";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_1){
-			ua += "MacOSX 10.1 Puma";
+            ua += "Mac OS X 10.1 Puma";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_2){
-			ua += "MacOSX 10.2 Jaguar";
+            ua += "Mac OS X 10.2 Jaguar";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_3){
-			ua += "MacOSX 10.3 Panther";
+            ua += "Mac OS X 10.3 Panther";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_4){
-			ua += "MacOSX 10.4 Tiger";
+            ua += "Mac OS X 10.4 Tiger";
 		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_5){
-			ua += "MacOSX 10.5 Leopard";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_SNOWLEOPARD){
-			ua += "MaxOSX 10.6 Snow Leopard";
-		}else if (QSysInfo::MacintoshVersion == QSysInfo::MV_Unknown){
-			ua += "Mac Unknown";
+            ua += "Mac OS X 10.5 Leopard";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_6){
+            ua += "Mac OS X 10.6 Snow Leopard";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_7){
+            ua += "Mac OS X 10.7 Lion";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_8){
+            ua += "Mac OS X 10.8 Mountain Lion";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_9){
+            ua += "Mac OS X 10.9 Mavericks";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_10){
+            ua += "Mac OS X 10.10 Yosemite";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_11){
+            ua += "Mac OS X 10.11 El Capitan";
+        }else if (QSysInfo::MacintoshVersion == QSysInfo::MV_10_12){
+            ua += "macOS 10.12 Sierra";
 		}else{
 			ua += "Mac Unknown";
 		}
@@ -229,8 +246,11 @@ void ZDLUpdater::fetch(int doAnyways){
 			ua += "Unknown";
 		}
 
+        // Find out what Linux distro the user is using.
+        //ua += ";"
+
 #endif
-#endif
+
 #if defined(USE_UID)
 		LOGDATAO() << "UID: " << ZDL_UID << endl;
 		ua += "; UID:";
@@ -239,24 +259,26 @@ void ZDLUpdater::fetch(int doAnyways){
 		ua += ")";
 		LOGDATAO() << "User-Agent: " << ua << endl;
 		//cout << "User agent:" << ua.toStdString() << endl;
-		qreq.setValue("Host", this->host);
-		qreq.setValue("User-Agent", ua);
-		httpGetId = http->request(qreq);
-		LOGDATAO() << "Request " << httpGetId << " started" << endl;
-	}else{
+        //qreq.setValue("Host", this->host);
+        http->setHeader("User-Agent", ua);
+        reply = net.get(http);
+        LOGDATAO() << "Request started" << endl;
+    }else{
 		LOGDATAO() << "Can't start multiple requests" << endl;
 	}
 
 }
 
-void ZDLUpdater::httpRequestFinished(int requestId, bool error){
+void ZDLUpdater::httpRequestFinished(bool error){
 	LOGDATAO() << "Finished request " << requestId << endl;
+    /*
 	if (requestId != httpGetId){
-		LOGDATAO() << "Internal HTTP error, reqId:" << requestId << " getId:" << httpGetId << " Buffer was: " << buffer << endl;
+        LOGDATAO() << "Internal HTTP error, Buffer was: " << buffer << endl;
 		return;
 	}
+    */
 	if (error){
-		LOGDATAO() << "Error!" << endl;
+        LOGDATAO() << "Error! Buffer was: " << buffer << endl;
 		return;
 	}
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -304,27 +326,19 @@ void ZDLUpdater::httpRequestFinished(int requestId, bool error){
 			zconf->deleteValue("zdl.net", "hasupdate");
 		}
 	}
-	httpGetId = 0;
-	LOGDATAO() << "Reset httpGetId, updateCode:" << updateCode << " errorCode:" << errorCode << endl;
+    LOGDATAO() << "updateCode:" << updateCode << " errorCode:" << errorCode << endl;
 	emit updateReady();
 }
 
-void ZDLUpdater::readyRead ( const QHttpResponseHeader & resp ){
-	LOGDATAO() << "ReadyRead" << endl;
-	if(resp.statusCode() == 200){
-		//cout << "readyRead: " << resp.reasonPhrase().toStdString() << endl;
-		QByteArray inBytes = http->readAll();
-		buffer.append(inBytes);
-	}
-}
-
-void ZDLUpdater::readResponseHeader(const QHttpResponseHeader &responseHeader){
-	//cout << "readResponseHeader" << endl;
-	errorCode = responseHeader.statusCode();
-	LOGDATAO() << "HTTP Header code: " << errorCode << endl;
-	//cout << "Error code: " << errorCode << endl;
-	if(errorCode != 200){
-		ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);	
-	}
-
+void ZDLUpdater::readyRead () {
+    LOGDATAO() << "ReadyRead (" << reply->bytesAvailable() << " bytes to read)" << endl;
+    errorCode = reply->header("Status").split(" ", QString::SkipEmptyParts).first().toInt();
+    if (errorCode == 200) {
+        buffer.append(reply->readAll());
+        if (reply->isFinished()) {
+            httpRequestFinished(reply->error());
+        }
+    } else {
+        ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);
+    }
 }

@@ -21,7 +21,9 @@
 
 #include <QtCore>
 #include <QObject>
-#include <QHttp>
+#include <QUrl>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
 #define UPDATE_NOUPDATE		0
 #define UPDATE_MISMATCH		1
@@ -43,14 +45,17 @@ Q_OBJECT
 		QString host;
 		int errorCode;
 		int port;
-		int updateCode;
-		int httpGetId;
-		QHttp *http;
+        int updateCode;
+        QUrl url;
+        QNetworkRequest* http;
 		QByteArray buffer;
+        QNetworkAccessManager net;
+        QNetworkReply* reply;
 	protected slots:
-		void httpRequestFinished(int requestId, bool error);
-		void readyRead (const QHttpResponseHeader &resp);
-		void readResponseHeader(const QHttpResponseHeader &responseHeader);
+        // TODO: Replace QHttp stuff
+        //void httpRequestFinished(int requestId, bool error);
+        void readyRead ();
+        //void readResponseHeader(const QHttpResponseHeader &responseHeader);
 		void updatesDisabledInfobar();
 		void updatesOldSystem();
 	signals:
