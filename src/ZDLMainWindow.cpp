@@ -17,9 +17,13 @@
  */
 
 #include <iostream>
-#include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
+#include <QAction>
+#include <QMessageBox>
+#include <QSize>
+#include <QPoint>
+#include <QString>
 
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
