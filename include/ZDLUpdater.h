@@ -53,7 +53,7 @@ Q_OBJECT
         QNetworkReply* reply;
 	protected slots:
         // TODO: Replace QHttp stuff
-        //void httpRequestFinished(int requestId, bool error);
+        void httpRequestFinished();
         void readyRead ();
         //void readResponseHeader(const QHttpResponseHeader &responseHeader);
 		void updatesDisabledInfobar();

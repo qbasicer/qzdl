@@ -32,11 +32,12 @@ ZDLUpdater::ZDLUpdater(){
             this, SLOT(httpRequestFinished(int, bool)));
 	*/
     connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(reply, SIGNAL(finished()), this, SLOT(httpRequestFinished()));
 	host = "update.vectec.net";
 	errorCode = 0;
 	port = 80;
     url = QUrl(QString("http://%1:%2/").arg(host, QString.setNum(port), QUrl::StrictMode));
-	http = new QNetworkRequest(host);
+    http = new QNetworkRequest(url);
     updateCode = 0;
 	LOGDATAO() << "Done" << endl;
 }
@@ -44,11 +45,15 @@ ZDLUpdater::ZDLUpdater(){
 ZDLUpdater::~ZDLUpdater(){
 	LOGDATAO() << "Destroying updater" << endl;
 	delete http;
+    if (reply != NULL) {
+        reply->deleteLater();
+    }
 }
 
 void ZDLUpdater::setHost(const char* host, const int port){
 	LOGDATAO() << "setHost " << host << port << endl;
     url.setHost(QString("http://%1:%2/").arg(host, QString.setNum(port)));
+    http->setUrl(url);
 }
 
 int ZDLUpdater::hasError(){
@@ -247,8 +252,27 @@ void ZDLUpdater::fetch(int doAnyways){
 		}
 
         // Find out what Linux distro the user is using.
-        //ua += ";"
 
+
+        bool lsbError = false;
+        QString* distro;
+        QProcess lsb("/usr/bin/lsb_release", QStringList() << "-d");
+        connect(lsb, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+                [=](int exitCode, QProcess::ExitStatus exitStatus){
+            QByteArray lsbout = lsb.readAllStandardOutput();
+            lsbout.remove(0, "Description: ".length());
+            distro = new QString(lsbout);
+        });
+        connect(lsb, &QProcess::errorOccurred, [&lsbError](QProcess::ProcessError error){
+            lsbError = true;
+        }));
+        lsb.waitForFinished(-1);
+
+        if (!lsbError) {
+            ua += "; ";
+            ua += distro;
+            delete distro;
+        }
 #endif
 
 #if defined(USE_UID)
@@ -269,15 +293,15 @@ void ZDLUpdater::fetch(int doAnyways){
 
 }
 
-void ZDLUpdater::httpRequestFinished(bool error){
-	LOGDATAO() << "Finished request " << requestId << endl;
+void ZDLUpdater::httpRequestFinished(){
+    LOGDATAO() << "Finished request.";
     /*
 	if (requestId != httpGetId){
         LOGDATAO() << "Internal HTTP error, Buffer was: " << buffer << endl;
 		return;
 	}
     */
-	if (error){
+    if (reply->error()){
         LOGDATAO() << "Error! Buffer was: " << buffer << endl;
 		return;
 	}
@@ -335,9 +359,6 @@ void ZDLUpdater::readyRead () {
     errorCode = reply->header("Status").split(" ", QString::SkipEmptyParts).first().toInt();
     if (errorCode == 200) {
         buffer.append(reply->readAll());
-        if (reply->isFinished()) {
-            httpRequestFinished(reply->error());
-        }
     } else {
         ZDLConfigurationManager::setInfobarMessage("There was an unexpected HTTP response code checking for updates",1);
     }
