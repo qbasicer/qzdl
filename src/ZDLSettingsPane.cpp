@@ -16,9 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QApplication>
 #include <QComboBox>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QWidget>
+#include <QListWidget>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QStringList>
+#include <QListWidgetItem>
+#include <QVariant>
+#include <QString>
+#include <QVector>
 #include "ZDLMapFile.h"
 
 #include "ZDLConfigurationManager.h"
