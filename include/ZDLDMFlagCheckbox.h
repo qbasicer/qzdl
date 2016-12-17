@@ -19,8 +19,8 @@
 #ifndef _ZDMFLAGCHECKBOX_H_
 #define _ZDMFLAGCHECKBOX_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QCheckBox>
 #include "ZDLWidget.h"
 
 class ZDLDMFlagCheckbox: public QCheckBox{

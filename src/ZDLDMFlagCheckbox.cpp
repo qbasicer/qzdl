@@ -17,6 +17,7 @@
  */
  
 #include "ZDLDMFlagCheckbox.h"
+#include <QCheckBox>
 
 ZDLDMFlagCheckbox::ZDLDMFlagCheckbox(int dmvalue, int highOn, QString text, QWidget *parent):QCheckBox(text,parent){
 	logic = highOn;
