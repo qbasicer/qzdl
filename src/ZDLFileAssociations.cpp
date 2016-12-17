@@ -3,6 +3,16 @@
 
 #include "zdlcommon.h"
 
+#include <QHBoxLayout>
+#include <QButtonGroup>
+#include <QString>
+#include <QFrame>
+#include <QWidget>
+#include <QMessageBox>
+#include <QRadioButton>
+#include <QLabel>
+#include <QPushButton>
+
 class ZDLButtonGroup {
 	public:
 		ZDLButtonGroup(QString labelText, QWidget *parent){
