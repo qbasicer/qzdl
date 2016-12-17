@@ -2,7 +2,6 @@ obj/
 moc/
 *~
 *.ini
-*.pro
 Makefile
 config.log
 zdl.log
