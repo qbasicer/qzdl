@@ -19,8 +19,9 @@
 #ifndef _ZINFOBAR_H_
 #define _ZINFOBAR_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QLabel>
+#include <QColor>
 #include "ZDLWidget.h"
 
 #define INFOBAR_NORMAL	0
