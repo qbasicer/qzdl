@@ -27,6 +27,9 @@
 
 using namespace std;
 
+#include <QPushButton>
+#include <QListWidget>
+
 class ZDLListWidget: public ZDLWidget{
 	Q_OBJECT
 	public: 
