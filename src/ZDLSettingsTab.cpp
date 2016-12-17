@@ -17,7 +17,7 @@
  */
  
 #include <iostream>
-#include <QtGui>
+
 #include <QApplication>
 
 #include "ZDLConfigurationManager.h"
