@@ -253,7 +253,7 @@ void ZDLUpdater::fetch(int doAnyways){
 
         // Find out what Linux distro the user is using.
 
-
+        /*
         bool lsbError = false;
         QString* distro;
         QProcess lsb;
@@ -268,7 +268,7 @@ void ZDLUpdater::fetch(int doAnyways){
                 lsbError = true;
             }
         });
-        QObject::connect(&lsb, &QProcess::errorOccurred(QProcess::ProcessError), [&lsbError](QProcess::ProcessError error){
+        QObject::connect(&lsb, (void QProcess::*(QProcess::ProcessError))(&QProcess::errorOccurred), [&lsbError](QProcess::ProcessError error){
             lsbError = true;
         });
         lsb.waitForFinished(-1);
@@ -278,6 +278,9 @@ void ZDLUpdater::fetch(int doAnyways){
             ua += distro;
             delete distro;
         }
+        */
+
+        // Or not...
 #endif
 
 #if defined(USE_UID)
