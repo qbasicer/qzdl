@@ -21,6 +21,8 @@
 
 
 #include <QObject>
+#include <QDialog>
+#include <QLineEdit>
 #include "ZDLWidget.h"
 #include "ZDLDMFlagManager.h"
 
