@@ -16,7 +16,7 @@ class ZDLUpdateDialog : public QDialog {
 	public slots:
 		void remindLater();
 	protected slots:
-		void requestFinished(int id, bool error);
+        void requestFinished();
         //void responseHeaderReceived(const QHttpResponseHeader &resp);
 	protected:
         //QHttp *http;

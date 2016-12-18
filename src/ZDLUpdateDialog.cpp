@@ -12,6 +12,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QDialogButtonBox>
+#include <QPushButton>
 
 // Healper
 static QLabel *createLabel(QString text, QWidget *parent){
@@ -46,20 +47,19 @@ ZDLUpdateDialog::ZDLUpdateDialog(QWidget *parent):QDialog(parent){
 	connect(btnLater, SIGNAL(clicked()), this, SLOT(remindLater()));	
 	setSizeGripEnabled(true);
 	setWindowTitle("Update available for "ZDL_ENGINE_NAME);
-	reqid = 0;
 
     url = QUrl("update.vectec.net", QUrl::StrictMode);
     url.setPath("/getchangelog.php");
     QString uquery("name=%1&id=%2");
-    uquery.arg(ZDL_PRODUCT_ID, QString.setNum(ZDL_VERSION_ID));
+    uquery.arg(ZDL_PRODUCT_ID, QString().setNum(ZDL_VERSION_ID));
     url.setQuery(uquery);
 
     http = new QNetworkRequest(url);
 
     connect(reply, SIGNAL(finished()), this, SLOT(requestFinished()));
     //connect(reply, SIGNAL(responseHeaderReceived(const QHttpResponseHeader&)), this, SLOT(responseHeaderReceived(const QHttpResponseHeader&)));
-	LOGDATAO() << "Starting request " << reqid << endl;
-    reply = net.get(http);
+    LOGDATAO() << "Starting request" << endl;
+    reply = net.get(*http);
 }
 /*
 void ZDLUpdateDialog::responseHeaderReceived(const QHttpResponseHeader &resp){

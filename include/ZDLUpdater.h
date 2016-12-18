@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QNetworkAccessManager>
 
 #define UPDATE_NOUPDATE		0
