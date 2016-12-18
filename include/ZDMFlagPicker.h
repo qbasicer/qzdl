@@ -21,6 +21,7 @@
 
 
 #include <ZDLWidget.h>
+#include <QDialog>
 
 class ZDMFlagPicker : public QDialog{
 Q_OBJECT
