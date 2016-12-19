@@ -251,12 +251,11 @@ void ZDLUpdater::fetch(int doAnyways){
 
         // Find out what Linux distro the user is using.
 
-        /*
         bool lsbError = false;
         QString* distro;
         QProcess lsb;
         lsb.start("/usr/bin/lsb_release", QStringList() << "-d");
-        connect(lsb, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+        connect(&lsb, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
                 [&](int exitCode, QProcess::ExitStatus exitStatus){
             if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
                 QByteArray lsbout = lsb.readAllStandardOutput();
@@ -266,19 +265,20 @@ void ZDLUpdater::fetch(int doAnyways){
                 lsbError = true;
             }
         });
-        QObject::connect(&lsb, (void QProcess::*(QProcess::ProcessError))(&QProcess::errorOccurred), [&lsbError](QProcess::ProcessError error){
+        connect(&lsb, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+            [&](QProcess::ProcessError error){
             lsbError = true;
         });
         lsb.waitForFinished(-1);
 
-        if (!lsbError) {
-            ua += "; ";
+        ua += " ";
+        if (lsbError) {
+            ua += "Unknown";
+            delete distro;
+        } else {
             ua += distro;
             delete distro;
         }
-        */
-
-        // Or not...
 #endif
 
 #if defined(USE_UID)

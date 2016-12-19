@@ -9,6 +9,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TEMPLATE = app
 TARGET = qzdl
 INCLUDEPATH += . include
+CONFIG += c++11
 
 # Input
 SOURCES +=  src/extras.cpp \
