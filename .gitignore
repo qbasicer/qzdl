@@ -8,3 +8,5 @@ zdl.log
 qrc_qzdl.cpp
 autom4te.cache/
 qzdl
+qzdl.pro.user
+zdl
