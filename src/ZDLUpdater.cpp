@@ -30,9 +30,7 @@ ZDLUpdater::ZDLUpdater(){
 			this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
     connect(net, SIGNAL(requestFinished(int, bool)),
             this, SLOT(httpRequestFinished(int, bool)));
-	*/
-    connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    connect(reply, SIGNAL(finished()), this, SLOT(httpRequestFinished()));
+    */
 	host = "update.vectec.net";
 	errorCode = 0;
 	port = 80;
@@ -295,6 +293,8 @@ void ZDLUpdater::fetch(int doAnyways){
         http->setHeader(QNetworkRequest::UserAgentHeader, ua);
         reply = net.get(*http);
         LOGDATAO() << "Request started" << endl;
+        connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
+        connect(reply, SIGNAL(finished()), this, SLOT(httpRequestFinished()));
     }else{
 		LOGDATAO() << "Can't start multiple requests" << endl;
 	}
