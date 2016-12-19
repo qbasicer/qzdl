@@ -260,6 +260,7 @@ void ZDLUpdater::fetch(int doAnyways){
             if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
                 QByteArray lsbout = lsb.readAllStandardOutput();
                 lsbout.remove(0, QString("Description: ").length());
+                lsbout.chop(1); // Remove newline
                 distro = new QString(lsbout);
             } else {
                 lsbError = true;
@@ -274,7 +275,6 @@ void ZDLUpdater::fetch(int doAnyways){
         ua += " ";
         if (lsbError) {
             ua += "Unknown";
-            delete distro;
         } else {
             ua += distro;
             delete distro;
