@@ -18,8 +18,8 @@
 
 
 #include <QApplication>
-#include <QMainWindow>
 #include <QDir>
+#include <QDebug>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
