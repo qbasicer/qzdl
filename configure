@@ -612,7 +612,6 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_updater
 enable_importer
 enable_logger
 '
@@ -1238,7 +1237,6 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --disable-updater       Disable the Vectec Auto Updater
   --disable-importer       Disable configuration import dialog
  --enable-logger         Enable the data logger
 
@@ -2975,32 +2973,6 @@ as_fn_error $? "error appending to file" "$LINENO" 5
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-
-# Check whether --enable-updater was given.
-if test "${enable_updater+set}" = set; then :
-  enableval=$enable_updater; use_updater=no
-else
-  use_updater=yes
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking checking if updater is disabled" >&5
-$as_echo_n "checking checking if updater is disabled... " >&6; }
-if test "$use_updater" = no; then
-	bnv_try_15="echo \"DEFINES += NO_UPDATER\" >> qzdl.pro"
-	{ { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$bnv_try_15\""; } >&5
-  (eval $bnv_try_15) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-	if test "$ac_status" != 0; then
-		as_fn_error $? "error appending to file" "$LINENO" 5
-	fi
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
 
 # Check whether --enable-importer was given.
 if test "${enable_importer+set}" = set; then :

@@ -31,7 +31,6 @@ public:
 	void startRead();
 	void writeConfig();
 protected slots:
-	void checkNow();
 	void fileAssociations();
 	void reloadConfig();
 	void pathToggled(bool enabled);
@@ -40,7 +39,6 @@ private:
 	QCheckBox *launchClose;
 	ZDLIWadList *iwadList;
 	ZDLSourcePortList *sourceList;
-	QCheckBox *updater;
 	QCheckBox *showPaths;
 	QCheckBox *launchZDL;
 	QCheckBox *savePaths;

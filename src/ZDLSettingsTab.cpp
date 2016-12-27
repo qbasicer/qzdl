@@ -89,29 +89,6 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addWidget(launchClose);
 	sections->addWidget(showPaths);
 	sections->addWidget(savePaths);
-	
-#if !defined(NO_UPDATER)	
-	QHBoxLayout *hbox = new QHBoxLayout();
-	updater = new QCheckBox("Enable Update Notifier", this);
-	updater->setToolTip("Check for updates at launch at most once a day");
-	QPushButton *btnCheckNow = new QPushButton("Check now",this);
-	connect(btnCheckNow, SIGNAL( clicked() ), this, SLOT(checkNow()));
-	
-	hbox->addWidget(updater);
-	hbox->addWidget(btnCheckNow);
-	
-	sections->addLayout(hbox);
-
-#if defined(ZDL_STABLE)
-	sections->addWidget(new QLabel("You're running ZDL Stable", this));
-	QLabel *web = new QLabel("Visit <a href=http://zdl.vectec.net>zdl.vectec.net</a> to try a beta</a>");
-	web->setOpenExternalLinks(true);
-	sections->addWidget(web);
-	
-#endif
-
-#endif
-	
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 }
@@ -135,21 +112,6 @@ void ZDLSettingsTab::fileAssociations(){
 
 void ZDLSettingsTab::rebuild(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-#if !defined(NO_UPDATER)
-	ZDLSection *section = zconf->getSection("zdl.net");
-	//Delete old configs
-	if (section){
-		QVector<ZDLLine*> vctr;
-		section->getRegex("^updateManager$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
-			section->deleteVariable(vctr[i]->getVariable());
-		}
-	}
-	
-	if (updater->checkState() == Qt::Unchecked){
-		zconf->setValue("zdl.net", "updateManager", "disabled");
-	}
-#endif
 	
 	if(launchClose->checkState() == Qt::Checked){
 		zconf->setValue("zdl.general","autoclose", "1");
@@ -180,28 +142,6 @@ void ZDLSettingsTab::rebuild(){
 
 void ZDLSettingsTab::newConfig(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-#if !defined(NO_UPDATER)
-	ZDLSection *section = zconf->getSection("zdl.net");
-	if (section){
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^updateManager$", fileVctr);
-		
-		for(int i = 0; i < fileVctr.size(); i++){
-			if (fileVctr[i]->getValue().compare("disabled") == 0){
-				updater->setCheckState(Qt::Unchecked);
-			}else{
-				updater->setCheckState(Qt::Checked);
-			}
-		}
-		//Make sure that it's on by default, if it's not listed
-		if (fileVctr.size() < 1){
-			updater->setCheckState(Qt::Checked);
-		}
-	}else{
-		//Default to on if it's not listed
-		updater->setCheckState(Qt::Checked);
-	}
-#endif
 
 	if(zconf->hasValue("zdl.general","showpaths")){
 		int ok = 0;
@@ -276,15 +216,6 @@ void ZDLSettingsTab::reloadConfig(){
 	writeConfig();
 	startRead();
 	LOGDATAO() << "Reload complete" << endl;
-}
-
-void ZDLSettingsTab::checkNow(){
-	LOGDATAO() << "checking for updates" << endl;
-	ZDLUpdater *zup = ZDLConfigurationManager::getUpdater();
-	if(zup){
-		
-		zup->fetch(1);
-	}
 }
 
 void ZDLSettingsTab::startRead(){

@@ -22,7 +22,6 @@
 #include <list>
 #include <string>
 #include "ZDLWidget.h"
-#include "ZDLUpdater.h"
 #include "ZDLConfiguration.h"
 #include "ZDLConfigurationEvents.h"
 
@@ -55,8 +54,6 @@ class ZDLConfigurationManager{
 		static void setInfobarMessage(const char* msg, int icon = 0);
 		static QString getConfigFileName();
 		static void setConfigFileName(QString name);
-		static void setUpdater(ZDLUpdater *zup);
-		static ZDLUpdater *getUpdater();
 		static QStringList getArgv();
 		static void setArgv(QStringList args);
 		static QString getExec();
@@ -70,7 +67,6 @@ class ZDLConfigurationManager{
 		static ZDLWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
-		static ZDLUpdater *zupper;
 		static ZDLConfiguration *conf;
 		static WhyConfig why;
 		static ZDLConfigurationEvents *events;
