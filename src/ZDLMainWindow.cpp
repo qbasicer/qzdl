@@ -26,7 +26,6 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
 #include "ZDLImportDialog.hpp"
-#include "ZDLUpdateDialog.h"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -46,47 +45,6 @@ ZDLMainWindow::~ZDLMainWindow(){
 		zconf->setValue("zdl.general", "windowpos", str);
 	}
 	LOGDATAO() << "Closing main window" << endl;
-	if(zup){
-		delete zup;
-	}
-}
-
-void ZDLMainWindow::manageUpdate(){
-	if(zup){
-		if (zup->hasUpdate() == UPDATE_MISMATCH){
-			LOGDATAO() << "Update available" << endl;
-			ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-			ZDLConfigurationManager::setInfobarMessage("There is an update available.",INFOBAR_WARNING);
-			connect(bar,SIGNAL(moreclicked()),this,SLOT(newUpdate()));
-		}else if (zup->hasUpdate() == UPDATE_ENDOFLIFE){
-			LOGDATAO() << "Product end of life" << endl;
-			ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-			ZDLConfigurationManager::setInfobarMessage("This product has reached end of life", INFOBAR_WARNING);
-			connect(bar,SIGNAL(moreclicked()),this,SLOT(endOfLife()));
-		}else{
-			LOGDATAO() << "No updates" << endl;
-		}
-	}
-}
-
-void ZDLMainWindow::newUpdate(){
-	if(zup){
-		ZDLUpdateDialog zdu(this);
-		zdu.exec();
-	}
-}
-
-void ZDLMainWindow::endOfLife(){
-	ZDLUpdateDialog zdu(this);
-	zdu.exec();
-}
-
-void ZDLMainWindow::setUpdater(ZDLUpdater *zup){
-	this->zup = zup;
-	if(zup){
-		LOGDATAO() << "Set updater" << endl;
-		connect(zup, SIGNAL(updateReady()), this, SLOT(manageUpdate()));
-	}
 }
 
 QString ZDLMainWindow::getWindowTitle(){

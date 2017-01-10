@@ -89,21 +89,6 @@ AC_MSG_ERROR(error appending to file)
 fi
 AC_MSG_RESULT(yes)
 
-AC_ARG_ENABLE(updater,
-  [  --disable-updater       Disable the Vectec Auto Updater],
-  [use_updater=no], [use_updater=yes])
-AC_MSG_CHECKING(checking if updater is disabled)
-if test "$use_updater" = no; then
-	bnv_try_15="echo \"DEFINES += NO_UPDATER\" >> qzdl.pro"
-	AC_TRY_EVAL(bnv_try_15)
-	if test "$ac_status" != 0; then
-		AC_MSG_ERROR(error appending to file)
-	fi
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-
 AC_ARG_ENABLE(importer,
   [  --disable-importer       Disable configuration import dialog],
   [use_import=no], [use_import=yes])

@@ -144,11 +144,6 @@ int main( int argc, char **argv ){
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
 
-	ZDLUpdater *zup = NULL;
-#if !defined(NO_UPDATER)
-	zup = new ZDLUpdater();
-#endif
-
 	ZDLConf* tconf = new ZDLConf();
 	ZDLConfigurationManager::setConfigFileName("");
 
@@ -244,8 +239,6 @@ int main( int argc, char **argv ){
 
 
 	mw = new ZDLMainWindow();
-	mw->setUpdater(zup);
-	ZDLConfigurationManager::setUpdater(zup);
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();
@@ -264,11 +257,6 @@ int main( int argc, char **argv ){
 				}
 			}
 		}
-	}
-
-	if(zup){
-		LOGDATA() << "Checking for updates" << endl;
-		zup->fetch();
 	}
 
 	mw->handleImport();
