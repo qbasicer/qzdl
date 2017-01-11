@@ -340,7 +340,7 @@ void ZDLMainWindow::launch(){
 	proc->setWorkingDirectory(workingDirectory);
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	proc->start(exec, args);
+	proc->startDetached(exec, args);
 	procerr = proc->error();
 #endif
 	int stat;
