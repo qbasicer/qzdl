@@ -11,14 +11,6 @@ if test "$ac_status" != 0; then
 fi
 AC_MSG_RESULT(yes)
 
-AC_MSG_CHECKING(setting project options)
-bnv_try_15="echo \"QT += network\" >> qzdl.pro"
-AC_TRY_EVAL(bnv_try_15)
-if test "$ac_status" != 0; then
-   AC_MSG_ERROR(error appending to file)
-fi
-AC_MSG_RESULT(yes)
-
 AC_MSG_CHECKING(enabling debug)
 bnv_try_15="echo \"CONFIG += debug\" >> qzdl.pro"
 AC_TRY_EVAL(bnv_try_15)
