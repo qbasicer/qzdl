@@ -340,7 +340,13 @@ void ZDLMainWindow::launch(){
 	proc->setWorkingDirectory(workingDirectory);
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	proc->start(exec, args);
+
+	if (zconf->hasValue("zdl.general", "autoclose")) {
+		proc->startDetached(exec, args);
+	} else {
+		proc->start(exec, args);
+	}
+
 	procerr = proc->error();
 #endif
 	int stat;
