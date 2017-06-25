@@ -29,4 +29,8 @@ In short, that means:
   be attributed erroneously to authors of previous versions.
   ...
 
+To build, do the following:
 
+  qmake -project -o qzdl.pro src/qzdl.cpp
+  qmake
+  make
