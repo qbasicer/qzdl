@@ -74,6 +74,7 @@ int main( int argc, char **argv ){
 	}
 	QStringList eatenArgs(args);
 	ZDLNullDevice nullDev;
+	nullDev.open(QIODevice::WriteOnly);
 #if defined(ZDL_BLACKBOX)
 	QFile *loggingFile = NULL;
 	zdlDebug = NULL;
@@ -305,6 +306,7 @@ int main( int argc, char **argv ){
 
 	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
 	LOGDATA() << "ZDL QUIT" << endl;
+	nullDev.close();
 	return ret;
 }
 
