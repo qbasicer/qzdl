@@ -17,9 +17,13 @@
  */
 
 #include <iostream>
-#include <QtGui>
 #include <QApplication>
 #include <QMainWindow>
+#include <QAction>
+#include <QMessageBox>
+#include <QSize>
+#include <QPoint>
+#include <QString>
 
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
@@ -340,7 +344,7 @@ void ZDLMainWindow::launch(){
 	proc->setWorkingDirectory(workingDirectory);
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	proc->start(exec, args);
+	proc->startDetached(exec, args);
 	procerr = proc->error();
 #endif
 	int stat;

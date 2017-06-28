@@ -19,8 +19,9 @@
 #ifndef _ZDMFLAGPICKER_H_
 #define _ZDMFLAGPICKER_H_
 
-#include <QtGui>
+
 #include <ZDLWidget.h>
+#include <QDialog>
 
 class ZDMFlagPicker : public QDialog{
 Q_OBJECT

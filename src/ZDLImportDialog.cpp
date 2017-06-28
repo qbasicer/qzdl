@@ -1,6 +1,12 @@
 #include "ZDLImportDialog.hpp"
 #include "zdlcommon.h"
 
+#include <QWidget>
+#include <QLabel>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
+
 ZDLImportDialog::ZDLImportDialog(QWidget *parent):QDialog(parent){
 	QVBoxLayout *layout = new QVBoxLayout(this);
 	this->setLayout(layout);

@@ -19,9 +19,12 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
-#include <QtGui>
+
 #include <QApplication>
 #include <QMainWindow>
+#include <QStringList>
+#include <QString>
+#include <QAction>
 #include "ZDLWidget.h"
 #include "ZDLInterface.h"
 #include "ZDLSettingsTab.h"

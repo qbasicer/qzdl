@@ -19,8 +19,11 @@
 #ifndef _ZADVANCEDMULTIPLAYERDIALOG_H_
 #define _ZADVANCEDMULTIPLAYERDIALOG_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QDialog>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
 #include "ZDLWidget.h"
 
 class ZDLAdvancedMultiplayerDialog: public QDialog{

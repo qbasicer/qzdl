@@ -19,8 +19,8 @@
 #ifndef _ZABOUTDIALOG_H_
 #define _ZABOUTDIALOG_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QDialog>
 #include "ZDLWidget.h"
 
 class ZDLAboutDialog: public QDialog{

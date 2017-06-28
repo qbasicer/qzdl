@@ -16,9 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtGui>
+
 #include <QApplication>
 #include <QMainWindow>
+
+#include <QMessageBox>
+#include <QPushButton>
+#include <QMenu>
+#include <QAction>
+#include <QString>
+#include <QFileInfo>
+#include <QFileDialog>
 #include "ZDLConfigurationManager.h"
 #include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLAboutDialog.h"

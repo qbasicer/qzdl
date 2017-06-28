@@ -22,6 +22,7 @@
 #include "ZDLMapFile.h"
 
 #include <iostream>
+#include <QFileDialog>
 using namespace std;
 
 extern QString getLastDir();

@@ -2,10 +2,12 @@ obj/
 moc/
 *~
 *.ini
-*.pro
 Makefile
 config.log
 zdl.log
 qrc_qzdl.cpp
 autom4te.cache/
 qzdl
+qzdl.pro.user
+zdl
+.qmake.stash
