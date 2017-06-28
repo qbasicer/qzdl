@@ -18,7 +18,16 @@
 
 #include "ZDLAboutDialog.h"
 #include "ZDLConfigurationManager.h"
+#include <QObject>
+#include <QString>
+#include <QDialog>
 #include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QFont>
+#include <QPixmap>
+#include <QFrame>
 #include "ZDLVersion.h"
 #include "bmp_logo.xpm"
 

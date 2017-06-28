@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
-#include <QObject>
+#include <QWidget>
+#include <QStringList>
+#include <QComboBox>
+#include <QListWidget>
 #include "ZDLWidget.h"
 
 class ZDLSettingsPane: public ZDLWidget{

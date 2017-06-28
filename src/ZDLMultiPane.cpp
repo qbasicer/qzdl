@@ -17,8 +17,14 @@
  */
  
 
-#include <QtGui>
 #include <QApplication>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QString>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
 

@@ -57,7 +57,7 @@ QString ZDLConfiguration::getString(QString section, QString key, int *ok,ConfSc
 	Q_UNUSED(key);
 	Q_UNUSED(scope);
 	Q_UNUSED(rules);
-	if(ok){*ok = FALSE;}
+    if(ok){*ok = false;}
 	return QString();
 }
 
@@ -66,7 +66,7 @@ int ZDLConfiguration::getInt(QString section, QString key, int *ok, ConfScope sc
 	Q_UNUSED(key);
 	Q_UNUSED(scope);
 	Q_UNUSED(rules);
-	if(ok){*ok = FALSE;}
+    if(ok){*ok = false;}
 	return 0;
 }
 
@@ -76,7 +76,7 @@ bool ZDLConfiguration::setString(QString section, QString key, QString value, Co
 	Q_UNUSED(value);
 	Q_UNUSED(scope);
 	Q_UNUSED(rules);
-	return FALSE;
+    return false;
 }
 
 bool ZDLConfiguration::setInt(QString section, QString key, int value, ConfScope scope, ScopeRules rules){
@@ -85,7 +85,7 @@ bool ZDLConfiguration::setInt(QString section, QString key, int value, ConfScope
 	Q_UNUSED(value);
 	Q_UNUSED(scope);
 	Q_UNUSED(rules);
-	return FALSE;
+    return false;
 }
 
 bool ZDLConfiguration::hasVariable(QString section, QString key, ConfScope scope, ScopeRules rules){
@@ -93,5 +93,5 @@ bool ZDLConfiguration::hasVariable(QString section, QString key, ConfScope scope
 	Q_UNUSED(key);
 	Q_UNUSED(scope);
 	Q_UNUSED(rules);
-	return FALSE;
+    return false;
 }

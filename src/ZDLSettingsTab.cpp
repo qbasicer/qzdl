@@ -17,8 +17,14 @@
  */
  
 #include <iostream>
-#include <QtGui>
+
 #include <QApplication>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QLabel>
+#include <QCheckBox>
+#include <QPushButton>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"

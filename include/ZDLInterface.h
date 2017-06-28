@@ -19,8 +19,11 @@
 #ifndef _ZDLINTERFACE_H_
 #define _ZDLINTERFACE_H_
 
-#include <QtGui>
 #include <QObject>
+#include <QLayout>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QLineEdit>
 #include "ZDLWidget.h"
 #include "ZDLMultiPane.h"
 
