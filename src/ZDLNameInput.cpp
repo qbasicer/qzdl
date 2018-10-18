@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
+#include <QtWidgets>
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
 #include <string>

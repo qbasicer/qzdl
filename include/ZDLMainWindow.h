@@ -19,7 +19,7 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
 #include "ZDLWidget.h"

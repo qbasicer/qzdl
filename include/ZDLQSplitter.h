@@ -20,7 +20,7 @@
 #ifndef _ZQSPLIT_H_
 #define _ZQSPLIT_H_
 #include <QObject>
-#include <QtGui>
+#include <QtWidgets>
 #include "ZDLWidget.h"
 
 

@@ -19,7 +19,7 @@
 #ifndef _ZABOUTDIALOG_H_
 #define _ZABOUTDIALOG_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 

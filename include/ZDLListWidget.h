@@ -19,7 +19,7 @@
 #ifndef _ZLISTWIDGET_H_
 #define _ZLISTWIDGET_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include <vector>
 #include "ZDLWidget.h"

@@ -1,7 +1,7 @@
 #ifndef _ZDLFILEASSOCIATIONS_H_
 #define _ZDLFILEASSOCIATIONS_H_
 
-#include <QtGui>
+#include <QtWidgets>
 
 class ZDLFileAssociations : public QDialog {
 	Q_OBJECT

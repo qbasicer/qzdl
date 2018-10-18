@@ -72,4 +72,5 @@ add_executable(
 )
 
 target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(zdl Qt4::QtGui)
+target_link_libraries(zdl Qt5::Core Qt5::Widgets)
+target_compile_definitions(zdl PRIVATE FALSE=0 TRUE=1)

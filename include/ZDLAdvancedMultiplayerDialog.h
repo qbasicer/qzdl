@@ -19,7 +19,7 @@
 #ifndef _ZADVANCEDMULTIPLAYERDIALOG_H_
 #define _ZADVANCEDMULTIPLAYERDIALOG_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 

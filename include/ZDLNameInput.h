@@ -19,7 +19,7 @@
 #ifndef _ZNAMEINPUT_H_
 #define _ZNAMEINPUT_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLNameListable.h"
 

@@ -19,7 +19,7 @@
 #ifndef _ZINFOBAR_H_
 #define _ZINFOBAR_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 

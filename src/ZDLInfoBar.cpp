@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QtGui>
+#include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
 #include "ZDLConfigurationManager.h"
@@ -38,7 +38,7 @@ ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	
 	lbl = new QLabel(this);	
 	txtlbl = new QLabel("", this);
-	lbl->setPixmap(NULL);
+	lbl->setPixmap(QPixmap());
 	box->addWidget(lbl);
 	
 	box->addWidget(txtlbl);

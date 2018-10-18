@@ -19,7 +19,7 @@
 #ifndef _ZDLINTERFACE_H_
 #define _ZDLINTERFACE_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 #include "ZDLMultiPane.h"

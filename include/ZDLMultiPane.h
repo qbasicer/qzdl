@@ -19,7 +19,7 @@
 #ifndef _MULTIPANE_H_
 #define _MULTIPANE_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 

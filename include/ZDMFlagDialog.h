@@ -19,7 +19,7 @@
 #ifndef _ZDMFLAGDIALOG_H_
 #define _ZDMFLAGDIALOG_H_
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include "ZDLWidget.h"
 #include "ZDLDMFlagManager.h"
