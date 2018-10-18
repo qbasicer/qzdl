@@ -1,0 +1,75 @@
+qt_wrap_cpp(
+	zdl
+	ZDL_MOC_OUTFILES
+	${PROJECT_SOURCE_DIR}/include/ZDLInfoBar.h
+	${PROJECT_SOURCE_DIR}/include/ZDLWidget.h
+	${PROJECT_SOURCE_DIR}/include/ZDLConfigurationEvents.h
+	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
+	${PROJECT_SOURCE_DIR}/include/ZDLMainWindow.h
+	${PROJECT_SOURCE_DIR}/include/ZDLImportDialog.hpp
+	${PROJECT_SOURCE_DIR}/include/ZDLListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLQSplitter.h
+	${PROJECT_SOURCE_DIR}/include/ZDLFileListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLNameListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLAboutDialog.h
+	${PROJECT_SOURCE_DIR}/include/ZDLInterface.h
+	${PROJECT_SOURCE_DIR}/include/ZDLFilePane.h
+	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagCheckbox.h
+	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
+	${PROJECT_SOURCE_DIR}/include/ZDLIWadList.h
+	${PROJECT_SOURCE_DIR}/include/ZDLMultiPane.h
+	${PROJECT_SOURCE_DIR}/include/ZDLListWidget.h
+	${PROJECT_SOURCE_DIR}/include/ZDLSourcePortList.h
+	${PROJECT_SOURCE_DIR}/include/ZDLFileAssociations.h
+	${PROJECT_SOURCE_DIR}/include/ZDMFlagDialog.h
+	${PROJECT_SOURCE_DIR}/include/ZDMFlagPicker.h
+	${PROJECT_SOURCE_DIR}/include/ZDLSettingsTab.h
+	${PROJECT_SOURCE_DIR}/include/ZDLNameInput.h
+	${PROJECT_SOURCE_DIR}/include/ZDLAdvancedMultiplayerDialog.h
+	${PROJECT_SOURCE_DIR}/include/ZDLSettingsPane.h
+)
+
+add_executable(
+	zdl
+	ZDLInfoBar.cpp
+	qzdl.cpp
+	ZDLConfigurationManager.cpp
+	ZDLMapFile.cpp
+	ZDLListWidget.cpp
+	ZDLSettingsTab.cpp
+	extras.cpp
+	zdlconf.cpp
+	ZDLNameInput.cpp
+	zdlsection.cpp
+	ZDLAdvancedMultiplayerDialog.cpp
+	ZDLSettingsPane.cpp
+	libwad.cpp
+	ZDLFileAssociations.cpp
+	ZDLSourcePortList.cpp
+	ZDLFileList.cpp
+	ZDMFlagDialog.cpp
+	ZDLInterface.cpp
+	ZDLMultiPane.cpp
+	ZDLNameListable.cpp
+	ZDLListEntry.cpp
+	ZDMFlagPicker.cpp
+	ZDLConfiguration.cpp
+	ZDLFilePane.cpp
+	ZDLIWadList.cpp
+	ZDLConfigurationEvents.cpp
+	ZDLDMFlagCheckbox.cpp
+	ZDLAboutDialog.cpp
+	ZDLFileListable.cpp
+	ZDLQSplitter.cpp
+	ZDLListable.cpp
+	ZDLImportDialog.cpp
+	zdlline.cpp
+	ZDLWidget.cpp
+	zdlvariables.cpp
+	ZDLMainWindow.cpp
+	ZDLDMFlagManager.cpp
+	${ZDL_MOC_OUTFILES}
+)
+
+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(zdl Qt4::QtGui)

@@ -9,3 +9,5 @@ zdl.log
 qrc_qzdl.cpp
 autom4te.cache/
 qzdl
+build
+compile_commands.json
