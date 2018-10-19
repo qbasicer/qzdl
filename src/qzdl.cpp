@@ -94,7 +94,7 @@ int main( int argc, char **argv ){
 #else
 	zdlDebug = new QDebug(&nullDev);
 #endif
-	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
+	LOGDATA() << "ZDL" << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 #if defined(Q_WS_WIN)
 	qt_ntfs_permission_lookup = 0;
@@ -274,7 +274,7 @@ int main( int argc, char **argv ){
 	QDir::setCurrent(qscwd);
 	delete mw;
 	// Set version information
-	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
+	tconf->setValue("zdl.general", "engine", "ZDL");
 	tconf->setValue("zdl.general", "version", versionString);
 
 	bool doSave = true;

@@ -102,7 +102,7 @@ void ZDLInterface::exitzdl(){
 void ZDLInterface::importCurrentConfig(){
 	LOGDATAO() << "Asking if they'd really like to import" << endl;
 	QString text("Are you sure you'd like to <b>replace</b> the current <b>global</b> configurationw with the one currently loaded?");
-	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, "ZDL", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 	if(btnrc != QMessageBox::Yes){
 		LOGDATAO() << "They said no, bailing" << endl;
 		return;
@@ -118,7 +118,7 @@ void ZDLInterface::importCurrentConfig(){
 			LOGDATAO() << "Nor does it's path" << endl;
 			if(!dir.mkpath(dir.absolutePath())){
 				LOGDATAO() << "Couldn't create the path, bailing" << endl;
-				QMessageBox::critical(this, ZDL_ENGINE_NAME, QString("Unable to create the directories for a global user configuration at ")+dir.absolutePath());
+				QMessageBox::critical(this, "ZDL", QString("Unable to create the directories for a global user configuration at ")+dir.absolutePath());
 				return;
 			}
 		}
@@ -127,7 +127,7 @@ void ZDLInterface::importCurrentConfig(){
 	mw->writeConfig();
 	if(zconf->writeINI(userConfPath) != 0){
 		LOGDATAO() << "Couldn't write to configuration file " << userConfPath << endl;
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, QString("Unable to write the configuration file at ")+userConfPath);
+		QMessageBox::critical(this, "ZDL", QString("Unable to write the configuration file at ")+userConfPath);
 		return;
 	}
 	ZDLConfigurationManager::setConfigFileName(userConfPath);
@@ -239,7 +239,7 @@ void ZDLInterface::clearAllPWads(){
 void ZDLInterface::clearEverything(){
 	LOGDATAO() << "Clearing everything question" << endl;
 	QString text("Warning!\n\nIf you proceed, you will lose <b>EVERYTHING</b>!\n All IWAD, PWAD, and source port settings will be wiped.\n\nWould you like to continue?");
-	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, ZDL_ENGINE_NAME, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, "ZDL", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 	if(btnrc != QMessageBox::Yes){
 		return;
 	}
@@ -469,7 +469,7 @@ void ZDLInterface::showCommandline(){
 
 	QString exec = mw->getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
+		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
 	QStringList args = mw->getArguments();

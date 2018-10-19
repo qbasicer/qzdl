@@ -21,7 +21,7 @@
 
 ZDMFlagPicker::ZDMFlagPicker(ZDLWidget *parent):QDialog(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
-	QString engineName = ZDL_ENGINE_NAME;
+	QString engineName = "ZDL";
 	setWindowTitle(engineName+" DMFlag Editor");
 	QTreeView * view = new QTreeView(this);
 	

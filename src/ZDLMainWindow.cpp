@@ -48,7 +48,7 @@ ZDLMainWindow::~ZDLMainWindow(){
 }
 
 QString ZDLMainWindow::getWindowTitle(){
-	QString windowTitle = ZDL_ENGINE_NAME;
+	QString windowTitle = "ZDL";
 	windowTitle += " " ZDL_VERSION_STRING " - ";
 	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 	if(conf){
@@ -252,7 +252,7 @@ void ZDLMainWindow::launch(){
 
 	QString exec = getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
+		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
 	QStringList args = getArguments();
@@ -388,11 +388,11 @@ QStringList ZDLMainWindow::getArguments(){
 		if (rc.length() > 0){
 			iwadName = rc;
 		}else{
-			QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
+			QMessageBox::critical(this, "ZDL", "Please select an IWAD");
 			return ourString;
 		}
 	}else{
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
+		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
 		return ourString;
 	}
 

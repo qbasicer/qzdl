@@ -21,7 +21,7 @@
 #include <QDialogButtonBox>
 
 ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QDialog(parent){
-	setWindowTitle(ZDL_ENGINE_NAME " Advanced Multiplayer Settings");
+	setWindowTitle("ZDL Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QGridLayout *form = new QGridLayout();
 	//form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
@@ -62,7 +62,7 @@ ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QD
 	form->addWidget(new QLabel("Enable:",this),4,0);
 	form->addWidget(enable,4,1);
 	
-	QLabel *top = new QLabel(ZDL_ENGINE_NAME,this);
+	QLabel *top = new QLabel("ZDL",this);
 	QFont font;
 	font.setPointSize(32);
 	top->setFont(font);

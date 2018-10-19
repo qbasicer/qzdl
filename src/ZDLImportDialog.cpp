@@ -6,7 +6,7 @@ ZDLImportDialog::ZDLImportDialog(QWidget *parent):QDialog(parent){
 	this->setLayout(layout);
 	setWindowTitle("Configuration Import");
 
-	QString preamble = ZDL_ENGINE_NAME;
+	QString preamble = "ZDL";
 	preamble += " has detected you have no user-level configuration!";
 	preamble += "We encourage you to use the user-level configuration so";
 	preamble += "that no matter where you are on your system, you will be";

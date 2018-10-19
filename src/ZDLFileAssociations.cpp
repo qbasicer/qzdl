@@ -52,7 +52,7 @@ ZDLButtonGroup *patchGrp;
 
 ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):QDialog(parent){
 	LOGDATAO() << "New ZDLFileAssociations" << endl;
-	setWindowTitle(ZDL_ENGINE_NAME " File Associations");
+	setWindowTitle("ZDL File Associations");
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	zdlGrp = new ZDLButtonGroup("ZDL Saved configs (*.zdl)", this);
@@ -116,7 +116,7 @@ void ZDLFileAssociations::applyChecks(){
 		RegisterFileTypeQt(".bex","ZDL.PatchFile","DeHackEd Patch",exec,"\"%1\"",3);
 	}
 #else
-	QMessageBox::information(this, ZDL_ENGINE_NAME, "Turns out there's no support for file associations on your platform, sorry");
+	QMessageBox::information(this, "ZDL", "Turns out there's no support for file associations on your platform, sorry");
 #endif
 	accept();
 }

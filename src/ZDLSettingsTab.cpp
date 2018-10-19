@@ -62,7 +62,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
 	
 	launchClose = new QCheckBox("Close on launch",this);
-	launchClose->setToolTip("Close "ZDL_ENGINE_NAME" completely when launching a new game");
+	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
 	showPaths = new QCheckBox("Show files paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
@@ -76,7 +76,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	QPushButton *assoc = new QPushButton("Associations", this);
-	assoc->setToolTip("Associate various file types with "ZDL_ENGINE_NAME);
+	assoc->setToolTip("Associate various file types with ZDL");
 	fileassoc->addWidget(assoc);
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif

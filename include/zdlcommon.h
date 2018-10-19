@@ -39,7 +39,6 @@ using namespace std;
 #endif
 
 #define ZDL_UDPATE_SERVER	"update.vectec.net"
-#define ZDL_ENGINE_NAME		"ZDL"
 #define ZDL_UID				"XXXX-XXXX-XXXX-XXXX"
 
 extern QDebug *zdlDebug;

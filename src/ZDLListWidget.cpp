@@ -153,7 +153,7 @@ void ZDLListWidget::remove(int index){
 	if (item){
 		delete item;
 	}else{
-		QMessageBox::warning(this, ZDL_ENGINE_NAME " Error", "You didn't make a selection.");
+		QMessageBox::warning(this, "ZDL Error", "You didn't make a selection.");
 	}
 }
 ZDLListable* ZDLListWidget::get(int index){
