@@ -25,14 +25,6 @@ ZDLMapFile *ZDLMapFile::getMapFile(QString file){
 		LOGDATA() << "IWAD file" << endl;
 		DoomWad *wad = new DoomWad(file);
 		return wad;
-#if defined(QUAZIP)
-	}else if(bytes[0] == 'P' && bytes[1] == 'K' && bytes[2] == (char)0x03 && bytes[3] == (char)0x04){
-		LOGDATA() << "ZIP file" << endl;
-#endif
-#if defined(SEVENZIP)
-	}else if(bytes[0] == '7' && bytes[1] == 'z' && bytes[2] == (char)0xBC && bytes[3] == (char)0xAF){
-		LOGDATA() << "7z file";
-#endif
 	}
 	LOGDATA() << "Unsupported format" << endl;
 	LOGDATA() << bytes.toHex() << endl;

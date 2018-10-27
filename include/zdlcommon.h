@@ -96,6 +96,5 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
 #include "zdlconf.hpp"
-#include "zdlvariables.hpp"
 
 #endif

@@ -65,7 +65,6 @@ add_executable(
 	ZDLImportDialog.cpp
 	zdlline.cpp
 	ZDLWidget.cpp
-	zdlvariables.cpp
 	ZDLMainWindow.cpp
 	ZDLDMFlagManager.cpp
 	${ZDL_MOC_OUTFILES}
