@@ -11,3 +11,4 @@ autom4te.cache/
 qzdl
 build
 compile_commands.json
+CMakeLists.txt.user
