@@ -24,10 +24,6 @@
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
 
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
-#include "ZDLFileAssociations.h"
-#endif
-
 ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLSettingsTab" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
@@ -74,13 +70,6 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
 	
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
-	QPushButton *assoc = new QPushButton("Associations", this);
-	assoc->setToolTip("Associate various file types with ZDL");
-	fileassoc->addWidget(assoc);
-	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
-#endif
-	
 	savePaths = new QCheckBox("Save/Load PWAD list automatically", this);
 	savePaths->setToolTip("Save the zdl.save section (PWADS) when closing");
 
@@ -101,13 +90,6 @@ void ZDLSettingsTab::pathToggled(bool enabled){
 	}
 	iwadList->rebuild();
 	sourceList->rebuild();
-}
-
-void ZDLSettingsTab::fileAssociations(){
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
-	ZDLFileAssociations assoc(this);
-	assoc.exec();
-#endif
 }
 
 void ZDLSettingsTab::rebuild(){

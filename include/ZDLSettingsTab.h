@@ -31,7 +31,6 @@ public:
 	void startRead();
 	void writeConfig();
 protected slots:
-	void fileAssociations();
 	void reloadConfig();
 	void pathToggled(bool enabled);
 private:

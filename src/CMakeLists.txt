@@ -20,7 +20,6 @@ qt_wrap_cpp(
 	${PROJECT_SOURCE_DIR}/include/ZDLMultiPane.h
 	${PROJECT_SOURCE_DIR}/include/ZDLListWidget.h
 	${PROJECT_SOURCE_DIR}/include/ZDLSourcePortList.h
-	${PROJECT_SOURCE_DIR}/include/ZDLFileAssociations.h
 	${PROJECT_SOURCE_DIR}/include/ZDMFlagPicker.h
 	${PROJECT_SOURCE_DIR}/include/ZDLSettingsTab.h
 	${PROJECT_SOURCE_DIR}/include/ZDLNameInput.h
@@ -43,7 +42,6 @@ add_executable(
 	ZDLAdvancedMultiplayerDialog.cpp
 	ZDLSettingsPane.cpp
 	libwad.cpp
-	ZDLFileAssociations.cpp
 	ZDLSourcePortList.cpp
 	ZDLFileList.cpp
 	ZDLInterface.cpp
