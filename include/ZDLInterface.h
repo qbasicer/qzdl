@@ -50,7 +50,6 @@ private slots:
 	void clearAllFields();
 	void clearAllPWads();
 	void clearEverything();
-	void importCurrentConfig();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();

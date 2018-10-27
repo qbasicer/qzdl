@@ -35,7 +35,6 @@ public:
 	void writeConfig();
 	QStringList getArguments();
 	QString getExecutable();
-	void handleImport();
 	QString getWindowTitle();
 public slots:
 	void launch();

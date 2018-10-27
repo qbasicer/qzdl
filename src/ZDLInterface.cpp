@@ -99,42 +99,6 @@ void ZDLInterface::exitzdl(){
 	mw->close();
 }
 
-void ZDLInterface::importCurrentConfig(){
-	LOGDATAO() << "Asking if they'd really like to import" << endl;
-	QString text("Are you sure you'd like to <b>replace</b> the current <b>global</b> configurationw with the one currently loaded?");
-	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, "ZDL", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-	if(btnrc != QMessageBox::Yes){
-		LOGDATAO() << "They said no, bailing" << endl;
-		return;
-	}
-	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
-	QFileInfo userConf(userConfPath);
-	if(!userConf.exists()){
-		LOGDATAO() << "File " << userConfPath << " doesn't exist" << endl;
-		QDir dir = userConf.dir();
-		if(!dir.exists()){
-			LOGDATAO() << "Nor does it's path" << endl;
-			if(!dir.mkpath(dir.absolutePath())){
-				LOGDATAO() << "Couldn't create the path, bailing" << endl;
-				QMessageBox::critical(this, "ZDL", QString("Unable to create the directories for a global user configuration at ")+dir.absolutePath());
-				return;
-			}
-		}
-	}
-	LOGDATAO() << "Triggering write" << endl;
-	mw->writeConfig();
-	if(zconf->writeINI(userConfPath) != 0){
-		LOGDATAO() << "Couldn't write to configuration file " << userConfPath << endl;
-		QMessageBox::critical(this, "ZDL", QString("Unable to write the configuration file at ")+userConfPath);
-		return;
-	}
-	ZDLConfigurationManager::setConfigFileName(userConfPath);
-	LOGDATAO() << "Triggering read" << endl;
-	mw->startRead();
-}
-
 QLayout *ZDLInterface::getButtonPane(){
 	QHBoxLayout *box = new QHBoxLayout();
 
@@ -153,9 +117,6 @@ QLayout *ZDLInterface::getButtonPane(){
 	clearAllFieldsAction->setShortcut(QKeySequence::New);
 	QAction *clearEverythingAction = actions->addAction("Clear everything");
 	actions->addSeparator();
-#if !defined(NO_IMPORT)
-	QAction *actImportCurrentConfig = actions->addAction("Import current config");
-#endif
 	QAction *clearCurrentGlobalConfig = actions->addAction("Clear current global config");
 	clearCurrentGlobalConfig->setEnabled(false);	
 
@@ -179,9 +140,6 @@ QLayout *ZDLInterface::getButtonPane(){
 	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
 	connect(saveZdlFileAction, SIGNAL(triggered()), this, SLOT(saveZdlFile()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
-#if !defined(NO_IMPORT)
-	connect(actImportCurrentConfig, SIGNAL(triggered()), this, SLOT(importCurrentConfig()));
-#endif
 
 	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
 	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));

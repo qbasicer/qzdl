@@ -240,7 +240,6 @@ int main( int argc, char **argv ){
 		}
 	}
 
-	mw->handleImport();
 	LOGDATA() << "-----------------------------------" << endl;
 	int ret = a.exec();
 	LOGDATA() << "-----------------------------------" << endl;

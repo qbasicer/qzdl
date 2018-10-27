@@ -25,7 +25,6 @@
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
-#include "ZDLImportDialog.hpp"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -137,95 +136,6 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 
 	connect(widget, SIGNAL(currentChanged(int)), this, SLOT(tabChange(int)));
 	LOGDATAO() << "Main window created." << endl;
-}
-
-void ZDLMainWindow::handleImport(){
-#if !defined(NO_IMPORT)
-	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
-	if(conf){
-		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
-		QString currentConf = ZDLConfigurationManager::getConfigFileName();
-		if(userConfPath != currentConf){
-			LOGDATAO() << "Not currently using user conf" << endl;
-			ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-			if(zconf->hasValue("zdl.general", "donotimportthis")){
-				int ok = 0;
-				if(zconf->getValue("zdl.general", "donotimportthis", &ok) == "1"){
-					LOGDATAO() << "Don't import current config" << endl;
-					return;
-				}
-			}
-			QFile userFile(userConfPath);
-			ZDLConf userconf;
-			if(userFile.exists()){
-				LOGDATAO() << "Reading user conf" << endl;
-				userconf.readINI(userConfPath);
-			}
-			if(userconf.hasValue("zdl.general", "nouserconf")){
-				int ok = 0;
-				if(userconf.getValue("zdl.general", "nouserconf", &ok) == "1"){
-					LOGDATAO() << "Do not use user conf" << endl;
-					return;
-				}
-			}
-			if(ZDLConfigurationManager::getWhy() == ZDLConfigurationManager::USER_SPECIFIED){
-				LOGDATA() << "The user asked for this ini, don't go forward" << endl;
-				return;
-			}
-			if(userFile.size() < 10){
-				LOGDATA() << "User conf is small, assuming empty" << endl;
-				ZDLImportDialog importd(this);
-				importd.exec();
-				if(importd.result() == QDialog::Accepted){
-					switch(importd.getImportAction()){
-						case ZDLImportDialog::IMPORTNOW:
-							LOGDATAO() << "Importing now" << endl;
-							if(!userFile.exists()){
-								QStringList path = userConfPath.split("/");
-								path.removeLast();
-								QDir dir;
-								if(!dir.mkpath(path.join("/"))){
-									break;
-								}
-							}
-
-							zconf->setValue("zdl.general", "importedfrom", currentConf);
-							zconf->setValue("zdl.general", "isimported", "1");
-							zconf->setValue("zdl.general", "importdate", QDateTime::currentDateTime().toString(Qt::ISODate));
-
-							zconf->writeINI(userConfPath);
-							ZDLConfigurationManager::setConfigFileName(userConfPath);
-							break;
-						case ZDLImportDialog::DONOTIMPORTTHIS:
-							LOGDATAO() << "Tagging this config as not importable" << endl;
-							zconf->setValue("zdl.general", "donotimportthis", "1");
-							break;
-						case ZDLImportDialog::NEVERIMPORT:
-							LOGDATAO() << "Setting NEVERi IMPORT" << endl;
-							userconf.setValue("zdl.general", "nouserconf", "1");
-							if(!userFile.exists()){
-								QStringList path = userConfPath.split("/");
-								path.removeLast();
-								QDir dir;
-								if(!dir.mkpath(path.join("/"))){
-									break;
-								}
-
-							}	
-							userconf.writeINI(userConfPath);
-							break;
-						case ZDLImportDialog::ASKLATER:
-
-						case ZDLImportDialog::UNKNOWN:
-						default:
-							LOGDATAO() << "Not setting anything" << endl;
-							break;
-					}
-				}
-			}
-		}
-	}
-#endif
 }
 
 void ZDLMainWindow::tabChange(int newTab){

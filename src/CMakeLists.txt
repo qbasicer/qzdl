@@ -6,7 +6,6 @@ qt_wrap_cpp(
 	${PROJECT_SOURCE_DIR}/include/ZDLConfigurationEvents.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
 	${PROJECT_SOURCE_DIR}/include/ZDLMainWindow.h
-	${PROJECT_SOURCE_DIR}/include/ZDLImportDialog.hpp
 	${PROJECT_SOURCE_DIR}/include/ZDLListable.h
 	${PROJECT_SOURCE_DIR}/include/ZDLQSplitter.h
 	${PROJECT_SOURCE_DIR}/include/ZDLFileListable.h
@@ -58,7 +57,6 @@ add_executable(
 	ZDLFileListable.cpp
 	ZDLQSplitter.cpp
 	ZDLListable.cpp
-	ZDLImportDialog.cpp
 	zdlline.cpp
 	ZDLWidget.cpp
 	ZDLMainWindow.cpp
