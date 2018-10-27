@@ -1,29 +1,29 @@
 qt_wrap_cpp(
 	zdl
 	ZDL_MOC_OUTFILES
-	${PROJECT_SOURCE_DIR}/include/ZDLInfoBar.h
-	${PROJECT_SOURCE_DIR}/include/ZDLWidget.h
-	${PROJECT_SOURCE_DIR}/include/ZDLConfigurationEvents.h
-	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
-	${PROJECT_SOURCE_DIR}/include/ZDLMainWindow.h
-	${PROJECT_SOURCE_DIR}/include/ZDLListable.h
-	${PROJECT_SOURCE_DIR}/include/ZDLQSplitter.h
-	${PROJECT_SOURCE_DIR}/include/ZDLFileListable.h
-	${PROJECT_SOURCE_DIR}/include/ZDLNameListable.h
 	${PROJECT_SOURCE_DIR}/include/ZDLAboutDialog.h
-	${PROJECT_SOURCE_DIR}/include/ZDLInterface.h
-	${PROJECT_SOURCE_DIR}/include/ZDLFilePane.h
+	${PROJECT_SOURCE_DIR}/include/ZDLAdvancedMultiplayerDialog.h
+	${PROJECT_SOURCE_DIR}/include/ZDLConfigurationEvents.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagCheckbox.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
+	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
+	${PROJECT_SOURCE_DIR}/include/ZDLFileListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLFilePane.h
 	${PROJECT_SOURCE_DIR}/include/ZDLIWadList.h
-	${PROJECT_SOURCE_DIR}/include/ZDLMultiPane.h
+	${PROJECT_SOURCE_DIR}/include/ZDLInfoBar.h
+	${PROJECT_SOURCE_DIR}/include/ZDLInterface.h
 	${PROJECT_SOURCE_DIR}/include/ZDLListWidget.h
-	${PROJECT_SOURCE_DIR}/include/ZDLSourcePortList.h
-	${PROJECT_SOURCE_DIR}/include/ZDMFlagPicker.h
-	${PROJECT_SOURCE_DIR}/include/ZDLSettingsTab.h
+	${PROJECT_SOURCE_DIR}/include/ZDLListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLMainWindow.h
+	${PROJECT_SOURCE_DIR}/include/ZDLMultiPane.h
 	${PROJECT_SOURCE_DIR}/include/ZDLNameInput.h
-	${PROJECT_SOURCE_DIR}/include/ZDLAdvancedMultiplayerDialog.h
+	${PROJECT_SOURCE_DIR}/include/ZDLNameListable.h
+	${PROJECT_SOURCE_DIR}/include/ZDLQSplitter.h
 	${PROJECT_SOURCE_DIR}/include/ZDLSettingsPane.h
+	${PROJECT_SOURCE_DIR}/include/ZDLSettingsTab.h
+	${PROJECT_SOURCE_DIR}/include/ZDLSourcePortList.h
+	${PROJECT_SOURCE_DIR}/include/ZDLWidget.h
+	${PROJECT_SOURCE_DIR}/include/ZDMFlagPicker.h
 )
 
 add_executable(
