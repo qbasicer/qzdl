@@ -28,39 +28,38 @@ qt_wrap_cpp(
 
 add_executable(
 	zdl
-	ZDLInfoBar.cpp
-	qzdl.cpp
-	ZDLConfigurationManager.cpp
-	ZDLMapFile.cpp
-	ZDLListWidget.cpp
-	ZDLSettingsTab.cpp
-	extras.cpp
-	zdlconf.cpp
-	ZDLNameInput.cpp
-	zdlsection.cpp
+	ZDLAboutDialog.cpp
 	ZDLAdvancedMultiplayerDialog.cpp
-	ZDLSettingsPane.cpp
-	libwad.cpp
-	ZDLSourcePortList.cpp
-	ZDLFileList.cpp
-	ZDLInterface.cpp
-	ZDLMultiPane.cpp
-	ZDLNameListable.cpp
-	ZDLListEntry.cpp
-	ZDMFlagPicker.cpp
 	ZDLConfiguration.cpp
+	ZDLConfigurationEvents.cpp
+	ZDLConfigurationManager.cpp
+	ZDLDMFlagCheckbox.cpp
+	ZDLDMFlagManager.cpp
+	ZDLFileList.cpp
+	ZDLFileListable.cpp
 	ZDLFilePane.cpp
 	ZDLIWadList.cpp
-	ZDLConfigurationEvents.cpp
-	ZDLDMFlagCheckbox.cpp
-	ZDLAboutDialog.cpp
-	ZDLFileListable.cpp
-	ZDLQSplitter.cpp
+	ZDLInfoBar.cpp
+	ZDLInterface.cpp
+	ZDLListWidget.cpp
 	ZDLListable.cpp
-	zdlline.cpp
-	ZDLWidget.cpp
 	ZDLMainWindow.cpp
-	ZDLDMFlagManager.cpp
+	ZDLMapFile.cpp
+	ZDLMultiPane.cpp
+	ZDLNameInput.cpp
+	ZDLNameListable.cpp
+	ZDLQSplitter.cpp
+	ZDLSettingsPane.cpp
+	ZDLSettingsTab.cpp
+	ZDLSourcePortList.cpp
+	ZDLWidget.cpp
+	ZDMFlagPicker.cpp
+	extras.cpp
+	libwad.cpp
+	qzdl.cpp
+	zdlconf.cpp
+	zdlline.cpp
+	zdlsection.cpp
 	${ZDL_MOC_OUTFILES}
 )
 
