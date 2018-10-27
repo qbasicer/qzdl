@@ -74,26 +74,7 @@ int main( int argc, char **argv ){
 	}
 	QStringList eatenArgs(args);
 	ZDLNullDevice nullDev;
-#if defined(ZDL_BLACKBOX)
-	QFile *loggingFile = NULL;
-	zdlDebug = NULL;
-	int logger = eatenArgs.indexOf("--enable-logger");
-	
-	if(logger >= 0){
-		eatenArgs.removeAt(logger);
-		loggingFile = new QFile("zdl.log");
-		if(loggingFile->exists()){
-			loggingFile->remove();
-		}
-		loggingFile->open(QIODevice::ReadWrite);
-		zdlDebug = new QDebug(loggingFile);
-		qDebug() << "Logger is enabled";
-	}else{
-		zdlDebug = new QDebug(&nullDev);
-	}
-#else
 	zdlDebug = new QDebug(&nullDev);
-#endif
 	LOGDATA() << "ZDL" << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 #if defined(Q_WS_WIN)
