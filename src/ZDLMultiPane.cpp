@@ -22,10 +22,6 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
 
-#ifdef _DMFLAG_PICKER_
-#include "ZDMFlagDialog.h"
-#endif
-
 
 ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
@@ -51,15 +47,9 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	
 	tFragLimit = new QLineEdit(this);
 	
-	//Per issue #26, remove DMFlag picker
-#ifdef _DMFLAG_PICKER_
-	bDMFlags = new QPushButton("0",this);
-	bDMFlags2 = new QPushButton("0",this);
-#else
 	bDMFlags = new QLineEdit("0", this);
 	bDMFlags2 = new QLineEdit("0", this);
-#endif
-	
+
 	QGridLayout *topGrid = new QGridLayout();
 	topGrid->addWidget(new QLabel("Game Mode",this),0,0,1,2);
 	topGrid->addWidget(gMode,1,0,1,2);
@@ -78,11 +68,6 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	topGrid->setSpacing(0);
 
 	layout()->setContentsMargins(0,0,0,0);
-
-#ifdef _DMFLAG_PICKER_
-	connect(bDMFlags, SIGNAL(clicked()), this, SLOT(dmflags()));
-	connect(bDMFlags2, SIGNAL(clicked()), this, SLOT(dmflags2()));
-#endif
 }
 
 void ZDLMultiPane::newConfig(){
@@ -191,34 +176,4 @@ void ZDLMultiPane::rebuild(){
 	zconf->setValue("zdl.save", "gametype", gMode->currentIndex());
 	zconf->setValue("zdl.save", "players", gPlayers->currentIndex());
 }
-
-
-void ZDLMultiPane::dmflags(){
-	//Per issue #26, remove DMFlag picker
-#if 0
-	ZDMFlagDialog dialog(this);
-	bool ok;
-	dialog.setValue(bDMFlags->text().toInt(&ok, 10));
-	dialog.setValue2(bDMFlags2->text().toInt(&ok, 10));
-	int ret = dialog.exec();
-	if (ret == 1){
-		bDMFlags->setText(QString::number(dialog.value()));
-		bDMFlags2->setText(QString::number(dialog.value2()));
-	}
-#endif
-}
-
-void ZDLMultiPane::dmflags2(){
-	dmflags();
-}
-
-
-
-
-
-
-
-
-
-
 

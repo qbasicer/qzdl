@@ -21,7 +21,6 @@ qt_wrap_cpp(
 	${PROJECT_SOURCE_DIR}/include/ZDLListWidget.h
 	${PROJECT_SOURCE_DIR}/include/ZDLSourcePortList.h
 	${PROJECT_SOURCE_DIR}/include/ZDLFileAssociations.h
-	${PROJECT_SOURCE_DIR}/include/ZDMFlagDialog.h
 	${PROJECT_SOURCE_DIR}/include/ZDMFlagPicker.h
 	${PROJECT_SOURCE_DIR}/include/ZDLSettingsTab.h
 	${PROJECT_SOURCE_DIR}/include/ZDLNameInput.h
@@ -47,7 +46,6 @@ add_executable(
 	ZDLFileAssociations.cpp
 	ZDLSourcePortList.cpp
 	ZDLFileList.cpp
-	ZDMFlagDialog.cpp
 	ZDLInterface.cpp
 	ZDLMultiPane.cpp
 	ZDLNameListable.cpp

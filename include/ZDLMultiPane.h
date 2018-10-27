@@ -34,18 +34,8 @@ private:
 	QLineEdit *tHostAddy;
 	QComboBox *gPlayers;
 	QLineEdit *tFragLimit;
-	// Per issue #26
-#ifdef _DMFLAG_PICKER_
-	QPushButton *bDMFlags;
-	QPushButton *bDMFlags2;
-#else
 	QLineEdit *bDMFlags;
 	QLineEdit *bDMFlags2;
-#endif
-
-protected slots:
-	void dmflags();
-	void dmflags2();
 };
 
 #endif
