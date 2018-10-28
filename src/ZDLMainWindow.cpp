@@ -26,10 +26,6 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLInfoBar.h"
 
-#ifdef Q_WS_WIN
-#include <windows.h>
-#endif
-
 extern QApplication *qapp;
 extern QString versionString;
 
@@ -188,62 +184,6 @@ void ZDLMainWindow::launch(){
 	workingDirectory = cwd.absolutePath();
 	LOGDATAO() << "Working directory: " << workingDirectory << endl;
 	// Turns on launch confirmation
-	/*QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	  if(btnrc == QMessageBox::No){
-	  ZDLConfigurationManager::setInfobarMessage("Launch aborted.",1);
-	  return;
-	  }*/
-#ifdef Q_WS_WIN
-	/* The first argument to CreateProcess must not be quoted */
-	/* TODO: Rewrite this code! */
-	QString unquotedExec = exec;
-	int doquotes = 1;
-	if(zconf->hasValue("zdl.general","quotefiles")){
-		int ok;
-		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			doquotes = 0;
-		}
-	}
-	//If quotefiles is enabled, and the executable contains a space, quote it
-	if(doquotes && exec.contains(" ")){
-		QString newExec = QString("\"").append(exec).append("\"");
-		exec = newExec;
-	}
-
-	QString compose = exec + QString(" ") + args.join(" ");
-	LOGDATAO() << "Launching: " << compose << endl;
-	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
-	wcscpy(cmd,compose.toStdWString().c_str());
-	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
-
-	wchar_t* execu = (wchar_t*)malloc((unquotedExec.length()+1)*sizeof(wchar_t)*4);
-	wchar_t* work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
-	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
-	wcscpy(execu, unquotedExec.toStdWString().c_str());
-	wcscpy(work, workingDirectory.toStdWString().c_str());
-	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
-	STARTUPINFOW siStartupInfo; 
-	PROCESS_INFORMATION piProcessInfo; 
-	memset(&siStartupInfo, 0, sizeof(siStartupInfo)); 
-	memset(&piProcessInfo, 0, sizeof(piProcessInfo)); 
-	siStartupInfo.cb = sizeof(siStartupInfo); 
-
-	if(execu == NULL || cmd == NULL || work == NULL){
-		ZDLConfigurationManager::setInfobarMessage("Internal error preparing to launch",1);
-		return;
-	}
-
-	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, &siStartupInfo, &piProcessInfo);
-	free(cmd);
-	free(execu);
-	free(work);
-	if(rc == FALSE){
-		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
-		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
-	}
-#else
 	QProcess *proc = new QProcess(this);
 
 	//Set the working directory to that directory
@@ -252,7 +192,6 @@ void ZDLMainWindow::launch(){
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 	proc->start(exec, args);
 	procerr = proc->error();
-#endif
 	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
 		QString append = zconf->getValue("zdl.general", "autoclose",&stat);
@@ -261,13 +200,6 @@ void ZDLMainWindow::launch(){
 			close();
 		}
 	}
-
-	// 	if(proc->state() != QProcess::NotRunning){
-	// 		std::cout << "ERROR!" << std::endl;
-	// 		ZDLConfigurationManager::setInfobarMessage("The process ended abnormally.",1);
-	// 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-	// 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
-	// 	}
 }
 
 void ZDLMainWindow::badLaunch(){

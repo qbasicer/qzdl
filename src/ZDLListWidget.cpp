@@ -122,11 +122,6 @@ void ZDLListWidget::dropEvent(QDropEvent *event){
 			LOGDATAO() << "url " << i << "=" << url.toString() << endl;
 			if(url.scheme() == "file"){
 				QString path = url.path();
-#ifdef Q_WS_WIN
-				if(path[2] == ':'){
-					path.remove(0,1);
-				}
-#endif
 				QFileInfo urlDecoder(path);
 				LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
 				files <<  urlDecoder.absoluteFilePath();

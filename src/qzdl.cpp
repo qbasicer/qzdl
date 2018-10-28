@@ -63,10 +63,6 @@ static void addFile(QString file, ZDLConf* zconf){
 
 QDebug *zdlDebug;
 
-#if defined(Q_WS_WIN)
-__declspec(dllimport) int qt_ntfs_permission_lookup;
-#endif
-
 int main( int argc, char **argv ){
 	QStringList args;
 	for(int i = 1; i < argc; i++){
@@ -77,22 +73,11 @@ int main( int argc, char **argv ){
 	zdlDebug = new QDebug(&nullDev);
 	LOGDATA() << "ZDL" << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
-#if defined(Q_WS_WIN)
-	qt_ntfs_permission_lookup = 0;
-#endif
-
-#if defined(Q_WS_MAC)
-	QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
-#endif
-
 	QApplication a( argc, argv );
 	qapp = &a;
 	ZDLConfigurationManager::setArgv(args);
 	{
 		QString execuatble(argv[0]);
-#if defined(Q_WS_WIN)
-		execuatble.replace("\\", "/");
-#endif
 		QFileInfo fullPath(execuatble);
 		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
 		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
@@ -116,9 +101,6 @@ int main( int argc, char **argv ){
 	if(ZDL_BUILD_NUMBER > 0){
 		LOGDATA() << "Build #: " << QString::number(ZDL_BUILD_NUMBER) << endl;
 	}
-#endif
-#if defined(ZDL_BUILD_JOB)
-	LOGDATA() << "Build job: " << ZDL_BUILD_JOB << endl;
 #endif
 
 	QDir cwd = QDir::current();
