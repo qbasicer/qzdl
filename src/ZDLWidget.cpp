@@ -31,10 +31,10 @@ ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
 
 void ZDLWidget::setZParent(ZDLWidget *parent){
 	zparent = parent;
-	connect(parent, SIGNAL( buildChildren(ZDLWidget*) ), this, SLOT(notifyFromParent(ZDLWidget*)));
-	connect(this, SIGNAL(buildParent(ZDLWidget*)), parent, SLOT(notifyFromChild(ZDLWidget*)));
-	connect(parent, SIGNAL( readChildren(ZDLWidget*) ), this, SLOT(readFromParent(ZDLWidget*)));
-	connect(this, SIGNAL(readParent(ZDLWidget*)), parent, SLOT(readFromChild(ZDLWidget*)));
+	connect(parent, &ZDLWidget::buildChildren, this, &ZDLWidget::notifyFromParent);
+	connect(this, &ZDLWidget::buildParent, parent, &ZDLWidget::notifyFromChild);
+	connect(parent, &ZDLWidget::readChildren, this, &ZDLWidget::readFromParent);
+	connect(this, &ZDLWidget::readParent, parent, &ZDLWidget::readFromChild);
 }
 
 ZDLWidget::ZDLWidget(){

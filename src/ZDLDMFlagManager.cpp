@@ -22,7 +22,7 @@ ZDLDMFlagManager::ZDLDMFlagManager(QWidget *parent) :QObject(parent){
 }
 
 void ZDLDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
-	connect(box,SIGNAL(stateChanged(int)),this,SLOT(stateChanged(int)));
+	connect(box, &ZDLDMFlagCheckbox::stateChanged, this, &ZDLDMFlagManager::stateChanged);
 	checks.append(box);
 }
 

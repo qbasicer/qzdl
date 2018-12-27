@@ -203,7 +203,7 @@ int main( int argc, char **argv ){
 
 	mw = new ZDLMainWindow();
 	mw->show();
-	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+	QObject::connect(&a, &QApplication::lastWindowClosed, &a, &QApplication::quit);
 	mw->startRead();
 
 	if(hasZDLFile){

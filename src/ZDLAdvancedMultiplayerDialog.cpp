@@ -48,8 +48,8 @@ ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QD
 	dupmode->addItem("8");
 	dupmode->addItem("9");
 	
-	connect(btnBox, SIGNAL(accepted()), this, SLOT(save()));
-	connect(btnBox, SIGNAL(rejected()), this, SLOT(close()));
+	connect(btnBox, &QDialogButtonBox::accepted, this, &ZDLAdvancedMultiplayerDialog::save);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &ZDLAdvancedMultiplayerDialog::close);
 	
 	form->addWidget(new QLabel("Extratic:",this),0,0);
 	form->addWidget(extratic,0,1);

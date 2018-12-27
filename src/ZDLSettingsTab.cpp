@@ -62,7 +62,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 
 	showPaths = new QCheckBox("Show files paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
-	connect(showPaths,SIGNAL(toggled(bool)),this,SLOT(pathToggled(bool)));
+	connect(showPaths, &QCheckBox::toggled, this, &ZDLSettingsTab::pathToggled);
 	sections->addWidget(alwaysArgs);
 
 	QHBoxLayout *fileassoc = new QHBoxLayout();

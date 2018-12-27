@@ -71,9 +71,9 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 	
 	lays->addLayout(buttons);
 	
-	connect(btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
-	connect(btnOK, SIGNAL(clicked()), this, SLOT(accept()));
-	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+	connect(btnBrowse, &QPushButton::clicked, this, &ZDLNameInput::browse);
+	connect(btnOK, &QPushButton::clicked, this, &ZDLNameInput::accept);
+	connect(btnCancel, &QPushButton::clicked, this, &ZDLNameInput::reject);
 }
 
 void ZDLNameInput::browse(){

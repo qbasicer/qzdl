@@ -105,7 +105,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok,Qt::Horizontal,this);
 	box->addWidget(btnBox);
-	connect(btnBox, SIGNAL(accepted()), this, SLOT(close()));
+	connect(btnBox, &QDialogButtonBox::accepted, this, &ZDLAboutDialog::close);
 }
 
 void ZDLAboutDialog::close(){

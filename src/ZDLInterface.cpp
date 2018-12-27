@@ -135,19 +135,18 @@ QLayout *ZDLInterface::getButtonPane(){
 	QAction *aboutAction = context->addAction("About");
 	aboutAction->setShortcut(QKeySequence::HelpContents);
 
-	connect(loadAction, SIGNAL(triggered()), this, SLOT(loadConfigFile()));
-	connect(saveAction, SIGNAL(triggered()), this, SLOT(saveConfigFile()));
-	connect(loadZdlFileAction, SIGNAL(triggered()), this, SLOT(loadZdlFile()));
-	connect(saveZdlFileAction, SIGNAL(triggered()), this, SLOT(saveZdlFile()));
-	connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClick()));
+	connect(loadAction, &QAction::triggered, this, &ZDLInterface::loadConfigFile);
+	connect(saveAction, &QAction::triggered, this, &ZDLInterface::saveConfigFile);
+	connect(loadZdlFileAction, &QAction::triggered, this, &ZDLInterface::loadZdlFile);
+	connect(saveZdlFileAction, &QAction::triggered, this, &ZDLInterface::saveZdlFile);
+	connect(aboutAction, &QAction::triggered, this, &ZDLInterface::aboutClick);
 
-	connect(clearAllPWadsAction, SIGNAL(triggered()), this, SLOT(clearAllPWads()));
-	connect(clearAllFieldsAction, SIGNAL(triggered()), this, SLOT(clearAllFields()));
-	connect(clearEverythingAction, SIGNAL(triggered()), this, SLOT(clearEverything()));
+	connect(clearAllPWadsAction, &QAction::triggered, this, &ZDLInterface::clearAllPWads);
+	connect(clearAllFieldsAction, &QAction::triggered, this, &ZDLInterface::clearAllFields);
+	connect(clearEverythingAction, &QAction::triggered, this, &ZDLInterface::clearEverything);
 
-	connect(showCommandline, SIGNAL(triggered()),this,SLOT(showCommandline()));
-	//connect(newDMFlagger, SIGNAL(triggered()),this,SLOT(showNewDMFlagger()));
-	connect(btnExit, SIGNAL(clicked()), this, SLOT(exitzdl()));
+	connect(showCommandline, &QAction::triggered, this, &ZDLInterface::showCommandline);
+	connect(btnExit, &QPushButton::clicked, this, &ZDLInterface::exitzdl);
 
 	btnZDL->setMenu(context);
 
@@ -159,7 +158,7 @@ QLayout *ZDLInterface::getButtonPane(){
 	btnEpr->setMinimumWidth(20);
 	btnLaunch->setMinimumWidth(minBtnWidth);
 
-	connect(btnLaunch, SIGNAL( clicked() ), this, SLOT(launch()));
+	connect(btnLaunch, &QPushButton::clicked, this, &ZDLInterface::launch);
 
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -170,9 +169,9 @@ QLayout *ZDLInterface::getButtonPane(){
 	box->addWidget(btnEpr);
 	box->addWidget(btnLaunch);
 	box->setSpacing(1);
-	connect(btnEpr, SIGNAL(clicked()), this, SLOT(mclick()));
+	connect(btnEpr, &QPushButton::clicked, this, &ZDLInterface::mclick);
 
-	connect(btnMSet, SIGNAL(clicked()), this, SLOT(ampclick()));
+	connect(btnMSet, &QPushButton::clicked, this, &ZDLInterface::ampclick);
 	return box;
 }
 

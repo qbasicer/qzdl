@@ -67,7 +67,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	diffList->addItem("Hard");
 	diffList->addItem("V. Hard");
 	LOGDATAO() << "Done" << endl;
-	connect(IWADList, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChanged(int)));
+	connect(IWADList, &QListWidget::currentRowChanged, this, &ZDLSettingsPane::currentRowChanged);
 
 }
 

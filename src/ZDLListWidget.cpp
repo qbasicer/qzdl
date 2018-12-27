@@ -36,12 +36,12 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	QAction* delact = new QAction(this);
 	delact->setShortcut(Qt::Key_Delete);
 	delact->setShortcutContext(Qt::WidgetShortcut);
-	connect(delact, SIGNAL(triggered()), this, SLOT(removeButton()));
+	connect(delact, &QAction::triggered, this, &ZDLListWidget::removeButton);
 
 	QAction* insact = new QAction(this);
 	insact->setShortcut(Qt::Key_Insert);
 	insact->setShortcutContext(Qt::WidgetShortcut);
-	connect(insact, SIGNAL(triggered()), this, SLOT(addButton()));
+	connect(insact, &QAction::triggered, this, &ZDLListWidget::addButton);
 
 	pList->addAction(delact);
 	pList->addAction(insact);
@@ -72,13 +72,13 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 
 	//signal time
-	QObject::connect(btnAdd, SIGNAL(clicked()), this, SLOT(addButton()));
-	QObject::connect(btnRem, SIGNAL(clicked()), this, SLOT(removeButton()));
-	QObject::connect(btnUp, SIGNAL(clicked()), this, SLOT(upButton()));
-	QObject::connect(btnDn, SIGNAL(clicked()), this, SLOT(downButton()));
-	QObject::connect(pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editButton(QListWidgetItem*)));
-	QObject::connect(pList, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChangedInternal(int)));
-	QObject::connect(pList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(currentItemChangedInternal(QListWidgetItem*, QListWidgetItem*)));
+	connect(btnAdd, &QPushButton::clicked, this, &ZDLListWidget::addButton);
+	connect(btnRem, &QPushButton::clicked, this, &ZDLListWidget::removeButton);
+	connect(btnUp, &QPushButton::clicked, this, &ZDLListWidget::upButton);
+	connect(btnDn, &QPushButton::clicked, this, &ZDLListWidget::downButton);
+	connect(pList, &QListWidget::itemDoubleClicked, this, &ZDLListWidget::editButton);
+	connect(pList, &QListWidget::currentRowChanged, this, &ZDLListWidget::currentRowChangedInternal);
+	connect(pList, &QListWidget::currentItemChanged, this, &ZDLListWidget::currentItemChangedInternal);
 }
 
 void ZDLListWidget::currentItemChangedInternal(QListWidgetItem *current, QListWidgetItem *previous){

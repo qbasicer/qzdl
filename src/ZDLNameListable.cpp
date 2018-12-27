@@ -30,7 +30,7 @@ ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, Q
 	setName(generateName());
 	ZDLConfigurationEvents* events = ZDLConfigurationManager::getEvents();
 	if(events){
-		connect(events, SIGNAL(newConfiguration(ZDLConf*)), this, SLOT(configurationChanged(ZDLConf*)));
+		connect(events, &ZDLConfigurationEvents::newConfiguration, this, &ZDLNameListable::configurationChanged);
 	}
 }
 

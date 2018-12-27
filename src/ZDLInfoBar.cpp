@@ -54,8 +54,8 @@ ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	box->addWidget(btn);
 	box->addWidget(btnhide);
 	
-	connect(btnhide, SIGNAL(clicked()), this, SLOT(hidebar()));
-	connect(btn, SIGNAL(clicked()), this, SLOT(more()));
+	connect(btnhide, &QPushButton::clicked, this, &ZDLInfoBar::hidebar);
+	connect(btn, &QPushButton::clicked, this, &ZDLInfoBar::more);
 	
 	setVisible(false);
 	LOGDATAO() << "Done" << endl;
