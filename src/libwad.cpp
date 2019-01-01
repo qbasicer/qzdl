@@ -1,6 +1,5 @@
 #include <QtCore>
 #include "libwad.h"
-#include "zdlcommon.h"
 
 struct waddir {
 	int lumpstart;
@@ -11,12 +10,12 @@ struct waddir {
 DoomWad::DoomWad(QString file){
 	QFile *pfile = new QFile(file);
 	dev = pfile;
-	LOGDATAO() << "Opening wad from our own QFile" << endl;
+	// Opening wad from our own QFile
 	shouldClose = true;
 }
 
 DoomWad::DoomWad(QIODevice *dev){
-	LOGDATAO() << "Opening wad from QIODevice" << endl;
+	// Opening wad from QIODevice
 	this->dev = dev;
 	shouldClose = false;
 }
@@ -26,39 +25,54 @@ DoomWad::~DoomWad(){
 		this->dev->close();
 		delete this->dev;
 		this->dev = NULL;
-		LOGDATAO() << "Closing device" << endl;
+		// Closing device
 	}
-	LOGDATAO() << "Deleteing DoomWad" << endl;
+	// Deleting DoomWad
 }
 
 bool DoomWad::open(){
-	LOGDATAO() << "Opening wad file" << endl;
+	// Opening wad file
 	if(!dev->isOpen()){
 		bool rc = dev->open(QIODevice::ReadOnly);
 		if(!rc){
-			LOGDATAO() << "Open failed" << endl;
+			// Open failed
 			return rc;
 		}
 	}
-	LOGDATAO() << "Wad file opened, reading data..." << endl;
+	// Wad file opened, reading data...
 	bool rc = dev->seek(4);
-	if(!rc){LOGDATAO() << "Seek failed" << endl;return rc;}
+	if (!rc)
+	{
+		// Seek failed
+		return rc;
+	}
 	char fourbytes[4];
 	int rd = dev->read(fourbytes, 4);
-	if(rd != 4){LOGDATAO() << "Read failed" << endl; return false;}
+	if (rd != 4)
+	{
+		// Read failed
+		return false;
+	}
 	int lumps = *((int*)fourbytes);
-	LOGDATAO() << "Lumps: " << lumps << endl;
 	rd = dev->read(fourbytes, 4);
-	if(rd != 4){LOGDATAO() << "Read failed" << endl; return false;}
+	if (rd != 4)
+	{
+		// Read failed
+		return false;
+	}
 	int diroffset = *((int*)fourbytes);
 	rc = dev->seek(diroffset);
-	if(!rc){LOGDATAO() << "Seek failed" << endl;return rc;}
+	if (!rc)
+	{
+		// Seek failed
+		return rc;
+	}
 	QString last("");
 	for(int i = 0; i < lumps; i++){
 		struct waddir dir;
 		rd = dev->read((char*)&dir, sizeof(struct waddir));
 		if(rd != sizeof(struct waddir)){
-			LOGDATAO() << "Dropping bad lump" << endl;
+			// Dropping bad lump
 			continue;
 		}
 		char tname[9];
@@ -70,10 +84,10 @@ bool DoomWad::open(){
 		WadLump *lump = new WadLump(lumpStart, lumpSize, lumpName, this);
 		wadLumps.append(lump);
 		if(lumpName == "THINGS" && !last.isEmpty()){
-			LOGDATAO() << "New level" << endl;
+			// New level
 			levelnames << last;
 		}else{
-			LOGDATAO() << "Not a level: " << last << endl;
+			// Not a level: last
 		}
 		last = lumpName;
 		
@@ -116,7 +130,7 @@ WadLump::WadLump(int start, int size, QString name, DoomWad *par){
 	lumpSize = size;
 	lumpName = name;
 	parent = par;
-	LOGDATAO() << "New lump " << name << endl;
+	// New lump: name
 }
 
 QString WadLump::getName(){
