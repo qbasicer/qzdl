@@ -1,131 +1,79 @@
-#include <QtCore>
-#include "libwad.h"
-#include "zdlcommon.h"
+/*
+ * This file is part of qZDL
+ * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
+ * 
+ * qZDL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-struct waddir {
-	int lumpstart;
-	int lumpsize;
-	char lumpname[8];
+#include "libwad.h"
+
+struct wadinfo_t {
+	char identification[4];		                 
+	int numlumps;
+	int infotableofs;
 };
 
-DoomWad::DoomWad(QString file){
-	QFile *pfile = new QFile(file);
-	dev = pfile;
-	LOGDATAO() << "Opening wad from our own QFile" << endl;
-	shouldClose = true;
-}
+struct filelump_t {
+	int	filepos;
+	int	size;
+	char name[8];
+};
 
-DoomWad::DoomWad(QIODevice *dev){
-	LOGDATAO() << "Opening wad from QIODevice" << endl;
-	this->dev = dev;
-	shouldClose = false;
-}
-
-DoomWad::~DoomWad(){
-	if(shouldClose){
-		this->dev->close();
-		delete this->dev;
-		this->dev = NULL;
-		LOGDATAO() << "Closing device" << endl;
-	}
-	LOGDATAO() << "Deleteing DoomWad" << endl;
-}
+DoomWad::DoomWad(const QString &file):
+	map_names(), file(file)
+{}
 
 bool DoomWad::open(){
-	LOGDATAO() << "Opening wad file" << endl;
-	if(!dev->isOpen()){
-		bool rc = dev->open(QIODevice::ReadOnly);
-		if(!rc){
-			LOGDATAO() << "Open failed" << endl;
-			return rc;
+	QFile wad(file);
+	map_names.clear();
+
+	if (wad.open(QIODevice::ReadOnly)) {
+		wadinfo_t header;
+
+		if (wad.read((char*)&header, sizeof(wadinfo_t))==sizeof(wadinfo_t)&&wad.seek(header.infotableofs)) {
+			filelump_t *fileinfo=new filelump_t[header.numlumps];
+			qint64 length=sizeof(filelump_t)*header.numlumps;
+
+			if (wad.read((char*)fileinfo, length)==length) {
+				char prev_lump_name[9]={};
+
+				for (int i=0; i<header.numlumps; i++) {
+					if (!strncmp(fileinfo[i].name, "THINGS", 8)||!strncmp(fileinfo[i].name, "TEXTMAP", 8)) {
+						if (prev_lump_name[0]) {
+							map_names<<QString(prev_lump_name).toUpper();
+							prev_lump_name[0]='\0';
+						}
+					} else {
+						strncpy(prev_lump_name, fileinfo[i].name, 8);
+					}
+				}
+			}
+
+			delete[] fileinfo;
 		}
+
+		wad.close();
 	}
-	LOGDATAO() << "Wad file opened, reading data..." << endl;
-	bool rc = dev->seek(4);
-	if(!rc){LOGDATAO() << "Seek failed" << endl;return rc;}
-	char fourbytes[4];
-	int rd = dev->read(fourbytes, 4);
-	if(rd != 4){LOGDATAO() << "Read failed" << endl; return false;}
-	int lumps = *((int*)fourbytes);
-	LOGDATAO() << "Lumps: " << lumps << endl;
-	rd = dev->read(fourbytes, 4);
-	if(rd != 4){LOGDATAO() << "Read failed" << endl; return false;}
-	int diroffset = *((int*)fourbytes);
-	rc = dev->seek(diroffset);
-	if(!rc){LOGDATAO() << "Seek failed" << endl;return rc;}
-	QString last("");
-	for(int i = 0; i < lumps; i++){
-		struct waddir dir;
-		rd = dev->read((char*)&dir, sizeof(struct waddir));
-		if(rd != sizeof(struct waddir)){
-			LOGDATAO() << "Dropping bad lump" << endl;
-			continue;
-		}
-		char tname[9];
-		memset(tname, 0, 9);
-		memcpy(tname, dir.lumpname, 8);
-		QString lumpName = tname;
-		int lumpStart = dir.lumpstart;
-		int lumpSize = dir.lumpsize;
-		WadLump *lump = new WadLump(lumpStart, lumpSize, lumpName, this);
-		wadLumps.append(lump);
-		if(lumpName == "THINGS" && !last.isEmpty()){
-			LOGDATAO() << "New level" << endl;
-			levelnames << last;
-		}else{
-			LOGDATAO() << "Not a level: " << last << endl;
-		}
-		last = lumpName;
-		
-	}
-	return true;
+
+	return map_names.length();
 }
 
-int DoomWad::lumps(){
-	return 0;
+QStringList DoomWad::getMapNames() {
+	return map_names;
 }
 
-WadLump *DoomWad::getLump(int index){
-	return NULL;
-}
-
-WadLump *DoomWad::getLumpByName(QString name){
-	return NULL;
-}
-
-bool DoomWad::addLumps(QList<WadLump*> lumps, DoomWad::AddBehaviour behaviour){
+bool DoomWad::isCompressed() {
 	return false;
 }
-
-QStringList DoomWad::getLumpNames(){
-	return QStringList();
-}
-
-QStringList DoomWad::getMapNames(){
-	return levelnames;
-}
-
-bool DoomWad::isCompressed(){
-	return false;
-}
-
-/******************** WADLUMP ***********************/
-
-WadLump::WadLump(int start, int size, QString name, DoomWad *par){
-	lumpStart = start;
-	lumpSize = size;
-	lumpName = name;
-	parent = par;
-	LOGDATAO() << "New lump " << name << endl;
-}
-
-QString WadLump::getName(){
-	return QString(lumpName);
-}
-
-int WadLump::getSize(){
-	return lumpSize;
-}
-
-
-

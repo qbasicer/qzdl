@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +41,6 @@ private slots:
 	void sendSignals();
 	void mclick();
 	void launch();
-	void ampclick();
 	void saveConfigFile();
 	void loadConfigFile();
 	void aboutClick();
@@ -61,6 +61,7 @@ private:
 	
 	QPushButton *btnEpr;
 	QPushButton *btnZDL;
+	QPushButton *btnLaunch;
 	QVBoxLayout *box;
 	ZDLMultiPane *mpane;
 	QLineEdit *extraArgs;

@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +22,8 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <QComboBox>
+#include <QValidator>
 #include "ZDLWidget.h"
 #include "ZDLConfiguration.h"
 #include "ZDLConfigurationEvents.h"
@@ -48,10 +51,7 @@ class ZDLConfigurationManager{
 		
 		static void setCurrentDirectory(string dir);
 		static const char* getCurrentDirectory();
-		static void setInfobar(ZDLWidget *zib);
-		static ZDLWidget *getInfobar();
 		static QPixmap getIcon();
-		static void setInfobarMessage(const char* msg, int icon = 0);
 		static QString getConfigFileName();
 		static void setConfigFileName(QString name);
 		static QStringList getArgv();
@@ -64,7 +64,6 @@ class ZDLConfigurationManager{
 		static QStringList argv;
 		static QString filename;
 		static ZDLWidget* interface;
-		static ZDLWidget* infobar;
 		static ZDLConf *activeConfig;
 		static string cdir;
 		static ZDLConfiguration *conf;
@@ -72,5 +71,35 @@ class ZDLConfigurationManager{
 		static ZDLConfigurationEvents *events;
 };
 
+QString getLastDir(ZDLConf *zconf=NULL);
+void saveLastDir(QString fileName, ZDLConf *zconf=NULL);
+QString getWadLastDir(ZDLConf *zconf=NULL, bool dwd_first=false);
+void saveWadLastDir(QString fileName, ZDLConf *zconf=NULL, bool is_dir=false);
+QString getSrcLastDir(ZDLConf *zconf=NULL);
+void saveSrcLastDir(QString fileName, ZDLConf *zconf=NULL);
+QString getSaveLastDir(ZDLConf *zconf=NULL);
+void saveSaveLastDir(QString fileName, ZDLConf *zconf=NULL);
+QString getZdlLastDir(ZDLConf *zconf=NULL);
+void saveZdlLastDir(QString fileName, ZDLConf *zconf=NULL);
+QString getIniLastDir(ZDLConf *zconf=NULL);
+void saveIniLastDir(QString fileName, ZDLConf *zconf=NULL);
+
+class VerboseComboBox: public QComboBox {
+	Q_OBJECT
+public:
+	VerboseComboBox(QWidget *parent=NULL): QComboBox(parent) {}
+	virtual void showPopup();
+	virtual void hidePopup();
+signals:
+	void onPopup();
+	void onHidePopup();
+};
+
+class EvilValidator: public QValidator {
+	Q_OBJECT
+public:
+    EvilValidator(QObject *parent): QValidator(parent) {}
+	virtual QValidator::State validate(QString &input, int &pos) const;
+};
 
 #endif

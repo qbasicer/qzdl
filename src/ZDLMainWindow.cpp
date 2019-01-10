@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +25,6 @@
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
-#include "ZDLInfoBar.h"
 #include "ZDLImportDialog.hpp"
 
 #ifdef Q_WS_WIN
@@ -32,7 +32,6 @@
 #endif
 
 extern QApplication *qapp;
-extern QString versionString;
 
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
@@ -48,16 +47,14 @@ ZDLMainWindow::~ZDLMainWindow(){
 }
 
 QString ZDLMainWindow::getWindowTitle(){
-	QString windowTitle = ZDL_ENGINE_NAME;
-	windowTitle += " " ZDL_VERSION_STRING " - ";
+	QString windowTitle = "ZDL";
+	windowTitle += " " ZDL_VERSION_STRING;
 	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
 	if(conf){
 		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
 		QString currentConf = ZDLConfigurationManager::getConfigFileName();
 		if(userConfPath != currentConf){
-			windowTitle += ZDLConfigurationManager::getConfigFileName();
-		}else{
-			windowTitle += "user config";
+			windowTitle += " [" + ZDLConfigurationManager::getConfigFileName() + "]";
 		}
 	}else{
 		windowTitle += ZDLConfigurationManager::getConfigFileName();
@@ -74,9 +71,8 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 
 	setWindowIcon(ZDLConfigurationManager::getIcon());
 
-
-	setContentsMargins(2,2,2,2);
-	layout()->setContentsMargins(2,2,2,2);
+	setContentsMargins(0,2,0,0);
+	layout()->setContentsMargins(0,0,0,0);
 	QTabWidget *widget = new QTabWidget(this);
 
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -118,11 +114,12 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	intr = new ZDLInterface(this);
 	settings = new ZDLSettingsTab(this);
 
+	//widget->setTabShape(QTabWidget::Triangular);
+	//widget->setWindowFlags(Qt::FramelessWindowHint);
+	widget->setDocumentMode(true);
+	widget->addTab(intr, "Launch config");
+	widget->addTab(settings, "General settings");
 	setCentralWidget(widget);
-	widget->addTab(intr, "Main");
-	widget->addTab(settings, "Settings");
-	//I haven't started on this yet :)
-	//widget->addTab(new ZDLInterface(this), "Notifications");
 
 	QAction *qact = new QAction(widget);
 	qact->setShortcut(Qt::Key_Return);
@@ -250,98 +247,31 @@ void ZDLMainWindow::launch(){
 	writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 
-	QString exec = getExecutable();
+	QString exec=getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select a source port");
+		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
-	QStringList args = getArguments();
-	if (args.join("").length() < 1){
-		return;
-	}
-
-	if(exec.contains("\\")){
-		exec.replace("\\","/");
-	}
-
-	//Find the executable
-	QStringList executablePath = exec.split("/");
-
-	//Remove the last item, which will be the .exe
-	executablePath.removeLast();
-
-	//Re-create the string
-	QString workingDirectory = executablePath.join("/");
-
-	//Resolve the path to an absolute directory
-	QDir cwd(workingDirectory);
-	workingDirectory = cwd.absolutePath();
-	LOGDATAO() << "Working directory: " << workingDirectory << endl;
-	// Turns on launch confirmation
-	/*QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	  if(btnrc == QMessageBox::No){
-	  ZDLConfigurationManager::setInfobarMessage("Launch aborted.",1);
-	  return;
-	  }*/
+	QFileInfo exec_fi(exec);
 #ifdef Q_WS_WIN
-	/* The first argument to CreateProcess must not be quoted */
-	/* TODO: Rewrite this code! */
-	QString unquotedExec = exec;
-	int doquotes = 1;
-	if(zconf->hasValue("zdl.general","quotefiles")){
-		int ok;
-		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			doquotes = 0;
-		}
-	}
-	//If quotefiles is enabled, and the executable contains a space, quote it
-	if(doquotes && exec.contains(" ")){
-		QString newExec = QString("\"").append(exec).append("\"");
-		exec = newExec;
-	}
+	PROCESS_INFORMATION pi={};
+	STARTUPINFO si={sizeof(STARTUPINFO), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
 
-	QString compose = exec + QString(" ") + args.join(" ");
-	LOGDATAO() << "Launching: " << compose << endl;
-	wchar_t* cmd = (wchar_t*)malloc((compose.length()+1)*sizeof(wchar_t)*4);
-	wcscpy(cmd,compose.toStdWString().c_str());
-	//swprintf(cmd,L"%ls",compose.toStdWString().c_str());
+	QString cmdline="\""+QDir::toNativeSeparators(exec_fi.absoluteFilePath())+"\" "+getArguments(true).join(" ");
+	QString cwd=QDir::toNativeSeparators(exec_fi.absolutePath());
 
-	wchar_t* execu = (wchar_t*)malloc((unquotedExec.length()+1)*sizeof(wchar_t)*4);
-	wchar_t* work = (wchar_t*)malloc((workingDirectory.length()+1)*sizeof(wchar_t)*4);
-	//swprintf(execu, L"%ls",exec.toStdWString().c_str());
-	wcscpy(execu, unquotedExec.toStdWString().c_str());
-	wcscpy(work, workingDirectory.toStdWString().c_str());
-	//http://www.goffconcepts.com/techarticles/development/cpp/createprocess.html
-	STARTUPINFOW siStartupInfo; 
-	PROCESS_INFORMATION piProcessInfo; 
-	memset(&siStartupInfo, 0, sizeof(siStartupInfo)); 
-	memset(&piProcessInfo, 0, sizeof(piProcessInfo)); 
-	siStartupInfo.cb = sizeof(siStartupInfo); 
-
-	if(execu == NULL || cmd == NULL || work == NULL){
-		ZDLConfigurationManager::setInfobarMessage("Internal error preparing to launch",1);
-		return;
-	}
-
-	BOOL rc = CreateProcess(execu, cmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, work, &siStartupInfo, &piProcessInfo);
-	free(cmd);
-	free(execu);
-	free(work);
-	if(rc == FALSE){
-		ZDLConfigurationManager::setInfobarMessage("Failed to launch the process!",1);
-		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
+	if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.toStdWString().c_str()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, cwd.toStdWString().c_str(), &si, &pi)) {
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	} else {
+		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
 	}
 #else
-	QProcess *proc = new QProcess(this);
-
-	//Set the working directory to that directory
-	proc->setWorkingDirectory(workingDirectory);
-
+	QProcess *proc=new QProcess(this);
+	proc->setWorkingDirectory(exec_fi.absolutePath());
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	proc->start(exec, args);
-	procerr = proc->error();
+	if (!proc->startDetached(exec_fi.absoluteFilePath(), getArguments()))
+		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
 #endif
 	int stat;
 	if (zconf->hasValue("zdl.general", "autoclose")){
@@ -351,27 +281,11 @@ void ZDLMainWindow::launch(){
 			close();
 		}
 	}
-
-	// 	if(proc->state() != QProcess::NotRunning){
-	// 		std::cout << "ERROR!" << std::endl;
-	// 		ZDLConfigurationManager::setInfobarMessage("The process ended abnormally.",1);
-	// 		ZDLInfoBar *bar = (ZDLInfoBar*)ZDLConfigurationManager::getInfobar();
-	// 		connect(bar,SIGNAL(moreclicked()),this,SLOT(badLaunch()));
-	// 	}
 }
 
-void ZDLMainWindow::badLaunch(){
-	LOGDATAO() << "badLaunch message box" << endl;
-	if(procerr == QProcess::FailedToStart){
-		QMessageBox::warning(NULL,"Failed to Start", "Failed to launch the application executable.",QMessageBox::Ok,QMessageBox::Ok);
-	}else if(procerr == QProcess::Crashed){
-		QMessageBox::warning(NULL,"Process Crashed", "The application ended abnormally (usually due to a crash or error).",QMessageBox::Ok,QMessageBox::Ok);
-	}else{
-		QMessageBox::warning(NULL,"Unknown error", "There was a problem running the application.",QMessageBox::Ok,QMessageBox::Ok);
-	}
-}
+#define IF_NATIVE_SEP(p)	(native_sep?QDir::toNativeSeparators(p):p)
 
-QStringList ZDLMainWindow::getArguments(){
+QStringList ZDLMainWindow::getArguments(bool native_sep){
 	LOGDATAO() << "Getting arguments" << endl;
 	QStringList ourString;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -381,18 +295,17 @@ QStringList ZDLMainWindow::getArguments(){
 
 	bool ok;
 	int stat;
-	int doquotes = 1;
 
 	if(zconf->hasValue("zdl.save", "iwad")){
 		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
 		if (rc.length() > 0){
 			iwadName = rc;
 		}else{
-			QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
+			QMessageBox::critical(this, "ZDL", "Please select an IWAD");
 			return ourString;
 		}
 	}else{
-		QMessageBox::critical(this, ZDL_ENGINE_NAME, "Please select an IWAD");
+		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
 		return ourString;
 	}
 
@@ -412,7 +325,7 @@ QStringList ZDLMainWindow::getArguments(){
 					section->getRegex("^" + var + "$",nameVctr);
 					if(nameVctr.size() == 1){
 						ourString << "-iwad";
-						ourString << nameVctr[0]->getValue();
+						ourString << IF_NATIVE_SEP(nameVctr[0]->getValue());
 					}
 				}
 			}
@@ -429,30 +342,27 @@ QStringList ZDLMainWindow::getArguments(){
 		ourString << zconf->getValue("zdl.save", "warp", &stat);
 	}
 
-	if (zconf->hasValue("zdl.save", "dmflags")){
-		ourString << "+set";
-		ourString << "dmflags";
-		ourString << zconf->getValue("zdl.save", "dmflags", &stat);
-	}
-
-	if (zconf->hasValue("zdl.save", "dmflags2")){
-		ourString << "+set";
-		ourString << "dmflags2";
-		ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
-	}
-
 	section = zconf->getSection("zdl.save");
 	QStringList pwads;
-	QStringList dhacked;
+	QStringList dehs;
+	QStringList bexs;
+	char deh_last=1;
+	QStringList autoexecs;
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^file[0-9]+$", fileVctr);
 
 		if (fileVctr.size() > 0){
 			for(int i = 0; i < fileVctr.size(); i++){
-				if(fileVctr[i]->getValue().endsWith(".deh",Qt::CaseInsensitive) || fileVctr[i]->getValue().endsWith(".bex",Qt::CaseInsensitive)){
-					dhacked << fileVctr[i]->getValue();
-				}else{
+				if(fileVctr[i]->getValue().endsWith(".bex",Qt::CaseInsensitive)) {
+					deh_last=0;
+					bexs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".deh",Qt::CaseInsensitive)) {
+					deh_last=1;
+					dehs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".cfg",Qt::CaseInsensitive)) {
+					autoexecs << fileVctr[i]->getValue();
+				} else {
 					pwads << fileVctr[i]->getValue();
 				}
 			}
@@ -461,20 +371,52 @@ QStringList ZDLMainWindow::getArguments(){
 
 	if(pwads.size() > 0){
 		ourString << "-file";
-		ourString << pwads;
+		foreach (const QString &str, pwads) {
+			ourString << IF_NATIVE_SEP(str);
+		}
 	}
 
-	if(dhacked.size() > 0){
-		ourString << "-deh";
-		ourString << dhacked;
-	}
+	do {
+		if (deh_last%2) {
+			foreach (const QString &str, bexs) {
+				ourString << "-bex";
+				ourString << IF_NATIVE_SEP(str);
+			}
+		} else {
+			foreach (const QString &str, dehs) {
+				ourString << "-deh";
+				ourString << IF_NATIVE_SEP(str);
+			}
+		}
+		deh_last+=3;
+	} while (deh_last<=4);
+
+    foreach (const QString &str, autoexecs) {
+		ourString << "+exec";
+		ourString << IF_NATIVE_SEP(str);
+    }
 
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype",&stat);
 		if(tGameType != "0"){
+			if (zconf->hasValue("zdl.save", "dmflags")){
+				ourString << "+set";
+				ourString << "dmflags";
+				ourString << zconf->getValue("zdl.save", "dmflags", &stat);
+			}
+
+			if (zconf->hasValue("zdl.save", "dmflags2")){
+				ourString << "+set";
+				ourString << "dmflags2";
+				ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
+			}
+
 			if (tGameType == "2"){
 				ourString << "-deathmath";
+			} else if (tGameType == "3"){
+				ourString << "-altdeath";
 			}
+
 			int players = 0;
 			if(zconf->hasValue("zdl.save","players")){
 				QString tPlayers = zconf->getValue("zdl.save","players",&stat);
@@ -483,68 +425,62 @@ QStringList ZDLMainWindow::getArguments(){
 			if(players > 0){
 				ourString << "-host";
 				ourString << QString::number(players);
+				if(zconf->hasValue("zdl.save","mp_port")){
+					ourString << "-port";
+					ourString << zconf->getValue("zdl.save","mp_port",&stat);
+				}
 			}else if(players == 0){
-				if(zconf->hasValue("zdl.save","host")){
-					ourString << "-join";
-					ourString << zconf->getValue("zdl.save","host",&stat);
+				if(zconf->hasValue("zdl.save", "host")) {
+					ourString<<"-join";
+					if (zconf->hasValue("zdl.save", "mp_port")) {
+						QRegExp trailing_port(":\\d*\\s*$");
+						ourString<<zconf->getValue("zdl.save", "host", &stat).remove(trailing_port)+":"+zconf->getValue("zdl.save", "mp_port", &stat);
+					} else {
+						ourString<<zconf->getValue("zdl.save", "host", &stat);
+					}
 				}
 			}
 			if(zconf->hasValue("zdl.save","fraglimit")){
 				ourString << "+set";
 				ourString << "fraglimit";
 				ourString << zconf->getValue("zdl.save","fraglimit",&stat);
-
 			}
-		}
-	}
-
-
-
-	if(zconf->hasValue("zdl.net","advenabled")){
-		QString aNetEnabled = zconf->getValue("zdl.net","advenabled",&stat);
-		if(aNetEnabled == "enabled"){
-			if(zconf->hasValue("zdl.net","port")){
-				ourString << "-port";
-				ourString << zconf->getValue("zdl.net","port",&stat);
+			if(zconf->hasValue("zdl.save","timelimit")){
+				ourString << "+set";
+				ourString << "timelimit";
+				ourString << zconf->getValue("zdl.save","timelimit",&stat);
 			}
-			if(zconf->hasValue("zdl.net","extratic")){
-				QString tExtratic = zconf->getValue("zdl.net","extratic",&stat);
-				if(tExtratic == "enabled"){
+			if(zconf->hasValue("zdl.save","extratic")){
+				QString tVal = zconf->getValue("zdl.save","extratic",&stat);
+				if(tVal == "1"){
 					ourString << "-extratic";
 				}
 			}
-			if(zconf->hasValue("zdl.net","netmode")){
-				QString tNetMode = zconf->getValue("zdl.net","netmode",&stat);
-				if(tNetMode == "1"){
+			if(zconf->hasValue("zdl.save","netmode")){
+				QString tVal = zconf->getValue("zdl.save","netmode",&stat);
+				if(tVal != "-1"){
 					ourString << "-netmode";
-					ourString << "0";
-				}else if(tNetMode == "2"){
-					ourString << "-netmode";
-					ourString << "1";
+					ourString << tVal;
 				}
 			}
-			if(zconf->hasValue("zdl.net","dup")){
-				QString tDup = zconf->getValue("zdl.net","dup",&stat);
-				if(tDup != "0"){
+			if(zconf->hasValue("zdl.save","dup")){
+				QString tVal = zconf->getValue("zdl.save","dup",&stat);
+				if(tVal != "0"){
 					ourString << "-dup";
-					ourString << tDup;
+					ourString << tVal;
 				}
 			}
-		}
-	}
-	if(zconf->hasValue("zdl.general","quotefiles")){
-		int ok;
-		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			doquotes = 0;
-		}
-	}
-	if(doquotes){
-		for(int i = 0; i < ourString.size(); i++){
-			if(ourString[i].contains(" ")){
-				QString newString = QString("\"") + ourString[i] + QString("\"");
-				ourString[i] = newString;
+			if(zconf->hasValue("zdl.save","savegame")){
+				ourString << "-loadgame";
+				ourString << IF_NATIVE_SEP(zconf->getValue("zdl.save","savegame",&stat));
 			}
+		}
+	}
+
+	for(int i = 0; i < ourString.size(); i++){
+		if(ourString[i].contains(" ")){
+			QString newString = "\"" + ourString[i] + "\"";
+			ourString[i] = newString;
 		}
 	}
 

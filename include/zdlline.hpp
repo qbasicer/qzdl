@@ -38,7 +38,7 @@ public:
 	QString getVariable();
 	QString getLine();
 	int setValue(QString inValue);
-	int isSlashConverting(){return (slashConvert != 0);}
+	int isSlashConverting(){return slashConvert;}
 	ZDLLine *clone();
 	void setIsCopy(bool val);
 	bool setFlags(int val);
@@ -54,7 +54,7 @@ private:
 	QString comment;
 	QString value;
 	QString variable;
-	int slashConvert;
+	bool slashConvert;
 	int flags;
 };
 

@@ -154,8 +154,8 @@ void ZDLLine::parse()
 		value = chomp(line.mid(loc+1, line.length() - loc - 1));
 		//This is important for cross platform
 		//Currently disabled
-		if (slashConvert == true){
-		}
+		//if (slashConvert == true){
+		//}
 		type = 0;
 	}else{
 		type = 1;
@@ -186,5 +186,6 @@ bool ZDLLine::setFlags(int value){
 		return false;
 	}
 	flags = value;
+	return true;
 }
 

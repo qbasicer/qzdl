@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,55 +22,44 @@
 #include "ZDLConfigurationManager.h"
 #include <string>
 
-QString getLastDir(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	if(!zconf){
-		return QString();
-	}
-	QString lastDir;
-	if (zconf->hasValue("zdl.general", "lastDir")) {
-		int ok = 0;
-		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
-	}
-	return lastDir;
-}
-
-void saveLastDir(QString fileName){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	if(!zconf){
-		return;
-	}
-	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
-}
-
-ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
+ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi):
+	QDialog(parent), last_used_dir(last_used_dir), zdl_fi(zdl_fi)
+{
+	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);
-	QHBoxLayout *files = new QHBoxLayout();
-	
-	QHBoxLayout *buttons = new QHBoxLayout();
-	
+	QGridLayout *inputGrid = new QGridLayout();
+	QHBoxLayout *ctrlButtons = new QHBoxLayout();
+		
 	QPushButton *btnOK = new QPushButton("OK", this);
 	QPushButton *btnCancel = new QPushButton("Cancel", this);
 	
 	lname = new QLineEdit(this);
 	lfile = new QLineEdit(this);
-	btnBrowse = new QPushButton("Browse...", this);
-	
-	lays->addWidget(new QLabel("Name", this));
-	lays->addWidget(lname);
-	
-	lays->addWidget(new QLabel("File", this));
-	
-	files->addWidget(lfile);
-	files->addWidget(btnBrowse);
-	
-	lays->addLayout(files);
-	
-	buttons->addWidget(btnOK);
-	buttons->addWidget(btnCancel);
-	
-	lays->addLayout(buttons);
+	btnBrowse = new QPushButton("...", this);
+	btnBrowse->setMaximumWidth(26);
+
+	inputGrid->addWidget(new QLabel("Name", this),0,0,1,2);
+	inputGrid->addWidget(lname,1,0,1,2);
+	inputGrid->addWidget(new QLabel("File", this),2,0,1,2);
+	inputGrid->addWidget(lfile,3,0);
+	inputGrid->addWidget(btnBrowse,3,1);
+	inputGrid->setSpacing(2);
+	inputGrid->setContentsMargins(0,0,0,0);
+
+	ctrlButtons->addStretch();
+	ctrlButtons->addWidget(btnOK);
+	ctrlButtons->addWidget(btnCancel);
+	ctrlButtons->setSpacing(4);
+	ctrlButtons->setContentsMargins(0,0,0,0);
+
+	lays->addLayout(inputGrid);
+	lays->addLayout(ctrlButtons);
+	lays->setSpacing(4);
+
+	setContentsMargins(4,4,4,4);
+	layout()->setContentsMargins(0,0,0,0);
+	setFixedHeight(sizeHint().height());
+	resize(350, sizeHint().height());
 	
 	connect(btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
 	connect(btnOK, SIGNAL(clicked()), this, SLOT(accept()));
@@ -78,11 +68,13 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 
 void ZDLNameInput::browse(){
 	QString filter = filters.join(";;");
-	QString lastDir = getLastDir();
-	QString fileName = QFileDialog::getOpenFileName(this, "Add File", lastDir, filter);
-	if(!fileName.isNull() && !fileName.isEmpty()){
+	QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filter);
+	if (!fileName.isEmpty()) {
 		lfile->setText(fileName);
-		saveLastDir(fileName);
+		if (zdl_fi) {
+			zdl_fi->setFile(fileName);
+			lname->setText(zdl_fi->GetFileDescription());
+		}
 	}
 }
 

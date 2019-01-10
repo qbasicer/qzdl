@@ -1,50 +1,37 @@
+/*
+ * This file is part of qZDL
+ * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
+ * 
+ * qZDL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef _LIBWAD_H_
 #define _LIBWAD_H_
-
-class DoomWad;
 
 #include <QtCore>
 #include "ZDLMapFile.h"
 
-class WadLump;
-
-class DoomWad : public ZDLMapFile {
+class DoomWad: public ZDLMapFile {
+	private:
+		QStringList map_names;
+		QString file;
 	public:
-		enum WadType {TYPE_IWAD, TYPE_PWAD};
-		enum AddBehaviour {REWRITE_WAD, APPEND_FIXUP};
-		DoomWad(QString file);
-		DoomWad(QIODevice *dev);
-		virtual ~DoomWad();
-		virtual bool open();
-		int lumps();
-		WadLump *getLump(int index);
-		WadLump *getLumpByName(QString name);
-		bool addLumps(QList<WadLump*> lumps, DoomWad::AddBehaviour behaviour = DoomWad::APPEND_FIXUP);
-		QStringList getLumpNames();
+		DoomWad(const QString &file);
 		virtual QStringList getMapNames();
+		virtual bool open();
 		virtual bool isCompressed();
-	protected:
-		int numLumps;
-		int directoryStart;
-		QIODevice *dev;
-		QStringList levelnames;
-		QVector<WadLump*> wadLumps;
-		bool shouldClose;
-};
-
-// This certainly won't compile for now
-class WadLump : public QIODevice{
-	public:
-		WadLump(int start, int size, QString name, DoomWad *par);
-		QString getName();
-		int getSize();
-		virtual qint64 readData(char* buf, qint64 len){return 0;}
-		virtual qint64 writeData(const char* buf, qint64 len){return 0;}
-	protected:
-		int lumpStart;
-		int lumpSize;
-		QString lumpName;
-		DoomWad *parent;
 };
 
 #endif

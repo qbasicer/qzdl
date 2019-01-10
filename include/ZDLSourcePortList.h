@@ -20,13 +20,16 @@
 #define _ZSPLIST_H_
 #include "ZDLListWidget.h"
 class ZDLSourcePortList : public ZDLListWidget{
-public:
-	ZDLSourcePortList(ZDLWidget *parent);
-	virtual void addButton();
-	virtual void rebuild();
-	virtual void newConfig();
-	virtual void editButton(QListWidgetItem * item);
-	virtual void newDrop(QStringList fileList);
+	Q_OBJECT
+	public:
+		ZDLSourcePortList(ZDLWidget *parent);
+		virtual void addButton();
+		virtual void rebuild();
+		virtual void newConfig();
+		virtual void editButton(QListWidgetItem * item);
+		virtual void newDrop(QStringList fileList);
+	protected slots:
+		void massAddButton();
 };
 
 #endif

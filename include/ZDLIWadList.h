@@ -20,13 +20,16 @@
 #define _ZIWADLIST_H_
 #include "ZDLListWidget.h"
 class ZDLIWadList : public ZDLListWidget{
-public:
-	ZDLIWadList(ZDLWidget *parent);
-	virtual void addButton();
-	virtual void rebuild();
-	virtual void newConfig();
-	virtual void editButton(QListWidgetItem * item);
-	virtual void newDrop(QStringList fileList);
+	Q_OBJECT
+	public:
+		ZDLIWadList(ZDLWidget *parent);
+		virtual void addButton();
+		virtual void rebuild();
+		virtual void newConfig();
+		virtual void editButton(QListWidgetItem * item);
+		virtual void newDrop(QStringList fileList);
+	protected slots:
+		void massAddButton();
 };
 
 #endif

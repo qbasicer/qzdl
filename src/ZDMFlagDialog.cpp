@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
 #include <QDialogButtonBox>
 
 ZDMFlagDialog::ZDMFlagDialog(ZDLWidget *parent):QDialog(parent){
-	setWindowTitle(ZDL_ENGINE_NAME " DMFlag Editor");
+	setWindowTitle("ZDL DMFlag Editor");
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QVBoxLayout *box = new QVBoxLayout(this);
 	

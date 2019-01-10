@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2011  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
 
 ZDMFlagPicker::ZDMFlagPicker(ZDLWidget *parent):QDialog(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);
-	QString engineName = ZDL_ENGINE_NAME;
+	QString engineName = "ZDL";
 	setWindowTitle(engineName+" DMFlag Editor");
 	QTreeView * view = new QTreeView(this);
 	

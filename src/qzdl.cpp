@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +24,12 @@
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
-#include "ZDLVersion.h"
 
 #include "ZDLNullDevice.h"
 
+#include "windows.h"
+
 QApplication *qapp;
-QString versionString;
 ZDLMainWindow *mw;
 
 static void addFile(QString file, ZDLConf* zconf){
@@ -64,7 +65,7 @@ static void addFile(QString file, ZDLConf* zconf){
 QDebug *zdlDebug;
 
 #if defined(Q_WS_WIN)
-__declspec(dllimport) int qt_ntfs_permission_lookup;
+	extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 #endif
 
 int main( int argc, char **argv ){
@@ -94,11 +95,7 @@ int main( int argc, char **argv ){
 #else
 	zdlDebug = new QDebug(&nullDev);
 #endif
-	LOGDATA() << ZDL_ENGINE_NAME << " booting at " << QDateTime::currentDateTime().toString() << endl;
-
-#if defined(Q_WS_WIN)
-	qt_ntfs_permission_lookup = 0;
-#endif
+	LOGDATA() << "ZDL" << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 #if defined(Q_WS_MAC)
 	QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
@@ -108,36 +105,15 @@ int main( int argc, char **argv ){
 	qapp = &a;
 	ZDLConfigurationManager::setArgv(args);
 	{
-		QString execuatble(argv[0]);
-#if defined(Q_WS_WIN)
-		execuatble.replace("\\", "/");
-#endif
-		QFileInfo fullPath(execuatble);
-		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
-		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
+		QFileInfo fullPath(argv[0]);
+		LOGDATA() << "Executable path: " << fullPath.canonicalFilePath() << endl;
+		ZDLConfigurationManager::setExec(fullPath.canonicalFilePath());
 	}
 
-
-#if defined(Q_WS_WIN)
-	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
-#elif defined(Q_WS_MAC)
-	versionString = ZDL_VERSION_STRING + QString(" (mac/") + QString(ZDL_BUILD)+QString(")");
-#elif defined(Q_WS_X11)
-	versionString = ZDL_VERSION_STRING + QString(" (linux/") + QString(ZDL_BUILD)+QString(")");
-#else
-	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD)+QString(")");
-#endif
-	LOGDATA() << "ZDL Version" << versionString << endl;
-	LOGDATA() << "Source: " << ZDL_SOURCE << endl;
-	LOGDATA() << "Build: " << ZDL_BUILD << endl;
-	LOGDATA() << "Revision: " << ZDL_REVISION << endl;
-#if defined(ZDL_BUILD_NUMBER)
-	if(ZDL_BUILD_NUMBER > 0){
-		LOGDATA() << "Build #: " << QString::number(ZDL_BUILD_NUMBER) << endl;
-	}
-#endif
-#if defined(ZDL_BUILD_JOB)
-	LOGDATA() << "Build job: " << ZDL_BUILD_JOB << endl;
+	LOGDATA() << "ZDL Version: " << ZDL_PRIVATE_VERSION_STRING << endl;
+	LOGDATA() << "Built on " << __DATE__ << " at " << __TIME__ <<endl;
+#if ZDL_DEV_BUILD==1
+	LOGDATA() << "This is development build" <<endl;
 #endif
 
 	QDir cwd = QDir::current();
@@ -274,8 +250,8 @@ int main( int argc, char **argv ){
 	QDir::setCurrent(qscwd);
 	delete mw;
 	// Set version information
-	tconf->setValue("zdl.general", "engine", ZDL_ENGINE_NAME);
-	tconf->setValue("zdl.general", "version", versionString);
+	tconf->setValue("zdl.general", "engine", "ZDL");
+	tconf->setValue("zdl.general", "version", ZDL_PRIVATE_VERSION_STRING);
 
 	bool doSave = true;
 	if (tconf->hasValue("zdl.general", "rememberFilelist")){

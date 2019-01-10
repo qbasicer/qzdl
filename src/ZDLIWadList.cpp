@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,16 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
+#include "zdlcommon.h"
 #include "ZDLIWadList.h"
 #include "ZDLNameListable.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
+#include "ZDLFileInfo.h"
+#include "gph_dps.xpm"
 
 #include <iostream>
 using namespace std;
 
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
+	QPushButton *btnMassAdd = new QPushButton(this);
+	btnMassAdd->setIcon(QPixmap(glyph_dbl_plus));
+	btnMassAdd->setToolTip("Add items");
+	buttonRow->insertWidget(0, btnMassAdd);
+
+	QObject::connect(btnMassAdd, SIGNAL(clicked()), this, SLOT(massAddButton()));
+}
+
+void ZDLIWadList::massAddButton(){
+	LOGDATAO() << "Adding new IWADs" << endl;
+	QStringList filters;
+	filters << "WAD files (*.wad;*.iwad)"
+		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
+		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
+		<< "All files (*.*)";
+
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters.join(";;"));
+	for(int i = 0; i < fileNames.size(); i++){
+		LOGDATAO() << "Adding file " << fileNames[i] << endl;
+		saveWadLastDir(fileNames[i]);
+		insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
+	}
 }
 
 void ZDLIWadList::newConfig(){
@@ -68,73 +94,51 @@ void ZDLIWadList::rebuild(){
 		
 		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("n"), fitm->getName());
 		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("f"), fitm->getFile());
-		
-		
 	}
 	
 }
 
 void ZDLIWadList::newDrop(QStringList fileList){
-	for(int i = 0; i < fileList.size(); i++){
-		ZDLNameListable *zList = NULL;
-		QString entry = fileList[i];
-		QStringList pathParts = entry.split("/");
-		if(pathParts.size() > 1){
-			QString file = pathParts.last();
-			QStringList fileParts = file.split(".");
-			if(fileParts.size() > 1){
-				QString name = fileParts[0];
-				zList = new ZDLNameListable(pList, 1001, entry, name);
-			}else{
-				zList = new ZDLNameListable(pList, 1001, entry, file);
-			}
-		}else{
-			zList = new ZDLNameListable(pList, 1001, entry, entry);
-		}
-		if(zList){
-			insert(zList, -1);
-		}
-	}
+	LOGDATAO() << "newDrop" << endl;	
+	for (int i=0; i<fileList.size(); i++)
+		insert(new ZDLNameListable(pList, 1001, fileList[i], ZDLIwadInfo(fileList[i]).GetFileDescription()), -1);
 }
 
 void ZDLIWadList::addButton(){
 	QStringList filters;
-	filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
-         << "WAD Files (*.wad)"
-         << "pk3 Files (*.pk3)"
-         << "zip Files (*.zip)"
-         << "All files (*)";
+	filters << "WAD files (*.wad;*.iwad)"
+		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
+		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
+		<< "All files (*.*)";
 	
-	ZDLNameInput diag(this);
+	ZDLIwadInfo zdl_fi;
+	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
 	diag.setWindowTitle("Add IWAD");
 	diag.setFilter(filters);
 	if (diag.exec()){
-		QString fileName = diag.getFile();
-		QString name = diag.getName();
-		ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, name);
-		insert(zList, -1);
+		saveWadLastDir(diag.getFile());
+		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
 	}
-
 }
 
 void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
 		QStringList filters;
-		filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
-				<< "WAD Files (*.wad)"
-				<< "pk3 Files (*.pk3)"
-				<< "zip Files (*.zip)"
-				<< "All files (*)";
+		filters << "WAD files (*.wad;*.iwad)"
+			<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
+			<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
+			<< "All files (*.*)";
+
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
-		ZDLNameInput diag(this);
+		ZDLIwadInfo zdl_fi;
+		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
 		diag.setWindowTitle("Add IWAD");
 		diag.setFilter(filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){
-			QString fileName = diag.getFile();
-			QString name = diag.getName();
-			zitem->setDisplayName(name);
-			zitem->setFile(fileName);
+			saveWadLastDir(diag.getFile());
+			zitem->setDisplayName(diag.getName());
+			zitem->setFile(diag.getFile());
 		}	
 	}
 }

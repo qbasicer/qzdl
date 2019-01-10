@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +23,12 @@
 #include <QtGui>
 #include <QObject>
 #include "ZDLNameListable.h"
+#include "ZDLFileInfo.h"
 
 class ZDLNameInput: public QDialog{
 	Q_OBJECT
 	public: 
-		ZDLNameInput(QWidget *parent);
+		ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi);
 		QString getName();
 		QString getFile();
 		void setFilter(QStringList inFilters);
@@ -35,6 +37,8 @@ class ZDLNameInput: public QDialog{
 	public slots:
 		void browse();
 	protected:
+		ZDLFileInfo *zdl_fi;
+		QString last_used_dir;
 		QLineEdit *lname;
 		QLineEdit *lfile;
 		QStringList filters;

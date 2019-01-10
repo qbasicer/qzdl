@@ -18,10 +18,11 @@
  
 #include <QtGui>
 #include <QObject>
+#include <QStyledItemDelegate>
 #include "ZDLWidget.h"
 
-class ZDLSettingsPane: public ZDLWidget{
-Q_OBJECT
+class ZDLSettingsPane: public ZDLWidget {
+	Q_OBJECT
 public: 
 	ZDLSettingsPane( QWidget *parent=0);
 	virtual void rebuild();
@@ -29,12 +30,22 @@ public:
 protected slots:
 	void currentRowChanged(int);
 	void reloadMapList();
+	void VerbosePopup();
+	void HidePopup();
 protected:
 	QStringList getFilesMaps();
-
 	QComboBox *diffList;
 	QComboBox *sourceList;
 	QListWidget *IWADList;
 	QComboBox *warpCombo;
-	
+	static bool naturalSortLess(const QString &lm, const QString &rm);
 };
+
+class AlwaysFocusedDelegate: public QItemDelegate {
+    Q_OBJECT
+public:
+	AlwaysFocusedDelegate(QObject *parent=NULL): QItemDelegate(parent) {}
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	//virtual void drawFocus(QPainter*, const QStyleOptionViewItem&, const QRect&) const {}
+};
+

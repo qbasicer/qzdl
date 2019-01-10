@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,6 +225,22 @@ QString ZDLConf::getValue(QString lsection, QString variable, int *status){
 		releaseReadLock();
 	}
 	*status = 2;
+	LOGDATAO() << "Failed to get value" << endl;
+	return QString();
+}
+
+QString ZDLConf::getValue(QString lsection, QString variable){
+	LOGDATAO() << "Getting value " << lsection << "/" << variable << endl;
+	if((mode & ReadOnly) != 0){
+		readLock();
+		reads++;
+		ZDLSection *sect = getSection(lsection);
+		if (sect){
+			releaseReadLock();
+			return sect->findVariable(variable);
+		}
+		releaseReadLock();
+	}
 	LOGDATAO() << "Failed to get value" << endl;
 	return QString();
 }

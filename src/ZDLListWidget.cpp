@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,17 +22,18 @@
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
-#include "adown.xpm"
-#include "aup.xpm"
+#include "gph_upt.xpm"
+#include "gph_dna.xpm"
+#include "gph_upa.xpm"
+#include "gph_pls.xpm"
+#include "gph_mns.xpm"
 
-ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
+ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent) {
 	QVBoxLayout *column = new QVBoxLayout(this);
 	pList = new QListWidget(this);
 	pList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-	QHBoxLayout *buttonRow = new QHBoxLayout();
-
-	btnAdd = new QPushButton("Add", this);
+	buttonRow = new QHBoxLayout();
 
 	QAction* delact = new QAction(this);
 	delact->setShortcut(Qt::Key_Delete);
@@ -42,31 +44,43 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	insact->setShortcut(Qt::Key_Insert);
 	insact->setShortcutContext(Qt::WidgetShortcut);
 	connect(insact, SIGNAL(triggered()), this, SLOT(addButton()));
-
+	
 	pList->addAction(delact);
 	pList->addAction(insact);
 
-	btnAdd->setMinimumWidth(30);
+	btnAdd = new QPushButton(this);
+	btnAdd->setIcon(QPixmap(glyph_plus));
 
-	btnRem = new QPushButton("Rem", this);
-	btnRem->setMinimumWidth(30);
+	btnRem = new QPushButton(this);
+	btnRem->setIcon(QPixmap(glyph_minus));
+
+	btnEdt = new QPushButton(this);
+	btnEdt->setIcon(QPixmap(glyph_up_trg));
 
 	btnUp = new QPushButton(this);
-	btnUp->setIcon(QPixmap(aup));
-	btnUp->setMinimumWidth(20);
+	btnUp->setIcon(QPixmap(glyph_up_arr));
 
 	btnDn = new QPushButton(this);
-	btnDn->setIcon(QPixmap(adown));
-	btnDn->setMinimumWidth(20);
+	btnDn->setIcon(QPixmap(glyph_down_arr));
+
+	btnAdd->setToolTip("Add item");
+	btnRem->setToolTip("Remove selected items");
+	btnEdt->setToolTip("Edit selected item");
+	btnUp->setToolTip("Move selected items up");
+	btnDn->setToolTip("Move selected items down");
 
 	buttonRow->addWidget(btnAdd);
 	buttonRow->addWidget(btnRem);
+	buttonRow->addWidget(btnEdt);
+	buttonRow->addStretch();
 	buttonRow->addWidget(btnUp);
 	buttonRow->addWidget(btnDn);
-	buttonRow->setSpacing(0);	
+	buttonRow->setSpacing(0);
+	
 	//Glue it together
 	column->addWidget(pList);
 	column->addLayout(buttonRow);
+	column->setSpacing(0);
 
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
@@ -74,6 +88,7 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	//signal time
 	QObject::connect(btnAdd, SIGNAL(clicked()), this, SLOT(addButton()));
 	QObject::connect(btnRem, SIGNAL(clicked()), this, SLOT(removeButton()));
+	QObject::connect(btnEdt, SIGNAL(clicked()), this, SLOT(editButton()));
 	QObject::connect(btnUp, SIGNAL(clicked()), this, SLOT(upButton()));
 	QObject::connect(btnDn, SIGNAL(clicked()), this, SLOT(downButton()));
 	QObject::connect(pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editButton(QListWidgetItem*)));
@@ -153,7 +168,7 @@ void ZDLListWidget::remove(int index){
 	if (item){
 		delete item;
 	}else{
-		QMessageBox::warning(this, ZDL_ENGINE_NAME " Error", "You didn't make a selection.");
+		QMessageBox::warning(this, "ZDL Error", "You didn't make a selection.");
 	}
 }
 ZDLListable* ZDLListWidget::get(int index){
@@ -286,8 +301,14 @@ void ZDLListWidget::downButton(){
         }
 }
 
-void ZDLListWidget::editButton(QListWidgetItem * item){
-	item = item;
+void ZDLListWidget::editButton(QListWidgetItem * item)
+{
+	Q_UNUSED(item);
+}
+
+void ZDLListWidget::editButton() 
+{ 
+	editButton(pList->currentItem()); 
 }
 
 

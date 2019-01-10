@@ -33,7 +33,7 @@ public:
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
-	QStringList getArguments();
+	QStringList getArguments(bool native_sep=false);
 	QString getExecutable();
 	void handleImport();
 	QString getWindowTitle();
@@ -41,12 +41,10 @@ public slots:
 	void launch();
 	void quit();
 	void tabChange(int index);
-	void badLaunch();
 protected:
 	ZDLInterface* intr;
 	ZDLSettingsTab* settings;
-	
-	int procerr;
+
 	QAction *qact2;
 };
 #endif

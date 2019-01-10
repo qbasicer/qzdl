@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,30 +21,14 @@
 #define _ZDLCOMMON_H_
 #include <QtCore>
 using namespace std;
+
 #define ZDL_FLAG_NAMELESS	0x00001
 
-#define ZDL_VERSION_STRING	"3.2.2.3 beta"
-
-#if defined(Q_WS_WIN)
-// Windows versioning information
-#define ZDL_VERSION_ID		57
-#define ZDL_PRODUCT_ID		"qzdl-win32-beta"
-#elif defined(Q_WS_MAC)
-// Mac information would go here
-#define ZDL_VERSION_ID          59
-#define ZDL_PRODUCT_ID          "zdl-mac-beta"
-#else
-// Other (Linux in reality)
-#define ZDL_VERSION_ID		58
-#define ZDL_PRODUCT_ID		"qzdl-git-beta"
-#endif
-
-#define ZDL_UDPATE_SERVER	"update.vectec.net"
-#define ZDL_ENGINE_NAME		"ZDL"
-#define ZDL_UID				"XXXX-XXXX-XXXX-XXXX"
+#define ZDL_VERSION_STRING "3-1.0"
+#define ZDL_DEV_BUILD 1
+#define ZDL_PRIVATE_VERSION_STRING "3.2.2.3~2017.01.11.git.6e5fe853c7-1.0+lcferrum"
 
 extern QDebug *zdlDebug;
-
 
 #if defined(ZDL_BLACKBOX)
 #include <QtCore>
@@ -53,7 +38,13 @@ extern QDebug *zdlDebug;
 #if !defined(Q_WS_MAC)
 
 #if UINTPTR_MAX == 0xffffffff
+#ifndef _ZDL_NO_WARNINGS
+#ifdef __GNUC__
 #warning 32bit
+#else
+#pragma message("Warning: 32bit")
+#endif
+#endif
 #define DPTR(ptr) QString("0x").append(QString("%1").arg((qulong)ptr, 0, 8, 16)
 #else
 #define DPTR(ptr) QString("0x").append(QString::number((qulonglong)ptr,16))
@@ -94,7 +85,13 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define RELEASE_WRITELOCK(mlock)	(mlock)->unlock()
 #define TRY_READLOCK(mlock, to)	(mlock)->tryLock(to)
 #define TRY_WRITELOCK(mlock, to) (mlock)->tryLock(to)
+#ifndef _ZDL_NO_WARNINGS
+#ifdef __GNUC__
 #warning Using Old Locking
+#else
+#pragma message("Warning: Using Old Locking")
+#endif
+#endif
 
 #else
 
@@ -106,7 +103,13 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define RELEASE_WRITELOCK(lock) (lock)->unlock()
 #define TRY_READLOCK(lock, to)	(lock)->tryLockForRead(to)
 #define TRY_WRITELOCK(lock, to) (lock)->tryLockForWrite(to)
+#ifndef _ZDL_NO_WARNINGS
+#ifdef __GNUC__
 #warning Using New Locking
+#else
+#pragma message("Warning: Using New Locking")
+#endif
+#endif
 
 #endif	
 

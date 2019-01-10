@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2018  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +24,9 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
+#include "ZDLQSplitter.h"
+
+#include <windows.h>
 
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 #include "ZDLFileAssociations.h"
@@ -32,41 +36,44 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLSettingsTab" << endl;
 	QVBoxLayout *sections = new QVBoxLayout(this);
 	
-	QVBoxLayout *iwadl = new QVBoxLayout();
-	QVBoxLayout *spl = new QVBoxLayout();
-	
 	alwaysArgs = new QLineEdit(this);
 	
-	QHBoxLayout *lrpane = new QHBoxLayout();
+	ZDLQSplitter *split = new ZDLQSplitter(this);
+	split->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ));
+	QSplitter *rsplit = split->getSplit();
 	
 	//IWAD
-	QVBoxLayout *lpane = new QVBoxLayout();
+	QWidget *rwidget = new QWidget(rsplit);
+	QVBoxLayout *rpane = new QVBoxLayout();
 	iwadList = new ZDLIWadList(this);
-	iwadl->addWidget(new QLabel("IWADs:", this));
-	iwadl->addWidget(iwadList);
+	iwadList->doDragDrop(true);
+	rpane->addWidget(new QLabel("IWADs", this));
+	rpane->addWidget(iwadList);
+	rwidget->setLayout(rpane);
+	rpane->setContentsMargins(0,0,0,0);
 	
 	//Source Port
-	QVBoxLayout *rpane = new QVBoxLayout();
+	QWidget *lwidget = new QWidget(rsplit);
+	QVBoxLayout *lpane = new QVBoxLayout();
 	sourceList = new ZDLSourcePortList(this);
-	spl->addWidget(new QLabel("Source Ports/Engines:", this));
-	spl->addWidget(sourceList);
+	sourceList->doDragDrop(true);
+	lpane->addWidget(new QLabel("Source ports", this));
+	lpane->addWidget(sourceList);
+	lwidget->setLayout(lpane);
+	lpane->setContentsMargins(0,0,0,0);
 	
-	rpane->addLayout(iwadl);
-	lpane->addLayout(spl);
-	
-	//Add the left and right panes
-	lrpane->addLayout(lpane);
-	lrpane->addLayout(rpane);
+	split->addChild(lwidget);
+	split->addChild(rwidget);
 	
 	//Add all the sections together
-	sections->addWidget(new QLabel("Always Add These Parameters", this));
+	sections->addWidget(new QLabel("Always add these parameters", this));
 	
 	launchClose = new QCheckBox("Close on launch",this);
-	launchClose->setToolTip("Close "ZDL_ENGINE_NAME" completely when launching a new game");
+	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
 	showPaths = new QCheckBox("Show files paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
-	connect(showPaths,SIGNAL(toggled(bool)),this,SLOT(pathToggled(bool)));
+	connect(showPaths,SIGNAL(stateChanged(int)),this,SLOT(pathToggled(int)));
 	sections->addWidget(alwaysArgs);
 
 	QHBoxLayout *fileassoc = new QHBoxLayout();
@@ -76,37 +83,39 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	QPushButton *assoc = new QPushButton("Associations", this);
-	assoc->setToolTip("Associate various file types with "ZDL_ENGINE_NAME);
+	assoc->setToolTip("Associate various file types with ZDL");
 	fileassoc->addWidget(assoc);
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
-	savePaths = new QCheckBox("Save/Load PWAD list automatically", this);
-	savePaths->setToolTip("Save the zdl.save section (PWADS) when closing");
+	savePaths = new QCheckBox("Save/load external file list automatically", this);
+	savePaths->setToolTip("Save the external file list when closing");
 
 	sections->addLayout(fileassoc);
-	sections->addLayout(lrpane);
+	sections->addWidget(split);
 	sections->addWidget(launchClose);
 	sections->addWidget(showPaths);
 	sections->addWidget(savePaths);
-	setContentsMargins(0,0,0,0);
+	setContentsMargins(4,4,4,4);
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-void ZDLSettingsTab::pathToggled(bool enabled){
-	if(enabled){
-		LOGDATAO() << "Path bracketing enabled" << endl;
-	}else{
-		LOGDATAO() << "Path bracketing disabled" << endl;
-	}
-	iwadList->rebuild();
-	sourceList->rebuild();
+void ZDLSettingsTab::pathToggled(int state){
+	Q_UNUSED(state);
+
+	ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration();
+	if(showPaths->checkState()==Qt::Checked)
+		zconf->setValue("zdl.general", "showpaths", "1");
+	else
+		zconf->setValue("zdl.general", "showpaths", "0");
+	iwadList->newConfig();
+	sourceList->newConfig();
 }
 
 void ZDLSettingsTab::fileAssociations(){
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 	ZDLFileAssociations assoc(this);
-	assoc.exec();
+	if (assoc.exec()) {}
 #endif
 }
 
