@@ -27,6 +27,13 @@ class ZDLAdvancedMultiplayerDialog: public QDialog{
 Q_OBJECT
 public: 
 	ZDLAdvancedMultiplayerDialog(ZDLWidget *parent=0);
+
+	// For the unit tests
+	Qt::CheckState getEnable();
+	Qt::CheckState getExtraTic();
+	QString getNetMode();
+	QString getPortNo();
+	QString getDupMode();
 private:
 	QCheckBox *enable;
 	QCheckBox *extratic;

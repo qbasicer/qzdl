@@ -85,9 +85,7 @@ ZDLWidget* ZDLConfigurationManager::getInterface(){
 }
 
 void ZDLConfigurationManager::setActiveConfiguration(ZDLConf *zconf){
-	//cout << "Using new configuration" << endl;
 	ZDLConfigurationManager::activeConfig = zconf;
-	events->signalNewConfiguration(zconf);
 }
 
 ZDLConf* ZDLConfigurationManager::getActiveConfiguration(){

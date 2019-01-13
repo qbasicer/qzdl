@@ -33,6 +33,15 @@ public:
 	void writeConfig();
 	virtual void newConfig();
 	virtual void rebuild();
+
+	// For the unit tests
+	QString getExtraArgs() const;
+	QString getMode();
+	QString getHostAddy();
+	QString getPlayers();
+	QString getFragLmit();
+	QString getDMFlags();
+	QString getDMFlags2();
 public slots:
 	void loadZdlFile();
 	void saveZdlFile();

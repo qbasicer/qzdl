@@ -30,6 +30,13 @@ public:
 	virtual void newConfig();
 	void startRead();
 	void writeConfig();
+
+	// For the unit tests
+	QString getAlwaysArgs();
+	Qt::CheckState getLaunchClose();
+	Qt::CheckState getShowPaths();
+	Qt::CheckState getLaunchZDL();
+	Qt::CheckState getSavePaths();
 protected slots:
 	void reloadConfig();
 	void pathToggled(bool enabled);

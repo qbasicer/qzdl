@@ -448,3 +448,63 @@ void ZDLMainWindow::writeConfig(){
 	intr->writeConfig();
 	settings->writeConfig();
 }
+
+QString ZDLMainWindow::getExtraArgs() const
+{
+	return intr->getExtraArgs();
+}
+
+QString ZDLMainWindow::getMode()
+{
+	return intr->getMode();
+}
+
+QString ZDLMainWindow::getHostAddy()
+{
+	return intr->getHostAddy();
+}
+
+QString ZDLMainWindow::getPlayers()
+{
+	return intr->getPlayers();
+}
+
+ QString ZDLMainWindow::getFragLmit()
+ {
+	 return intr->getFragLmit();
+ }
+
+ QString ZDLMainWindow::getDMFlags()
+ {
+	 return intr->getDMFlags();
+ }
+
+ QString ZDLMainWindow::getDMFlags2()
+ {
+	 return intr->getDMFlags2();
+ }
+
+ QString ZDLMainWindow::getAlwaysArgs()
+ {
+	 return settings->getAlwaysArgs();
+ }
+
+ Qt::CheckState ZDLMainWindow::getLaunchClose()
+ {
+	 return settings->getLaunchClose();
+ }
+
+ Qt::CheckState ZDLMainWindow::getShowPaths()
+ {
+	 return settings->getShowPaths();
+ }
+
+ Qt::CheckState ZDLMainWindow::getLaunchZDL()
+ {
+	 return settings->getLaunchZDL();
+ }
+
+ Qt::CheckState ZDLMainWindow::getSavePaths()
+ {
+	 return settings->getSavePaths();
+ }

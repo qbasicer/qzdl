@@ -211,3 +211,26 @@ void ZDLSettingsTab::writeConfig(){
 	emit buildChildren(this);
 	rebuild();
 }
+
+QString ZDLSettingsTab::getAlwaysArgs()
+{
+	return alwaysArgs->text();
+}
+
+Qt::CheckState ZDLSettingsTab::getLaunchClose()
+{
+	return launchClose->checkState();
+}
+
+Qt::CheckState ZDLSettingsTab::getShowPaths()
+{
+	return showPaths->checkState();
+}
+Qt::CheckState ZDLSettingsTab::getLaunchZDL()
+{
+	return launchZDL->checkState();
+}
+Qt::CheckState ZDLSettingsTab::getSavePaths()
+{
+	return savePaths->checkState();
+}

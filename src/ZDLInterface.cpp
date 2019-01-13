@@ -547,3 +547,38 @@ void ZDLInterface::writeConfig(){
 	rebuild();
 	emit buildChildren(this);
 }
+
+QString ZDLInterface::getExtraArgs() const
+{
+	return extraArgs->text();
+}
+
+QString ZDLInterface::getMode()
+{
+	return mpane->getMode();
+}
+
+QString ZDLInterface::getHostAddy()
+{
+	return mpane->getHostAddy();
+}
+
+QString ZDLInterface::getPlayers()
+{
+	return mpane->getPlayers();
+}
+
+ QString ZDLInterface::getFragLmit()
+ {
+	 return mpane->getFragLmit();
+ }
+
+ QString ZDLInterface::getDMFlags()
+ {
+	 return mpane->getDMFlags();
+ }
+
+ QString ZDLInterface::getDMFlags2()
+ {
+	 return mpane->getDMFlags2();
+ }

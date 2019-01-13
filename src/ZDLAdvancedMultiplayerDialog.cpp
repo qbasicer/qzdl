@@ -195,3 +195,28 @@ void ZDLAdvancedMultiplayerDialog::save(){
 	
 	done(1);
 }
+
+Qt::CheckState ZDLAdvancedMultiplayerDialog::getEnable()
+{
+	return enable->checkState();
+}
+
+Qt::CheckState ZDLAdvancedMultiplayerDialog::getExtraTic()
+{
+	return extratic->checkState();
+}
+
+QString ZDLAdvancedMultiplayerDialog::getNetMode()
+{
+	return netmode->currentText();
+}
+
+QString ZDLAdvancedMultiplayerDialog::getPortNo()
+{
+	return portNo->text();
+}
+
+QString ZDLAdvancedMultiplayerDialog::getDupMode()
+{
+	return dupmode->currentText();
+}

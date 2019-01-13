@@ -177,3 +177,33 @@ void ZDLMultiPane::rebuild(){
 	zconf->setValue("zdl.save", "players", gPlayers->currentIndex());
 }
 
+
+QString ZDLMultiPane::getMode()
+{
+	return gMode->currentText();
+}
+
+QString ZDLMultiPane::getHostAddy()
+{
+	return tHostAddy->text();
+}
+
+QString ZDLMultiPane::getPlayers()
+{
+	return gPlayers->currentText();
+}
+
+QString ZDLMultiPane::getFragLmit()
+{
+	return tFragLimit->text();
+}
+
+QString ZDLMultiPane::getDMFlags()
+{
+	return bDMFlags->text();
+}
+
+QString ZDLMultiPane::getDMFlags2()
+{
+	return bDMFlags2->text();
+}

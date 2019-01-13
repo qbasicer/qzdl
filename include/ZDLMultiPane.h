@@ -29,6 +29,14 @@ public:
 	ZDLMultiPane( ZDLWidget *parent=0);
 	virtual void newConfig();
 	virtual void rebuild();
+
+	// For the unit tests
+	QString getMode();
+	QString getHostAddy();
+	QString getPlayers();
+	QString getFragLmit();
+	QString getDMFlags();
+	QString getDMFlags2();
 private:
 	QComboBox *gMode;
 	QLineEdit *tHostAddy;
