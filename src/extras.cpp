@@ -36,19 +36,4 @@ int countLines(ZDLConf *cnf)
 		count += sc->lines.size();
 	}	
 	return count;
-} 
-
-/* Lifted straight from ZDL 3.0 */
- //////////////////////////
-// From DoomDefs.h (by Bio)
-typedef struct{
-	char type[4];	// Either "IWAD" or "PWAD"
-	int lumps;	// Number of lumps in the dir
-	int dir;		// the offset of the start of the dir
-}WADHEAD;
-typedef struct{
-	int start;	// where the lump starts
-	int length;	// how long the lump is
-	char name[8];	// the lump's name (e.g. "MAP01")
-}LUMPHEAD;
-
+}

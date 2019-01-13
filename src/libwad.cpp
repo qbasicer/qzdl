@@ -44,7 +44,7 @@ bool DoomWad::open(){
 
 		if (wad.read((char*)&header, sizeof(wadinfo_t))==sizeof(wadinfo_t)&&wad.seek(header.infotableofs)) {
 			filelump_t *fileinfo=new filelump_t[header.numlumps];
-			qint64 length=sizeof(filelump_t)*header.numlumps;
+			size_t length=sizeof(filelump_t)*header.numlumps;
 
 			if (wad.read((char*)fileinfo, length)==length) {
 				char prev_lump_name[9]={};
