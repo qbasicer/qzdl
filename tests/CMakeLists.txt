@@ -58,7 +58,7 @@ add_executable(
 	../src/ZDLListWidget.cpp
 	../src/ZDMFlagPicker.cpp
 	../src/ZDLSettingsTab.cpp
-	../src/ZDLIWADList.cpp
+	../src/ZDLIWadList.cpp
 	../src/ZDLNameInput.cpp
 	../src/ZDLAboutDialog.cpp
 	../src/ZDLFileListable.cpp
