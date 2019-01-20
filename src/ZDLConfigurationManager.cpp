@@ -68,6 +68,10 @@ void ZDLConfigurationManager::setArgv(QStringList args){
 	ZDLConfigurationManager::argv = args;
 }
 
+QStringList ZDLConfigurationManager::parseExtraArgs(QString arg_str){
+	return arg_str.split(' ', QString::SkipEmptyParts);
+}
+
 void ZDLConfigurationManager::setWhy(ZDLConfigurationManager::WhyConfig conf){
 	ZDLConfigurationManager::why = conf;
 }
@@ -76,10 +80,10 @@ ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::getWhy(){
 	return ZDLConfigurationManager::why;
 }
 
-
 void ZDLConfigurationManager::setInterface(ZDLWidget *widget){
 	interface  = widget;
 }
+
 ZDLWidget* ZDLConfigurationManager::getInterface(){
 	return interface;
 }

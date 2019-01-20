@@ -549,11 +549,11 @@ QStringList ZDLMainWindow::getArguments(){
 	}
 
 	if (zconf->hasValue("zdl.general", "alwaysadd")){
-		ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
+		ourString += ZDLConfigurationManager::parseExtraArgs(zconf->getValue("zdl.general", "alwaysadd", &stat));
 	}
 
 	if (zconf->hasValue("zdl.save", "extra")){
-		ourString << zconf->getValue("zdl.save", "extra", &stat);
+		ourString += ZDLConfigurationManager::parseExtraArgs(zconf->getValue("zdl.save", "extra", &stat));
 	}
 	LOGDATAO() << "args: " << ourString << endl;
 	return ourString;

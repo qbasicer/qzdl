@@ -59,6 +59,8 @@ class ZDLConfigurationManager{
 		static QString getExec();
 		static void setExec(QString execu);
 		static ZDLConfigurationEvents* getEvents();
+
+		static QStringList parseExtraArgs(QString arg_str);
 	protected:
 		static QString exec;
 		static QStringList argv;
