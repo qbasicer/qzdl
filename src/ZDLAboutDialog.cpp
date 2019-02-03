@@ -46,8 +46,8 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	QFrame *hrTop = new QFrame(this);
 	hrTop->setFrameStyle(QFrame::HLine);
 	box->addWidget(hrTop);
-	box->addWidget(new QLabel("Copyright (C) ZDL Software Foundation 2004-2012", this));
-	box->addWidget(new QLabel("Copyright (C) Lcferrum 2018", this));
+	box->addWidget(new QLabel("Copyright (c) 2018-2019 Lcferrum", this));
+	box->addWidget(new QLabel("Copyright (c) 2004-2012 ZDL Software Foundation", this));
 	QLabel *url = new QLabel("<a href=https://github.com/lcferrum/qzdl>GitHub/qzdl</a>",this);
 	url->setOpenExternalLinks(true);
 	box->addWidget(url);

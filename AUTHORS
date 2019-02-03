@@ -1,12 +1,21 @@
-   _________________________
-  /                         /
- /  ZDL 3.2.2.3 beta       /
-/_________________________/
-
-http://zdl.vectec.net
-(C) ZDL Software Foundation
-
-- Cody "QBasicer" Harris, charris@vectec.net
-- Ryan "BioHazard" Turner 
-- NeuralStunner
-
+ZDL:
+	Written by
+		Lcferrum <lcferrum@yandex.com>
+		ZDL Software Foundation
+	ZDL Software Foundation is
+		Cody "QBasicer" Harris <charris@vectec.net>
+		Ryan "BioHazard" Turner 
+		NeuralStunner
+	Released under under GNU General Public License v3.0
+	Uses SimpleWFA and miniz libraries
+	
+SimpleWFA:
+	Written by
+		Lcferrum <lcferrum@yandex.com>
+	Released under under BSD 2-Clause License
+	
+miniz:
+	Written by
+		RAD Game Tools and Valve Software
+		Rich Geldreich and Tenacious Software LLC
+	Released under under Miniz License

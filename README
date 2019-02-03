@@ -1,32 +1,25 @@
-   _________________________
-  /                         /
- /   ZDL 3.2.2.3 beta      /
-/_________________________/
+ZDL
 
-http://zdl.vectec.net
-(C) ZDL Software Foundation
+1. License
+----------
+Copyright (c) 2018-2019 Lcferrum
+Copyright (c) 2004-2012 ZDL Software Foundation
 
-Thank you for using ZDL 3.2!
-I add features based on demand and usage.  The more users
-and feedback I get, the better the product gets.
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
 
-Special Thanks:
-- Ryan "Biohazard" Turner, original ZDL artwork/designer/coder
-- NeuralStunner, alpha tester and artwork
-- Risen, Enjay, DRDTeam.org, ZDoom.org, for being awesome
-- Everybody who reported bugs!
+You should have received a copy of the GNU General Public License along with
+this program. If not, see http://www.gnu.org/licenses/.
 
-On IRC? Join us at #zdl on EsperNET - irc.esper.net
+2. About
+--------
+ZDL is a frontend ("launcher") for ZDoom based Doom engine source ports. It
+provides convenient interface to launch Doom engine games and their third-party
+modifications (WADs) using selected source port. Launch configurations can be
+saved on disc to be later used by ZDL to quickly launch selected game or
+modification. ZDL can also be used to launch multiplayer sessions.
 
-ZDL 3.2 is released under the GNU Public License v3 (GPLv3).
-
-In short, that means:
-  ...
-  For the developers' and authors' protection, the GPL clearly
-  explains that there is no warranty for this free software. For 
-  both users' and authors' sake, the GPL requires that modified 
-  versions be marked as changed, so that their problems will not 
-  be attributed erroneously to authors of previous versions.
-  ...
-
-
+3. History
+----------
