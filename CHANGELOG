@@ -1,86 +1,128 @@
-   _________________________
-  /                         /
- /  ZDL 3.2.2.3 beta       /
-/_________________________/
+2019-XX-XX  Lcferrum <lcferrum@yandex.com>
 
-http://zdl.vectec.net
-(C) ZDL Software Foundation
+	* Release 3-1.0
+	* Fixed:
+		- File associations now work on Win 7+
+	* Changed:
+		- New versioning scheme to differentiate this fork from original Qt ZDL
+		- UI design is now closer to original BioHazard's ZDL UI
+		- DOOMWADDIR is taken into account when using "add WAD" dialogs
+		- Last used directory is remembered separately for each of the "add file/WAD" dialogs
+		- Config files containing CCMDs (.cfg) are passed to source port using '+exec' option
+	* Added:
+		- Automatic naming for added source ports and IWADs
+		- Drag & drop support for source ports and IWADs lists
+		- 'Add several files' button for source ports and IWADs lists
+		- 'Add directory' button for external files list
+		- Entries in external files list can be "excluded"/"included" with double click
+		- Server port, time limit and savegame multiplayer options
+		- Support for PK3 (ZIP) and UDMF (TEXTMAP) maps in map select drop-down list
 
-* 3.2.2.3 - May 16th, 2014
-  * Remember last directory used in the file pane
+2014-05-16  ZDL Software Foundation
 
-* 3.2.2.2 - August 2nd, 2012
-  * Change behaviour of issue #31, only drop file[0-9]+, changed the option to rememberFilelist
-  * Default to remembering file list
-  * Add new function to libzdl: deleteRegex(QString section, QString regex)
-  * Fixed buggle multiple-file-moving
+	* Release 3.2.2.3
+	* Remember last directory used in the file pane
 
-* 3.2.2.1 - July 30th, 2012
-  * Fix broken config file saving (#32)
+2012-08-02  ZDL Software Foundation
 
-* 3.2.2.0 - July 26th, 2012
-  * Option to toggle saving/loading of the PWAD list (31)
-  * Move lastDir from zdl.save to zdl.general
-  * Ignore arguments starting with -
-  * Append .ini file when saving configuration if there is no extension
-  * ZDL now under the "ZDL Software Foundation"
-  * Rebrand more to ZDL instead of qZDL
-  * Specify the configuration backend of libzdl to sunrise
-  * Add (currently unused) options to libzdl to prevent writing and cloning and accessor APIs
+	* Release 3.2.2.2
+	* Change behaviour of issue #31, only drop file[0-9]+, changed the option to rememberFilelist
+	* Default to remembering file list
+	* Add new function to libzdl: deleteRegex(QString section, QString regex)
+	* Fixed buggle multiple-file-moving
 
-* 3.2.1.1 - July 24th, 2012
-  * Save the last directory used in the file open/save dialogs into zdl.save/lastDir (#20)
+2012-07-30  ZDL Software Foundation
+	
+	* Release 3.2.2.1
+	* Fix broken config file saving (#32)
 
-* 3.2.1.0 - July 18th, 2012
-  * Fix auto-close not being loaded properly if 'show paths' was checked (#30)
-  * Enable multiple items to be moved at once in lists (#27)
+2012-07-26  ZDL Software Foundation
+	
+	* Release 3.2.2.0
+	* Option to toggle saving/loading of the PWAD list (31)
+	* Move lastDir from zdl.save to zdl.general
+	* Ignore arguments starting with -
+	* Append .ini file when saving configuration if there is no extension
+	* ZDL now under the "ZDL Software Foundation"
+	* Rebrand more to ZDL instead of qZDL
+	* Specify the configuration backend of libzdl to sunrise
+	* Add (currently unused) options to libzdl to prevent writing and cloning and accessor APIs
+	
+2012-07-24  ZDL Software Foundation
 
-* 3.2.0.2 - July 10th, 2012
-  * Fix holding of wad files and not closing them (#23)
-  * Removed DMFlag picker (#26)
-  * Fix swapped paths in file list (#22)
-  * Fixed broken advanced multiplayer settings load (#25)
+	* Release 3.2.1.1
+	* Save the last directory used in the file open/save dialogs into zdl.save/lastDir (#20)
+	
+2012-07-18  ZDL Software Foundation
 
-* 3.2.0.1 - June 27th, 2012
-  * Fix the inability to save .ZDL files (issue #21)
-  * Fix using save dialog instead of open dialog for .ZDL file opening (issue #19)
-  * Fix bogus update notification after updating (issue #18)
+	* Release 3.2.1.0
+	* Fix auto-close not being loaded properly if 'show paths' was checked (#30)
+	* Enable multiple items to be moved at once in lists (#27)
+	
+2012-07-10  ZDL Software Foundation
 
-* 3.2.0.0 - June 8th, 2012
-  * Remove 'quote paths' option
-  * Add option to hide paths in lists
-  * Populate the maps combobox with map names from the wads
-  * Change internal branding to ZDL
+	* Release 3.2.0.2
+	* Fix holding of wad files and not closing them (#23)
+	* Removed DMFlag picker (#26)
+	* Fix swapped paths in file list (#22)
+	* Fixed broken advanced multiplayer settings load (#25)
+	
+2012-06-27  ZDL Software Foundation
 
-* 3.0.5.9 - June 7th, 2012
-  * Fix the multiplayer section configuration not loading (issue #17)
-  * Fix -join not working (issue #17)
-  * Fix host parameter not added to command line (issue #17)
+	* Release 3.2.0.1
+	* Fix the inability to save .ZDL files (issue #21)
+	* Fix using save dialog instead of open dialog for .ZDL file opening (issue #19)
+	* Fix bogus update notification after updating (issue #18)
+	
+2012-06-08  ZDL Software Foundation
 
-* 3.0.5.8 - May 23rd, 2012
-  * Use native file dialogs instead of Qt
-  * Show a nice GUI for new versions which shows the changelog
-  * Check for updates at most once every 24h unless checked manually
-  * No longer beta
+	* Release 3.2.0.0
+	* Remove 'quote paths' option
+	* Add option to hide paths in lists
+	* Populate the maps combobox with map names from the wads
+	* Change internal branding to ZDL
+	
+2012-06-07  ZDL Software Foundation
 
-* 3.0.5.7 - April 27th, 2012
-  * Actually fixed GHI #11
-  * Create the configuration folders if they don't exist
-  * Save and restore both window size and location
+	* Release 3.0.5.9
+	* Fix the multiplayer section configuration not loading (issue #17)
+	* Fix -join not working (issue #17)
+	* Fix host parameter not added to command line (issue #17)
+	
+2012-05-23  ZDL Software Foundation
 
-* 3.0.5.6 - April 22nd, 2012
-  * Fixed GHI #10: Multiplayer config isn't read on open
-  * Fixed GHI #11: Alwaysadd configuration option is not loaded
+	* Release 3.0.5.8
+	* Use native file dialogs instead of Qt
+	* Show a nice GUI for new versions which shows the changelog
+	* Check for updates at most once every 24h unless checked manually
+	* No longer beta
+	
+2012-04-27  ZDL Software Foundation
 
-* 3.0.5.5b - April 19th, 2012
-  * Fixed documentation
-  * Fixed bug in updater where no updates would ever be found
+	* Release 3.0.5.7
+	* Actually fixed GHI #11
+	* Create the configuration folders if they don't exist
+	* Save and restore both window size and location
+	
+2012-04-22  ZDL Software Foundation
 
-* 3.0.5.5 - April 18th, 2012
-  * Fixed GHI #5: Autoclose doesn't work on Windows
-    https://github.com/qbasicer/qzdl/issues/5
-  * Fixed GHI #6: Quote Files may have an issue
-    https://github.com/qbasicer/qzdl/issues/6
+	* Release 3.0.5.6
+	* Fixed GHI #10: Multiplayer config isn't read on open
+	* Fixed GHI #11: Alwaysadd configuration option is not loaded
+	
+2012-04-19  ZDL Software Foundation
 
-* 3.0.5.4 - April 16th, 2012
-  * First release
+	* Release 3.0.5.5b
+	* Fixed documentation
+	* Fixed bug in updater where no updates would ever be found
+	
+2012-04-18  ZDL Software Foundation
+
+	* Release 3.0.5.5
+	* Fixed GHI #5: Autoclose doesn't work on Windows https://github.com/qbasicer/qzdl/issues/5
+	* Fixed GHI #6: Quote Files may have an issue https://github.com/qbasicer/qzdl/issues/6
+	
+2012-04-16  ZDL Software Foundation
+
+	* Release 3.0.5.4
+	* First release

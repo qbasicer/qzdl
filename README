@@ -21,5 +21,48 @@ modifications (WADs) using selected source port. Launch configurations can be
 saved on disc to be later used by ZDL to quickly launch selected game or
 modification. ZDL can also be used to launch multiplayer sessions.
 
-3. History
-----------
+3. Where to get
+---------------
+You can compile binary by yourself (refer to COMPILE that comes with the 
+sources) or download binary distribution from GitHub releases section. Project
+homepage at GitHub:
+
+	https://github.com/lcferrum/qzdl
+	
+4. Installation and usage
+-------------------------
+ZDL is distributed as a single portable executable. Just copy it somewhere and
+run it. On Windows executable additionally requires Microsoft Visual C++ 2010
+x86 redistributable package to be installed on the machine. If it's not already
+installed, download it from here:
+
+	https://www.microsoft.com/en-us/download/details.aspx?id=5555
+	
+ZDL is just a frontend, you should get Doom source port and needed game assets
+(IWADs and PWADs) separately.
+
+ZDL interface should be self-explanatory to someone familiar with Doom source
+ports. There are two tabs: first one is used to configure launch options for
+selected source port and the second one is used to manage collection of IWADs
+and source ports. Button with a down arrow on the first tab opens additional
+panel for configuring multiplayer options. For the quickstart:
+
+    1) Switch to the second tab and add IWADs and source ports
+
+        a) Drag and drop IWAD files to IWADs list
+
+        b) Drag and drop source port executables to source ports list
+
+    2) Switch to the first tab and configure launch options 
+	
+        a) Select source port from source port drop-down list
+
+        b) Select IWAD from the IWAD list
+
+        c) If necessary, add any additional files (PWADs, configs, patches) by
+           dragging and dropping them to external files list
+
+    3) Click 'Launch' button to launch source port using current configuration
+
+    4) ZDL automatically saves IWADs and source ports lists and, by default,
+       also remembers launch configuration
