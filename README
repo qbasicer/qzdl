@@ -33,10 +33,10 @@ homepage at GitHub:
 -------------------------
 ZDL is distributed as a single portable executable. Just copy it somewhere and
 run it. On Windows executable additionally requires Microsoft Visual C++ 2010
-x86 redistributable package to be installed on the machine. If it's not already
-installed, download it from here:
+SP1 x86 redistributable package to be installed on the machine. If it's not
+already installed, download it from here:
 
-	https://www.microsoft.com/en-us/download/details.aspx?id=5555
+	https://www.microsoft.com/en-us/download/details.aspx?id=8328
 	
 ZDL is just a frontend, you should get Doom source port and needed game assets
 (IWADs and PWADs) separately.
