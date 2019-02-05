@@ -1,18 +1,13 @@
 ZDL:
-	Written by
-		Lcferrum <lcferrum@yandex.com>
-		ZDL Software Foundation
-	ZDL Software Foundation is
+	Lcferrum <lcferrum@yandex.com>
+	ZDL Software Foundation:
 		Cody "QBasicer" Harris <charris@vectec.net>
 		Ryan "BioHazard" Turner 
 		NeuralStunner
-	Uses SimpleWFA and miniz libraries
-	
+
 SimpleWFA:
-	Written by
-		Lcferrum <lcferrum@yandex.com>
+	Lcferrum <lcferrum@yandex.com>
 	
 miniz:
-	Written by
-		RAD Game Tools and Valve Software
-		Rich Geldreich and Tenacious Software LLC
+	RAD Game Tools and Valve Software
+	Rich Geldreich and Tenacious Software LLC

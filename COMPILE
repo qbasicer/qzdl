@@ -1,0 +1,39 @@
+ZDL compiling instructions
+
+1. License
+----------
+Copyright (c) 2018-2019 Lcferrum
+Copyright (c) 2004-2012 ZDL Software Foundation
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see http://www.gnu.org/licenses/.
+
+2. General
+----------
+ZDL is written in C++ and uses Qt library. To be able to compile ZDL you should
+install Qt SDK. ZDL also uses SimpleWFA and miniz libraries which are
+statically linked and included with the sources. Sources can be downloaded from
+official GitHub page:
+
+	https://github.com/lcferrum/qzdl
+	
+After compiling, see README file for instructions on using ZDL.
+
+3. Compile for Windows
+----------------------
+ZDL source code is distributed in the form of Microsoft Visual Studio 2010
+solution and uses Qt 4.8. Besides VS 2010, to compile ZDL you need to download:
+
+    1) Qt 4.8 for Microsoft Visual Studio 2010
+
+    2) Qt Visual Studio Add-in
+	
+Default distribution of Qt 4.8 is compiled for dynamic linking. If you want ZDL
+to be compiled as standalone executable, you have to recompile Qt with static
+linking support. After setting up build environment, don't forget to set
+correct Qt version in Qt project settings.
