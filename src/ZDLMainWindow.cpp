@@ -25,7 +25,7 @@
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
-#include "ZDLImportDialog.hpp"
+#include "ZDLImportDialog.h"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
