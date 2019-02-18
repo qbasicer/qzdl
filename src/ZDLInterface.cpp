@@ -109,41 +109,21 @@ QLayout *ZDLInterface::getButtonPane(){
 	QPushButton *btnLaunch = new QPushButton("Launch", this);
 
 	QMenu *context = new QMenu(btnZDL);
-	QMenu *actions = new QMenu("Actions",context);
 
-	QAction *showCommandline = actions->addAction("Show Command Line");
-	QAction *clearAllPWadsAction = actions->addAction("Clear PWAD list");
-	QAction *clearAllFieldsAction = actions->addAction("Clear all fields");
-	clearAllFieldsAction->setShortcut(QKeySequence::New);
-	QAction *clearEverythingAction = actions->addAction("Clear everything");
-	actions->addSeparator();
-	QAction *clearCurrentGlobalConfig = actions->addAction("Clear current global config");
-	clearCurrentGlobalConfig->setEnabled(false);	
-
-	//QAction *newDMFlagger = actions->addAction("New DMFlag picker");
-
-	context->addMenu(actions);
+	QAction *showCommandline = context->addAction("Show Command Line");
 	context->addSeparator();
+
 	QAction *loadZdlFileAction = context->addAction("Load .zdl");
 	loadZdlFileAction->setShortcut(QKeySequence::Open);
 	QAction *saveZdlFileAction = context->addAction("Save .zdl");
 	saveZdlFileAction->setShortcut(QKeySequence::Save);
 	context->addSeparator();
-	QAction *loadAction = context->addAction("Load .ini");
-	QAction *saveAction = context->addAction("Save .ini");
-	context->addSeparator();
 	QAction *aboutAction = context->addAction("About");
 	aboutAction->setShortcut(QKeySequence::HelpContents);
 
-	connect(loadAction, &QAction::triggered, this, &ZDLInterface::loadConfigFile);
-	connect(saveAction, &QAction::triggered, this, &ZDLInterface::saveConfigFile);
 	connect(loadZdlFileAction, &QAction::triggered, this, &ZDLInterface::loadZdlFile);
 	connect(saveZdlFileAction, &QAction::triggered, this, &ZDLInterface::saveZdlFile);
 	connect(aboutAction, &QAction::triggered, this, &ZDLInterface::aboutClick);
-
-	connect(clearAllPWadsAction, &QAction::triggered, this, &ZDLInterface::clearAllPWads);
-	connect(clearAllFieldsAction, &QAction::triggered, this, &ZDLInterface::clearAllFields);
-	connect(clearEverythingAction, &QAction::triggered, this, &ZDLInterface::clearEverything);
 
 	connect(showCommandline, &QAction::triggered, this, &ZDLInterface::showCommandline);
 	connect(btnExit, &QPushButton::clicked, this, &ZDLInterface::exitzdl);
@@ -173,49 +153,6 @@ QLayout *ZDLInterface::getButtonPane(){
 
 	connect(btnMSet, &QPushButton::clicked, this, &ZDLInterface::ampclick);
 	return box;
-}
-
-void ZDLInterface::clearAllPWads(){
-	LOGDATAO() << "Clearing all PWads" << endl;
-	mw->writeConfig();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.save");
-	if(!section){
-		return;
-	}
-	for(int i = 0; i < section->lines.size(); i++){
-		if(section->lines[i]->getVariable().startsWith("file", Qt::CaseInsensitive)){
-			ZDLLine *line = section->lines[i];
-			section->lines.remove(i--);
-			delete line;
-		}
-	}
-	mw->startRead();
-}
-
-void ZDLInterface::clearEverything(){
-	LOGDATAO() << "Clearing everything question" << endl;
-	QString text("Warning!\n\nIf you proceed, you will lose <b>EVERYTHING</b>!\n All IWAD, PWAD, and source port settings will be wiped.\n\nWould you like to continue?");
-	QMessageBox::StandardButton btnrc = QMessageBox::warning(this, "ZDL", text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-	if(btnrc != QMessageBox::Yes){
-		return;
-	}
-	LOGDATAO() << "They said yes, clearing..." << endl;
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLConfigurationManager::setActiveConfiguration(new ZDLConf());
-	delete zconf;
-	LOGDATAO() << "Clearing done" << endl;
-	mw->startRead();
-
-}
-
-void ZDLInterface::clearAllFields(){
-	LOGDATAO() << "Clearing all of zdl.save" << endl;
-	mw->writeConfig();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	zconf->deleteSectionByName("zdl.save");
-	mw->startRead();
-	LOGDATAO() << "Complete" << endl;
 }
 
 void ZDLInterface::showNewDMFlagger(){
@@ -301,59 +238,6 @@ static void saveLastDir(ZDLConf *zconf, QString fileName){
 	QFileInfo fi(fileName);
 	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
 	qDebug() << "Saving last dir" << fi.absolutePath();
-}
-
-void ZDLInterface::saveConfigFile(){
-	LOGDATAO() << "Saving config file" << endl;
-	sendSignals();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	QStringList filters;
-	filters << "ini (*.ini)"
-		<< "Any files (*)";
-
-	QString filter = filters.join(";;");
-	QString lastDir = getLastDir(zconf);
-	QString fileName = QFileDialog::getSaveFileName(this, "Save Configuration", lastDir, filter);
-
-	if(!fileName.isNull() && !fileName.isEmpty()){
-		QFileInfo fi(fileName);
-		if(!fi.fileName().contains(".")){
-			fileName += ".ini";
-		}
-		ZDLConfigurationManager::setConfigFileName(fileName);
-		saveLastDir(zconf,fileName);
-		zconf->writeINI(fileName);
-		mw->startRead();
-	}
-
-}
-
-void ZDLInterface::loadConfigFile(){
-	LOGDATAO() << "Loading config file" << endl;
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	QString filter;
-	QStringList filters;
-	
-	filters << "ini (*.ini)"
-		<< "Any files (*)";
-	filter = filters.join(";;");
-	QString lastDir = getLastDir(zconf);
-	QString fileName = QFileDialog::getOpenFileName(this, "Load Configuration", lastDir, filter);
-	if(!fileName.isNull() && !fileName.isEmpty()){
-		QFileInfo fi(fileName);
-                if(!fi.fileName().contains(".")){
-                        fileName += ".ini";
-                }
-		delete zconf;
-		ZDLConf* tconf = new ZDLConf();
-		ZDLConfigurationManager::setConfigFileName(fileName);
-		tconf->readINI(fileName);
-		saveLastDir(zconf,fileName);
-		ZDLConfigurationManager::setActiveConfiguration(tconf);
-
-		mw->startRead();
-	}
-
 }
 
 void ZDLInterface::loadZdlFile(){

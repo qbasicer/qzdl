@@ -50,15 +50,10 @@ private slots:
 	void mclick();
 	void launch();
 	void ampclick();
-	void saveConfigFile();
-	void loadConfigFile();
 	void aboutClick();
 	void showCommandline();
 	void showNewDMFlagger();
 	void exitzdl();
-	void clearAllFields();
-	void clearAllPWads();
-	void clearEverything();
 private:
 	QLayout *getBottomPane();
 	QLayout *getButtonPane();
