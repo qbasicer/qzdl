@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDir>
+#include <QCommandLineParser>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
@@ -68,13 +69,14 @@ int main( int argc, char **argv ){
 	for(int i = 1; i < argc; i++){
 		args << QString(argv[i]);
 	}
-	QStringList eatenArgs(args);
+
 	ZDLNullDevice nullDev;
 	zdlDebug = new QDebug(&nullDev);
 	LOGDATA() << "ZDL" << " booting at " << QDateTime::currentDateTime().toString() << endl;
 
 	QApplication a( argc, argv );
 	qapp = &a;
+
 	ZDLConfigurationManager::setArgv(args);
 	{
 		QString execuatble(argv[0]);
@@ -82,7 +84,6 @@ int main( int argc, char **argv ){
 		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
 		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
 	}
-
 
 #if defined(Q_WS_WIN)
 	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
@@ -103,6 +104,10 @@ int main( int argc, char **argv ){
 	}
 #endif
 
+	QCoreApplication::setApplicationName("qZDL");
+	QCoreApplication::setOrganizationName("Vectec Software");
+	QCoreApplication::setApplicationVersion(versionString);
+
 	QDir cwd = QDir::current();
 	ZDLConfigurationManager::init();
 	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
@@ -111,17 +116,6 @@ int main( int argc, char **argv ){
 	ZDLConfigurationManager::setConfigFileName("");
 
 	ZDLConfigurationManager::setWhy(ZDLConfigurationManager::UNKNOWN);
-
-	//If the user has specified an alternative .ini
-	for(int i = 0; i < eatenArgs.size(); i++){
-		if(eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive)){
-			LOGDATA() << "Loading command line INI configuration " << eatenArgs[i] << endl;
-			ZDLConfigurationManager::setConfigFileName(eatenArgs[i]);
-			eatenArgs.removeAt(i);
-			ZDLConfigurationManager::setWhy(ZDLConfigurationManager::USER_SPECIFIED);
-			break;
-		}
-	}
 
 	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
 		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
@@ -175,31 +169,29 @@ int main( int argc, char **argv ){
 
 	bool hasZDLFile = false;
 
-	for(int i = 0; i < eatenArgs.size(); i++){
-		if(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive)){
-			LOGDATA() << "Found a .zdl on the command line, replacing current zdl.save" << endl;
+	QCommandLineParser parser;
+	parser.setApplicationDescription(QCoreApplication::applicationName());
+	parser.addPositionalArgument("zdl", "(optional) A .zdl file to load.");
+	parser.addHelpOption();
+	parser.process(a);
+	auto positionalArgs = parser.positionalArguments();
+	if (!positionalArgs.isEmpty())
+	{
+		QFileInfo zdlInfo(positionalArgs.first());
+		if (zdlInfo.isFile() && zdlInfo.isReadable() && !QString::compare(zdlInfo.suffix(), "zdl", Qt::CaseInsensitive))
+		{
+			// Found a .zdl on the command line, replacing current zdl.save
 			tconf->deleteSectionByName("zdl.save");
 			ZDLConf zdlFile;
-			zdlFile.readINI(eatenArgs[i]);
+			zdlFile.readINI(zdlInfo.absoluteFilePath());
 			ZDLSection *section = zdlFile.getSection("zdl.save");
-			if(section){
+			if(section)
+			{
 				tconf->addSection(section->clone());
 				hasZDLFile = true;
 			}
-			eatenArgs.removeAt(i);
-			break;
 		}
 	}
-
-
-	for(int i = 0; i < eatenArgs.size(); i++){
-		if(!(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive) || eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive) || eatenArgs.startsWith("-"))){
-			addFile(eatenArgs[i], tconf);
-			eatenArgs.removeAt(i);
-			i--;
-		}
-	}
-
 
 	mw = new ZDLMainWindow();
 	mw->show();
