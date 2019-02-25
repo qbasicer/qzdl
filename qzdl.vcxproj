@@ -198,7 +198,6 @@
     <ClCompile Include="SimpleWFA\SimpleWFA.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ZAttribute.h" />
     <ClInclude Include="include\ZDLFileInfo.h" />
     <ClInclude Include="miniz\miniz.h" />
     <ClInclude Include="res\Win32\resource.h" />

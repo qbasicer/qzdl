@@ -86,7 +86,7 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent) {
 	netmode->addItem("0 (Classic P2P)");
 	netmode->addItem("1 (Client/Server)");
 
-	extratic->addItem("Off");
+	extratic->addItem("Off (Default)");
 	extratic->addItem("On");
 	
 	dupmode->addItem("(Default)");

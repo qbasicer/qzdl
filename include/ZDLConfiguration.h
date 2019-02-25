@@ -2,7 +2,7 @@
 #define _ZDLCONFIGURATION_H_
 
 #include <QtCore>
-#include <zdlcommon.h>
+#include "zdlcommon.h"
 
 /**
  * ZDLConfiguration

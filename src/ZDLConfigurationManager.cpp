@@ -26,7 +26,7 @@
 
 using namespace std;
 
-#include <zdlcommon.h>
+#include "zdlcommon.h"
 #include "ZDLConfigurationManager.h"
 #include "ico_icon.xpm"
 

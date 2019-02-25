@@ -21,7 +21,7 @@
 #include <QtCore>
 #include <list>
 using namespace std;
-#include <zdlcommon.h>
+#include "zdlcommon.h"
 
 QString chomp(QString in);
 

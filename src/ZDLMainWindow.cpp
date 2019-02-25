@@ -253,6 +253,8 @@ void ZDLMainWindow::launch(){
 		return;
 	}
 	QFileInfo exec_fi(exec);
+	bool no_err=true;
+
 #ifdef Q_WS_WIN
 	PROCESS_INFORMATION pi={};
 	STARTUPINFO si={sizeof(STARTUPINFO), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
@@ -265,19 +267,21 @@ void ZDLMainWindow::launch(){
 		CloseHandle(pi.hThread);
 	} else {
 		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+		no_err=false;
 	}
 #else
 	QProcess *proc=new QProcess(this);
 	proc->setWorkingDirectory(exec_fi.absolutePath());
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	if (!proc->startDetached(exec_fi.absoluteFilePath(), getArguments()))
+	if (!proc->startDetached(exec_fi.absoluteFilePath(), getArguments())) {
 		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+		no_err=false;
+	}
 #endif
-	int stat;
-	if (zconf->hasValue("zdl.general", "autoclose")){
-		QString append = zconf->getValue("zdl.general", "autoclose",&stat);
-		if (append == "1" || append == "true"){
-			LOGDATAO() << "Asked to exit... closing" << endl;
+	if (no_err) {
+		QString aclose=zconf->getValue("zdl.general", "autoclose");
+		if (aclose=="1"||aclose=="true"){
+			LOGDATAO()<<"Asked to exit... closing"<<endl;
 			close();
 		}
 	}

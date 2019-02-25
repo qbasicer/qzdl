@@ -13,6 +13,9 @@ version.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see http://www.gnu.org/licenses/.
 
+This program uses SimpleWFA and miniz libraries. See AUTHORS and associated
+LICENSE files for details.
+
 2. General
 ----------
 ZDL is written in C++ and uses Qt library. To be able to compile ZDL you should

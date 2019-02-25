@@ -26,7 +26,7 @@
 #endif
 
 using namespace std;
-#include <zdlcommon.h>
+#include "zdlcommon.h"
 
 #define READLOCK() (readLock(__FILE__,__LINE__))
 #define WRITELOCK() (writeLock(__FILE__,__LINE__))

@@ -26,7 +26,7 @@
 
 
 using namespace std;
-#include <zdlcommon.h>
+#include "zdlcommon.h"
 
 
 extern QString chomp(QString in);
