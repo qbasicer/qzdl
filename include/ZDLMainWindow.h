@@ -33,18 +33,18 @@ public:
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
-	QStringList getArguments(bool native_sep=false);
+	QString getArgumentsString(bool native_sep=false);
+	QStringList getArgumentsList();
 	QString getExecutable();
 	void handleImport();
 	QString getWindowTitle();
+protected:
+	ZDLInterface* intr;
+	ZDLSettingsTab* settings;
+	QAction *qact2;
 public slots:
 	void launch();
 	void quit();
 	void tabChange(int index);
-protected:
-	ZDLInterface* intr;
-	ZDLSettingsTab* settings;
-
-	QAction *qact2;
 };
 #endif

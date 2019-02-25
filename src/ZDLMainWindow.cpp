@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <QtGui>
+#include <QRegExp>
 #include <QApplication>
 #include <QMainWindow>
 
@@ -64,7 +65,9 @@ QString ZDLMainWindow::getWindowTitle(){
 
 }
 
-ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
+ZDLMainWindow::ZDLMainWindow(QWidget *parent): 
+	QMainWindow(parent)
+{
 	LOGDATAO() << "New main window " << DPTR(this) << endl;
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);
@@ -259,10 +262,10 @@ void ZDLMainWindow::launch(){
 	PROCESS_INFORMATION pi={};
 	STARTUPINFO si={sizeof(STARTUPINFO), NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, STARTF_USESHOWWINDOW, SW_SHOWNORMAL};
 
-	QString cmdline="\""+QDir::toNativeSeparators(exec_fi.absoluteFilePath())+"\" "+getArguments(true).join(" ");
+	QString cmdline="\""+QDir::toNativeSeparators(exec_fi.absoluteFilePath())+"\" "+getArgumentsString(true);
 	QString cwd=QDir::toNativeSeparators(exec_fi.absolutePath());
 
-	if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.toStdWString().c_str()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, cwd.toStdWString().c_str(), &si, &pi)) {
+	if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.utf16()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, cwd.utf16(), &si, &pi)) {
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	} else {
@@ -270,10 +273,7 @@ void ZDLMainWindow::launch(){
 		no_err=false;
 	}
 #else
-	QProcess *proc=new QProcess(this);
-	proc->setWorkingDirectory(exec_fi.absolutePath());
-	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	if (!proc->startDetached(exec_fi.absoluteFilePath(), getArguments())) {
+	if (QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
 		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
 		no_err=false;
 	}
@@ -287,30 +287,60 @@ void ZDLMainWindow::launch(){
 	}
 }
 
+#ifdef Q_WS_WIN
+
+QString QuoteParam(const QString& param)
+{
+	//Function was adapted from:
+	// Everyone quotes command line arguments the wrong way
+	// Blog post by Daniel Colascione
+	// http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
+
+    if (!param.isEmpty()&&param.indexOf(QRegExp("[ \t\n\v\"]"))==-1) {
+        return param;
+    } else {
+        QString qparam('"');
+
+        for (QString::const_iterator it=param.constBegin();; it++) {
+            int backslash_count=0;
+
+            while (it!=param.constEnd()&&*it=='\\') {
+                it++;
+                backslash_count++;
+            }
+
+            if (it==param.constEnd()) {
+                qparam.append(QString(backslash_count*2, '\\'));
+                break;
+            } else if (*it==L'"') {
+                qparam.append(QString(backslash_count*2+1, '\\'));
+                qparam.append(*it);
+            } else {
+                qparam.append(QString(backslash_count, '\\'));
+                qparam.append(*it);
+            }
+        }
+
+        qparam.append('"');
+
+		return qparam;
+    }
+}
+
 #define IF_NATIVE_SEP(p)	(native_sep?QDir::toNativeSeparators(p):p)
 
-QStringList ZDLMainWindow::getArguments(bool native_sep){
+QString ZDLMainWindow::getArgumentsString(bool native_sep)
+{
 	LOGDATAO() << "Getting arguments" << endl;
-	QStringList ourString;
+	QString args;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
 
-	QString iwadName = "";
+	QString iwadName = zconf->getValue("zdl.save", "iwad");
 
-	bool ok;
-	int stat;
-
-	if(zconf->hasValue("zdl.save", "iwad")){
-		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
-		if (rc.length() > 0){
-			iwadName = rc;
-		}else{
-			QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-			return ourString;
-		}
-	}else{
+	if (iwadName.isEmpty()) {
 		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-		return ourString;
+		return args;
 	}
 
 	section = zconf->getSection("zdl.iwads");
@@ -328,8 +358,8 @@ QStringList ZDLMainWindow::getArguments(bool native_sep){
 					var = QString("i") + var + QString("f");
 					section->getRegex("^" + var + "$",nameVctr);
 					if(nameVctr.size() == 1){
-						ourString << "-iwad";
-						ourString << IF_NATIVE_SEP(nameVctr[0]->getValue());
+						args.append("-iwad ");
+						args.append(QuoteParam(IF_NATIVE_SEP(nameVctr[0]->getValue())));
 					}
 				}
 			}
@@ -337,13 +367,13 @@ QStringList ZDLMainWindow::getArguments(bool native_sep){
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
-		ourString << "-skill";
-		ourString << zconf->getValue("zdl.save", "skill", &stat);
+		args.append(" -skill ");
+		args.append(zconf->getValue("zdl.save", "skill"));
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
-		ourString << "+map";
-		ourString << zconf->getValue("zdl.save", "warp", &stat);
+		args.append(" +map ");
+		args.append(QuoteParam(zconf->getValue("zdl.save", "warp")));
 	}
 
 	section = zconf->getSection("zdl.save");
@@ -374,130 +404,368 @@ QStringList ZDLMainWindow::getArguments(bool native_sep){
 	}
 
 	if(pwads.size() > 0){
-		ourString << "-file";
+		args.append(" -file");
 		foreach (const QString &str, pwads) {
-			ourString << IF_NATIVE_SEP(str);
+			args.append(' ');
+			args.append(QuoteParam(IF_NATIVE_SEP(str)));
 		}
 	}
 
 	do {
 		if (deh_last%2) {
 			foreach (const QString &str, bexs) {
-				ourString << "-bex";
-				ourString << IF_NATIVE_SEP(str);
+				args.append(" -bex ");
+				args.append(QuoteParam(IF_NATIVE_SEP(str)));
 			}
 		} else {
 			foreach (const QString &str, dehs) {
-				ourString << "-deh";
-				ourString << IF_NATIVE_SEP(str);
+				args.append(" -deh ");
+				args.append(QuoteParam(IF_NATIVE_SEP(str)));
 			}
 		}
 		deh_last+=3;
 	} while (deh_last<=4);
 
     foreach (const QString &str, autoexecs) {
-		ourString << "+exec";
-		ourString << IF_NATIVE_SEP(str);
+		args.append(" +exec ");
+		args.append(QuoteParam(IF_NATIVE_SEP(str)));
     }
 
 	if(zconf->hasValue("zdl.save","gametype")){
-		QString tGameType = zconf->getValue("zdl.save","gametype",&stat);
+		QString tGameType = zconf->getValue("zdl.save","gametype");
 		if(tGameType != "0"){
 			if (zconf->hasValue("zdl.save", "dmflags")){
-				ourString << "+set";
-				ourString << "dmflags";
-				ourString << zconf->getValue("zdl.save", "dmflags", &stat);
+				args.append(" +set dmflags ");
+				args.append(zconf->getValue("zdl.save", "dmflags"));
 			}
 
 			if (zconf->hasValue("zdl.save", "dmflags2")){
-				ourString << "+set";
-				ourString << "dmflags2";
-				ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
+				args.append(" +set dmflags2 ");
+				args.append(zconf->getValue("zdl.save", "dmflags2"));
 			}
 
 			if (tGameType == "2"){
-				ourString << "-deathmath";
+				args.append(" -deathmath");
 			} else if (tGameType == "3"){
-				ourString << "-altdeath";
+				args.append(" -altdeath");
 			}
 
 			int players = 0;
 			if(zconf->hasValue("zdl.save","players")){
-				QString tPlayers = zconf->getValue("zdl.save","players",&stat);
+				bool ok;
+				QString tPlayers = zconf->getValue("zdl.save","players");
 				players = tPlayers.toInt(&ok, 10);
 			}
 			if(players > 0){
-				ourString << "-host";
-				ourString << QString::number(players);
+				args.append(" -host ");
+				args.append(QString::number(players));
 				if(zconf->hasValue("zdl.save","mp_port")){
-					ourString << "-port";
-					ourString << zconf->getValue("zdl.save","mp_port",&stat);
+					args.append(" -port ");
+					args.append(zconf->getValue("zdl.save","mp_port"));
 				}
 			}else if(players == 0){
 				if(zconf->hasValue("zdl.save", "host")) {
-					ourString<<"-join";
+					args.append(" -join ");
 					if (zconf->hasValue("zdl.save", "mp_port")) {
 						QRegExp trailing_port(":\\d*\\s*$");
-						ourString<<zconf->getValue("zdl.save", "host", &stat).remove(trailing_port)+":"+zconf->getValue("zdl.save", "mp_port", &stat);
+						args.append(zconf->getValue("zdl.save", "host").remove(trailing_port)+":"+zconf->getValue("zdl.save", "mp_port"));
 					} else {
-						ourString<<zconf->getValue("zdl.save", "host", &stat);
+						args.append(zconf->getValue("zdl.save", "host"));
 					}
 				}
 			}
 			if(zconf->hasValue("zdl.save","fraglimit")){
-				ourString << "+set";
-				ourString << "fraglimit";
-				ourString << zconf->getValue("zdl.save","fraglimit",&stat);
+				args.append(" +set fraglimit ");
+				args.append(zconf->getValue("zdl.save","fraglimit"));
 			}
 			if(zconf->hasValue("zdl.save","timelimit")){
-				ourString << "+set";
-				ourString << "timelimit";
-				ourString << zconf->getValue("zdl.save","timelimit",&stat);
+				args.append(" +set timelimit ");
+				args.append(zconf->getValue("zdl.save","timelimit"));
 			}
 			if(zconf->hasValue("zdl.save","extratic")){
-				QString tVal = zconf->getValue("zdl.save","extratic",&stat);
+				QString tVal = zconf->getValue("zdl.save","extratic");
 				if(tVal == "1"){
-					ourString << "-extratic";
+					args.append(" -extratic");
 				}
 			}
 			if(zconf->hasValue("zdl.save","netmode")){
-				QString tVal = zconf->getValue("zdl.save","netmode",&stat);
+				QString tVal = zconf->getValue("zdl.save","netmode");
 				if(tVal != "-1"){
-					ourString << "-netmode";
-					ourString << tVal;
+					args.append(" -netmode ");
+					args.append(tVal);
 				}
 			}
 			if(zconf->hasValue("zdl.save","dup")){
-				QString tVal = zconf->getValue("zdl.save","dup",&stat);
+				QString tVal = zconf->getValue("zdl.save","dup");
 				if(tVal != "0"){
-					ourString << "-dup";
-					ourString << tVal;
+					args.append(" -dup ");
+					args.append(tVal);
 				}
 			}
 			if(zconf->hasValue("zdl.save","savegame")){
-				ourString << "-loadgame";
-				ourString << IF_NATIVE_SEP(zconf->getValue("zdl.save","savegame",&stat));
+				args.append(" -loadgame ");
+				args.append(QuoteParam(IF_NATIVE_SEP(zconf->getValue("zdl.save","savegame"))));
 			}
-		}
-	}
-
-	for(int i = 0; i < ourString.size(); i++){
-		if(ourString[i].contains(" ")){
-			QString newString = "\"" + ourString[i] + "\"";
-			ourString[i] = newString;
 		}
 	}
 
 	if (zconf->hasValue("zdl.general", "alwaysadd")){
-		ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
+		args.append(' ');
+		args.append(zconf->getValue("zdl.general", "alwaysadd"));
 	}
 
 	if (zconf->hasValue("zdl.save", "extra")){
-		ourString << zconf->getValue("zdl.save", "extra", &stat);
+		args.append(' ');
+		args.append(zconf->getValue("zdl.save", "extra"));
 	}
-	LOGDATAO() << "args: " << ourString << endl;
-	return ourString;
+
+	LOGDATAO() << "args: " << args << endl;
+	return args;
 }
+
+QStringList ZDLMainWindow::getArgumentsList()
+{
+	return QStringList();
+}
+
+#else
+
+QStringList ParseParams(const QString& params)
+{
+	//This function is lifted straight from the Qt sources
+	//qprocess.cpp/parseCombinedArgString
+
+    QStringList plist;
+    QString tmp;
+    int quoteCount = 0;
+    bool inQuote = false;
+
+    for (int i = 0; i < params.size(); ++i) {
+        if (params.at(i) == QLatin1Char('"')) {
+            ++quoteCount;
+            if (quoteCount == 3) {
+                quoteCount = 0;
+                tmp += params.at(i);
+            }
+            continue;
+        }
+        if (quoteCount) {
+            if (quoteCount == 1)
+                inQuote = !inQuote;
+            quoteCount = 0;
+        }
+        if (!inQuote && params.at(i).isSpace()) {
+            if (!tmp.isEmpty()) {
+                plist += tmp;
+                tmp.clear();
+            }
+        } else {
+            tmp += params.at(i);
+        }
+    }
+    if (!tmp.isEmpty())
+        plist += tmp;
+
+    return plist;
+}
+
+QStringList ZDLMainWindow::getArgumentsList()
+{
+	LOGDATAO() << "Getting arguments" << endl;
+	QStringList args;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = NULL;
+
+	QString iwadName = zconf->getValue("zdl.save", "iwad");
+
+	if (iwadName.isEmpty()) {
+		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
+		return args;
+	}
+
+	section = zconf->getSection("zdl.iwads");
+	if (section){
+		QVector<ZDLLine*> fileVctr;
+		section->getRegex("^i[0-9]+n$", fileVctr);
+
+		for(int i = 0; i < fileVctr.size(); i++){
+			ZDLLine *line = fileVctr[i];
+			if(line->getValue().compare(iwadName) == 0){
+				QString var = line->getVariable();
+				if(var.length() >= 3){
+					var = var.mid(1,var.length()-2);
+					QVector<ZDLLine*> nameVctr;
+					var = QString("i") + var + QString("f");
+					section->getRegex("^" + var + "$",nameVctr);
+					if(nameVctr.size() == 1){
+						args<<"-iwad"<<nameVctr[0]->getValue();
+					}
+				}
+			}
+		}
+	}
+
+	if (zconf->hasValue("zdl.save", "skill")){
+		args<<"-skill"<<zconf->getValue("zdl.save", "skill");
+	}
+
+	if (zconf->hasValue("zdl.save", "warp")){
+		args<<"+map"<<zconf->getValue("zdl.save", "warp");
+	}
+
+	section = zconf->getSection("zdl.save");
+	QStringList pwads;
+	QStringList dehs;
+	QStringList bexs;
+	char deh_last=1;
+	QStringList autoexecs;
+	if (section){
+		QVector<ZDLLine*> fileVctr;
+		section->getRegex("^file[0-9]+$", fileVctr);
+
+		if (fileVctr.size() > 0){
+			for(int i = 0; i < fileVctr.size(); i++){
+				if(fileVctr[i]->getValue().endsWith(".bex",Qt::CaseInsensitive)) {
+					deh_last=0;
+					bexs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".deh",Qt::CaseInsensitive)) {
+					deh_last=1;
+					dehs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".cfg",Qt::CaseInsensitive)) {
+					autoexecs << fileVctr[i]->getValue();
+				} else {
+					pwads << fileVctr[i]->getValue();
+				}
+			}
+		}
+	}
+
+	if(pwads.size() > 0){
+		args<<"-file";
+		foreach (const QString &str, pwads) {
+			args<<str;
+		}
+	}
+
+	do {
+		if (deh_last%2) {
+			foreach (const QString &str, bexs) {
+				args<<"-bex"<<str;
+			}
+		} else {
+			foreach (const QString &str, dehs) {
+				args<<"-deh"<<str;
+			}
+		}
+		deh_last+=3;
+	} while (deh_last<=4);
+
+    foreach (const QString &str, autoexecs) {
+		args<<"+exec"<<str;
+    }
+
+	if(zconf->hasValue("zdl.save","gametype")){
+		QString tGameType = zconf->getValue("zdl.save","gametype");
+		if(tGameType != "0"){
+			if (zconf->hasValue("zdl.save", "dmflags")){
+				args<<"+set"<<"dmflags"<<zconf->getValue("zdl.save", "dmflags");
+			}
+
+			if (zconf->hasValue("zdl.save", "dmflags2")){
+				args<<"+set"<<"dmflags2"<<zconf->getValue("zdl.save", "dmflags2");
+			}
+
+			if (tGameType == "2"){
+				args<<"-deathmath";
+			} else if (tGameType == "3"){
+				args<<"-altdeath";
+			}
+
+			int players = 0;
+			if(zconf->hasValue("zdl.save","players")){
+				bool ok;
+				QString tPlayers = zconf->getValue("zdl.save","players");
+				players = tPlayers.toInt(&ok, 10);
+			}
+			if(players > 0){
+				args<<"-host"<<QString::number(players);
+				if(zconf->hasValue("zdl.save","mp_port")){
+					args<<"-port"<<zconf->getValue("zdl.save","mp_port");
+				}
+			}else if(players == 0){
+				if(zconf->hasValue("zdl.save", "host")) {
+					args<<"-join";
+					if (zconf->hasValue("zdl.save", "mp_port")) {
+						QRegExp trailing_port(":\\d*\\s*$");
+						args<<zconf->getValue("zdl.save", "host").remove(trailing_port)+":"+zconf->getValue("zdl.save", "mp_port");
+					} else {
+						args<<zconf->getValue("zdl.save", "host");
+					}
+				}
+			}
+			if(zconf->hasValue("zdl.save","fraglimit")){
+				args<<"+set"<<"fraglimit"<<zconf->getValue("zdl.save","fraglimit");
+			}
+			if(zconf->hasValue("zdl.save","timelimit")){
+				args<<"+set"<<"timelimit"<<zconf->getValue("zdl.save","timelimit");
+			}
+			if(zconf->hasValue("zdl.save","extratic")){
+				QString tVal = zconf->getValue("zdl.save","extratic");
+				if(tVal == "1"){
+					args<<"-extratic";
+				}
+			}
+			if(zconf->hasValue("zdl.save","netmode")){
+				QString tVal = zconf->getValue("zdl.save","netmode");
+				if(tVal != "-1"){
+					args<<"-netmode"<<tVal;
+				}
+			}
+			if(zconf->hasValue("zdl.save","dup")){
+				QString tVal = zconf->getValue("zdl.save","dup");
+				if(tVal != "0"){
+					args<<"-dup"<<tVal;
+				}
+			}
+			if(zconf->hasValue("zdl.save","savegame")){
+				args<<"-loadgame"<<zconf->getValue("zdl.save","savegame");
+			}
+		}
+	}
+
+	if (zconf->hasValue("zdl.general", "alwaysadd")){
+		args<<ParseParams(zconf->getValue("zdl.general", "alwaysadd"));
+	}
+
+	if (zconf->hasValue("zdl.save", "extra")){
+		args<<ParseParams(zconf->getValue("zdl.save", "extra"));
+	}
+
+	LOGDATAO() << "args: " << args << endl;
+	return args;
+}
+
+QString ZDLMainWindow::getArgumentsString(bool native_sep)
+{
+	Q_UNUSED(native_sep);
+
+	QString args;
+
+	foreach (const QString &str, getArgumentsList()) {
+		if (str.indexOf(QRegExp("\\s"))!=-1) {
+			args.append('"');
+			args.append(str);
+			args.append('"');
+		} else {
+			args.append(str);
+		}
+		args.append(' ');
+	}
+
+	return args;
+}
+
+#endif
 
 QString ZDLMainWindow::getExecutable(){
 	LOGDATAO() << "Getting exec" << endl;

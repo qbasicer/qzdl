@@ -450,7 +450,10 @@ void ZDLInterface::showCommandline(){
 
 	QMessageBox msgBox(this);
 	msgBox.setWindowTitle("Command line and environment");
-	msgBox.setText("Executable: "+exec_fi.fileName()+"\n\nArguments: "+mw->getArguments().join(" ")+"\n\nWorking directory: "+exec_fi.canonicalPath()+"\n\nDOOMWADDIR: "+QDir::fromNativeSeparators(QProcessEnvironment::systemEnvironment().value("DOOMWADDIR")));
+	QString dwd;
+	if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
+		dwd="\n\nDOOMWADDIR: "+QDir::fromNativeSeparators(QProcessEnvironment::systemEnvironment().value("DOOMWADDIR"));
+	msgBox.setText("Executable: "+exec_fi.fileName()+"\n\nArguments: "+mw->getArgumentsString()+"\n\nWorking directory: "+exec_fi.canonicalPath()+dwd);
 	msgBox.setStandardButtons(QMessageBox::Cancel);
 	QPushButton *launch_btn=msgBox.addButton("Execute", QMessageBox::AcceptRole);
 	msgBox.setDefaultButton(launch_btn);
