@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cstring>
 #include "ZDLFileInfo.h"
+#include "ZDLMapFile.h"
 
 struct IwadHash {
 	char md5[16];
@@ -189,15 +190,18 @@ const FileDesc sorted_iwad_files[]={
 const FileDesc sorted_source_ports[]={
 	{"boom", "Boom"},
 	{"chocolate-doom", "Chocolate Doom"},
-	{"cndoom", "CNDoom"},
-	{"cnheretic", "CNDoom (Heretic)"},
-	{"cnhexen", "CNDoom (Hexen)"},
-	{"cnserver", "CNDoom (Server)"},
-	{"cnstrife", "CNDoom (Strife)"},
+	{"chocolate-heretic", "Chocolate Heretic"},
+	{"chocolate-hexen", "Chocolate Hexen"},
+	{"chocolate-strife", "Chocolate Strife"},
+	{"cndoom", "CnDoom (Doom)"},
+	{"cnheretic", "CnDoom (Heretic)"},
+	{"cnhexen", "CnDoom (Hexen)"},
+	{"cnserver", "CnDoom (Server)"},
+	{"cnstrife", "CnDoom (Strife)"},
 	{"crispy-doom", "Crispy Doom"},
 	{"crispy-server", "Crispy Doom (Server)"},
 	{"doom", "Doom"},
-	{"doom2", "Doom II"},
+	{"doom2", "Doom II: Hell on Earth"},
 	{"doom3d", "Doom3D"},
 	{"doom95", "Doom 95"},
 	{"doomcl", "csDoom"},
@@ -214,7 +218,10 @@ const FileDesc sorted_source_ports[]={
 	{"glboom-plus", "PrBoom+ (OpenGL)"},
 	{"gldoom", "GLDoom"},
 	{"gzdoom", "GZDoom"},
-	{"jdoom", "jDoom"},
+	{"heretic", "Heretic"},
+	{"hexen", "Hexen"},
+	{"hexendk", "Hexen: Deathkings of the Dark Citadel"},
+	{"jdoom", "jDoom (Doom)"},
 	{"jheretic", "jDoom (Heretic)"},
 	{"jhexen", "jDoom (Hexen)"},
 	{"linuxsdoom", "Linux Doom (SVGAlib)"},
@@ -237,6 +244,8 @@ const FileDesc sorted_source_ports[]={
 	{"smmu", "Smack My Marine Up (SMMU)"},
 	{"strawberry-doom", "Strawberry Doom"},
 	{"strawberry-server", "Strawberry Doom (Server)"},
+	{"strife", "Strife (Shareware)"},
+	{"strife1", "Strife"},
 	{"tasdoom", "TASDoom"},
 	{"vavoom", "Vavoom"},
 	{"vavoom-dedicated", "Vavoom (Server)"},
@@ -304,6 +313,12 @@ QString ZDLIwadInfo::GetFileDescription()
 		}
 
 		iwad_file.close();
+	}
+
+	ZDLMapFile *mapfile;
+	if (iwad_name.isEmpty()&&(mapfile=ZDLMapFile::getMapFile(filePath()))) {
+		iwad_name=mapfile->getIwadinfoName();
+		delete mapfile;
 	}
 
 	if (iwad_name.isEmpty()) {
@@ -489,20 +504,29 @@ blasphemer.wad		{"blasphemer.wad", "Blasphemer"},
 //Don't forget to remove comma at the end of the last element
 
 doom		{"doom", "Doom"},
-doom2		{"doom2", "Doom II"},
+doom2		{"doom2", "Doom II: Hell on Earth"},
+heretic		{"heretic", "Heretic"},
+hexen		{"hexen", "Hexen"},
+hexendk		{"hexendk", "Hexen: Deathkings of the Dark Citadel"},
+strife		{"strife", "Strife (Shareware)"},
+strife1		{"strife1", "Strife"},
 windoom		{"windoom", "WinDoom"},
 doom95		{"doom95", "Doom 95"},
-gzdoom		{"gzdoom", "GZDoom"},
-skulltag		{"skulltag", "Skulltag"},
 zdoom		{"zdoom", "ZDoom"},
+gzdoom		{"gzdoom", "GZDoom"},
+qzdoom		{"qzdoom", "QZDoom"},
+skulltag		{"skulltag", "Skulltag"},
 doomsday		{"doomsday", "Doomsday Engine"},
 doomsday-server		{"doomsday-server", "Doomsday Engine (Server)"},
 chocolate-doom		{"chocolate-doom", "Chocolate Doom"},
-cndoom		{"cndoom", "CNDoom"},
-cnheretic		{"cnheretic", "CNDoom (Heretic)"},
-cnhexen		{"cnhexen", "CNDoom (Hexen)"},
-cnstrife		{"cnstrife", "CNDoom (Strife)"},
-cnserver		{"cnserver", "CNDoom (Server)"},
+chocolate-heretic		{"chocolate-heretic", "Chocolate Heretic"},
+chocolate-hexen		{"chocolate-hexen", "Chocolate Hexen"},
+chocolate-strife		{"chocolate-strife", "Chocolate Strife"},
+cndoom		{"cndoom", "CnDoom (Doom)"},
+cnheretic		{"cnheretic", "CnDoom (Heretic)"},
+cnhexen		{"cnhexen", "CnDoom (Hexen)"},
+cnstrife		{"cnstrife", "CnDoom (Strife)"},
+cnserver		{"cnserver", "CnDoom (Server)"},
 zdaemon		{"zdaemon", "ZDaemon"},
 zserv32		{"zserv32", "ZDaemon (Server)"},
 prboom-plus		{"prboom-plus", "PrBoom+"},
@@ -526,10 +550,9 @@ boom		{"boom", "Boom"},
 doomcl		{"doomcl", "csDoom"},
 crispy-doom		{"crispy-doom", "Crispy Doom"},
 crispy-server		{"crispy-server", "Crispy Doom (Server)"},
-jdoom		{"jdoom", "jDoom"},
+jdoom		{"jdoom", "jDoom (Doom)"},
 jheretic		{"jheretic", "jDoom (Heretic)"},
 jhexen		{"jhexen", "jDoom (Hexen)"},
-qzdoom		{"qzdoom", "QZDoom"},
 wdmp		{"wdmp", "WDMP"},
 wdmp32s		{"wdmp32s", "WDMP (Win32s)"},
 lxdoom		{"lxdoom", "LxDoom"},

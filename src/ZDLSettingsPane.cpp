@@ -134,16 +134,10 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 	QStringList maps;
 	for(int i = vctr.size()-1; i >= 0; i--){
 		LOGDATAO() << "Getting maps for " << vctr[i]->getValue() << endl;
-		ZDLMapFile *mapfile = ZDLMapFile::getMapFile(vctr[i]->getValue());
-		if(!mapfile){
-			continue;
-		}
-		if(!mapfile->open()){
+		if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(vctr[i]->getValue())) {
+			maps+=mapfile->getMapNames();
 			delete mapfile;
-			continue;
 		}
-		maps += mapfile->getMapNames();
-		delete mapfile;
 	}
 	return maps;
 }
@@ -239,18 +233,11 @@ void ZDLSettingsPane::reloadMapList(){
 		if(fi.exists()&&exts.indexIn(file)>=0) {
 			LOGDATAO()<<"Getting iwad maps from "<<file<<endl;
 			QStringList wadMaps;
-			ZDLMapFile *mapfile=ZDLMapFile::getMapFile(file);
 
-			if(mapfile) {
-				if(mapfile->open()) {
-					wadMaps=mapfile->getMapNames();
-					LOGDATAO()<<"Maps: "<<wadMaps<<endl;
-				} else {
-					LOGDATAO()<<"Failed to open file"<<endl;
-				}
+			if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(file)) {
+				wadMaps+=mapfile->getMapNames();
+				LOGDATAO()<<"Maps: "<<wadMaps<<endl;
 				delete mapfile;
-			}else{
-				LOGDATAO()<<"Failed to read map names"<<endl;
 			}
 
 			LOGDATAO()<<"Getting files maps"<<endl;

@@ -291,12 +291,10 @@ void ZDLMainWindow::launch(){
 
 QString QuoteParam(const QString& param)
 {
-	//Function was adapted from:
-	// Everyone quotes command line arguments the wrong way
-	// Blog post by Daniel Colascione
-	// http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
+	//Based on "Everyone quotes command line arguments the wrong way" by Daniel Colascione
+	//http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
 
-    if (!param.isEmpty()&&param.indexOf(QRegExp("[ \t\n\v\"]"))==-1) {
+    if (!param.isEmpty()&&param.indexOf(QRegExp("[\\s\"]"))<0) {
         return param;
     } else {
         QString qparam('"');

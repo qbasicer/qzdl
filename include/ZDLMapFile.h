@@ -24,10 +24,8 @@
 class ZDLMapFile{
 	public:
 		static ZDLMapFile *getMapFile(QString file);
+		virtual QString getIwadinfoName() = 0;
 		virtual QStringList getMapNames() = 0;
-		virtual bool open() = 0;
-		virtual bool isCompressed() = 0;
-	protected:
 };
 
 

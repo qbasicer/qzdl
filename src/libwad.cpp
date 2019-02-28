@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QRegExp>
 #include "libwad.h"
 
 struct wadinfo_t {
@@ -32,12 +33,12 @@ struct filelump_t {
 };
 
 DoomWad::DoomWad(const QString &file):
-	map_names(), file(file)
+	file(file)
 {}
 
-bool DoomWad::open(){
+QStringList DoomWad::getMapNames() {
 	QFile wad(file);
-	map_names.clear();
+	QStringList map_names;
 
 	if (wad.open(QIODevice::ReadOnly)) {
 		wadinfo_t header;
@@ -67,13 +68,44 @@ bool DoomWad::open(){
 		wad.close();
 	}
 
-	return map_names.length();
-}
-
-QStringList DoomWad::getMapNames() {
 	return map_names;
 }
 
-bool DoomWad::isCompressed() {
-	return false;
+QString DoomWad::getIwadinfoName()
+{
+	QFile wad(file);
+	QString iwad_name;
+
+	if (wad.open(QIODevice::ReadOnly)) {
+		wadinfo_t header;
+
+		if (wad.read((char*)&header, sizeof(wadinfo_t))==sizeof(wadinfo_t)&&wad.seek(header.infotableofs)) {
+			filelump_t *fileinfo=new filelump_t[header.numlumps];
+			size_t length=sizeof(filelump_t)*header.numlumps;
+
+			if (wad.read((char*)fileinfo, length)==length) {
+				for (int i=0; i<header.numlumps; i++) {
+					if (!strncmp(fileinfo[i].name, "IWADINFO", 8)) {
+						char* iwadinfo=new char[fileinfo[i].size+1];
+						iwadinfo[fileinfo[i].size]='\0';
+						
+						if (wad.seek(fileinfo[i].filepos)&&wad.read(iwadinfo, fileinfo[i].size)==fileinfo[i].size) {
+							QRegExp name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+", Qt::CaseInsensitive);
+							name_re.setMinimal(true);
+							if (name_re.indexIn(iwadinfo)>-1)
+								iwad_name=name_re.cap(1);
+						}
+
+						delete[] iwadinfo;
+					}
+				}
+			}
+
+			delete[] fileinfo;
+		}
+
+		wad.close();
+	}
+
+	return iwad_name;
 }

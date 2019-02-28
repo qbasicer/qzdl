@@ -20,7 +20,6 @@
 #include "ZDLFileList.h"
 #include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
-#include "ZDLMapFile.h"
 #include "gph_fld.xpm"
 
 #include <iostream>

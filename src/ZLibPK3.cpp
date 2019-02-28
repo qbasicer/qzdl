@@ -16,22 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QRegExp>
+#include <QMessageBox>
 #include "ZLibPK3.h"
 #include "miniz.h"
 
 ZLibPK3::ZLibPK3(const QString &file):
-	map_names(), file(file)
+	file(file)
 {}
 
 QStringList ZLibPK3::getMapNames()
 {
-	return map_names;
-}
-
-bool ZLibPK3::open()
-{
 	mz_zip_archive zip_archive={};
-	map_names.clear();
+	QStringList map_names;
 
 	if (mz_zip_reader_init_file(&zip_archive, qPrintable(file), 0)) {
 		if (mz_uint fnum=mz_zip_reader_get_num_files(&zip_archive)) {
@@ -51,10 +48,41 @@ bool ZLibPK3::open()
 		mz_zip_reader_end(&zip_archive);
 	}
 
-	return map_names.length();
+	return map_names;
 }
 
-bool ZLibPK3::isCompressed()
+QString ZLibPK3::getIwadinfoName()
 {
-	return true;
+	mz_zip_archive zip_archive={};
+	QString iwad_name;
+
+	if (mz_zip_reader_init_file(&zip_archive, qPrintable(file), 0)) {
+		if (mz_uint fnum=mz_zip_reader_get_num_files(&zip_archive)) {
+			mz_zip_archive_file_stat file_stat;
+
+			for (mz_uint i=0; i<fnum; i++) {
+				if (!mz_zip_reader_is_file_a_directory(&zip_archive, i)&&mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) {
+					QFileInfo zname(file_stat.m_filename);
+					if (!zname.baseName().compare("iwadinfo", Qt::CaseInsensitive)&&!zname.path().compare(".")) {
+						size_t buf_len;
+						void *buf;
+						if ((buf=mz_zip_reader_extract_to_heap(&zip_archive, i, &buf_len, 0))) {
+							QByteArray char_buf((const char*)buf, buf_len);
+							mz_free(buf);
+
+							QRegExp name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+", Qt::CaseInsensitive);
+							name_re.setMinimal(true);
+							if (name_re.indexIn(char_buf)>-1)
+								iwad_name=name_re.cap(1);
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		mz_zip_reader_end(&zip_archive);
+	}
+
+	return iwad_name;
 }

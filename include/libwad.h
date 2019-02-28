@@ -25,13 +25,11 @@
 
 class DoomWad: public ZDLMapFile {
 	private:
-		QStringList map_names;
 		QString file;
 	public:
 		DoomWad(const QString &file);
+		virtual QString getIwadinfoName();
 		virtual QStringList getMapNames();
-		virtual bool open();
-		virtual bool isCompressed();
 };
 
 #endif
