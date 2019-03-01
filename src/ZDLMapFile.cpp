@@ -31,7 +31,7 @@ ZDLMapFile *ZDLMapFile::getMapFile(QString file){
 	QFile fileio(file);
 	ZDLMapFile *mapfile=NULL;
 
-	if(fileio.open(QIODevice::ReadOnly)){
+	if (fileio.open(QIODevice::ReadOnly)) {
 		char magic[4];
 
 		if (fileio.read(magic, 4)==4) {

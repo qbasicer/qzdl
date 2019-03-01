@@ -77,11 +77,12 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent) {
 	portNo->setValidator(new QIntValidator(0, 65535, this));
 	dupmode = new QComboBox(this);
 	savegame = new VerboseComboBox(this);
-	savegame->setEditable(true);
 	savegame->setInsertPolicy(QComboBox::NoInsert);	
-	savegame->setCompleter(NULL);
+	savegame->setEditable(true);
 	savegame->setValidator(new EvilValidator(this));
-		
+	savegame->setCompleter(NULL);
+	savegame->addItem("(None)");
+			
 	netmode->addItem("(Default)");
 	netmode->addItem("0 (Classic P2P)");
 	netmode->addItem("1 (Client/Server)");

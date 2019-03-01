@@ -70,6 +70,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	warpCombo->setValidator(new EvilValidator(this));
 	warpCombo->setCompleter(NULL);
 	warpCombo->lineEdit()->setPlaceholderText("(Default)");
+	warpCombo->addItem("(Default)");
 	warpBox->addWidget(new QLabel("Map",this));
 	warpBox->addWidget(warpCombo);
 	warpBox->setSpacing(2);
@@ -347,23 +348,11 @@ void ZDLSettingsPane::newConfig(){
 		diffList->setCurrentIndex(0);
 	}
 
-	LOGDATAO() << "Reloading map list" << endl;
-	reloadMapList();
-
-	{
-		LOGDATAO()<<"Loading map selection"<<endl;
-		int idx=0;
-		QString rc=zconf->getValue("zdl.save", "warp", &idx);
-
-		if ((idx=warpCombo->findText(rc, Qt::MatchFixedString))!=-1) {
-			LOGDATAO()<<"Setting to (idx) "<<idx<<endl;
-			warpCombo->setCurrentIndex(idx);
-		} else {
-			LOGDATAO()<<"Setting to (text) "<<rc<<endl;
-			warpCombo->setEditText(rc);
-		}
+	if (zconf->hasValue("zdl.save", "warp")){
+		warpCombo->setEditText(zconf->getValue("zdl.save", "warp"));
+	}else{
+		warpCombo->clearEditText();
 	}
-
 
 	sourceList->clear();
 	ZDLSection *section = zconf->getSection("zdl.ports");

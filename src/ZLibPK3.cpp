@@ -17,7 +17,6 @@
  */
 
 #include <QRegExp>
-#include <QMessageBox>
 #include "ZLibPK3.h"
 #include "miniz.h"
 
