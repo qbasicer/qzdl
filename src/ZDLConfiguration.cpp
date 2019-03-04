@@ -14,28 +14,6 @@ ZDLConfiguration::ZDLConfiguration(){
 	confs[CONF_SYSTEM] = new ZDLConf();
 	confs[CONF_USER] = new ZDLConf();
 	confs[CONF_FILE] = new ZDLConf();
-
-	//cout << "Global configuration: " << paths[CONF_SYSTEM].toStdString() << endl;
-	//cout << "User configuration: " << paths[CONF_USER].toStdString() << endl;
-
-	//Attempts to create the files.
-	//bootstrap(paths[CONF_USER]);
-	//bootstrap(paths[CONF_SYSTEM]);
-
-	//confs[CONF_SYSTEM]->readINI(paths[CONF_SYSTEM].toStdString().c_str());
-	//confs[CONF_USER]->readINI(paths[CONF_USER].toStdString().c_str());
-
-
-}
-
-void ZDLConfiguration::bootstrap(QString path){
-	QFileInfo fileInfo(path);
-	if(!fileInfo.exists()){
-		QFile file(fileInfo.absoluteFilePath());
-		if(!file.open(QIODevice::ReadWrite)){
-			//cerr << "FAILED to create file " << fileInfo.absoluteFilePath().toStdString() << endl;
-		}
-	}
 }
 
 QString ZDLConfiguration::getPath(ConfScope scope){

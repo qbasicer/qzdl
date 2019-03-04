@@ -38,7 +38,7 @@ void ZDLConfigurationManager::init(){
 }
 
 ZDLConf *ZDLConfigurationManager::activeConfig;
-string ZDLConfigurationManager::cdir;
+QString ZDLConfigurationManager::cdir;
 ZDLWidget* ZDLConfigurationManager::interface;
 QString ZDLConfigurationManager::filename;
 ZDLConfiguration *ZDLConfigurationManager::conf;
@@ -93,7 +93,7 @@ ZDLConf* ZDLConfigurationManager::getActiveConfiguration(){
 	return ZDLConfigurationManager::activeConfig;
 }
 
-void ZDLConfigurationManager::setCurrentDirectory(string dir){
+void ZDLConfigurationManager::setCurrentDirectory(const QString &dir){
 	cdir = dir;
 }
 
@@ -101,8 +101,8 @@ QPixmap ZDLConfigurationManager::getIcon(){
 	return QPixmap(zdlicon);
 }
 
-const char* ZDLConfigurationManager::getCurrentDirectory(){
-	return cdir.c_str();
+QString ZDLConfigurationManager::getCurrentDirectory(){
+	return cdir;
 }
 
 

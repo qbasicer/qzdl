@@ -30,7 +30,7 @@ public:
 	~ZDLVariables();
 	/* Call this to get the variable.  Automatic resolving will be used. */
 	QString getVariable(QString lsection, QString variable, int* status){
-		const char* rc = getVariableInternal(lsection.toStdString().c_str(), variable.toStdString().c_str(), status);
+		const char* rc = getVariableInternal(qPrintable(lsection), qPrintable(variable), status);
 		return QString(rc);
 	}
 	const char *getVariableInternal(const char *lsection, const char *variable, int* status);
@@ -45,7 +45,7 @@ public:
 	 * Set the temp flag to not write it out at close
 	 */
 	int setVariable(QString section, QString variable, QString value, int temp){
-		return setVariableInternal(section.toStdString().c_str(), variable.toStdString().c_str(), value.toStdString().c_str(), temp);
+		return setVariableInternal(qPrintable(section), qPrintable(variable), qPrintable(value), temp);
 	}
 	int setVariableInternal(const char *section, const char *variable, const char *value, int temp);
 private:

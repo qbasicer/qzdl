@@ -28,15 +28,15 @@
 class AssocListWidget: public QListWidgetItem {
 	private:
 		Qt::CheckState orig_state;
-		std::wstring prog_id;
-		std::wstring desc;
-		std::vector<std::wstring> extensions;
+		QString prog_id;
+		QString desc;
+		QStringList extensions;
 		UINT icon;
 		bool hklm;
 		bool remove;
 	public: 
-		AssocListWidget(const QString &text, QListWidget *parent, const wchar_t* c_prog_id, const wchar_t* c_desc, const wchar_t* c_exts, bool hklm, UINT icon);
-		void Process(const std::wstring &file_path);
+		AssocListWidget(const QString &text, QListWidget *parent, const QString &prog_id, const QString &desc, const QString &exts, bool hklm, UINT icon);
+		void Process(const QString &file_path);
 		void SetRemove(int state);
 };
 

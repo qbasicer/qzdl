@@ -34,12 +34,10 @@ QStringList ZLibPK3::getMapNames()
 			mz_zip_archive_file_stat file_stat;
 
 			for (mz_uint i=0; i<fnum; i++) {
-				if (mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) {
+				if (!mz_zip_reader_is_file_a_directory(&zip_archive, i)&&mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) {
 					QFileInfo zname(file_stat.m_filename);
-					if (!zname.path().compare("maps", Qt::CaseInsensitive)&&zname.baseName().length())
+					if (!zname.path().compare("maps", Qt::CaseInsensitive))
 						map_names<<zname.baseName().left(8).toUpper();
-				} else {
-					break;
 				}
 			}
 		}
@@ -66,13 +64,14 @@ QString ZLibPK3::getIwadinfoName()
 						size_t buf_len;
 						void *buf;
 						if ((buf=mz_zip_reader_extract_to_heap(&zip_archive, i, &buf_len, 0))) {
-							QByteArray char_buf((const char*)buf, buf_len);
-							mz_free(buf);
-
+							QByteArray char_buf=QByteArray::fromRawData((const char*)buf, buf_len);
+							
 							QRegExp name_re("\\s+Name\\s*=\\s*\"(.+)\"\\s+", Qt::CaseInsensitive);
 							name_re.setMinimal(true);
 							if (name_re.indexIn(char_buf)>-1)
 								iwad_name=name_re.cap(1);
+
+							mz_free(buf);
 						}
 						break;
 					}

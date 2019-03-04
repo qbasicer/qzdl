@@ -118,7 +118,7 @@ int main( int argc, char **argv ){
 
 	QDir cwd = QDir::current();
 	ZDLConfigurationManager::init();
-	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
+	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath());
 
 	ZDLConf* tconf = new ZDLConf();
 	ZDLConfigurationManager::setConfigFileName("");

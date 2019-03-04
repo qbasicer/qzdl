@@ -24,15 +24,15 @@
 #include "zdlcommon.h"
 #include "resource.h"
 
-AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const wchar_t* c_prog_id, const wchar_t* c_desc, const wchar_t* c_exts, bool hklm, UINT icon):
-	QListWidgetItem(text, parent), prog_id(c_prog_id), desc(c_desc), extensions(std::istream_iterator<std::wstring, wchar_t>(std::wistringstream(c_exts)), std::istream_iterator<std::wstring, wchar_t>()), icon(icon), hklm(hklm), remove(false)
+AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const QString &prog_id, const QString &desc, const QString &exts, bool hklm, UINT icon):
+	QListWidgetItem(text, parent), prog_id(prog_id), desc(desc), extensions(exts.split(" ")), icon(icon), hklm(hklm), remove(false)
 {
 	setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
 
 	bool initial=true;
 	SimpleWFA::AssocStatus res_stat;
-	foreach (const std::wstring &ext, extensions) {
-		SimpleWFA::AssocStatus cur_stat=SimpleWFA::CheckAssociationStatus(hklm, true, ext.c_str(), c_prog_id, NULL);
+	foreach (const QString &ext, extensions) {
+		SimpleWFA::AssocStatus cur_stat=SimpleWFA::CheckAssociationStatus(hklm, true, ext.utf16(), prog_id.utf16(), NULL);
 		if (initial) {
 			res_stat=cur_stat;
 			initial=false;
@@ -56,25 +56,25 @@ AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const
 	setCheckState(orig_state);
 }
 
-void AssocListWidget::Process(const std::wstring &file_path)
+void AssocListWidget::Process(const QString &file_path)
 {
 	bool changed=orig_state!=checkState();
 
 	if (!remove&&changed&&checkState()==Qt::Checked) {
-		foreach (const std::wstring &ext, extensions) {
-			SimpleWFA::Associate(hklm, ext.c_str(), prog_id.c_str());
+		foreach (const QString &ext, extensions) {
+			SimpleWFA::Associate(hklm, ext.utf16(), prog_id.utf16());
 		}
-		SimpleWFA::CreateSimpleProgID(hklm, SimpleWFA::CD_UPDATE_ALWAYS, prog_id.c_str(), file_path.c_str(), desc.c_str(), icon);
+		SimpleWFA::CreateSimpleProgID(hklm, SimpleWFA::CD_UPDATE_ALWAYS, prog_id.utf16(), file_path.utf16(), desc.utf16(), icon);
 	}
 	
 	if (remove||(changed&&checkState()==Qt::Unchecked)) {
-		foreach (const std::wstring &ext, extensions) {
-			SimpleWFA::Deassociate(hklm, ext.c_str(), prog_id.c_str());
+		foreach (const QString &ext, extensions) {
+			SimpleWFA::Deassociate(hklm, ext.utf16(), prog_id.utf16());
 		}
 	}
 
 	if (remove) {
-		SimpleWFA::RemoveProgID(hklm, prog_id.c_str());
+		SimpleWFA::RemoveProgID(hklm, prog_id.utf16());
 	}
 }
 
@@ -110,12 +110,12 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 
 	bool hklm=SimpleWFA::CheckIfLocalMachineAvailable();
 
-	assoc_list->addItem(new AssocListWidget("ZDL files (*.zdl)", assoc_list, L"ZDL.Zdl.1", L"ZDL config file", L".zdl", hklm, IDI_SAVE));
-	assoc_list->addItem(new AssocListWidget("WAD files (*.wad;*.iwad)", assoc_list, L"ZDL.Wad.1", L"Doom engine WAD file", L".wad .iwad", hklm, IDI_WAD));
-	assoc_list->addItem(new AssocListWidget("Patch files (*.bex;*.deh)", assoc_list, L"ZDL.Patch.1", L"Doom engine DeHackEd patch", L".bex .deh", hklm, IDI_PATCH));
-	assoc_list->addItem(new AssocListWidget("Config files (*.cfg)", assoc_list, L"ZDL.Config.1", L"Doom engine config file", L".cfg", hklm, IDI_CFG));
-	assoc_list->addItem(new AssocListWidget("Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)", assoc_list, L"ZDL.DoomArch.1", L"Doom engine specialized archive", L".pk3 .ipk3 .pk7 .p7z .pkz", hklm, IDI_ARCH));
-	assoc_list->addItem(new AssocListWidget("Other supported archives (*.zip;*.7z)", assoc_list, L"ZDL.OtherArch.1", L"Doom engine supported archive", L".zip .7z", hklm, IDI_ARCH_RED));
+	assoc_list->addItem(new AssocListWidget("ZDL files (*.zdl)", assoc_list, "ZDL.Zdl.1", "ZDL config file", ".zdl", hklm, IDI_SAVE));
+	assoc_list->addItem(new AssocListWidget("WAD files (*.wad;*.iwad)", assoc_list, "ZDL.Wad.1", "Doom engine WAD file", ".wad .iwad", hklm, IDI_WAD));
+	assoc_list->addItem(new AssocListWidget("Patch files (*.bex;*.deh)", assoc_list, "ZDL.Patch.1", "Doom engine DeHackEd patch", ".bex .deh", hklm, IDI_PATCH));
+	assoc_list->addItem(new AssocListWidget("Config files (*.cfg)", assoc_list, "ZDL.Config.1", "Doom engine config file", ".cfg", hklm, IDI_CFG));
+	assoc_list->addItem(new AssocListWidget("Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)", assoc_list, "ZDL.DoomArch.1", "Doom engine specialized archive", ".pk3 .ipk3 .pk7 .p7z .pkz", hklm, IDI_ARCH));
+	assoc_list->addItem(new AssocListWidget("Other supported archives (*.zip;*.7z)", assoc_list, "ZDL.OtherArch.1", "Doom engine supported archive", ".zip .7z", hklm, IDI_ARCH_RED));
 
 	main_layout->addWidget(desc);
 	main_layout->addWidget(assoc_list);
@@ -136,7 +136,7 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 
 void ZDLFileAssociations::ApplyAssociations()
 {
-	std::wstring file_path=QDir::toNativeSeparators(ZDLConfigurationManager::getExec()).toStdWString();
+	QString file_path=QDir::toNativeSeparators(ZDLConfigurationManager::getExec());
 
 	for(int i=0; i<assoc_list->count(); i++)
 		((AssocListWidget*)assoc_list->item(i))->Process(file_path);

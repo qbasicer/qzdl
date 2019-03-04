@@ -173,6 +173,7 @@ const FileDesc sorted_iwad_files[]={
 	{"rotwb.wad", "Rise Of The Wool Ball"},
 	{"square.pk3", "The Adventures of Square"},
 	{"square1.pk3", "The Adventures of Square"},
+	{"srb2.srb", "Sonic Robo Blast 2"},
 	{"strife.wad", "Strife Registered"},
 	{"strife0.wad", "Strife Shareware"},
 	{"strife1.wad", "Strife Registered"},
@@ -322,8 +323,8 @@ QString ZDLIwadInfo::GetFileDescription()
 	}
 
 	if (iwad_name.isEmpty()) {
-		std::string file_buf=fileName().toLower().toStdString();
-		FileDesc target_file={file_buf.c_str()};
+		QByteArray file_buf=fileName().toLower().toLocal8Bit();
+		FileDesc target_file={file_buf.constData()};
 
 		const FileDesc *null_iwad=sorted_iwad_files+SORTED_IWAD_FILES_SIZE;
 		const FileDesc *found_iwad=std::lower_bound(sorted_iwad_files, null_iwad, target_file, FileDescCompare);
@@ -345,8 +346,8 @@ ZDLAppInfo::ZDLAppInfo(const QString &file):
 
 QString ZDLAppInfo::GetFileDescription()
 {
-	std::string file_buf=baseName().toLower().toStdString();
-	FileDesc target_file={file_buf.c_str()};
+	QByteArray file_buf=fileName().toLower().toLocal8Bit();
+	FileDesc target_file={file_buf.constData()};
 
 	const FileDesc *null_port=sorted_source_ports+SORTED_SOURCE_PORTS_SIZE;
 	const FileDesc *found_port=std::lower_bound(sorted_source_ports, null_port, target_file, FileDescCompare);
@@ -495,6 +496,7 @@ square1.pk3		{"square1.pk3", "The Adventures of Square"},
 delaweare.wad		{"delaweare.wad", "Delaweare"},
 rotwb.wad		{"rotwb.wad", "Rise Of The Wool Ball"},
 doom_complete.pk3		{"doom_complete.pk3", "DOOM Complete (WADSmoosh)"},
+srb2.srb		{"srb2.srb", "Sonic Robo Blast 2"},
 blasphem.wad		{"blasphem.wad", "Blasphemer"},
 blasphemer.wad		{"blasphemer.wad", "Blasphemer"},
 

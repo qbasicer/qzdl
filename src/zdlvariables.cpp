@@ -126,15 +126,15 @@ const char *ZDLVariables::getVariableInternal(const char *lsection, const char *
 	for (itr = (_parent->sections).begin(); itr != (_parent->sections).end();itr++){
 		ZDLSection* section = (*itr);
 		if (section->getName().compare(lsection) == 0){
-			string rc = section->findVariable(variable).toStdString();
-			while (containsUnresolved((char*)rc.c_str())){
-				rc = resolveVariable((char*)rc.c_str());
+			QString rc=section->findVariable(variable);
+			while (containsUnresolved(qPrintable(rc))){
+				rc = resolveVariable(qPrintable(rc));
 			}
 			if (cdepth == 0){
 				depth = 0;
-				rc = demangle((char*)rc.c_str());
+				rc = demangle(qPrintable(rc));
 			}else{depth--;}
-			return (char*)rc.c_str();
+			return qPrintable(rc);
 		}
 	}
 	if (cdepth == 0){depth = 0;}else{depth--;}

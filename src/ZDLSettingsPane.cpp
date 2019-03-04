@@ -335,7 +335,7 @@ void ZDLSettingsPane::newConfig(){
 		int stat = 0;
 		QString rc = zconf->getValue("zdl.save", "skill", &stat);
 		if (rc.length() > 0){
-			index = atoi((char*)rc.toStdString().c_str());
+			index = rc.toInt();
 		}
 		if (index >= 0 && index <= 5){
 			diffList->setCurrentIndex(index);

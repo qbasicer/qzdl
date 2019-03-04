@@ -49,8 +49,8 @@ class ZDLConfigurationManager{
 		
 		static ZDLConfiguration* getConfiguration();
 		
-		static void setCurrentDirectory(string dir);
-		static const char* getCurrentDirectory();
+		static void setCurrentDirectory(const QString &dir);
+		static QString getCurrentDirectory();
 		static QPixmap getIcon();
 		static QString getConfigFileName();
 		static void setConfigFileName(QString name);
@@ -65,7 +65,7 @@ class ZDLConfigurationManager{
 		static QString filename;
 		static ZDLWidget* interface;
 		static ZDLConf *activeConfig;
-		static string cdir;
+		static QString cdir;
 		static ZDLConfiguration *conf;
 		static WhyConfig why;
 		static ZDLConfigurationEvents *events;

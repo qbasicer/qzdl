@@ -39,7 +39,6 @@ class ZDLConfiguration{
 		bool hasVariable(QString section, QString key, ConfScope scope = NUM_CONFS, ScopeRules rules = SCOPE_ALL);
 		
 	private:
-		void bootstrap(QString path);
 		ZDLConf* confs[NUM_CONFS];
 		QString paths[NUM_CONFS];
 };
