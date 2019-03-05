@@ -30,6 +30,8 @@
 
 #ifdef Q_WS_WIN
 #include <windows.h>
+#else
+#include <wordexp.h>
 #endif
 
 extern QApplication *qapp;
@@ -117,8 +119,6 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent):
 	intr = new ZDLInterface(this);
 	settings = new ZDLSettingsTab(this);
 
-	//widget->setTabShape(QTabWidget::Triangular);
-	//widget->setWindowFlags(Qt::FramelessWindowHint);
 	widget->setDocumentMode(true);
 	widget->addTab(intr, "Launch config");
 	widget->addTab(settings, "General settings");
@@ -265,7 +265,7 @@ void ZDLMainWindow::launch(){
 	QString cmdline="\""+QDir::toNativeSeparators(exec_fi.absoluteFilePath())+"\" "+getArgumentsString(true);
 	QString cwd=QDir::toNativeSeparators(exec_fi.absolutePath());
 
-	if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.utf16()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, cwd.utf16(), &si, &pi)) {
+	if (CreateProcess(NULL, const_cast<wchar_t*>(cmdline.utf16()), NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS|CREATE_UNICODE_ENVIRONMENT|CREATE_NEW_CONSOLE, NULL, cwd.utf16(), &si, &pi)) {
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	} else {
@@ -323,6 +323,26 @@ QString QuoteParam(const QString& param)
 
 		return qparam;
     }
+}
+
+QString ExpandEnvironmentStringsWrapper(QString &args)
+{
+	wchar_t dummy_buf;
+
+	//Documentation says that lpDst parameter is optional but Win 95 version of this function actually fails if lpDst is NULL
+	//So using dummy buffer to get needed buffer length (function returns length in characters including terminating NULL)
+	//If returned length is 0 - it is an error
+	if (DWORD buf_len=ExpandEnvironmentStrings(args.utf16(), &dummy_buf, 0)) {
+		wchar_t* expanded_buf=new wchar_t[buf_len];
+
+		//Ensuring that returned length is expected length
+		if (ExpandEnvironmentStrings(args.utf16(), expanded_buf, buf_len)<=buf_len) 
+			args.setUtf16(expanded_buf, buf_len-1);
+
+		delete[] expanded_buf;
+	}
+	
+	return args;
 }
 
 #define IF_NATIVE_SEP(p)	(native_sep?QDir::toNativeSeparators(p):p)
@@ -509,12 +529,12 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 
 	if (zconf->hasValue("zdl.general", "alwaysadd")){
 		args.append(' ');
-		args.append(zconf->getValue("zdl.general", "alwaysadd"));
+		args.append(ExpandEnvironmentStringsWrapper(zconf->getValue("zdl.general", "alwaysadd")));
 	}
 
 	if (zconf->hasValue("zdl.save", "extra")){
 		args.append(' ');
-		args.append(zconf->getValue("zdl.save", "extra"));
+		args.append(ExpandEnvironmentStringsWrapper(zconf->getValue("zdl.save", "extra")));
 	}
 
 	LOGDATAO() << "args: " << args << endl;
@@ -530,39 +550,17 @@ QStringList ZDLMainWindow::getArgumentsList()
 
 QStringList ParseParams(const QString& params)
 {
-	//This function is lifted straight from the Qt sources
-	//qprocess.cpp/parseCombinedArgString
-
     QStringList plist;
-    QString tmp;
-    int quoteCount = 0;
-    bool inQuote = false;
+    
+	wordexp_t result;
 
-    for (int i = 0; i < params.size(); ++i) {
-        if (params.at(i) == QLatin1Char('"')) {
-            ++quoteCount;
-            if (quoteCount == 3) {
-                quoteCount = 0;
-                tmp += params.at(i);
-            }
-            continue;
-        }
-        if (quoteCount) {
-            if (quoteCount == 1)
-                inQuote = !inQuote;
-            quoteCount = 0;
-        }
-        if (!inQuote && params.at(i).isSpace()) {
-            if (!tmp.isEmpty()) {
-                plist += tmp;
-                tmp.clear();
-            }
-        } else {
-            tmp += params.at(i);
-        }
-    }
-    if (!tmp.isEmpty())
-        plist += tmp;
+	switch (wordexp(qPrintable(params), &result, 0)) {
+		case 0:
+			for (int i=0; i<result.we_wordc; i++)
+				plist<<result.we_wordv[i];
+		case WRDE_NOSPACE:	//If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
+			wordfree (&result);
+	}
 
     return plist;
 }

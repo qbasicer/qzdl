@@ -479,7 +479,7 @@
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties QtVersion_x0020_Win32="4.8.7-static-O1" UicDir=".\uic" RccDir=".\rcc" />
+      <UserProperties QtVersion_x0020_Win32="4.8.7-static-no-stl-O1" UicDir=".\uic" RccDir=".\rcc" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
