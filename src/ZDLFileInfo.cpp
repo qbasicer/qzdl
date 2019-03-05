@@ -38,7 +38,6 @@ const IwadHash sorted_iwad_hashes[]={
 	DEFINE_IWAD("Heretic Shareware v1.0", 0x023b5217, 0x5d2f260c, 0x3bdc5528, 0xdf5d0a8c),
 	DEFINE_IWAD("Doom Press Release Beta", 0x049e32f1, 0x8d9c9529, 0x630366cf, 0xc72726ea),
 	DEFINE_IWAD("Strife: Veteran Edition v1.0", 0x06a8f99b, 0x9b756ac9, 0x08917c38, 0x68b8e3bc),
-	DEFINE_IWAD("Strife Voices WAD", 0x082234d6, 0xa3f70864, 0x24856478, 0xb5aa9e95),
 	DEFINE_IWAD("The Ultimate Doom v1.9 (Xbox Doom 3 bundle)", 0x0c8758f1, 0x02ccafe2, 0x6a3040be, 0xe8ba5021),
 	DEFINE_IWAD("Hexen: Deathkings of the Dark Citadel v1.0", 0x1077432e, 0x2690d390, 0xc256ac90, 0x8b5f4efa),
 	DEFINE_IWAD("Doom Registered v1.8", 0x11e1cd21, 0x6801ea26, 0x57723abc, 0x86ecb01f),
@@ -78,7 +77,6 @@ const IwadHash sorted_iwad_hashes[]={
 	DEFINE_IWAD("Hexen: Deathkings of the Dark Citadel v1.1", 0x78d5898e, 0x99e220e4, 0xde64edaa, 0x0e479593),
 	DEFINE_IWAD("The Ultimate Doom v1.9 (Xbox 360 BFG Edition)", 0x7912931e, 0x44c7d56e, 0x021084a2, 0x56659800),
 	DEFINE_IWAD("Doom Registered v1.2", 0x792fd1fe, 0xa023d612, 0x10857089, 0xa7c1e351),
-	DEFINE_IWAD("Master Levels for Doom II (PSN Classic Complete)", 0x84cb8640, 0xf599c4a1, 0x7c8eb526, 0xf90d2b7a),
 	DEFINE_IWAD("Hexen Shareware v1.0", 0x876a5a44, 0xc7b68f04, 0xb3bb9bc7, 0xa5bd69d6),
 	DEFINE_IWAD("Strife Registered v1.1", 0x8f2d3a6a, 0x289f5d2f, 0x2f9c1eec, 0x02b47299),
 	DEFINE_IWAD("Doom Shareware v0.99/v1.0", 0x90facab2, 0x1eede798, 0x1be10790, 0xe3f82da2),
@@ -229,6 +227,7 @@ const FileDesc sorted_source_ports[]={
 	{"linuxxdoom", "Linux Doom (X)"},
 	{"lxdoom", "LxDoom"},
 	{"lxdoom-game-server", "LxDoom (Server)"},
+	{"lzdoom", "LZDoom"},
 	{"mbf", "Marine's Best Friend (MBF)"},
 	{"mochadoom", "Mocha Doom"},
 	{"mochadoom7", "Mocha Doom (Win 7)"},
@@ -257,6 +256,10 @@ const FileDesc sorted_source_ports[]={
 	{"zdaemon", "ZDaemon"},
 	{"zdaemongl", "ZDaemonGL"},
 	{"zdoom", "ZDoom"},
+	{"zdoom32", "ZDoom32"},
+	{"zdoom32_N", "ZDoom32 (MinGW)"},
+	{"zdoom32_SSE2", "ZDoom32 (SSE2)"},
+	{"zdoom98", "ZDoom LE (Win 9x)"},
 	{"zdoomgl", "ZDoomGL"},
 	{"zserv32", "ZDaemon (Server)"}
 };
@@ -363,7 +366,6 @@ QString ZDLAppInfo::GetFileDescription()
 //Simply copy this to Excel or Google Tables, edit any hashes, add new IWADs and sort it using first column
 //Then copy second and third columns to sorted_iwad_hashes
 //Don't forget to remove comma at the end of the last element
-//N.B.: List actually contains some PWADs for the simplicity of comparing it to other "commercial WAD lists" that often include both IWADs and PWADs
 
 740901119ba2953e3c7f3764eca6e128		DEFINE_IWAD("Doom Alpha v0.2", 0x74090111, 0x9ba2953e, 0x3c7f3764, 0xeca6e128),
 dae9b1eea1a8e090fdfa5707187f4a43		DEFINE_IWAD("Doom Alpha v0.3", 0xdae9b1ee, 0xa1a8e090, 0xfdfa5707, 0x187f4a43),
@@ -415,7 +417,6 @@ b77ca6a809c4fae086162dad8e7a1335		DEFINE_IWAD("Final Doom: The Plutonia Experime
 677605e1a7ee75dc279373036cdb6ebb		DEFINE_IWAD("Final Doom: TNT Evilution v1.9 (DOOMPatcher)", 0x677605e1, 0xa7ee75dc, 0x27937303, 0x6cdb6ebb),
 1d39e405bf6ee3df69a8d2646c8d5c49		DEFINE_IWAD("Final Doom: TNT Evilution v1.9 (id Anthology)", 0x1d39e405, 0xbf6ee3df, 0x69a8d264, 0x6c8d5c49),
 be626c12b7c9d94b1dfb9c327566b4ff		DEFINE_IWAD("Final Doom: TNT Evilution v1.9 (PSN Classic Complete)", 0xbe626c12, 0xb7c9d94b, 0x1dfb9c32, 0x7566b4ff),
-84cb8640f599c4a17c8eb526f90d2b7a		DEFINE_IWAD("Master Levels for Doom II (PSN Classic Complete)", 0x84cb8640, 0xf599c4a1, 0x7c8eb526, 0xf90d2b7a),
 fc7eab659f6ee522bb57acc1a946912f		DEFINE_IWAD("Heretic Shareware Beta", 0xfc7eab65, 0x9f6ee522, 0xbb57acc1, 0xa946912f),
 023b52175d2f260c3bdc5528df5d0a8c		DEFINE_IWAD("Heretic Shareware v1.0", 0x023b5217, 0x5d2f260c, 0x3bdc5528, 0xdf5d0a8c),
 ae779722390ec32fa37b0d361f7d82f8		DEFINE_IWAD("Heretic Shareware v1.2", 0xae779722, 0x390ec32f, 0xa37b0d36, 0x1f7d82f8),
@@ -438,7 +439,6 @@ bb545b9c4eca0ff92c14d466b3294023		DEFINE_IWAD("Strife Shareware v1.1", 0xbb545b9
 06a8f99b9b756ac908917c3868b8e3bc		DEFINE_IWAD("Strife: Veteran Edition v1.0", 0x06a8f99b, 0x9b756ac9, 0x08917c38, 0x68b8e3bc),
 2c0a712d3e39b010519c879f734d79ae		DEFINE_IWAD("Strife: Veteran Edition v1.1", 0x2c0a712d, 0x3e39b010, 0x519c879f, 0x734d79ae),
 47958a4fea8a54116e4b51fc155799c0		DEFINE_IWAD("Strife: Veteran Edition v1.2+", 0x47958a4f, 0xea8a5411, 0x6e4b51fc, 0x155799c0),
-082234d6a3f7086424856478b5aa9e95		DEFINE_IWAD("Strife Voices WAD", 0x082234d6, 0xa3f70864, 0x24856478, 0xb5aa9e95),
 25485721882b050afa96a56e5758dd52		DEFINE_IWAD("Chex Quest v1.0", 0x25485721, 0x882b050a, 0xfa96a56e, 0x5758dd52),
 fdc4ffa57e1983e30912c006284a3e01		DEFINE_IWAD("Chex Quest 2 v1.0", 0xfdc4ffa5, 0x7e1983e3, 0x0912c006, 0x284a3e01),
 59c985995db55cd2623c1893550d82b3		DEFINE_IWAD("Chex Quest 3 v1.0", 0x59c98599, 0x5db55cd2, 0x623c1893, 0x550d82b3),
@@ -517,6 +517,11 @@ doom95		{"doom95", "Doom 95"},
 zdoom		{"zdoom", "ZDoom"},
 gzdoom		{"gzdoom", "GZDoom"},
 qzdoom		{"qzdoom", "QZDoom"},
+zdoom98		{"zdoom98", "ZDoom LE (Win 9x)"},
+lzdoom		{"lzdoom", "LZDoom"},
+zdoom32		{"zdoom32", "ZDoom32"},
+zdoom32_N		{"zdoom32_N", "ZDoom32 (MinGW)"},
+zdoom32_SSE2		{"zdoom32_SSE2", "ZDoom32 (SSE2)"},
 skulltag		{"skulltag", "Skulltag"},
 doomsday		{"doomsday", "Doomsday Engine"},
 doomsday-server		{"doomsday-server", "Doomsday Engine (Server)"},
