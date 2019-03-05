@@ -116,7 +116,6 @@ const IwadHash sorted_iwad_hashes[]={
 	DEFINE_IWAD("Doom II: Hell on Earth v1.9 (Xbox 360 BFG Edition)", 0xf617591a, 0x6c5d0703, 0x7eb716dc, 0x4863e26b),
 	DEFINE_IWAD("The Ultimate Doom v1.9 (BFG Edition)", 0xfb35c4a5, 0xa9fd49ec, 0x29ab6e90, 0x0572c524),
 	DEFINE_IWAD("Heretic Shareware Beta", 0xfc7eab65, 0x9f6ee522, 0xbb57acc1, 0xa946912f),
-	DEFINE_IWAD("Chex Quest 2 v1.0", 0xfdc4ffa5, 0x7e1983e3, 0x0912c006, 0x284a3e01),
 	DEFINE_IWAD("Harmony v1.0", 0xfe2cce67, 0x13ddcf6c, 0x6d6f0e81, 0x54b0cb38)
 };
 
@@ -440,7 +439,6 @@ bb545b9c4eca0ff92c14d466b3294023		DEFINE_IWAD("Strife Shareware v1.1", 0xbb545b9
 2c0a712d3e39b010519c879f734d79ae		DEFINE_IWAD("Strife: Veteran Edition v1.1", 0x2c0a712d, 0x3e39b010, 0x519c879f, 0x734d79ae),
 47958a4fea8a54116e4b51fc155799c0		DEFINE_IWAD("Strife: Veteran Edition v1.2+", 0x47958a4f, 0xea8a5411, 0x6e4b51fc, 0x155799c0),
 25485721882b050afa96a56e5758dd52		DEFINE_IWAD("Chex Quest v1.0", 0x25485721, 0x882b050a, 0xfa96a56e, 0x5758dd52),
-fdc4ffa57e1983e30912c006284a3e01		DEFINE_IWAD("Chex Quest 2 v1.0", 0xfdc4ffa5, 0x7e1983e3, 0x0912c006, 0x284a3e01),
 59c985995db55cd2623c1893550d82b3		DEFINE_IWAD("Chex Quest 3 v1.0", 0x59c98599, 0x5db55cd2, 0x623c1893, 0x550d82b3),
 bce163d06521f9d15f9686786e64df13		DEFINE_IWAD("Chex Quest 3 v1.4", 0xbce163d0, 0x6521f9d1, 0x5f968678, 0x6e64df13),
 1511a7032ebc834a3884cf390d7f186e		DEFINE_IWAD("HacX v1.0", 0x1511a703, 0x2ebc834a, 0x3884cf39, 0x0d7f186e),
