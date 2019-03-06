@@ -20,15 +20,14 @@
 #include <iostream>
 #include <QtGui>
 #include <QApplication>
+#include <windows.h>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
 #include "ZDLQSplitter.h"
 
-#include <windows.h>
-
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+#ifdef Q_WS_WIN
 #include "ZDLFileAssociations.h"
 #endif
 
@@ -81,7 +80,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
 	
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+#ifdef Q_WS_WIN
 	QPushButton *assoc = new QPushButton("Associations", this);
 	assoc->setToolTip("Associate various file types with ZDL");
 	fileassoc->addWidget(assoc);
@@ -100,7 +99,8 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-void ZDLSettingsTab::pathToggled(int state){
+void ZDLSettingsTab::pathToggled(int state)
+{
 	Q_UNUSED(state);
 
 	ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration();
@@ -112,10 +112,11 @@ void ZDLSettingsTab::pathToggled(int state){
 	sourceList->newConfig();
 }
 
-void ZDLSettingsTab::fileAssociations(){
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+void ZDLSettingsTab::fileAssociations()
+{
+#ifdef Q_WS_WIN
 	ZDLFileAssociations assoc(this);
-	if (assoc.exec()) {}
+	assoc.exec();
 #endif
 }
 
