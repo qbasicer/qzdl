@@ -20,7 +20,6 @@
 #include <iostream>
 #include <QtGui>
 #include <QApplication>
-#include <windows.h>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
@@ -28,6 +27,7 @@
 #include "ZDLQSplitter.h"
 
 #ifdef Q_WS_WIN
+#include <windows.h>
 #include "ZDLFileAssociations.h"
 #endif
 
