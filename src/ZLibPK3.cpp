@@ -24,6 +24,9 @@ ZLibPK3::ZLibPK3(const QString &file):
 	file(file)
 {}
 
+ZLibPK3::~ZLibPK3()
+{}
+
 QStringList ZLibPK3::getMapNames()
 {
 	mz_zip_archive zip_archive={};

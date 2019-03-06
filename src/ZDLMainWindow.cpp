@@ -20,7 +20,6 @@
 #include <iostream>
 #include <QtGui>
 #include <QRegExp>
-#include <QApplication>
 #include <QMainWindow>
 
 #include "ZDLInterface.h"
@@ -33,8 +32,6 @@
 #else
 #include <wordexp.h>
 #endif
-
-extern QApplication *qapp;
 
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
@@ -273,7 +270,7 @@ void ZDLMainWindow::launch(){
 		no_err=false;
 	}
 #else
-	if (QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
+    if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
 		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
 		no_err=false;
 	}
@@ -556,7 +553,7 @@ QStringList ParseParams(const QString& params)
 
 	switch (wordexp(qPrintable(params), &result, 0)) {
 		case 0:
-			for (int i=0; i<result.we_wordc; i++)
+            for (size_t i=0; i<result.we_wordc; i++)
 				plist<<result.we_wordv[i];
 		case WRDE_NOSPACE:	//If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
 			wordfree (&result);

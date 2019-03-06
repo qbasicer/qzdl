@@ -6,17 +6,17 @@ TEMPLATE = app
 TARGET = qzdl
 DESTDIR = ./release
 QT += core gui
-CONFIG += release
+CONFIG += release static
+QMAKE_CFLAGS += -fno-strict-aliasing
+QMAKE_CXXFLAGS += -Wno-missing-field-initializers
 DEFINES += _ZDL_NO_WARNINGS NOMINMAX STATIC QT_HAVE_MMX QT_HAVE_3DNOW QT_HAVE_SSE QT_HAVE_MMXEXT QT_HAVE_SSE2
 INCLUDEPATH += ./miniz \
     ./res/XPM \
     ./res/Win32 \
     ./include \
     ./moc \
-    $(QTDIR)/mkspecs/default \
     ./uic \
     ./rcc
-DEPENDPATH += .
 MOC_DIR += ./moc
 OBJECTS_DIR += release
 UI_DIR += ./uic

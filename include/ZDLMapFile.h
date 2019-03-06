@@ -27,6 +27,7 @@ class ZDLMapFile{
 		static ZDLMapFile *getMapFile(QString file);
 		virtual QString getIwadinfoName() = 0;
 		virtual QStringList getMapNames() = 0;
+        virtual ~ZDLMapFile() = 0;
 };
 
 

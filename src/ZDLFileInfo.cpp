@@ -28,7 +28,7 @@ struct IwadHash {
 	const char* name;
 };
 
-#define INT_TO_BYTES(i) ((unsigned int)i>>24)&0xFF, ((unsigned int)i>>16)&0xFF, ((unsigned int)i>>8)&0xFF, (unsigned int)i&0xFF
+#define INT_TO_BYTES(i) (char)(((unsigned int)i>>24)&0xFF), (char)(((unsigned int)i>>16)&0xFF), (char)(((unsigned int)i>>8)&0xFF), (char)((unsigned int)i&0xFF)
 #define DEFINE_IWAD(n, d1, d2, d3, d4) {{INT_TO_BYTES(d1), INT_TO_BYTES(d2), INT_TO_BYTES(d3), INT_TO_BYTES(d4)}, n}
 
 //This is sorted list of IWAD hashes

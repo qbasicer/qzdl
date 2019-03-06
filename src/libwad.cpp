@@ -36,6 +36,9 @@ DoomWad::DoomWad(const QString &file):
 	file(file)
 {}
 
+DoomWad::~DoomWad()
+{}
+
 QStringList DoomWad::getMapNames() {
 	QFile wad(file);
 	QStringList map_names;

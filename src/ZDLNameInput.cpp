@@ -23,7 +23,7 @@
 #include <string>
 
 ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi):
-	QDialog(parent), last_used_dir(last_used_dir), zdl_fi(zdl_fi)
+    QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir)
 {
 	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);

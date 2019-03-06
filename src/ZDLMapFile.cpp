@@ -27,6 +27,9 @@ const char iwad_m[]={'I', 'W', 'A', 'D'};
 const char pwad_m[]={'P', 'W', 'A', 'D'};
 const char zip_m[]={'P', 'K', 0x03, 0x04};
 
+ZDLMapFile::~ZDLMapFile()
+{}
+
 ZDLMapFile *ZDLMapFile::getMapFile(QString file){
 	QFile fileio(file);
 	ZDLMapFile *mapfile=NULL;
