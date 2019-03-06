@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,9 @@
 
 #include "ZDLNullDevice.h"
 
+#if defined(Q_WS_WIN)
 #include "windows.h"
+#endif
 
 QApplication *qapp;
 ZDLMainWindow *mw;
