@@ -30,7 +30,7 @@ class ZDLSourcePortList : public ZDLListWidget{
 		virtual void editButton(QListWidgetItem * item);
 		virtual void newDrop(QStringList fileList);
 	protected slots:
-		void massAddButton();
+        void wizardAddButton();
 };
 
 #endif

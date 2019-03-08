@@ -22,37 +22,38 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
 #include "ZDLFileInfo.h"
-#include "gph_dps.xpm"
+#include "gph_ast.xpm"
 
 #include <cstdio>
 #include <iostream>
 using namespace std;
 
 ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
-	QPushButton *btnMassAdd = new QPushButton(this);
-	btnMassAdd->setIcon(QPixmap(glyph_dbl_plus));
-	btnMassAdd->setToolTip("Add items");
-	buttonRow->insertWidget(0, btnMassAdd);
+    QPushButton *btnWizardAdd = new QPushButton(this);
+    btnWizardAdd->setIcon(QPixmap(glyph_asterisk));
+    btnWizardAdd->setToolTip("Add and name item");
+    buttonRow->insertWidget(0, btnWizardAdd);
 
-	QObject::connect(btnMassAdd, SIGNAL(clicked()), this, SLOT(massAddButton()));
+    QObject::connect(btnWizardAdd, SIGNAL(clicked()), this, SLOT(wizardAddButton()));
 }
 
-void ZDLSourcePortList::massAddButton(){
-	LOGDATAO() << "Adding new source ports" << endl;
-	QStringList filters;
+void ZDLSourcePortList::wizardAddButton(){
+    QStringList filters;
 #if defined(Q_WS_WIN)
-	filters << "Executables (*.exe)";
+    filters << "Executables (*.exe)";
 #elif defined(Q_WS_MAC)
-	filters << "Applications (*.app)";
+    filters << "Applications (*.app)";
 #endif
-	filters << "All files (*.*)";
+    filters << "All files (*.*)";
 
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), filters.join(";;"));
-	for(int i = 0; i < fileNames.size(); i++){
-		LOGDATAO() << "Adding file " << fileNames[i] << endl;
-		saveSrcLastDir(fileNames[i]);
-		insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
-	}
+    ZDLAppInfo zdl_fi;
+    ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
+    diag.setWindowTitle("Add source port");
+    diag.setFilter(filters);
+    if (diag.exec()){
+        saveSrcLastDir(diag.getFile());
+        insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
+    }
 }
 
 void ZDLSourcePortList::newConfig(){
@@ -108,24 +109,21 @@ void ZDLSourcePortList::newDrop(QStringList fileList){
 
 
 void ZDLSourcePortList::addButton(){
-	QStringList filters;
+    LOGDATAO() << "Adding new source ports" << endl;
+    QStringList filters;
 #if defined(Q_WS_WIN)
-	filters << "Executables (*.exe)";
+    filters << "Executables (*.exe)";
 #elif defined(Q_WS_MAC)
-	filters << "Applications (*.app)";
+    filters << "Applications (*.app)";
 #endif
-	filters << "All files (*.*)";
-	
-	ZDLAppInfo zdl_fi;
-	ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
-	diag.setWindowTitle("Add source port");
-	diag.setFilter(filters);
-	if (diag.exec()){
-		saveSrcLastDir(diag.getFile());
-		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
-	}
-	
-	
+    filters << "All files (*.*)";
+
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), filters.join(";;"));
+    for(int i = 0; i < fileNames.size(); i++){
+        LOGDATAO() << "Adding file " << fileNames[i] << endl;
+        saveSrcLastDir(fileNames[i]);
+        insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
+    }
 }
 
 void ZDLSourcePortList::editButton(QListWidgetItem * item){

@@ -23,34 +23,35 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
 #include "ZDLFileInfo.h"
-#include "gph_dps.xpm"
+#include "gph_ast.xpm"
 
 #include <iostream>
 using namespace std;
 
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
-	QPushButton *btnMassAdd = new QPushButton(this);
-	btnMassAdd->setIcon(QPixmap(glyph_dbl_plus));
-	btnMassAdd->setToolTip("Add items");
-	buttonRow->insertWidget(0, btnMassAdd);
+    QPushButton *btnWizardAdd = new QPushButton(this);
+    btnWizardAdd->setIcon(QPixmap(glyph_asterisk));
+    btnWizardAdd->setToolTip("Add and name item");
+    buttonRow->insertWidget(0, btnWizardAdd);
 
-	QObject::connect(btnMassAdd, SIGNAL(clicked()), this, SLOT(massAddButton()));
+    QObject::connect(btnWizardAdd, SIGNAL(clicked()), this, SLOT(wizardAddButton()));
 }
 
-void ZDLIWadList::massAddButton(){
-	LOGDATAO() << "Adding new IWADs" << endl;
-	QStringList filters;
-	filters << "WAD files (*.wad;*.iwad)"
-		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-		<< "All files (*.*)";
+void ZDLIWadList::wizardAddButton(){
+    QStringList filters;
+    filters << "WAD files (*.wad;*.iwad)"
+        << "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
+        << "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
+        << "All files (*.*)";
 
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters.join(";;"));
-	for(int i = 0; i < fileNames.size(); i++){
-		LOGDATAO() << "Adding file " << fileNames[i] << endl;
-		saveWadLastDir(fileNames[i]);
-		insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
-	}
+    ZDLIwadInfo zdl_fi;
+    ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
+    diag.setWindowTitle("Add IWAD");
+    diag.setFilter(filters);
+    if (diag.exec()){
+        saveWadLastDir(diag.getFile());
+        insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
+    }
 }
 
 void ZDLIWadList::newConfig(){
@@ -105,20 +106,19 @@ void ZDLIWadList::newDrop(QStringList fileList){
 }
 
 void ZDLIWadList::addButton(){
-	QStringList filters;
-	filters << "WAD files (*.wad;*.iwad)"
-		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-		<< "All files (*.*)";
-	
-	ZDLIwadInfo zdl_fi;
-	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
-	diag.setWindowTitle("Add IWAD");
-	diag.setFilter(filters);
-	if (diag.exec()){
-		saveWadLastDir(diag.getFile());
-		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
-	}
+    LOGDATAO() << "Adding new IWADs" << endl;
+    QStringList filters;
+    filters << "WAD files (*.wad;*.iwad)"
+        << "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
+        << "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
+        << "All files (*.*)";
+
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters.join(";;"));
+    for(int i = 0; i < fileNames.size(); i++){
+        LOGDATAO() << "Adding file " << fileNames[i] << endl;
+        saveWadLastDir(fileNames[i]);
+        insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
+    }
 }
 
 void ZDLIWadList::editButton(QListWidgetItem * item){

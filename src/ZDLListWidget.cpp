@@ -63,7 +63,7 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent) {
 	btnDn = new QPushButton(this);
 	btnDn->setIcon(QPixmap(glyph_down_arr));
 
-	btnAdd->setToolTip("Add item");
+    btnAdd->setToolTip("Add items");
 	btnRem->setToolTip("Remove selected items");
 	btnEdt->setToolTip("Edit selected item");
 	btnUp->setToolTip("Move selected items up");

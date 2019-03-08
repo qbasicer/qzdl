@@ -113,7 +113,7 @@ OTHER_FILES += \
     res/XPM/bmp_logo.xpm \
     res/XPM/gph_dna.xpm \
     res/XPM/gph_dnt.xpm \
-    res/XPM/gph_dps.xpm \
+    res/XPM/gph_ast.xpm \
     res/XPM/gph_fld.xpm \
     res/XPM/gph_mns.xpm \
     res/XPM/gph_pls.xpm \
