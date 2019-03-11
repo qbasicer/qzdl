@@ -27,6 +27,8 @@
 #define INFOBAR_WARNING	1
 #define INFOBAR_INFO	2
 
+class QLabel;
+
 class ZDLInfoBar : public ZDLWidget{
 Q_OBJECT
 	public: 

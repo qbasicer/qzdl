@@ -20,6 +20,9 @@
 #include <QObject>
 #include "ZDLWidget.h"
 
+class QComboBox;
+class QListWidget;
+
 class ZDLSettingsPane: public ZDLWidget{
 Q_OBJECT
 public: 

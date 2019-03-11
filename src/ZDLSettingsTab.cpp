@@ -24,6 +24,11 @@
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
 
+#include <QLayout>
+#include <QLineEdit>
+#include <QLabel>
+#include <QCheckBox>
+
 #if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 #include "ZDLFileAssociations.h"
 #endif

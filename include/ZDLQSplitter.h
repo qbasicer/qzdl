@@ -23,6 +23,8 @@
 #include <QtGui>
 #include "ZDLWidget.h"
 
+class QSplitter;
+class QVBoxLayout;
 
 class ZDLQSplitter: public virtual ZDLWidget{
 Q_OBJECT

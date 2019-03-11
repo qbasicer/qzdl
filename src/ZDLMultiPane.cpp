@@ -22,6 +22,11 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
 
+#include <QLayout>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QLabel>
+
 #ifdef _DMFLAG_PICKER_
 #include "ZDMFlagDialog.h"
 #endif

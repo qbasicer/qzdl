@@ -23,6 +23,8 @@
 #include <QObject>
 #include "ZDLNameListable.h"
 
+#include <QDialog>
+
 class ZDLNameInput: public QDialog{
 	Q_OBJECT
 	public: 

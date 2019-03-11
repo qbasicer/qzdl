@@ -26,6 +26,10 @@
 
 #include "ZDLInfoBar.h"
 
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+
 ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	LOGDATAO() << "New ZDLInfoBar" << endl;
 	QPalette p(palette());
@@ -38,7 +42,7 @@ ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	
 	lbl = new QLabel(this);	
 	txtlbl = new QLabel("", this);
-	lbl->setPixmap(NULL);
+    //lbl->setPixmap();
 	box->addWidget(lbl);
 	
 	box->addWidget(txtlbl);

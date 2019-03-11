@@ -24,6 +24,11 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLSettingsPane.h"
 
+#include <QLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QLineEdit>
+
 ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	LOGDATAO() << "New ZDLSettingsPane" << endl;
 	QVBoxLayout *box = new QVBoxLayout(this);

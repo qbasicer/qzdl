@@ -3,6 +3,13 @@
 
 #include "zdlcommon.h"
 
+#include <QLayout>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QButtonGroup>
+#include <QLabel>
+#include <QMessageBox>
+
 class ZDLButtonGroup {
 	public:
 		ZDLButtonGroup(QString labelText, QWidget *parent){
@@ -13,7 +20,7 @@ class ZDLButtonGroup {
 		bool isRemove(){return deassoc->isChecked();}
 		bool isIgnore(){return ignore->isChecked();}
 		void add(QVBoxLayout *layout){
-			QHBoxLayout *hlayout = new QHBoxLayout();
+            QHBoxLayout *hlayout = new QHBoxLayout();
 			QButtonGroup *grpZDLFiles = new QButtonGroup(parent);
 			QString text = "<b>";
 			text += labelText += "</b>";

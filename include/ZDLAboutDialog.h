@@ -22,6 +22,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
+#include <QDialog>
 
 class ZDLAboutDialog: public QDialog{
 Q_OBJECT

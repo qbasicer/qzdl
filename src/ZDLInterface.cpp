@@ -35,6 +35,16 @@
 #include "aup.xpm"
 #include "adown.xpm"
 
+#include <QLayout>
+#include <QSplitter>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QMenu>
+#include <QFileDialog>
+
+
 extern ZDLMainWindow *mw;
 extern QApplication *qapp;
 

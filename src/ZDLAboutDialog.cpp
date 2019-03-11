@@ -21,6 +21,8 @@
 #include <QDialogButtonBox>
 #include "ZDLVersion.h"
 #include "bmp_logo.xpm"
+#include <QLayout>
+#include <QLabel>
 
 extern QString versionString;
 

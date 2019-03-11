@@ -21,6 +21,12 @@
 #include "ZDLConfigurationManager.h"
 #include <string>
 
+#include <QLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QFileDialog>
+
 QString getLastDir(){
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){

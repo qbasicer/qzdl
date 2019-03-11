@@ -21,6 +21,8 @@
 #include <QApplication>
 #include "ZDLQSplitter.h"
 #include <QMetaObject>
+#include <QLayout>
+#include <QSplitter>
 
 
 ZDLQSplitter::ZDLQSplitter(ZDLWidget *parent):ZDLWidget(parent){

@@ -22,6 +22,9 @@
 #include "ZDLSourcePortList.h"
 #include "ZDLIWadList.h"
 
+class QCheckBox;
+
+
 class ZDLSettingsTab: public ZDLWidget{
 Q_OBJECT
 public: 

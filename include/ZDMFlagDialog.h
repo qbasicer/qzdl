@@ -23,6 +23,8 @@
 #include <QObject>
 #include "ZDLWidget.h"
 #include "ZDLDMFlagManager.h"
+#include <QLineEdit>
+#include <QDialog>
 
 class ZDMFlagDialog: public QDialog{
 Q_OBJECT

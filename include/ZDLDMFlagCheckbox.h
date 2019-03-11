@@ -22,6 +22,7 @@
 #include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
+#include <QCheckBox>
 
 class ZDLDMFlagCheckbox: public QCheckBox{
 Q_OBJECT

@@ -31,6 +31,10 @@
 #include <windows.h>
 #endif
 
+#include <QLayout>
+#include <QAction>
+#include <QMessageBox>
+
 extern QApplication *qapp;
 extern QString versionString;
 

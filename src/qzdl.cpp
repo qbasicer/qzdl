@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDir>
+#include <QComboBox>
 
 #include "ZDLConfigurationManager.h"
 #include "ZDLMainWindow.h"
@@ -27,8 +28,8 @@
 
 #include "ZDLNullDevice.h"
 
-QApplication *qapp;
-QString versionString;
+//QApplication *qapp;
+//QString versionString;
 ZDLMainWindow *mw;
 
 static void addFile(QString file, ZDLConf* zconf){
@@ -73,7 +74,8 @@ int main( int argc, char **argv ){
 		args << QString(argv[i]);
 	}
 	QStringList eatenArgs(args);
-	ZDLNullDevice nullDev;
+    ZDLNullDevice nullDev;
+    QString versionString;
 #if defined(ZDL_BLACKBOX)
 	QFile *loggingFile = NULL;
 	zdlDebug = NULL;
@@ -105,7 +107,7 @@ int main( int argc, char **argv ){
 #endif
 
 	QApplication a( argc, argv );
-	qapp = &a;
+    //qapp = &a;
 	ZDLConfigurationManager::setArgv(args);
 	{
 		QString execuatble(argv[0]);
@@ -238,7 +240,7 @@ int main( int argc, char **argv ){
 	}
 
 
-	mw = new ZDLMainWindow();
+    mw = new ZDLMainWindow();
 	mw->show();
 	QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
 	mw->startRead();

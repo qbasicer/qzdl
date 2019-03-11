@@ -24,6 +24,9 @@
 #include "ZDLListWidget.h"
 #include "ZDLFilePane.h"
 
+#include <QLayout>
+#include <QLabel>
+
 
 ZDLFilePane::ZDLFilePane(QWidget *parent):ZDLWidget(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);

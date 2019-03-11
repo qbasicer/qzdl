@@ -2,6 +2,9 @@
 #define _ZDLFILEASSOCIATIONS_H_
 
 #include <QtGui>
+#include <QDialog>
+
+class QCheckBox;
 
 class ZDLFileAssociations : public QDialog {
 	Q_OBJECT

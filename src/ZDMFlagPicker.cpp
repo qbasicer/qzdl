@@ -18,6 +18,8 @@
 
 #include "ZDMFlagPicker.h"
 #include "zdlcommon.h"
+#include <QLayout>
+#include <QTreeView>
 
 ZDMFlagPicker::ZDMFlagPicker(ZDLWidget *parent):QDialog(parent){
 	QVBoxLayout *box = new QVBoxLayout(this);

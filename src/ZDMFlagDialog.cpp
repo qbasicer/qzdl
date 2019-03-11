@@ -19,6 +19,9 @@
 #include "ZDMFlagDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
+#include <QLayout>
+#include <QGroupBox>
+#include <QLabel>
 
 ZDMFlagDialog::ZDMFlagDialog(ZDLWidget *parent):QDialog(parent){
 	setWindowTitle(ZDL_ENGINE_NAME " DMFlag Editor");

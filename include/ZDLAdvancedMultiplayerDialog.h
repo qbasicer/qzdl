@@ -22,6 +22,11 @@
 #include <QtGui>
 #include <QObject>
 #include "ZDLWidget.h"
+#include <QDialog>
+
+class QCheckBox;
+class QComboBox;
+class QLineEdit;
 
 class ZDLAdvancedMultiplayerDialog: public QDialog{
 Q_OBJECT

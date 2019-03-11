@@ -23,6 +23,11 @@
 #include <QObject>
 #include "ZDLWidget.h"
 
+class QComboBox;
+class QLineEdit;
+class QPushButton;
+
+
 class ZDLMultiPane: public ZDLWidget{
 Q_OBJECT
 public: 

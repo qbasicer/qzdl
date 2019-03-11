@@ -25,6 +25,8 @@
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
 
+class QPushButton;
+
 using namespace std;
 
 class ZDLListWidget: public ZDLWidget{

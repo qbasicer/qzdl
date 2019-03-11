@@ -24,6 +24,11 @@
 #include "adown.xpm"
 #include "aup.xpm"
 
+#include <QLayout>
+#include <QPushButton>
+#include <QAction>
+#include <QMessageBox>
+
 ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *column = new QVBoxLayout(this);
 	pList = new QListWidget(this);

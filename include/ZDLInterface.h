@@ -24,6 +24,9 @@
 #include "ZDLWidget.h"
 #include "ZDLMultiPane.h"
 
+class QPushButton;
+class QVBoxLayout;
+
 
 class ZDLInterface: public ZDLWidget{
 Q_OBJECT

@@ -19,6 +19,11 @@
 #include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
+#include <QLayout>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QLabel>
 
 ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QDialog(parent){
 	setWindowTitle(ZDL_ENGINE_NAME " Advanced Multiplayer Settings");
