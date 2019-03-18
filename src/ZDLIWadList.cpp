@@ -108,7 +108,7 @@ void ZDLIWadList::newDrop(QStringList fileList){
 void ZDLIWadList::addButton(){
     LOGDATAO() << "Adding new IWADs" << endl;
     QString filters =
-        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+        "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
         "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
         "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
         "All files (" QFD_FILTER_ALL ")";
@@ -117,14 +117,14 @@ void ZDLIWadList::addButton(){
     for(int i = 0; i < fileNames.size(); i++){
         LOGDATAO() << "Adding file " << fileNames[i] << endl;
         saveWadLastDir(fileNames[i]);
-        insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
+        insert(new ZDLNameListable(pList, 1001, QFD_QT_SEP(fileNames[i]), ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
     }
 }
 
 void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
         QString filters =
-            "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+            "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
             "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
             "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
             "All files (" QFD_FILTER_ALL ")";

@@ -30,10 +30,12 @@ using namespace std;
 
 #ifdef Q_WS_WIN
 #define QFD_FILTER_DELIM    ";"
-#define QFD_FILTER_ALL   "*.*"
+#define QFD_FILTER_ALL		"*.*"
+#define QFD_QT_SEP(x)		QDir::fromNativeSeparators(x)
 #else
 #define QFD_FILTER_DELIM    " "
-#define QFD_FILTER_ALL   "*"
+#define QFD_FILTER_ALL		"*"
+#define QFD_QT_SEP(x)		x
 #endif
 
 extern QDebug *zdlDebug;

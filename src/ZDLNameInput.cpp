@@ -69,7 +69,7 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 void ZDLNameInput::browse(){
     QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filters);
 	if (!fileName.isEmpty()) {
-		lfile->setText(fileName);
+		lfile->setText(QFD_QT_SEP(fileName));
 		if (zdl_fi) {
 			zdl_fi->setFile(fileName);
 			lname->setText(zdl_fi->GetFileDescription());

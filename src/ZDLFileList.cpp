@@ -21,11 +21,18 @@
 #include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
 #include "gph_fld.xpm"
-
 #include <iostream>
+
+#ifdef Q_WS_WIN
+#include <windows.h>
+#include <shlobj.h>
+#endif
+
 using namespace std;
 
-ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
+ZDLFileList::ZDLFileList(ZDLWidget *parent): 
+	ZDLListWidget(parent), basic_fileopendialog(false)
+{
 	LOGDATAO() << "ZDLFileList" << endl;
 
 	QPushButton *btnFolder = new QPushButton(this);
@@ -40,6 +47,23 @@ ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
 	btnDn->setToolTip("Move selected files and directories down");
 
 	QObject::connect(btnFolder, SIGNAL(clicked()), this, SLOT(folderButton()));
+
+#ifdef Q_WS_WIN
+	//On Win32 QFileDialog::getExistingDirectory(QFileDialog::ShowDirsOnly) will try to use native Win32 dialog for selecting directories
+	//Since ancient times it was just shitty SHBrowseForFolder but in Vista Microsoft introduced new and shiny Common Item Dialog family available via COM
+	//And they handle 'dir' param of getExistingDirectory differently
+	//Being tree dialog, SHBrowseForFolder will expand directory tree right up to 'dir' and select it, so 'dir' itself will be visible but not it's nodes
+	//Common Item Dialog, behaving more like traditional GetOpenFileName, will instead show user contents of the 'dir'
+	//That's why we check if Common Item Dialog is available and, if available, pass last opened dir's parent instead actual path to getExistingDirectory
+	//The same goes to Linux select file dialogs which are handled by Qt
+	CoInitialize(NULL);
+	IFileDialog *pDialog;
+	if (SUCCEEDED(CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pDialog))))
+		pDialog->Release();
+	else
+		basic_fileopendialog=true;
+	CoUninitialize();
+#endif
 }
 
 void ZDLFileList::newDrop(QStringList fileList){
@@ -111,7 +135,7 @@ void ZDLFileList::addButton()
 	for(int i = 0; i < fileNames.size(); i++){
 		LOGDATAO() << "Adding file " << fileNames[i] << endl;
 		saveWadLastDir(fileNames[i]);
-		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
+		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, QFD_QT_SEP(fileNames[i]));
 		insert(zList, -1);
 	}
 }
@@ -138,11 +162,18 @@ void ZDLFileList::folderButton()
 {
 	LOGDATAO() << "Adding new dir" << endl;
 
-	QString dirName = QFileDialog::getExistingDirectory(this, "Add directory", getWadLastDir(), QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+	QString last_dir=getWadLastDir();
+	if (!basic_fileopendialog) {
+		QDir parent_dir(last_dir);
+		if (parent_dir.cdUp())
+			last_dir=parent_dir.path();
+	}
+
+	QString dirName = QFileDialog::getExistingDirectory(this, "Add directory", last_dir, QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
 	if (!dirName.isEmpty()) {
 		LOGDATAO() << "Adding dir " << dirName << endl;
 		saveWadLastDir(dirName, NULL, true);
-		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, dirName);
+		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, QFD_QT_SEP(dirName));
 		insert(zList, -1);
 	}
 }

@@ -31,6 +31,7 @@ class ZDLFileList : public ZDLListWidget{
 		virtual void rebuild();
 		virtual void newConfig();
 		virtual void newDrop(QStringList fileList);
+		bool basic_fileopendialog;
 	protected slots:
 		void folderButton();
 };

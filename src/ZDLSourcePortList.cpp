@@ -122,7 +122,7 @@ void ZDLSourcePortList::addButton(){
     for(int i = 0; i < fileNames.size(); i++){
         LOGDATAO() << "Adding file " << fileNames[i] << endl;
         saveSrcLastDir(fileNames[i]);
-        insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
+        insert(new ZDLNameListable(pList, 1001, QFD_QT_SEP(fileNames[i]), ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
     }
 }
 

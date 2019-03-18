@@ -235,7 +235,7 @@ void ZDLMultiPane::EditSave(int idx)
 		if (new_save.isEmpty()) {
 			savegame->setEditText(prev_save);
 		} else {
-			savegame->setEditText(new_save);
+			savegame->setEditText(QFD_QT_SEP(new_save));
 			saveSaveLastDir(new_save);
 		}
 	} else if (idx>1) {
