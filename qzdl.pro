@@ -16,17 +16,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 TEMPLATE = app
-TARGET = qzdl
-DESTDIR = ./release
+TARGET = zdl
+DESTDIR = release
+MOC_DIR = moc
+UI_DIR = uic
+RCC_DIR = rcc
+
 QT += core gui
-CONFIG += release static
-QMAKE_CFLAGS += -fno-strict-aliasing
-QMAKE_CXXFLAGS += -Wno-missing-field-initializers
-DEFINES += _ZDL_NO_WARNINGS _ZDL_NO_WFA NOMINMAX STATIC QT_HAVE_MMX QT_HAVE_3DNOW QT_HAVE_SSE QT_HAVE_MMXEXT QT_HAVE_SSE2
-MOC_DIR += moc
-OBJECTS_DIR += release
-UI_DIR += uic
-RCC_DIR += rcc
+CONFIG += release
+DEFINES += _ZDL_NO_WARNINGS _ZDL_NO_WFA NOMINMAX QT_HAVE_MMX QT_HAVE_3DNOW QT_HAVE_SSE QT_HAVE_MMXEXT QT_HAVE_SSE2
+
+*g++ {
+    QMAKE_CFLAGS += -fno-strict-aliasing
+    QMAKE_CXXFLAGS += -Wno-missing-field-initializers
+}
+
+# For static build supply CONFIG+=static as additional argument in qmake build step for selected kit
+static {
+    DEFINES += STATIC
+
+    *g++ {
+        QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
+    } else {
+        QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
+    }
+}
+
 INCLUDEPATH += \
     miniz \
     res/XPM \

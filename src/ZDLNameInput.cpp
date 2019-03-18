@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,8 +67,7 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 }
 
 void ZDLNameInput::browse(){
-	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filter);
+    QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filters);
 	if (!fileName.isEmpty()) {
 		lfile->setText(fileName);
 		if (zdl_fi) {
@@ -89,7 +88,7 @@ void ZDLNameInput::basedOff(ZDLNameListable *listable){
 	}
 }
 
-void ZDLNameInput::setFilter(QStringList inFilters){
+void ZDLNameInput::setFilter(QString inFilters){
 	filters = inFilters;
 }
 

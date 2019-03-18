@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 }
 
 void ZDLIWadList::wizardAddButton(){
-    QStringList filters;
-    filters << "WAD files (*.wad;*.iwad)"
-        << "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-        << "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-        << "All files (*.*)";
+    QString filters =
+        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "All files (" QFD_FILTER_ALL ")";
 
     ZDLIwadInfo zdl_fi;
     ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
@@ -107,13 +107,13 @@ void ZDLIWadList::newDrop(QStringList fileList){
 
 void ZDLIWadList::addButton(){
     LOGDATAO() << "Adding new IWADs" << endl;
-    QStringList filters;
-    filters << "WAD files (*.wad;*.iwad)"
-        << "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-        << "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-        << "All files (*.*)";
+    QString filters =
+        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "All files (" QFD_FILTER_ALL ")";
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters.join(";;"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters);
     for(int i = 0; i < fileNames.size(); i++){
         LOGDATAO() << "Adding file " << fileNames[i] << endl;
         saveWadLastDir(fileNames[i]);
@@ -123,11 +123,11 @@ void ZDLIWadList::addButton(){
 
 void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
-		QStringList filters;
-		filters << "WAD files (*.wad;*.iwad)"
-			<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-			<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-			<< "All files (*.*)";
+        QString filters =
+            "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+            "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+            "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+            "All files (" QFD_FILTER_ALL ")";
 
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLIwadInfo zdl_fi;

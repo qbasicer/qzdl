@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
 }
 
 void ZDLSourcePortList::wizardAddButton(){
-    QStringList filters;
 #if defined(Q_WS_WIN)
-    filters << "Executables (*.exe)";
+    QString filters = "Executables (*.exe);;All files (*.*)";
 #elif defined(Q_WS_MAC)
-    filters << "Applications (*.app)";
+    QString filters = "Applications (*.app);;All files (*)";
+#else
+    QString filters = "All files (*)";
 #endif
-    filters << "All files (*.*)";
 
     ZDLAppInfo zdl_fi;
     ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
@@ -110,15 +110,15 @@ void ZDLSourcePortList::newDrop(QStringList fileList){
 
 void ZDLSourcePortList::addButton(){
     LOGDATAO() << "Adding new source ports" << endl;
-    QStringList filters;
 #if defined(Q_WS_WIN)
-    filters << "Executables (*.exe)";
+    QString filters = "Executables (*.exe);;All files (*.*)";
 #elif defined(Q_WS_MAC)
-    filters << "Applications (*.app)";
+    QString filters = "Applications (*.app);;All files (*)";
+#else
+    QString filters = "All files (*)";
 #endif
-    filters << "All files (*.*)";
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), filters.join(";;"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), filters);
     for(int i = 0; i < fileNames.size(); i++){
         LOGDATAO() << "Adding file " << fileNames[i] << endl;
         saveSrcLastDir(fileNames[i]);
@@ -128,13 +128,13 @@ void ZDLSourcePortList::addButton(){
 
 void ZDLSourcePortList::editButton(QListWidgetItem * item){
 	if (item){
-		QStringList filters;
 #if defined(Q_WS_WIN)
-		filters << "Executables (*.exe)";
+        QString filters = "Executables (*.exe);;All files (*.*)";
 #elif defined(Q_WS_MAC)
-		filters << "Applications (*.app)";
+        QString filters = "Applications (*.app);;All files (*)";
+#else
+        QString filters = "All files (*)";
 #endif
-		filters << "All files (*.*)";
 
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLAppInfo zdl_fi;

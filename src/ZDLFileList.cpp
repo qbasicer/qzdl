@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,16 +98,16 @@ void ZDLFileList::rebuild(){
 void ZDLFileList::addButton()
 {
 	LOGDATAO() << "Adding new file" << endl;
-	QStringList filters;
-	filters << "Doom resource files (*.wad;*.iwad;*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz;*.bex;*.deh;*.cfg)"
-		<< "WAD files (*.wad;*.iwad)"
-		<< "Patch files (*.bex;*.deh)"
-		<< "Config files (*.cfg)"
-		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-		<< "All files (*.*)";
+    QString filters =
+        "Doom resource files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.bex" QFD_FILTER_DELIM "*.deh" QFD_FILTER_DELIM "*.cfg);;"
+        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+        "Patch files (*.bex" QFD_FILTER_DELIM "*.deh);;"
+        "Config files (*.cfg);;"
+        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
+        "All files (" QFD_FILTER_ALL ")";
 
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add files", getWadLastDir(), filters.join(";;"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add files", getWadLastDir(), filters);
 	for(int i = 0; i < fileNames.size(); i++){
 		LOGDATAO() << "Adding file " << fileNames[i] << endl;
 		saveWadLastDir(fileNames[i]);
