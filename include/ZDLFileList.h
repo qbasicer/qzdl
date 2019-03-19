@@ -26,6 +26,7 @@ class ZDLFileList : public ZDLListWidget{
 		ZDLFileList(ZDLWidget *parent);
 	protected:
 		virtual void editButton(QListWidgetItem * item);
+		virtual void editButton(const QList<QListWidgetItem*> &items);
 		virtual void editButton();
 		virtual void addButton();
 		virtual void rebuild();

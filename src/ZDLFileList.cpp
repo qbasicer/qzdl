@@ -42,7 +42,7 @@ ZDLFileList::ZDLFileList(ZDLWidget *parent):
 
 	btnAdd->setToolTip("Add files");
 	btnRem->setToolTip("Remove selected files and directories");
-	btnEdt->setToolTip("Exclude/include selected files and directories");
+	btnEdt->setToolTip("Disable (enable) files and directories");
 	btnUp->setToolTip("Move selected files and directories up");
 	btnDn->setToolTip("Move selected files and directories down");
 
@@ -54,7 +54,7 @@ ZDLFileList::ZDLFileList(ZDLWidget *parent):
 	//And they handle 'dir' param of getExistingDirectory differently
 	//Being tree dialog, SHBrowseForFolder will expand directory tree right up to 'dir' and select it, so 'dir' itself will be visible but not it's nodes
 	//Common Item Dialog, behaving more like traditional GetOpenFileName, will instead show user contents of the 'dir'
-	//That's why we check if Common Item Dialog is available and, if available, pass last opened dir's parent instead actual path to getExistingDirectory
+	//That's why we check if Common Item Dialog is available and, if available, pass last opened dir's parent instead of actual path to getExistingDirectory
 	//The same goes to Linux select file dialogs which are handled by Qt
 	CoInitialize(NULL);
 	IFileDialog *pDialog;
@@ -152,10 +152,28 @@ void ZDLFileList::editButton(QListWidgetItem * item)
 	}
 }
 
+void ZDLFileList::editButton(const QList<QListWidgetItem*> &items)
+{
+	QList<QListWidgetItem*> en_items;
+	bool disable_all=true;
+
+    foreach (QListWidgetItem *item, items) {
+		if (!item->font().strikeOut()) {
+			en_items.append(item);
+			disable_all=false;
+		}
+	}
+
+	foreach (QListWidgetItem *item, disable_all?items:en_items)
+		editButton(item);
+}
+
 void ZDLFileList::editButton()
 {
-    foreach (QListWidgetItem *item, pList->selectedItems()) 
-		editButton(item);
+	if (pList->selectedItems().length())
+		editButton(pList->selectedItems());
+	else
+		editButton(pList->findItems("*", Qt::MatchWildcard));
 }
 
 void ZDLFileList::folderButton()
