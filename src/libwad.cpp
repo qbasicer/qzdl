@@ -112,3 +112,35 @@ QString DoomWad::getIwadinfoName()
 
 	return iwad_name;
 }
+
+bool DoomWad::isMAPXX()
+{
+	QFile wad(file);
+	bool is_mapxx=false;
+
+	if (wad.open(QIODevice::ReadOnly)) {
+		wadinfo_t header;
+
+		if (wad.read((char*)&header, sizeof(wadinfo_t))==sizeof(wadinfo_t)&&wad.seek(header.infotableofs)) {
+			filelump_t *fileinfo=new filelump_t[header.numlumps];
+			size_t length=sizeof(filelump_t)*header.numlumps;
+
+			if (wad.read((char*)fileinfo, length)==length) {
+				for (int i=0; i<header.numlumps; i++) {
+					//In original ZDoom code only global namespace is checked for 'MAP01' lump
+					//Global namespace includes lumps outside of any markers
+					if (!strncmp(fileinfo[i].name, "MAP01", 8)) {
+						is_mapxx=true;
+						break;
+					}
+				}
+			}
+
+			delete[] fileinfo;
+		}
+
+		wad.close();
+	}
+
+	return is_mapxx;
+}

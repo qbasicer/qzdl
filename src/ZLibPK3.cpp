@@ -87,3 +87,29 @@ QString ZLibPK3::getIwadinfoName()
 
 	return iwad_name;
 }
+
+bool ZLibPK3::isMAPXX()
+{
+	mz_zip_archive zip_archive={};
+	bool is_mapxx=false;
+
+	if (mz_zip_reader_init_file(&zip_archive, qPrintable(file), 0)) {
+		if (mz_uint fnum=mz_zip_reader_get_num_files(&zip_archive)) {
+			mz_zip_archive_file_stat file_stat;
+
+			for (mz_uint i=0; i<fnum; i++) {
+				if (!mz_zip_reader_is_file_a_directory(&zip_archive, i)&&mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) {
+					QFileInfo zname(file_stat.m_filename);
+					if (!zname.path().compare("maps", Qt::CaseInsensitive)&&(!zname.fileName().compare("map01.wad", Qt::CaseInsensitive)||!zname.fileName().compare("map01.map", Qt::CaseInsensitive))) {
+						is_mapxx=true;
+						break;
+					}
+				}
+			}
+		}
+
+		mz_zip_reader_end(&zip_archive);
+	}
+
+	return is_mapxx;
+}
