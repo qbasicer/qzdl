@@ -37,8 +37,6 @@ static {
 
     *g++ {
         QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
-    } else {
-        QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
     }
 }
 
