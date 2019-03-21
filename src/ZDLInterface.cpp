@@ -199,10 +199,10 @@ QLayout *ZDLInterface::getButtonPane(){
 	btnEpr->setMinimumWidth(20);
 	btnLaunch->setMinimumWidth(minBtnWidth);
 	
-	btnExit->setMinimumHeight(26);
-	btnZDL->setMinimumHeight(26);
-	btnEpr->setMinimumHeight(26);
-	btnLaunch->setMinimumHeight(26);
+    btnExit->setMinimumHeight(28);
+    btnZDL->setMinimumHeight(28);
+    btnEpr->setMinimumHeight(28);
+    btnLaunch->setMinimumHeight(28);
 
 	connect(btnLaunch, SIGNAL( clicked() ), this, SLOT(launch()));
 
