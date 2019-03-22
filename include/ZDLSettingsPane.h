@@ -50,3 +50,10 @@ public:
 	//virtual void drawFocus(QPainter*, const QStyleOptionViewItem&, const QRect&) const {}
 };
 
+class DeselectableListWidget: public QListWidget {
+    Q_OBJECT
+public:
+	DeselectableListWidget(QWidget *parent=NULL): QListWidget(parent) {}
+	virtual void mousePressEvent(QMouseEvent *event);
+};
+

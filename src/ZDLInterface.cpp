@@ -199,10 +199,13 @@ QLayout *ZDLInterface::getButtonPane(){
 	btnEpr->setMinimumWidth(20);
 	btnLaunch->setMinimumWidth(minBtnWidth);
 	
-    btnExit->setMinimumHeight(28);
-    btnZDL->setMinimumHeight(28);
-    btnEpr->setMinimumHeight(28);
-    btnLaunch->setMinimumHeight(28);
+    btnExit->setMinimumHeight(26);
+    btnZDL->setMinimumHeight(26);
+    btnLaunch->setMinimumHeight(26);
+	//26 is a cherry-picked value for Win32 system font
+	//On other OSes we can have fonts with greater sizes so text buttons will be taller than 26 but glyph button will remain the same
+	//To accomodate this, we set minimum height for glyph button dynamically
+	btnEpr->setMinimumHeight(btnLaunch->sizeHint().height());
 
 	connect(btnLaunch, SIGNAL( clicked() ), this, SLOT(launch()));
 
@@ -223,14 +226,11 @@ void ZDLInterface::clearAllPWads(){
 	mw->writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
-	if(!section){
-		return;
-	}
-	for(int i = 0; i < section->lines.size(); i++){
-		if(section->lines[i]->getVariable().startsWith("file", Qt::CaseInsensitive)){
-			ZDLLine *line = section->lines[i];
-			section->lines.remove(i--);
-			delete line;
+	if (section){
+		QVector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+d?$", vctr);
+		for(int i = 0; i < vctr.size(); i++){
+			zconf->deleteValue("zdl.save", vctr[i]->getVariable());
 		}
 	}
 	mw->startRead();
@@ -449,9 +449,12 @@ void ZDLInterface::showCommandline(){
 	QMessageBox msgBox(this);
 	msgBox.setWindowTitle("Command line and environment");
 	QString dwd;
+	QString args=mw->getArgumentsString();
+	if (args.length())
+		args="\n\nArguments: "+args;
 	if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
 		dwd="\n\nDOOMWADDIR: "+QDir::fromNativeSeparators(QProcessEnvironment::systemEnvironment().value("DOOMWADDIR"));
-	msgBox.setText("Executable: "+exec_fi.fileName()+"\n\nArguments: "+mw->getArgumentsString()+"\n\nWorking directory: "+exec_fi.canonicalPath()+dwd);
+	msgBox.setText("Executable: "+exec_fi.fileName()+args+"\n\nWorking directory: "+exec_fi.canonicalPath()+dwd);
 	msgBox.setStandardButtons(QMessageBox::Cancel);
 	QPushButton *launch_btn=msgBox.addButton("Execute", QMessageBox::AcceptRole);
 	msgBox.setDefaultButton(launch_btn);

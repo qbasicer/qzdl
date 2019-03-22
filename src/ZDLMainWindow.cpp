@@ -287,21 +287,23 @@ void ZDLMainWindow::launch(){
 
 QStringList WarpBackwardCompat(const QString& iwad_path, const QString& map_name)
 {
-	bool iwad_mapxx=false;
+	if (iwad_path.length()) {
+		bool iwad_mapxx=false;
 
-	if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(iwad_path)) {
-		iwad_mapxx=mapfile->isMAPXX();
-		delete mapfile;
-	}
+		if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(iwad_path)) {
+			iwad_mapxx=mapfile->isMAPXX();
+			delete mapfile;
+		}
 
-	if (iwad_mapxx) {
-		QRegExp mapxx_re("^MAP(\\d\\d)$", Qt::CaseInsensitive);
-		if (mapxx_re.indexIn(map_name)>-1)
-			return QStringList()<<"-warp"<<mapxx_re.cap(1);
-	} else {
-		QRegExp exmy_re("^E(\\d)M([1-9])$", Qt::CaseInsensitive);
-		if (exmy_re.indexIn(map_name)>-1)
-			return QStringList()<<"-warp"<<exmy_re.cap(1)<<exmy_re.cap(2);
+		if (iwad_mapxx) {
+			QRegExp mapxx_re("^MAP(\\d\\d)$", Qt::CaseInsensitive);
+			if (mapxx_re.indexIn(map_name)>-1)
+				return QStringList()<<"-warp"<<mapxx_re.cap(1);
+		} else {
+			QRegExp exmy_re("^E(\\d)M([1-9])$", Qt::CaseInsensitive);
+			if (exmy_re.indexIn(map_name)>-1)
+				return QStringList()<<"-warp"<<exmy_re.cap(1)<<exmy_re.cap(2);
+		}
 	}
 
 	return QStringList();
@@ -377,13 +379,8 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	QString iwadName = zconf->getValue("zdl.save", "iwad");
 	QString iwadPath;
 
-	if (iwadName.isEmpty()) {
-		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-		return args;
-	}
-
 	section = zconf->getSection("zdl.iwads");
-	if (section){
+	if (section&&iwadName.length()){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+n$", fileVctr);
 
@@ -568,7 +565,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	}
 
 	LOGDATAO() << "args: " << args << endl;
-	return args;
+	return args.trimmed();
 }
 
 QStringList ZDLMainWindow::getArgumentsList()
@@ -605,13 +602,8 @@ QStringList ZDLMainWindow::getArgumentsList()
 	QString iwadPath;
 	QString iwadName = zconf->getValue("zdl.save", "iwad");
 
-	if (iwadName.isEmpty()) {
-		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-		return args;
-	}
-
 	section = zconf->getSection("zdl.iwads");
-	if (section){
+	if (section&&iwadName.length()){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+n$", fileVctr);
 

@@ -48,7 +48,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 
 	box->addWidget(new QLabel("IWAD",this));
 
-	IWADList = new QListWidget(this);
+	IWADList = new DeselectableListWidget(this);
 	IWADList->setItemDelegate(new AlwaysFocusedDelegate());
 	box->addWidget(IWADList);
 
@@ -87,6 +87,19 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	LOGDATAO() << "Done" << endl;
 }
 
+void DeselectableListWidget::mousePressEvent(QMouseEvent *event)
+{
+	QListWidgetItem *item=itemAt(event->pos());
+
+	if (item&&item->isSelected()) {
+		QListWidget::mousePressEvent(event);
+		//clearSelection();
+		setCurrentRow(-1);
+	} else {
+		QListWidget::mousePressEvent(event);
+	}
+}
+
 void ZDLSettingsPane::VerbosePopup()
 {
 	warpCombo->lineEdit()->setPlaceholderText("");
@@ -119,28 +132,31 @@ void ZDLSettingsPane::currentRowChanged(int idx){
 }
 
 QStringList ZDLSettingsPane::getFilesMaps(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	if(!zconf){
-		return QStringList();
-	}
-	ZDLSection *section = zconf->getSection("zdl.save");
-	if(!section){
-		return QStringList();
-	}
-	QVector<ZDLLine*> vctr;
-	section->getRegex("^file[0-9]+$", vctr);
-	if(vctr.size() <= 0){
-		return QStringList();
-	}
-	QStringList maps;
-	for(int i = vctr.size()-1; i >= 0; i--){
-		LOGDATAO() << "Getting maps for " << vctr[i]->getValue() << endl;
-		if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(vctr[i]->getValue())) {
-			maps+=mapfile->getMapNames();
-			delete mapfile;
+	if (ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration()) {
+		if (ZDLSection *section=zconf->getSection("zdl.save")) {
+			QVector<ZDLLine*> vctr;
+			QRegExp exts("\\.(zip|wad|iwad|pk3|ipk3|pkz)$", Qt::CaseInsensitive);
+
+			section->getRegex("^file[0-9]+$", vctr);
+			if (vctr.size()) {
+				QStringList maps;
+
+				foreach (ZDLLine *line, vctr) {
+					QString file_pth=line->getValue();
+					if (exts.indexIn(file_pth)>-1) {
+						if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(file_pth)) {
+							maps+=mapfile->getMapNames();
+							delete mapfile;
+						}
+					}
+				}
+
+				return maps;
+			}
 		}
 	}
-	return maps;
+
+	return QStringList();
 }
 
 bool ZDLSettingsPane::naturalSortLess(const QString &left, const QString &right)
@@ -225,35 +241,21 @@ void ZDLSettingsPane::reloadMapList(){
 	warpCombo->clear();
 	warpCombo->addItem("(Default)");
 
+	QStringList wadMaps;
+
 	if(QListWidgetItem *item=IWADList->currentItem()) {
-		QString file=item->data(32).toString();
-		QFileInfo fi(file);
-
-		QRegExp exts("\\.(zip|wad|iwad|pk3|ipk3|pkz)$");
-		exts.setCaseSensitivity(Qt::CaseInsensitive);
-		if(fi.exists()&&exts.indexIn(file)>=0) {
-			LOGDATAO()<<"Getting iwad maps from "<<file<<endl;
-			QStringList wadMaps;
-
-			if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(file)) {
-				wadMaps+=mapfile->getMapNames();
-				LOGDATAO()<<"Maps: "<<wadMaps<<endl;
-				delete mapfile;
-			}
-
-			LOGDATAO()<<"Getting files maps"<<endl;
-			wadMaps.append(getFilesMaps());
-
-			if (wadMaps.size()) {
-				qSort(wadMaps.begin(), wadMaps.end(), naturalSortLess);
-				wadMaps.removeDuplicates();
-				warpCombo->addItems(wadMaps);
-			}
-
-			LOGDATAO()<<"reloadMapList END"<<endl;
-		}else{
-			LOGDATAO()<<"File doesn't exist - "<<file<<endl;
+		if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(item->data(32).toString())) {
+			wadMaps+=mapfile->getMapNames();
+			delete mapfile;
 		}
+	}
+
+	wadMaps.append(getFilesMaps());
+
+	if (wadMaps.size()) {
+		qSort(wadMaps.begin(), wadMaps.end(), naturalSortLess);
+		wadMaps.removeDuplicates();
+		warpCombo->addItems(wadMaps);
 	}
 
 	warpCombo->setCurrentIndex(-1);
@@ -274,6 +276,7 @@ void ZDLSettingsPane::rebuild(){
 		zconf->deleteValue("zdl.save", "warp");
 	}
 
+	bool set=false;
 	ZDLSection *section = zconf->getSection("zdl.ports");
 	if (section){
 		int count = 0;
@@ -292,13 +295,16 @@ void ZDLSettingsPane::rebuild(){
 			if (nameVctr.size() == 1){
 				if (sourceList->currentIndex() == count){
 					zconf->setValue("zdl.save", "port", nameVctr[0]->getValue());
+					set=true;
 					break;
 				}
 				count++;
 			}
 		}
 	}
+	if (!set) zconf->deleteValue("zdl.save", "port");
 
+	set=false;
 	section = zconf->getSection("zdl.iwads");
 	if (section){
 		int count = 0;
@@ -317,14 +323,14 @@ void ZDLSettingsPane::rebuild(){
 			if (nameVctr.size() == 1){
 				if (IWADList->currentRow() == count){
 					zconf->setValue("zdl.save", "iwad", nameVctr[0]->getValue());
-
+					set=true;
 					break;
 				}
 				count++;
 			}
 		}
 	}
-
+	if (!set) zconf->deleteValue("zdl.save", "iwad");
 }
 
 void ZDLSettingsPane::newConfig(){
@@ -388,12 +394,11 @@ void ZDLSettingsPane::newConfig(){
 					break;
 				}
 			}
-			if(set == 0){
-				sourceList->setCurrentIndex(0);
-			}
-		}	
-	}else{
-		//cout << "Don't have port" << endl;
+		}
+
+		if(!set){
+			zconf->deleteValue("zdl.save", "port");
+		}
 	}
 
 	IWADList->clear();
@@ -435,13 +440,7 @@ void ZDLSettingsPane::newConfig(){
 			}
 		}
 		if(!set){
-			if(IWADList->count() == 0){
-				zconf->deleteValue("zdl.save", "iwad");
-			}else{
-				IWADList->setCurrentRow(0);
-				QListWidgetItem *item = IWADList->item(0);
-				zconf->setValue("zdl.save","iwad",item->text());
-			}
+			zconf->deleteValue("zdl.save", "iwad");
 		}
 	}
 

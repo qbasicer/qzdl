@@ -132,7 +132,7 @@ void ZDLIWadList::editButton(QListWidgetItem * item){
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLIwadInfo zdl_fi;
 		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
-		diag.setWindowTitle("Add IWAD");
+		diag.setWindowTitle("Edit IWAD");
 		diag.setFilter(filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){

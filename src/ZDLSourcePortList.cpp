@@ -139,7 +139,7 @@ void ZDLSourcePortList::editButton(QListWidgetItem * item){
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLAppInfo zdl_fi;
 		ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
-		diag.setWindowTitle("Add source port");
+		diag.setWindowTitle("Edit source port");
 		diag.setFilter(filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){
