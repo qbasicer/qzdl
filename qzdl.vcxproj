@@ -187,13 +187,11 @@
     <ClCompile Include="src\ZDLWidget.cpp" />
     <ClCompile Include="src\ZDMFlagDialog.cpp" />
     <ClCompile Include="src\ZDMFlagPicker.cpp" />
-    <ClCompile Include="src\extras.cpp" />
     <ClCompile Include="src\libwad.cpp" />
     <ClCompile Include="src\qzdl.cpp" />
     <ClCompile Include="src\zdlconf.cpp" />
     <ClCompile Include="src\zdlline.cpp" />
     <ClCompile Include="src\zdlsection.cpp" />
-    <ClCompile Include="src\zdlvariables.cpp" />
     <ClCompile Include="src\ZLibPK3.cpp" />
     <ClCompile Include="SimpleWFA\SimpleWFA.cpp" />
   </ItemGroup>
@@ -451,7 +449,6 @@
     <ClInclude Include="include\zdlconf.hpp" />
     <ClInclude Include="include\zdlline.hpp" />
     <ClInclude Include="include\zdlsection.hpp" />
-    <ClInclude Include="include\zdlvariables.hpp" />
     <ClInclude Include="include\ZLibPK3.h" />
     <ClInclude Include="SimpleWFA\SimpleWFA.h" />
     <None Include="res\XPM\adown.xpm" />

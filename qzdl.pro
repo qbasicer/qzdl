@@ -57,7 +57,6 @@ HEADERS += \
     include/zdlconf.hpp \
     include/zdlline.hpp \
     include/zdlsection.hpp \
-    include/zdlvariables.hpp \
     include/ZLibPK3.h \
     include/ZDLAboutDialog.h \
     include/ZDLConfigurationEvents.h \
@@ -112,13 +111,11 @@ SOURCES += \
     src/ZDLWidget.cpp \
     src/ZDMFlagDialog.cpp \
     src/ZDMFlagPicker.cpp \
-    src/extras.cpp \
     src/libwad.cpp \
     src/qzdl.cpp \
     src/zdlconf.cpp \
     src/zdlline.cpp \
     src/zdlsection.cpp \
-    src/zdlvariables.cpp \
     src/ZLibPK3.cpp
 OTHER_FILES += \
     res/XPM/adown.xpm \

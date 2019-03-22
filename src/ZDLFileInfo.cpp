@@ -348,7 +348,7 @@ ZDLAppInfo::ZDLAppInfo(const QString &file):
 
 QString ZDLAppInfo::GetFileDescription()
 {
-	QByteArray file_buf=fileName().toLower().toLocal8Bit();
+	QByteArray file_buf=baseName().toLower().toLocal8Bit();
 	FileDesc target_file={file_buf.constData()};
 
 	const FileDesc *null_port=sorted_source_ports+SORTED_SOURCE_PORTS_SIZE;

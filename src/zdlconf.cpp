@@ -22,14 +22,8 @@
 #include <string>
 #include <list>
 #include <cstring>
-
-
-
-using namespace std;
 #include "zdlcommon.h"
 
-
-extern QString chomp(QString in);
 
 /* ZDLConf.cpp
  *    Author: Cody Harris
@@ -338,20 +332,20 @@ void ZDLConf::parse(QString in, ZDLSection* current)
 	if (in.length() < 1){
 		return;
 	}
-	QString chomped = chomp(in);
-	LOGDATAO() << "Parse " << chomped << endl;
-	if (chomped[0] == '[' && chomped[chomped.length() - 1] == ']'){
-		chomped = chomped.mid(1, chomped.length()-2);
+	in=in.trimmed();;
+	LOGDATAO() << "Parse " << in << endl;
+	if (in[0] == '[' && in[in.length() - 1] == ']'){
+		in = in.mid(1, in.length()-2);
 		//This will remove duplicate sections automagically
-		ZDLSection *ptr = getSection(chomped);
+		ZDLSection *ptr = getSection(in);
 		if (ptr == NULL){
-			current = new ZDLSection(chomped);
+			current = new ZDLSection(in);
 			sections.push_back(current);
 		}else{
 			current = ptr;
 		}
 	}else{
-		current->addLine(chomped);
+		current->addLine(in);
 	}
 }
 

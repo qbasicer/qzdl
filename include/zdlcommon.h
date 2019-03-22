@@ -113,6 +113,5 @@ extern QDebug *zdlDebug;
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
 #include "zdlconf.hpp"
-#include "zdlvariables.hpp"
 
 #endif
