@@ -104,7 +104,7 @@ void ZDLLine::parse()
 	int cloc = findComment(';');
 	int cloc2 = findComment('#');
 	if(cloc != -1 && cloc2 != -1){
-		cloc = min(cloc,cloc2);
+		cloc = std::min(cloc,cloc2);
 	}else if(cloc == -1 && cloc2 != -1){
 		cloc = cloc2;
 	}

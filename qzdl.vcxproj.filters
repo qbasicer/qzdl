@@ -35,12 +35,6 @@
     <ClCompile Include="src\ZDLConfigurationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ZDLDMFlagCheckbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZDLDMFlagManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ZDLFileAssociations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,12 +95,6 @@
     <ClCompile Include="src\ZDLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ZDMFlagDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZDMFlagPicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\libwad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -129,12 +117,6 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="moc\moc_ZDLConfigurationEvents.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDLDMFlagCheckbox.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDLDMFlagManager.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="moc\moc_ZDLFileAssociations.cpp">
@@ -179,12 +161,6 @@
     <ClCompile Include="moc\moc_ZDLWidget.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="moc\moc_ZDMFlagDialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDMFlagPicker.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="moc\moc_ZDLFileList.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -213,12 +189,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="include\ZDLConfigurationEvents.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagCheckbox.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagManager.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="include\ZDLFileAssociations.h">
@@ -273,12 +243,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="include\ZDLWidget.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagDialog.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagPicker.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <ClInclude Include="include\libwad.h">

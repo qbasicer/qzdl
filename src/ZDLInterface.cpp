@@ -30,7 +30,6 @@
 #include "ZDLFilePane.h"
 #include "ZDLSettingsPane.h"
 #include "ZDLQSplitter.h"
-#include "ZDMFlagPicker.h"
 
 #include "gph_dnt.xpm"
 #include "gph_upt.xpm"
@@ -259,12 +258,6 @@ void ZDLInterface::clearAllFields(){
 	zconf->deleteSectionByName("zdl.save");
 	mw->startRead();
 	LOGDATAO() << "Complete" << endl;
-}
-
-void ZDLInterface::showNewDMFlagger(){
-	LOGDATAO() << "New DMFlag picker" << endl;
-	ZDMFlagPicker dialog(this);
-	dialog.exec();
 }
 
 void ZDLInterface::launch(){

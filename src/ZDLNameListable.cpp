@@ -22,8 +22,6 @@
 #include <QFileInfo>
 #include "ZDLConfigurationManager.h" 
 
-using namespace std;
-
 ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, QString name):ZDLListable(parent, type){
 	setFile(file);
 	setDisplayName(name);

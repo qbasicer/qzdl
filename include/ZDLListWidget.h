@@ -26,8 +26,6 @@
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
 
-using namespace std;
-
 class ZDLListWidget: public ZDLWidget{
 	Q_OBJECT
 	public: 
@@ -36,8 +34,6 @@ class ZDLListWidget: public ZDLWidget{
 		virtual int count();
 		virtual void remove(int index);
 		virtual ZDLListable* get(int index);
-		//virtual vector<ZDLListable*> getList();
-		//virtual void setList(vector<ZDLListable*> *newlist);
 		void doDragDrop(int enabled);
 		virtual void newDrop(QStringList fileList);
 	signals:
@@ -65,7 +61,6 @@ class ZDLListWidget: public ZDLWidget{
 		QPushButton *btnUp;
 		QPushButton *btnDn;
 		QListWidget *pList;
-		vector<ZDLListable*> list;
-
+		QList<ZDLListable*> list;
 };
 #endif

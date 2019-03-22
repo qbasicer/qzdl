@@ -26,7 +26,6 @@
 #include "gph_ast.xpm"
 
 #include <iostream>
-using namespace std;
 
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
     QPushButton *btnWizardAdd = new QPushButton(this);

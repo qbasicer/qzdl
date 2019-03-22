@@ -24,8 +24,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 #include "zdlcommon.h"
 #include "ZDLConfigurationManager.h"
 #include "ico_icon.xpm"

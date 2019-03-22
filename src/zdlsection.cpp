@@ -26,7 +26,6 @@
 #include <QRegExp>
 #endif
 
-using namespace std;
 #include "zdlcommon.h"
 
 #define READLOCK() (readLock(__FILE__,__LINE__))

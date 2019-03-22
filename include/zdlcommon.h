@@ -20,7 +20,6 @@
 #ifndef _ZDLCOMMON_H_
 #define _ZDLCOMMON_H_
 #include <QtCore>
-using namespace std;
 
 #define ZDL_FLAG_NAMELESS	0x00001
 
@@ -108,7 +107,6 @@ extern QDebug *zdlDebug;
 #endif
 
 #endif	
-
 
 #include "zdlline.hpp"
 #include "zdlsection.hpp"

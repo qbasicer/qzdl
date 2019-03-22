@@ -22,8 +22,6 @@
 #include <string>
 #include <QFileInfo>
 
-using namespace std;
-
 ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLNameListable(parent, type, file, QFileInfo(file).fileName()){
 	fileName = file;
 }

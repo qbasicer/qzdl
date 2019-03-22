@@ -28,8 +28,6 @@
 #include <shlobj.h>
 #endif
 
-using namespace std;
-
 ZDLFileList::ZDLFileList(ZDLWidget *parent): 
 	ZDLListWidget(parent), basic_fileopendialog(false)
 {

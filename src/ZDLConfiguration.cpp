@@ -21,8 +21,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 ZDLConfiguration::ZDLConfiguration(){
 	//TODO These need to migrate
 	QSettings system(QSettings::IniFormat,QSettings::SystemScope,"Vectec Software","qZDL",NULL);

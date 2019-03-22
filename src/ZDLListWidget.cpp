@@ -172,7 +172,7 @@ void ZDLListWidget::remove(int index){
 	}
 }
 ZDLListable* ZDLListWidget::get(int index){
-	if (index >= 0 && index < (int)list.size()){
+	if (index >= 0 && index < list.length()){
 		return list[index];
 	}
 	return NULL;

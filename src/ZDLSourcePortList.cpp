@@ -26,7 +26,6 @@
 
 #include <cstdio>
 #include <iostream>
-using namespace std;
 
 ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
     QPushButton *btnWizardAdd = new QPushButton(this);

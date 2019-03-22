@@ -137,8 +137,6 @@
     <ClCompile Include="moc\moc_ZDLAboutDialog.cpp" />
     <ClCompile Include="moc\moc_ZDLConfigurationEvents.cpp" />
     <ClCompile Include="moc\moc_ZDLConfigurationManager.cpp" />
-    <ClCompile Include="moc\moc_ZDLDMFlagCheckbox.cpp" />
-    <ClCompile Include="moc\moc_ZDLDMFlagManager.cpp" />
     <ClCompile Include="moc\moc_ZDLFileAssociations.cpp" />
     <ClCompile Include="moc\moc_ZDLFileList.cpp" />
     <ClCompile Include="moc\moc_ZDLFilePane.cpp" />
@@ -156,14 +154,10 @@
     <ClCompile Include="moc\moc_ZDLSettingsTab.cpp" />
     <ClCompile Include="moc\moc_ZDLSourcePortList.cpp" />
     <ClCompile Include="moc\moc_ZDLWidget.cpp" />
-    <ClCompile Include="moc\moc_ZDMFlagDialog.cpp" />
-    <ClCompile Include="moc\moc_ZDMFlagPicker.cpp" />
     <ClCompile Include="src\ZDLAboutDialog.cpp" />
     <ClCompile Include="src\ZDLConfiguration.cpp" />
     <ClCompile Include="src\ZDLConfigurationEvents.cpp" />
     <ClCompile Include="src\ZDLConfigurationManager.cpp" />
-    <ClCompile Include="src\ZDLDMFlagCheckbox.cpp" />
-    <ClCompile Include="src\ZDLDMFlagManager.cpp" />
     <ClCompile Include="src\ZDLFileAssociations.cpp" />
     <ClCompile Include="src\ZDLFileInfo.cpp" />
     <ClCompile Include="src\ZDLFileList.cpp" />
@@ -185,8 +179,6 @@
     <ClCompile Include="src\ZDLSettingsTab.cpp" />
     <ClCompile Include="src\ZDLSourcePortList.cpp" />
     <ClCompile Include="src\ZDLWidget.cpp" />
-    <ClCompile Include="src\ZDMFlagDialog.cpp" />
-    <ClCompile Include="src\ZDMFlagPicker.cpp" />
     <ClCompile Include="src\libwad.cpp" />
     <ClCompile Include="src\qzdl.cpp" />
     <ClCompile Include="src\zdlconf.cpp" />
@@ -229,26 +221,6 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDLConfigurationManager.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagCheckbox.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -DNOMINMAX -DWIN32 -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\res\XPM" "-I.\res\Win32" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDLDMFlagCheckbox.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDLDMFlagCheckbox.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagManager.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -DNOMINMAX -DWIN32 -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\res\XPM" "-I.\res\Win32" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDLDMFlagManager.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDLDMFlagManager.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="include\ZDLFileAssociations.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
@@ -422,26 +394,6 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDLWidget.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagDialog.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -DNOMINMAX -DWIN32 -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\res\XPM" "-I.\res\Win32" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDMFlagDialog.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDMFlagDialog.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagPicker.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -DNOMINMAX -DWIN32 -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\res\XPM" "-I.\res\Win32" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDMFlagPicker.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDMFlagPicker.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="include\libwad.h" />

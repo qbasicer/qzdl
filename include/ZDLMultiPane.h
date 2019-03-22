@@ -50,14 +50,8 @@ private:
 	QLineEdit *tFragLimit;
 	QLineEdit *tTimeLimit;
 	QPushButton *launch_btn;
-	// Per issue #26
-#ifdef _DMFLAG_PICKER_
-	QPushButton *bDMFlags;
-	QPushButton *bDMFlags2;
-#else
 	QLineEdit *bDMFlags;
 	QLineEdit *bDMFlags2;
-#endif
 	QComboBox *extratic;
 	QComboBox *netmode;
 	QLineEdit *portNo;

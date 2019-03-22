@@ -28,8 +28,6 @@
 #include "ZDLConfiguration.h"
 #include "ZDLConfigurationEvents.h"
 
-using namespace std;
-
 #include "zdlcommon.h"
 
 class ZDLConfigurationEvents;

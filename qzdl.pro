@@ -61,8 +61,6 @@ HEADERS += \
     include/ZDLAboutDialog.h \
     include/ZDLConfigurationEvents.h \
     include/ZDLConfigurationManager.h \
-    include/ZDLDMFlagCheckbox.h \
-    include/ZDLDMFlagManager.h \
     include/ZDLFileList.h \
     include/ZDLFilePane.h \
     include/ZDLIWadList.h \
@@ -79,16 +77,12 @@ HEADERS += \
     include/ZDLSettingsTab.h \
     include/ZDLSourcePortList.h \
     include/ZDLWidget.h \
-    include/ZDMFlagDialog.h \
-    include/ZDMFlagPicker.h
 SOURCES += \
     miniz/miniz.c \
     src/ZDLAboutDialog.cpp \
     src/ZDLConfiguration.cpp \
     src/ZDLConfigurationEvents.cpp \
     src/ZDLConfigurationManager.cpp \
-    src/ZDLDMFlagCheckbox.cpp \
-    src/ZDLDMFlagManager.cpp \
     src/ZDLFileInfo.cpp \
     src/ZDLFileList.cpp \
     src/ZDLFileListable.cpp \
@@ -109,8 +103,6 @@ SOURCES += \
     src/ZDLSettingsTab.cpp \
     src/ZDLSourcePortList.cpp \
     src/ZDLWidget.cpp \
-    src/ZDMFlagDialog.cpp \
-    src/ZDMFlagPicker.cpp \
     src/libwad.cpp \
     src/qzdl.cpp \
     src/zdlconf.cpp \
