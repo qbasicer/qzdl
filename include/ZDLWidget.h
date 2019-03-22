@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QMetaObject>
 #ifndef _ZQWIDGET_H_
 #define _ZQWIDGET_H_
 #include <QObject>

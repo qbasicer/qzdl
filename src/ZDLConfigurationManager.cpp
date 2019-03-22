@@ -19,11 +19,6 @@
  
 #include <stdlib.h>
 
-#include <iostream>
-#include <list>
-#include <string>
-#include <vector>
-
 #include "zdlcommon.h"
 #include "ZDLConfigurationManager.h"
 #include "ico_icon.xpm"

@@ -19,7 +19,6 @@
 
 #include "ZDLListable.h"
 #include "ZDLFileListable.h"
-#include <string>
 #include <QFileInfo>
 
 ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLNameListable(parent, type, file, QFileInfo(file).fileName()){

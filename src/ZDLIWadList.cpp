@@ -25,8 +25,6 @@
 #include "ZDLFileInfo.h"
 #include "gph_ast.xpm"
 
-#include <iostream>
-
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
     QPushButton *btnWizardAdd = new QPushButton(this);
     btnWizardAdd->setIcon(QPixmap(glyph_asterisk));

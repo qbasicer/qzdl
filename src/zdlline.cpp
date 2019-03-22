@@ -17,10 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
-#include <fstream>
 #include <QtCore>
-#include <list>
 #include "zdlcommon.h"
 
 ZDLLine::ZDLLine(QString inLine)
@@ -104,7 +101,7 @@ void ZDLLine::parse()
 	int cloc = findComment(';');
 	int cloc2 = findComment('#');
 	if(cloc != -1 && cloc2 != -1){
-		cloc = std::min(cloc,cloc2);
+        cloc = qMin(cloc,cloc2);
 	}else if(cloc == -1 && cloc2 != -1){
 		cloc = cloc2;
 	}

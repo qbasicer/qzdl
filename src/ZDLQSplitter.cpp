@@ -16,12 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include "ZDLQSplitter.h"
-#include <QMetaObject>
-
 
 ZDLQSplitter::ZDLQSplitter(ZDLWidget *parent):ZDLWidget(parent){
 	box = new QVBoxLayout(this);

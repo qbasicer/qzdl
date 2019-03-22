@@ -21,7 +21,6 @@
 #include "ZDLFileListable.h"
 #include "ZDLConfigurationManager.h"
 #include "gph_fld.xpm"
-#include <iostream>
 
 #ifdef Q_WS_WIN
 #include <windows.h>

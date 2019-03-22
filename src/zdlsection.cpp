@@ -17,15 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <list>
-
-#ifdef QT_CORE_LIB
 #include <QRegExp>
-#endif
-
 #include "zdlcommon.h"
 
 #define READLOCK() (readLock(__FILE__,__LINE__))

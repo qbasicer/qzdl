@@ -22,7 +22,6 @@
 
 #include <QtGui>
 #include <QObject>
-#include <vector>
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
 

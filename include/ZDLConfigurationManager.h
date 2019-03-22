@@ -19,9 +19,6 @@
  
 #ifndef _configurationManger_h_
 #define _configurationManger_h_
-#include <iostream>
-#include <list>
-#include <string>
 #include <QComboBox>
 #include <QValidator>
 #include "ZDLWidget.h"

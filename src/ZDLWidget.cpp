@@ -16,12 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include "ZDLWidget.h"
-#include <QMetaObject>
-
 
 ZDLWidget::ZDLWidget(ZDLWidget *parent):QWidget(parent){
 	setZParent(parent);

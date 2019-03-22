@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-
+#include <QFileInfo>
 #include "ZDLListable.h"
 #include "ZDLNameListable.h"
-#include <QFileInfo>
 #include "ZDLConfigurationManager.h" 
 
 ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, QString name):ZDLListable(parent, type){

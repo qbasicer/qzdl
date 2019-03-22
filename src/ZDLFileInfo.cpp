@@ -18,7 +18,7 @@
 
 #include <QFile>
 #include <QCryptographicHash>
-#include <algorithm>
+#include <QtAlgorithms>
 #include <cstring>
 #include "ZDLFileInfo.h"
 #include "ZDLMapFile.h"
@@ -309,9 +309,9 @@ QString ZDLIwadInfo::GetFileDescription()
 			memcpy(target_hash.md5, file_hash.result().data(), 16);
 
 			const IwadHash *null_iwad=sorted_iwad_hashes+SORTED_IWAD_HASHES_SIZE;
-			const IwadHash *found_iwad=std::lower_bound(sorted_iwad_hashes, null_iwad, target_hash, IwadHashCompare);
+            const IwadHash *found_iwad=qBinaryFind(sorted_iwad_hashes, null_iwad, target_hash, IwadHashCompare);
 
-			if (found_iwad!=null_iwad&&!IwadHashCompare(target_hash, *found_iwad))
+            if (found_iwad!=null_iwad)
 				iwad_name=found_iwad->name;
 		}
 
@@ -326,12 +326,11 @@ QString ZDLIwadInfo::GetFileDescription()
 
 	if (iwad_name.isEmpty()) {
 		QByteArray file_buf=fileName().toLower().toLocal8Bit();
-		FileDesc target_file={file_buf.constData()};
-
+        const FileDesc target_file={file_buf.constData()};
 		const FileDesc *null_iwad=sorted_iwad_files+SORTED_IWAD_FILES_SIZE;
-		const FileDesc *found_iwad=std::lower_bound(sorted_iwad_files, null_iwad, target_file, FileDescCompare);
+        const FileDesc *found_iwad=qBinaryFind(sorted_iwad_files, null_iwad, target_file, FileDescCompare);
 
-		if (found_iwad!=null_iwad&&!FileDescCompare(target_file, *found_iwad))
+        if (found_iwad!=null_iwad)
 			iwad_name=found_iwad->name;
 	}
 
@@ -349,12 +348,11 @@ ZDLAppInfo::ZDLAppInfo(const QString &file):
 QString ZDLAppInfo::GetFileDescription()
 {
 	QByteArray file_buf=baseName().toLower().toLocal8Bit();
-	FileDesc target_file={file_buf.constData()};
-
+    const FileDesc target_file={file_buf.constData()};
 	const FileDesc *null_port=sorted_source_ports+SORTED_SOURCE_PORTS_SIZE;
-	const FileDesc *found_port=std::lower_bound(sorted_source_ports, null_port, target_file, FileDescCompare);
+    const FileDesc *found_port=qBinaryFind(sorted_source_ports, null_port, target_file, FileDescCompare);
 
-	if (found_port!=null_port&&!FileDescCompare(target_file, *found_port))
+    if (found_port!=null_port)
 		return found_port->name;
 	else
 		return baseName();

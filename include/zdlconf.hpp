@@ -23,8 +23,6 @@
 class ZDLVariables;
 
 #include <QtCore>
-#include <iostream>
-#include <list>
 #include "zdlcommon.h"
 #include "zdlsection.hpp"
 

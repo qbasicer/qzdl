@@ -20,7 +20,6 @@
 #include <QtGui>
 #include <QApplication>
 #include <QListWidget>
-#include <iostream>
 
 #include "ZDLListWidget.h"
 #include "ZDLFilePane.h"

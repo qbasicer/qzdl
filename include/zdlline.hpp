@@ -20,7 +20,6 @@
 #ifndef _ZDLLINE_HPP_
 #define _ZDLLINE_HPP_
 
-#include <string>
 #include <QtCore>
  
 #define FLAG_NORMAL	0	// Normal flag

@@ -17,7 +17,6 @@
  */
  
 #include "ZDLListable.h"
-#include <string>
 
 ZDLListable::ZDLListable( QListWidget * parent, int type):QListWidgetItem(parent){
 	myType = type;

@@ -76,7 +76,7 @@ HEADERS += \
     include/ZDLSettingsPane.h \
     include/ZDLSettingsTab.h \
     include/ZDLSourcePortList.h \
-    include/ZDLWidget.h \
+    include/ZDLWidget.h
 SOURCES += \
     miniz/miniz.c \
     src/ZDLAboutDialog.cpp \

@@ -18,6 +18,7 @@
  */
 
 #include <QRegExp>
+#include <cstring>
 #include "libwad.h"
 
 struct wadinfo_t {

@@ -20,7 +20,6 @@
 #include <QtGui>
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
-#include <string>
 
 ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi):
     QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir)
