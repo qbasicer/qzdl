@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 cmake_policy(SET CMP0071 NEW)
 
-project(test_zdl LANGUAGES CXX)
+project(test_zdl LANGUAGES C CXX)
 
 find_package(Qt5Test REQUIRED)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
@@ -69,14 +69,19 @@ add_executable(
 	../src/ZDLMapFile.cpp
 	../src/ZDLAdvancedMultiplayerDialog.cpp
 	${TEST_ZDL_MOC_OUTFILES}
+	../zdlconf/confparser.cpp
+	../zdlconf/inih-r42/ini.c
 )
 add_test(${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Test Qt5::Core Qt5::Widgets)
 target_include_directories(${PROJECT_NAME} PRIVATE ../include)
+target_include_directories(${PROJECT_NAME} PRIVATE ../zdlconf)
+target_include_directories(${PROJECT_NAME} PRIVATE ../zdlconf/inih-r42)
 
 file(COPY resources/dummy.wad DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources)
 file(COPY resources/qZDL.ini DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources)
+file(COPY resources/qZDL2.ini DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resources)
 
 # Seems to be needed for ZDLConfiguration.cpp
 target_compile_definitions(test_zdl PRIVATE FALSE=0 TRUE=1)

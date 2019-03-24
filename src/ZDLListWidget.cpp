@@ -18,8 +18,6 @@
 
 #include <QtWidgets>
 #include <QApplication>
-
-#include "ZDLConfigurationManager.h"
 #include "ZDLListWidget.h"
 #include "adown.xpm"
 #include "aup.xpm"
@@ -119,11 +117,9 @@ void ZDLListWidget::dropEvent(QDropEvent *event){
 		QStringList files;
 		for (int i = 0; i < urlList.size() && i < 32; ++i) {
 			QUrl url = urlList.at(i);
-			LOGDATAO() << "url " << i << "=" << url.toString() << endl;
 			if(url.scheme() == "file"){
 				QString path = url.path();
 				QFileInfo urlDecoder(path);
-				LOGDATAO() << "Adding path " << urlDecoder.absoluteFilePath() << endl;
 				files <<  urlDecoder.absoluteFilePath();
 			}
 		}

@@ -19,7 +19,6 @@
 #include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
-#include "ZDLConfigurationManager.h"
 #include <string.h>
 #include "exclaim.xpm"
 #include "question.xpm"
@@ -27,7 +26,6 @@
 #include "ZDLInfoBar.h"
 
 ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
-	LOGDATAO() << "New ZDLInfoBar" << endl;
 	QPalette p(palette());
 	normal = p.color(QPalette::Background);
 	warning = QColor(255,96,96);
@@ -58,22 +56,18 @@ ZDLInfoBar::ZDLInfoBar(ZDLWidget *parent): ZDLWidget(parent){
 	connect(btn, &QPushButton::clicked, this, &ZDLInfoBar::more);
 	
 	setVisible(false);
-	LOGDATAO() << "Done" << endl;
 }
 
 void ZDLInfoBar::hidebar(){
-	LOGDATAO() << "hideBar" << endl;
 	disconnect(this, 0, 0, 0);
 	setVisible(false);
 }
 
 void ZDLInfoBar::more(){
-	LOGDATAO() << "more" << endl;
 	emit moreclicked();
 }
 
 void ZDLInfoBar::setMessage(const char* message, int icon){
-	LOGDATAO() << "setMessage: " << message << endl;
 	QPalette p(palette());
 	disconnect(this, 0, 0, 0);
 	if(icon == 0){

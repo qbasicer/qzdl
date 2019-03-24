@@ -28,43 +28,19 @@
 
 #include "ZDLNullDevice.h"
 
+#include "confparser.h"
+#include "ini.h"
+#include <QSettings>
+
 QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
 
-static void addFile(QString file, ZDLConf* zconf){
-	LOGDATA() << "Adding " << file << " to " << (void*)zconf << endl;
-	ZDLSection *section = zconf->getSection("zdl.save");
-	if(!section){
-		zconf->setValue("zdl.save", "file0", file);
-		return;
-	}
-	QVector<ZDLLine*> vctr;
-	section->getRegex("^file[0-9]+$", vctr);
-	if(vctr.size() == 0){
-		zconf->setValue("zdl.save", "file0", file);
-		return;
-	}
-	QVector<int> numbers;
-	for(int i = 0; i < vctr.size(); i++){
-		bool ok = false;
-		QString value = vctr[i]->getVariable();
-		value.remove(0,4);
-		int val = value.toInt(&ok);
-		if(!ok){
-			return;
-		}
-		numbers.push_back(val);
-	}
-	qSort(numbers);
-	int highest = numbers.last();
-	zconf->setValue("zdl.save", "file"+QString::number(highest+1), file);
-	return;
-}
 
 QDebug *zdlDebug;
 
 int main( int argc, char **argv ){
+
 	QStringList args;
 	for(int i = 1; i < argc; i++){
 		args << QString(argv[i]);
@@ -77,13 +53,6 @@ int main( int argc, char **argv ){
 	QApplication a( argc, argv );
 	qapp = &a;
 
-	ZDLConfigurationManager::setArgv(args);
-	{
-		QString execuatble(argv[0]);
-		QFileInfo fullPath(execuatble);
-		LOGDATA() << "Executable path: " << fullPath.absoluteFilePath() << endl;
-		ZDLConfigurationManager::setExec(fullPath.absoluteFilePath());
-	}
 
 #if defined(Q_WS_WIN)
 	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
@@ -94,78 +63,24 @@ int main( int argc, char **argv ){
 #else
 	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD)+QString(")");
 #endif
-	LOGDATA() << "ZDL Version" << versionString << endl;
-	LOGDATA() << "Source: " << ZDL_SOURCE << endl;
-	LOGDATA() << "Build: " << ZDL_BUILD << endl;
-	LOGDATA() << "Revision: " << ZDL_REVISION << endl;
-#if defined(ZDL_BUILD_NUMBER)
-	if(ZDL_BUILD_NUMBER > 0){
-		LOGDATA() << "Build #: " << QString::number(ZDL_BUILD_NUMBER) << endl;
-	}
-#endif
 
 	QCoreApplication::setApplicationName("qZDL");
 	QCoreApplication::setOrganizationName("Vectec Software");
 	QCoreApplication::setApplicationVersion(versionString);
 
-	QDir cwd = QDir::current();
-	ZDLConfigurationManager::init();
-	ZDLConfigurationManager::setCurrentDirectory(cwd.absolutePath().toStdString());
-
-	ZDLConf* tconf = new ZDLConf();
-	ZDLConfigurationManager::setConfigFileName("");
-
-	ZDLConfigurationManager::setWhy(ZDLConfigurationManager::UNKNOWN);
-
-	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
-		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
-		if(conf){
-			QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
-			if(QFile::exists(userConfPath)){
-				QFile cfile(userConfPath);
-				if(cfile.size() > 20){
-					ZDLConf conf;
-					conf.readINI(userConfPath);
-					if(!conf.hasValue("zdl.general","nouserconf")){
-						ZDLConfigurationManager::setConfigFileName(userConfPath);
-						LOGDATA() << "Using user-level config file at " << userConfPath << endl;
-					}else{
-						LOGDATA() << "Config file specified nouserconf" << endl;
-					}			
-				}else{
-					LOGDATA() << "User config file is small" << endl;
-				}
-			}else{
-				LOGDATA() << "User conf file doesn't exist" << endl;
-			}
-		}else{
-			LOGDATA() << "No conf yet" << endl;
-		}
+	auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
+	QSettings *tconf{nullptr};
+	auto portaConf = QCoreApplication::applicationDirPath() + "/zdl.ini";
+	if (QFileInfo(portaConf).isFile())
+	{
+		tconf = new QSettings(portaConf, iniFormat);
 	}
-
-	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
-		QString exec = ZDLConfigurationManager::getExec();
-		QStringList path = exec.split("/");
-		path.removeLast();
-		if(QFile::exists(path.join("/")+"/zdl.ini")){
-			LOGDATA() << "Using zdl.ini at " << (path.join("/")+"/zdl.ini") << endl;
-			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
-		}
+	else
+	{
+		tconf = new QSettings(iniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
 	}
-
-	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
-		ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
-		if(conf){
-			ZDLConfigurationManager::setConfigFileName(conf->getPath(ZDLConfiguration::CONF_USER));
-			LOGDATA() << "Falling back on user config at " << conf->getPath(ZDLConfiguration::CONF_USER) << endl;
-		}else{
-			ZDLConfigurationManager::setConfigFileName("zdl.ini");
-			LOGDATA() << "No conf, going to have to use local zdl.ini" << endl;
-		}
-	}
-
-	tconf->readINI(ZDLConfigurationManager::getConfigFileName());
-	ZDLConfigurationManager::setActiveConfiguration(tconf);
+	ZDLSettingsManager settingsManager;
+	settingsManager.setInstance(tconf);
 
 	bool hasZDLFile = false;
 
@@ -180,16 +95,18 @@ int main( int argc, char **argv ){
 		QFileInfo zdlInfo(positionalArgs.first());
 		if (zdlInfo.isFile() && zdlInfo.isReadable() && !QString::compare(zdlInfo.suffix(), "zdl", Qt::CaseInsensitive))
 		{
-			// Found a .zdl on the command line, replacing current zdl.save
-			tconf->deleteSectionByName("zdl.save");
-			ZDLConf zdlFile;
-			zdlFile.readINI(zdlInfo.absoluteFilePath());
-			ZDLSection *section = zdlFile.getSection("zdl.save");
-			if(section)
+			tconf->beginGroup("zdl.save");
+			tconf->remove("");
+			QSettings zdlFile(zdlInfo.absoluteFilePath(), iniFormat);
+			zdlFile.beginGroup("zdl.save");
+			for (auto key: zdlFile.allKeys())
 			{
-				tconf->addSection(section->clone());
-				hasZDLFile = true;
+				tconf->setValue(key, zdlFile.value(key));
 			}
+			zdlFile.endGroup();
+			tconf->endGroup();
+
+			hasZDLFile = true;
 		}
 	}
 
@@ -198,21 +115,23 @@ int main( int argc, char **argv ){
 	QObject::connect(&a, &QApplication::lastWindowClosed, &a, &QApplication::quit);
 	mw->startRead();
 
+
 	if(hasZDLFile){
-		LOGDATA() << "A .zdl file as passed as a command line option" << endl;
-		if(tconf->hasValue("zdl.general", "zdllaunch")){
-			int ok = 0;
-			QString rc = tconf->getValue("zdl.general", "zdllaunch", &ok);
+		//  A .zdl file as passed as a command line option
+		if(tconf->contains("zdl.general/zdllaunch")){
+			QString rc = tconf->value("zdl.general/zdllaunch").toString();
 			if(rc.length() > 0){
 				if(rc.compare("1") == 0){
-					LOGDATA() << "Launching configuration NOW" << endl;
+					// Launching configuration NOW
 					mw->launch();
-					LOGDATA() << "ZDL QUIT" << endl;
+					// ZDL QUIT
 					return 0;
 				}
 			}
 		}
 	}
+
+
 
 	LOGDATA() << "-----------------------------------" << endl;
 	int ret = a.exec();
@@ -224,17 +143,11 @@ int main( int argc, char **argv ){
 	}
 	mw->writeConfig();
 	QString qscwd = ZDLConfigurationManager::getCurrentDirectory();
-	tconf = ZDLConfigurationManager::getActiveConfiguration();
-	QDir::setCurrent(qscwd);
 	delete mw;
-	// Set version information
-	tconf->setValue("zdl.general", "engine", "ZDL");
-	tconf->setValue("zdl.general", "version", versionString);
 
 	bool doSave = true;
-	if (tconf->hasValue("zdl.general", "rememberFilelist")){
-		int ok = 0;
-		QString val = tconf->getValue("zdl.general", "rememberFilelist", &ok);
+	if (tconf->contains("zdl.general/rememberFilelist")){
+		QString val = tconf->value("zdl.general", "rememberFilelist").toString();
 		if (val == "0"){
 			doSave = false;
 		} else {
@@ -242,11 +155,19 @@ int main( int argc, char **argv ){
 		}
 	}
 	if (!doSave){
-		tconf->deleteRegex("zdl.save", "^file[0-9]+$");
+		for (int i = 0; ; i++)
+		{
+			auto key = QString("zdl.save/file%1").arg(i);
+			if (!tconf->contains(key))
+			{
+				break;
+			}
+			tconf->remove(key);
+		}
 	}
 
-	tconf->writeINI(ZDLConfigurationManager::getConfigFileName());
-	LOGDATA() << "ZDL QUIT" << endl;
+
+	delete tconf;
 	return ret;
 }
 

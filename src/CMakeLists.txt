@@ -61,8 +61,13 @@ add_executable(
 	zdlline.cpp
 	zdlsection.cpp
 	${ZDL_MOC_OUTFILES}
+
+	${PROJECT_SOURCE_DIR}/zdlconf/confparser.cpp
+	${PROJECT_SOURCE_DIR}/zdlconf/inih-r42/ini.c
 )
 
 target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf)
+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf/inih-r42)
 target_link_libraries(zdl Qt5::Core Qt5::Widgets)
 target_compile_definitions(zdl PRIVATE FALSE=0 TRUE=1)
