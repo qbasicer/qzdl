@@ -18,7 +18,7 @@
  
 #include "ZDLSourcePortList.h"
 #include "ZDLNameListable.h"
-#include "confparser.h"
+#include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
 
 #include <cstdio>
@@ -30,32 +30,49 @@ ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLSourcePortList::newConfig(){
 	pList->clear();
-	auto zconf = ZDLSettingsManager::getInstance();
-	for (int i = 0; ; i++){
-		auto fileKey = QString("zdl.ports/p%1f").arg(i);
-		auto nameKey = QString("zdl.ports/p%1n").arg(i);
-		if (!zconf->contains(fileKey) || !zconf->contains(nameKey)){
-			break;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.ports");
+	if (section){
+		QVector<ZDLLine*> fileVctr;
+		section->getRegex("^p[0-9]+f$", fileVctr);
+		
+		for(int i = 0; i < fileVctr.size(); i++){
+			QString value = fileVctr[i]->getVariable();
+			
+			QString number = "^p";
+			number.append(value.mid(1, value.length()-2));
+			number.append("n$");
+			
+			QVector <ZDLLine*> nameVctr;
+			section->getRegex(number, nameVctr);
+			if (nameVctr.size() == 1){
+				QString disName = nameVctr[0]->getValue();
+				QString fileName = fileVctr[i]->getValue();
+				ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, disName);
+				insert(zList, -1);
+			}
 		}
-		QString disName = zconf->value(nameKey).toString();
-		QString fileName = zconf->value(fileKey).toString();
-		ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, disName);
-		insert(zList, -1);
 	}
 }
 
 
 void ZDLSourcePortList::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
-	zconf->beginGroup("zdl.ports");
-	zconf->remove("");
-	zconf->endGroup();
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.ports");
+	if (section){
+		zconf->deleteSection("zdl.ports");
+	}
 	
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLNameListable* fitm = (ZDLNameListable*)itm;
-		zconf->setValue(QString("zdl.ports/p%1n").arg(i), fitm->getName());
-		zconf->setValue(QString("zdl.ports/p%1f").arg(i), fitm->getFile());
+		char szBuffer[256];
+		snprintf(szBuffer, 256, "p%dn", i);
+		zconf->setValue("zdl.ports", szBuffer, fitm->getName());
+		snprintf(szBuffer, 256, "p%df", i);
+		zconf->setValue("zdl.ports", szBuffer, fitm->getFile());
+		
+	
 	}
 	
 }

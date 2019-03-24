@@ -11,8 +11,3 @@ qzdl
 build
 compile_commands.json
 CMakeLists.txt.user*
-tags
-.mypy_cache
-GPATH
-GTAGS
-GRTAGS

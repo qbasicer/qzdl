@@ -18,16 +18,21 @@
 
 #include "ZDLFileList.h"
 #include "ZDLFileListable.h"
-#include "confparser.h"
+#include "ZDLConfigurationManager.h"
 #include "ZDLMapFile.h"
+
+#include <iostream>
+using namespace std;
 
 extern QString getLastDir();
 extern void saveLastDir(QString fileName);
 
 ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
+	LOGDATAO() << "ZDLFileList" << endl;
 }
 
 void ZDLFileList::newDrop(QStringList fileList){
+	LOGDATAO() << "newDrop" << endl;	
 	for (int i = 0; i < fileList.size(); i++) {
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileList[i]);
 		insert(zList, -1);
@@ -35,42 +40,49 @@ void ZDLFileList::newDrop(QStringList fileList){
 }
 
 void ZDLFileList::newConfig(){
+	LOGDATAO() << "Reading new config" << endl;
 	pList->clear();
-	auto zconf = ZDLSettingsManager::getInstance();
-	for (int i = 0; ; i++)
-	{
-		QString key{"zdl.save/file" + QString::number(i)};
-		if (!zconf->contains(key))
-		{
-			break;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if (section){
+		QVector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+$", vctr);
+		//cout << "I got " << vctr.size() << " matches!" << endl;
+		for(int i = 0; i < vctr.size(); i++){
+			ZDLFileListable *zList = new ZDLFileListable(pList, 1001, vctr[i]->getValue());
+			insert(zList, -1);
 		}
-		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, zconf->value(key).toString());
-		insert(zList, -1);
 	}
 }
 
 void ZDLFileList::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
-	for (int i = 0; ; i++)
-	{
-		QString key{"zdl.save/file" + QString::number(i)};
-		if (zconf->contains(key))
-		{
-			break;
+	LOGDATAO() << "Saving config" << endl;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if (section){
+		QVector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+$", vctr);
+		//cout << "I got " << vctr.size() << " matches!" << endl;
+		for(int i = 0; i < vctr.size(); i++){
+			// Can't use the section to perform this operation
+			// Section is a clone of the real section
+			zconf->deleteValue("zdl.save", vctr[i]->getVariable());
 		}
-		zconf->remove(key);
 	}
 
+	//cout << "Building lines" << endl;
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLFileListable* fitm = (ZDLFileListable*)itm;
 		QString name = QString("file").append(QString::number(i));
-		zconf->setValue("zdl.save/" + name, fitm->getFile());
+		zconf->setValue("zdl.save", name, fitm->getFile());
+
 	}
 
 }
 
 void ZDLFileList::addButton(){
+	LOGDATAO() << "Adding new file" << endl;
 	QStringList filters;
 	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
 		<< "WAD Files (*.wad)"
@@ -83,6 +95,7 @@ void ZDLFileList::addButton(){
 		<< "Any files (*)";
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", getLastDir(), filters.join(";;"));
 	for(int i = 0; i < fileNames.size(); i++){
+		LOGDATAO() << "Adding file " << fileNames[i] << endl;
 		saveLastDir(fileNames[i]);
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
 		insert(zList, -1);

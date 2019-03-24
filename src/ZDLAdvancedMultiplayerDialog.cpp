@@ -17,13 +17,14 @@
  */
  
 #include "ZDLAdvancedMultiplayerDialog.h"
-#include "confparser.h"
+#include "ZDLConfigurationManager.h"
 #include <QDialogButtonBox>
 
 ZDLAdvancedMultiplayerDialog::ZDLAdvancedMultiplayerDialog(ZDLWidget *parent):QDialog(parent){
 	setWindowTitle("ZDL Advanced Multiplayer Settings");
 	QVBoxLayout *box = new QVBoxLayout(this);
 	QGridLayout *form = new QGridLayout();
+	//form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 	QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	
 	extratic = new QCheckBox("On/Off", this);
@@ -90,30 +91,34 @@ void ZDLAdvancedMultiplayerDialog::close(){
 }
 
 void ZDLAdvancedMultiplayerDialog::readConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	int status;
+	LOGDATAO() << "Loading config" << endl;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString tEnabled = "disabled";
-	if(zconf->contains("zdl.net/advenabled")){
-		tEnabled = zconf->value("zdl.net/advenabled").toString();
+	if(zconf->hasValue("zdl.net","advenabled")){
+		tEnabled = zconf->getValue("zdl.net","advenabled",&status);
+		LOGDATAO() << "Has enabled" << endl;
 	}
+	LOGDATAO() << "Enabled: " << tEnabled << endl;
 	
 	QString tExtratic = "disabled";
-	if(zconf->contains("zdl.net/extratic")){
-		tExtratic = zconf->value("zdl.net/extratic").toString();
+	if(zconf->hasValue("zdl.net","extratic")){
+		tExtratic = zconf->getValue("zdl.net","extratic",&status);
 	}
 
 	QString tPort = "";
-	if(zconf->contains("zdl.net/port")){
-		tPort = zconf->value("zdl.net/port").toString();
+	if(zconf->hasValue("zdl.net","port")){
+		tPort = zconf->getValue("zdl.net","port",&status);
 	}
 
 	QString tNetMode = "0";
-	if(zconf->contains("zdl.net/netmode")){
-		tNetMode = zconf->value("zdl.net/netmode").toString();
+	if(zconf->hasValue("zdl.net","netmode")){
+		tNetMode = zconf->getValue("zdl.net","netmode",&status);
 	}
 
 	QString tDup = "0";
-	if(zconf->contains("zdl.net/dup")){
-		tDup = zconf->value("zdl.net/dup").toString();
+	if(zconf->hasValue("zdl.net","dup")){
+		tDup = zconf->getValue("zdl.net","dup",&status);
 	}
 		
 	if(tEnabled == "enabled"){
@@ -149,40 +154,41 @@ void ZDLAdvancedMultiplayerDialog::readConfig(){
 }
 
 void ZDLAdvancedMultiplayerDialog::save(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	LOGDATAO() << "Saving config" << endl;
+	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(enable->isChecked()){
-		zconf->setValue("zdl.net/advenabled", "enabled");
+		zconf->setValue("zdl.net", "advenabled", "enabled");
 	}else{
-		zconf->setValue("zdl.net/advenabled", "disabled");
+		zconf->setValue("zdl.net", "advenabled", "disabled");
 	}
 	if(extratic->isChecked()){
-		zconf->setValue("zdl.net/extratic", "enabled");
+		zconf->setValue("zdl.net", "extratic", "enabled");
 	}else{
-		zconf->setValue("zdl.net/extratic", "disabled");
+		zconf->setValue("zdl.net", "extratic", "disabled");
 	}
 	
 	if(portNo->text().length() > 0){
-		zconf->setValue("zdl.net/port", portNo->text());
+		zconf->setValue("zdl.net", "port", portNo->text());
 	}else{
-		if(zconf->contains("zdl.net/port")){
-			zconf->remove("zdl.net/port");
+		if(zconf->hasValue("zdl.net","port")){
+			zconf->deleteValue("zdl.net","port");
 		}
 	}
 	
 	
 	if(dupmode->currentIndex() > 0){
-		zconf->setValue("zdl.net/dup", QString::number(dupmode->currentIndex()));
+		zconf->setValue("zdl.net", "dup", dupmode->currentIndex());
 	}else{
-		if(zconf->contains("zdl.net/dup")){
-			zconf->remove("zdl.net/dup");
+		if(zconf->hasValue("zdl.net","dup")){
+			zconf->deleteValue("zdl.net","dup");
 		}
 	}
 	
 	if(netmode->currentIndex() > 0){
-		zconf->setValue("zdl.net/netmode", QString::number(netmode->currentIndex()));
+		zconf->setValue("zdl.net", "netmode", netmode->currentIndex());
 	}else{
-		if(zconf->contains("zdl.net/netmode")){
-			zconf->remove("zdl.net/netmode");
+		if(zconf->hasValue("zdl.net","netmode")){
+			zconf->deleteValue("zdl.net","netmode");
 		}
 	}
 	

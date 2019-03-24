@@ -20,6 +20,7 @@
 #define _ZNAMELISTABLE_H_
 
 #include "ZDLListable.h"
+#include "zdlconf.hpp"
 
 class ZDLNameListable : public ZDLListable{
 	Q_OBJECT
@@ -30,8 +31,11 @@ class ZDLNameListable : public ZDLListable{
 		QString getName();
 		void setDisplayName(QString name);
 		void setFile(QString file);
+	protected slots:
+		void configurationChanged(ZDLConf *conf);
 	protected:
 		QString generateName();
+		QString generateName(ZDLConf *zconf);
 		QString fileName;
 		QString displayName;
 };
