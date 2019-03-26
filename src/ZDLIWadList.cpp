@@ -18,60 +18,48 @@
  
 #include "ZDLIWadList.h"
 #include "ZDLNameListable.h"
-#include "ZDLConfigurationManager.h"
+#include "confparser.h"
 #include "ZDLNameInput.h"
 
-#include <iostream>
-using namespace std;
 
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 }
 
 void ZDLIWadList::newConfig(){
 	pList->clear();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.iwads");
-	if (section){
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^i[0-9]+f$", fileVctr);
-		
-		for(int i = 0; i < fileVctr.size(); i++){
-			QString value = fileVctr[i]->getVariable();
-			
-			QString number = "^i";
-			number.append(value.mid(1, value.length()-2));
-			number.append("n$");
-			
-			QVector<ZDLLine*> nameVctr;
-			section->getRegex(number, nameVctr);
-			if (nameVctr.size() == 1){
-				QString disName = nameVctr[0]->getValue();
-				QString fileName = fileVctr[i]->getValue();
-				ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, disName);
-				insert(zList, -1);
-			}
+	auto zconf = ZDLSettingsManager::getInstance();
+	for (int i = 0; ; i++)
+	{
+		auto nameKey = QString("zdl.iwads/i%1n").arg(i);
+		auto fileKey = QString("zdl.iwads/i%1f").arg(i);
+		if (!zconf->contains(nameKey) || !zconf->contains(fileKey))
+		{
+			break;
 		}
+
+		auto fileName = zconf->value(fileKey).toString();
+		auto disName = zconf->value(nameKey).toString();
+		ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, disName);
+		insert(zList, -1);
 	}
 }
 
 
 void ZDLIWadList::rebuild(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.iwads");
-	if (section){
-		zconf->deleteSection("zdl.iwads");
-	}
-	
+	auto zconf = ZDLSettingsManager::getInstance();
+	zconf->beginGroup("zdl.iwads");
+	zconf->remove("");
+
+
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLNameListable* fitm = (ZDLNameListable*)itm;
-		
-		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("n"), fitm->getName());
-		zconf->setValue("zdl.iwads", QString("i").append(QString::number(i)).append("f"), fitm->getFile());
-		
-		
+
+		zconf->setValue(QString("i%1n").arg(i), fitm->getName());
+		zconf->setValue(QString("i%1f").arg(i), fitm->getFile());
 	}
-	
+
+	zconf->endGroup();
 }
 
 void ZDLIWadList::newDrop(QStringList fileList){

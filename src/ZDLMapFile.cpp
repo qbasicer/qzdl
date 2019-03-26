@@ -18,15 +18,14 @@ ZDLMapFile *ZDLMapFile::getMapFile(QString file){
 		return NULL;
 	}
 	if(bytes[0] == 'P' && bytes[1] == 'W' && bytes[2] == 'A' && bytes[3] == 'D'){
-		LOGDATA() << "PWAD file" << endl;
+		// PWAD file
 		DoomWad *wad = new DoomWad(file);
 		return wad;
 	}else if(bytes[0] == 'I' && bytes[1] == 'W' && bytes[2] == 'A' && bytes[3] == 'D'){
-		LOGDATA() << "IWAD file" << endl;
+		// IWAD file
 		DoomWad *wad = new DoomWad(file);
 		return wad;
 	}
-	LOGDATA() << "Unsupported format" << endl;
-	LOGDATA() << bytes.toHex() << endl;
+	// Unsupported format
 	return NULL;
 }

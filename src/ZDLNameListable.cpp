@@ -20,7 +20,7 @@
 #include "ZDLListable.h"
 #include "ZDLNameListable.h"
 #include <QFileInfo>
-#include "ZDLConfigurationManager.h" 
+#include "confparser.h"
 
 using namespace std;
 
@@ -28,18 +28,13 @@ ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, Q
 	setFile(file);
 	setDisplayName(name);
 	setName(generateName());
-	ZDLConfigurationEvents* events = ZDLConfigurationManager::getEvents();
-	if(events){
-		connect(events, &ZDLConfigurationEvents::newConfiguration, this, &ZDLNameListable::configurationChanged);
-	}
+
+	// TODO: There used to be a signal->slot connection to call setName whenever the configuration changes.
 }
 
 ZDLNameListable::~ZDLNameListable(){
 }
 
-void ZDLNameListable::configurationChanged(ZDLConf *conf){
-	setName(generateName(conf));
-}
 
 QString ZDLNameListable::getFile(){
 	return fileName;
@@ -59,15 +54,12 @@ void ZDLNameListable::setFile(QString file){
 	setName(generateName());
 }
 
-QString ZDLNameListable::generateName(){
-	return generateName(ZDLConfigurationManager::getActiveConfiguration());
-}
 
-QString ZDLNameListable::generateName(ZDLConf *zconf){
+QString ZDLNameListable::generateName(){
+	auto zconf = ZDLSettingsManager::getInstance();
 	bool showPath = true;
-	if(zconf->hasValue("zdl.general","showpaths")){
-		int ok = 0;
-		QString rc = zconf->getValue("zdl.general", "showpaths", &ok);
+	if(zconf->contains("zdl.general/showpaths")){
+		QString rc = zconf->value("zdl.general/showpaths").toString();
 		if(!rc.isNull()){
 			if(rc == "0"){
 				showPath = false;

@@ -19,7 +19,7 @@
 
 #include <QtWidgets>
 #include <QApplication>
-#include "ZDLConfigurationManager.h"
+#include "confparser.h"
 #include "ZDLMultiPane.h"
 
 
@@ -71,17 +71,15 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 }
 
 void ZDLMultiPane::newConfig(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.save");
-	if (section && section->hasVariable("host")){
-		int stat;
-		QString hostName = zconf->getValue("zdl.save","host",&stat);
+	auto zconf = ZDLSettingsManager::getInstance();
+	if (zconf->contains("zdl.save/host")){
+		auto hostName = zconf->value("zdl.save/host").toString();
 		tHostAddy->setText(hostName);
 	}else{
 		tHostAddy->setText("");
 	}
-	if (section && section->hasVariable("players")){
-		QString strPlayers = section->findVariable("players");
+	if (zconf->contains("zdl.save/players")) {
+		auto strPlayers = zconf->value("zdl.save/players").toString();
 		bool ok;
 		int noPlayers = strPlayers.toInt(&ok, 10);
 		if (noPlayers >= 0 && noPlayers <= 8 && ok){
@@ -93,8 +91,8 @@ void ZDLMultiPane::newConfig(){
 	}else{
 		gPlayers->setCurrentIndex(0);
 	}
-	if (section && section->hasVariable("gametype")){
-		QString strGType = section->findVariable("gametype");
+	if (zconf->contains("zdl.save/gametype")){
+		auto strGType = zconf->value("zdl.save/gametype").toString();
 		bool ok;
 		int gType = strGType.toInt(&ok, 10);
 		if (gType >= 0 && gType <= 2 && ok){
@@ -106,8 +104,8 @@ void ZDLMultiPane::newConfig(){
 	}else{
 		gMode->setCurrentIndex(0);
 	}
-	if (section && section->hasVariable("dmflags")){
-		QString dmFlags = section->findVariable("dmflags");
+	if (zconf->contains("zdl.save/dmflags")){
+		auto dmFlags = zconf->value("zdl.save/dmflags").toString();
 		bool ok;
 		int flags = dmFlags.toInt(&ok, 10);
 		if (!ok && flags >= 0){
@@ -118,8 +116,8 @@ void ZDLMultiPane::newConfig(){
 	}else{
 		bDMFlags->setText("0");
 	}
-	if (section && section->hasVariable("dmflags2")){
-		QString dmFlags = section->findVariable("dmflags2");
+	if (zconf->contains("zdl.save/dmflags2")){
+		auto dmFlags = zconf->value("zdl.save/dmflags2").toString();
 		bool ok;
 		int flags = dmFlags.toInt(&ok, 10);
 		if (!ok && flags >= 0){
@@ -130,9 +128,8 @@ void ZDLMultiPane::newConfig(){
 	}else{
 		bDMFlags2->setText("0");
 	}
-	
-	if (section && section->hasVariable("fraglimit")){
-		QString dmFlags = section->findVariable("fraglimit");
+	if (zconf->contains("zdl.save/fraglimit")){
+		auto dmFlags = zconf->value("zdl.save/fraglimit").toString();
 		bool ok;
 		int flags = dmFlags.toInt(&ok, 10);
 		if (!ok && flags >= 0){
@@ -147,34 +144,33 @@ void ZDLMultiPane::newConfig(){
 }
 
 void ZDLMultiPane::rebuild(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-
+	auto zconf = ZDLSettingsManager::getInstance();
 	if (tHostAddy->text().length() > 0){
-		zconf->setValue("zdl.save", "host", tHostAddy->text());
+		zconf->setValue("zdl.save/host", tHostAddy->text());
 	}else{
-		zconf->deleteValue("zdl.save", "host");
+		zconf->remove("zdl.save/host");
 	}
 
 	if (tFragLimit->text().length() > 0){
-		zconf->setValue("zdl.save", "fraglimit", tFragLimit->text());
+		zconf->setValue("zdl.save/fraglimit", tFragLimit->text());
 	}else{
-		zconf->deleteValue("zdl.save", "fraglimit");
+		zconf->remove("zdl.save/fraglimit");
 	}
 
 	if(bDMFlags->text() != "0"){
-		zconf->setValue("zdl.save", "dmflags", bDMFlags->text());
+		zconf->setValue("zdl.save/dmflags", bDMFlags->text());
 	}else{
-		zconf->deleteValue("zdl.save", "dmflags");
+		zconf->remove("zdl.save/dmflags");
 	}
 
 	if(bDMFlags2->text() != "0"){
-		zconf->setValue("zdl.save", "dmflags2", bDMFlags2->text());
+		zconf->setValue("zdl.save/dmflags2", bDMFlags2->text());
 	}else{
-		zconf->deleteValue("zdl.save", "dmflags2");
+		zconf->remove("zdl.save/dmflags2");
 	}
 
-	zconf->setValue("zdl.save", "gametype", gMode->currentIndex());
-	zconf->setValue("zdl.save", "players", gPlayers->currentIndex());
+	zconf->setValue("zdl.save/gametype", gMode->currentIndex());
+	zconf->setValue("zdl.save/players", gPlayers->currentIndex());
 }
 
 

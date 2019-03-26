@@ -19,7 +19,7 @@
 #include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
-#include "ZDLConfigurationManager.h"
+#include "confparser.h"
 #include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLAboutDialog.h"
 
@@ -39,8 +39,6 @@ extern ZDLMainWindow *mw;
 extern QApplication *qapp;
 
 ZDLInterface::ZDLInterface(QWidget *parent):ZDLWidget(parent){
-	LOGDATAO() << "New ZDLInterface" << endl;
-	ZDLConfigurationManager::setInterface(this);
 
 	box = new QVBoxLayout(this);
 
@@ -55,10 +53,8 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZDLWidget(parent){
 	ZDLInfoBar *zib = new ZDLInfoBar(this);
 	box->addWidget(zib);
 
-	ZDLConfigurationManager::setInfobar(zib);
 	box->addLayout(tpane);
 	box->addLayout(bpane);
-	LOGDATAO() << "Done creating interface" << endl;
 }
 
 QLayout *ZDLInterface::getTopPane(){
@@ -95,7 +91,6 @@ QLayout *ZDLInterface::getBottomPane(){
 }
 
 void ZDLInterface::exitzdl(){
-	LOGDATAO() << "Closing ZDL" << endl;
 	mw->close();
 }
 
@@ -156,60 +151,47 @@ QLayout *ZDLInterface::getButtonPane(){
 }
 
 void ZDLInterface::showNewDMFlagger(){
-	LOGDATAO() << "New DMFlag picker" << endl;
 	ZDMFlagPicker dialog(this);
 	dialog.exec();
 }
 
 void ZDLInterface::launch(){
-	LOGDATAO() << "Launching" << endl;
 	mw->launch();
 }
 
 void ZDLInterface::buttonPaneNewConfig(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = zconf->getSection("zdl.save");
-	if (section){
-		QVector<ZDLLine*> vctr;
-		section->getRegex("^dlgmode$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
-			if (vctr[i]->getValue().compare("open",Qt::CaseInsensitive) == 0){
-				btnEpr->setIcon(QPixmap(adown));
-			}else{
-				btnEpr->setIcon(QPixmap(aup));
-			}
-		}
-		if (vctr.size() < 1){
+	auto zconf = ZDLSettingsManager::getInstance();
+	if (zconf->contains("zdl.save/dlgmode")){
+		if (zconf->value("zdl.save/dlgmode").toString().compare("open",Qt::CaseInsensitive) == 0){
+			btnEpr->setIcon(QPixmap(adown));
+		}else{
 			btnEpr->setIcon(QPixmap(aup));
 		}
 	}else{
 		btnEpr->setIcon(QPixmap(aup));
 	}
-
 }
 
 void ZDLInterface::mclick(){
 	writeConfig();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	int stat;
-	if(zconf->hasValue("zdl.save","dlgmode")){
-		QString txt = zconf->getValue("zdl.save","dlgmode",&stat);
+	auto zconf = ZDLSettingsManager::getInstance();
+	if(zconf->contains("zdl.save/dlgmode")){
+		QString txt = zconf->value("zdl.save/dlgmode").toString();
 		if(txt == "closed"){
 			btnEpr->setIcon(QPixmap(adown));
-			zconf->setValue("zdl.save", "dlgmode", "open");
+			zconf->setValue("zdl.save/dlgmode", "open");
 		}else{
-			zconf->setValue("zdl.save", "dlgmode", "closed");
+			zconf->setValue("zdl.save/dlgmode", "closed");
 			btnEpr->setIcon(QPixmap(aup));
 		}
 	}else{
 		btnEpr->setIcon(QPixmap(adown));
-		zconf->setValue("zdl.save", "dlgmode", "open");
+		zconf->setValue("zdl.save/dlgmode", "open");
 	}
 	startRead();
 }
 
 void ZDLInterface::ampclick(){
-	LOGDATAO() << "Advanced multiplayer opening" << endl;
 	ZDLAdvancedMultiplayerDialog *zampd = new ZDLAdvancedMultiplayerDialog(this);
 	zampd->exec();
 	delete zampd;
@@ -221,91 +203,75 @@ void ZDLInterface::sendSignals(){
 	emit buildChildren(this);
 }
 
-static QString getLastDir(ZDLConf *zconf){
-	qDebug() << "Loading last dir";
+static QString getLastDir(){
 	QString lastDir;
-	if (zconf->hasValue("zdl.general", "lastDir")) {
-		int ok = 0;
-		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
-		qDebug() << "Loaded dir " << lastDir;
-	}else{
-		qDebug() << "No last dir";
+	auto zconf = ZDLSettingsManager::getInstance();
+	if (zconf->contains("zdl.general/lastDir")) {
+		lastDir = zconf->value("zdl.general/lastDir").toString();
 	}
 	return lastDir;
 }
 
-static void saveLastDir(ZDLConf *zconf, QString fileName){
+static void saveLastDir(QString fileName){
+	auto zconf = ZDLSettingsManager::getInstance();
 	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
-	qDebug() << "Saving last dir" << fi.absolutePath();
+	zconf->setValue("zdl.general/lastDir", fi.absolutePath());
 }
 
 void ZDLInterface::loadZdlFile(){
-	LOGDATAO() << "Loading ZDL file" << endl;
 	QStringList filters;
 	QString filter;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	filter = filters.join(";;");
-	QString lastDir = getLastDir(ZDLConfigurationManager::getActiveConfiguration());
+	QString lastDir = getLastDir();
 	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
-		for(int i = 0; i < current->sections.size(); i++){
-			if(current->sections[i]->getName().compare("zdl.save") == 0){
-				ZDLSection *section = current->sections[i];
-				current->sections.remove(i);
-				delete section;
-				break;
-			}
+		auto current = ZDLSettingsManager::getInstance();
+		current->beginGroup("zdl.save");
+		current->remove("");
+		current->endGroup();
+		auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
+		QSettings newConf(fileName, iniFormat);
+		newConf.beginGroup("zdl.save");
+		for (auto key : newConf.childKeys())
+		{
+			auto settingKey = "zdl.save/" + key;
+			current->setValue(settingKey, newConf.value(settingKey).toString());
 		}
-		ZDLConf *newConf = new ZDLConf();
-		newConf->readINI(fileName);
-		for(int i = 0; i < newConf->sections.size(); i++){
-			if(newConf->sections[i]->getName().compare("zdl.save") == 0){
-				ZDLSection *section = newConf->sections[i];
-				current->addSection(section->clone());
-				break;
-			}
-		}
-		saveLastDir(current, fileName);
-		delete newConf;
+		newConf.endGroup();
+		saveLastDir(fileName);
 		mw->startRead();
 	}
 }
 
 void ZDLInterface::saveZdlFile(){
-	LOGDATAO() << "Saving ZDL File" << endl;
 	sendSignals();
 	QStringList filters;
 	filters << "ZDL (*.zdl)" << "Any files (*)";
 	QString filter = filters.join(";;");
-	QString lastDir = getLastDir(ZDLConfigurationManager::getActiveConfiguration());
+	QString lastDir = getLastDir();
 	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
-		ZDLConf *copy = new ZDLConf();
-		for(int i = 0; i < current->sections.size(); i++){
-			if(current->sections[i]->getName().compare("zdl.save") == 0){
-				copy->addSection(current->sections[i]->clone());
-				if(!fileName.contains(".")){
-					fileName = fileName + QString(".zdl");
-				}
-				saveLastDir(current, fileName);
-				copy->writeINI(fileName);
-			}
+		auto current = ZDLSettingsManager::getInstance();
+		auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
+		QSettings copy(fileName, iniFormat);
+		current->beginGroup("zdl.save");
+		for (auto key: current->childKeys())
+		{
+			QString settingKey{"zdl.save/" + key};
+			copy.setValue(settingKey, current->value(settingKey).toString());
 		}
+		current->endGroup();
+		saveLastDir(fileName);
 	}
-
 }
 
 void ZDLInterface::aboutClick(){
-	LOGDATAO() << "Opening About dialog" << endl;
 	ZDLAboutDialog zad(this);
 	zad.exec();
 }
 
 void ZDLInterface::showCommandline(){
-	LOGDATAO() << "Showing command line" << endl;
 	writeConfig();
 
 	QString exec = mw->getExecutable();
@@ -337,29 +303,25 @@ void ZDLInterface::showCommandline(){
 	// Turns on launch confirmation
 	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	if(btnrc == QMessageBox::Yes){
-		LOGDATAO() << "Asked to launch" << endl;
 		mw->launch();
 		return;
 	}
-	LOGDATAO() << "Done" << endl;
 }
 
 void ZDLInterface::rebuild(){
-	LOGDATAO() << "Saving config" << endl;
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	if(extraArgs->text().length() > 0){
-		zconf->setValue("zdl.save", "extra", extraArgs->text());
+		zconf->setValue("zdl.save/extra", extraArgs->text());
 
 	}else{
-		zconf->deleteValue("zdl.save", "extra");
+		zconf->remove("zdl.save/extra");
 	}
 }
 
 void ZDLInterface::bottomPaneNewConfig(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	if(zconf->hasValue("zdl.save", "extra")){
-		int stat;
-		QString rc = zconf->getValue("zdl.save", "extra", &stat);
+	auto zconf = ZDLSettingsManager::getInstance();
+	if(zconf->contains("zdl.save/extra")){
+		QString rc = zconf->value("zdl.save/extra").toString();
 		if(rc.length() > 0){
 			extraArgs->setText(rc);
 		}
@@ -372,21 +334,16 @@ void ZDLInterface::bottomPaneNewConfig(){
 //The button changed the configuration, and then notifies us that we need
 //to look at the configuration to see what we need to do.
 void ZDLInterface::newConfig(){
-	LOGDATAO() << "Loading new config" << endl;
 	buttonPaneNewConfig();
 	bottomPaneNewConfig();
 	//Grab our configuration
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	//Grab our section in the configuration
-	ZDLSection *section = zconf->getSection("zdl.save");
 	//Do we have it?
-	if (section){
-		QVector<ZDLLine*> vctr;
-		//Search for our string
-		section->getRegex("^dlgmode$", vctr);
-		for(int i = 0; i < vctr.size(); i++){
+	if (zconf->childGroups().contains("zdl.save")){
+		if (zconf->contains("zdl.save/dlgmode")){
 			//Are we open?
-			if (vctr[i]->getValue().compare("open", Qt::CaseInsensitive) == 0){
+			if (zconf->value("zdl.save/dlgmode").toString().compare("open", Qt::CaseInsensitive) == 0){
 				// If the multiplayer pane has not been created, create one
 				if(mpane == NULL){
 					mpane = new ZDLMultiPane(this);
@@ -405,7 +362,7 @@ void ZDLInterface::newConfig(){
 			}
 		}
 		//Do we have the section, but not the key?
-		if (vctr.size() < 1){
+		else{
 			if(mpane){
 				box->removeWidget(mpane);
 				mpane->setVisible(false);

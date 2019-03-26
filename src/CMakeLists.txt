@@ -3,7 +3,6 @@ qt_wrap_cpp(
 	ZDL_MOC_OUTFILES
 	${PROJECT_SOURCE_DIR}/include/ZDLAboutDialog.h
 	${PROJECT_SOURCE_DIR}/include/ZDLAdvancedMultiplayerDialog.h
-	${PROJECT_SOURCE_DIR}/include/ZDLConfigurationEvents.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagCheckbox.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
 	${PROJECT_SOURCE_DIR}/include/ZDLDMFlagManager.h
@@ -30,9 +29,6 @@ add_executable(
 	zdl
 	ZDLAboutDialog.cpp
 	ZDLAdvancedMultiplayerDialog.cpp
-	ZDLConfiguration.cpp
-	ZDLConfigurationEvents.cpp
-	ZDLConfigurationManager.cpp
 	ZDLDMFlagCheckbox.cpp
 	ZDLDMFlagManager.cpp
 	ZDLFileList.cpp
@@ -54,15 +50,16 @@ add_executable(
 	ZDLSourcePortList.cpp
 	ZDLWidget.cpp
 	ZDMFlagPicker.cpp
-	extras.cpp
 	libwad.cpp
 	qzdl.cpp
-	zdlconf.cpp
-	zdlline.cpp
-	zdlsection.cpp
 	${ZDL_MOC_OUTFILES}
+
+	${PROJECT_SOURCE_DIR}/zdlconf/confparser.cpp
+	${PROJECT_SOURCE_DIR}/zdlconf/inih-r42/ini.c
 )
 
 target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf)
+target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf/inih-r42)
 target_link_libraries(zdl Qt5::Core Qt5::Widgets)
 target_compile_definitions(zdl PRIVATE FALSE=0 TRUE=1)

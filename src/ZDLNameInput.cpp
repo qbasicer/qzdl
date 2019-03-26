@@ -18,29 +18,28 @@
  
 #include <QtWidgets>
 #include "ZDLNameInput.h"
-#include "ZDLConfigurationManager.h"
+#include "confparser.h"
 #include <string>
 
 QString getLastDir(){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	if(!zconf){
 		return QString();
 	}
 	QString lastDir;
-	if (zconf->hasValue("zdl.general", "lastDir")) {
-		int ok = 0;
-		lastDir = zconf->getValue("zdl.general", "lastDir", &ok);
+	if (zconf->contains("zdl.general/lastDir")) {
+		lastDir = zconf->value("zdl.general/lastDir").toString();
 	}
 	return lastDir;
 }
 
 void saveLastDir(QString fileName){
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	if(!zconf){
 		return;
 	}
 	QFileInfo fi(fileName);
-	zconf->setValue("zdl.general", "lastDir", fi.absolutePath());
+	zconf->setValue("zdl.general/lastDir", fi.absolutePath());
 }
 
 ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){

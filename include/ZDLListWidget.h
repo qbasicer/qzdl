@@ -35,8 +35,6 @@ class ZDLListWidget: public ZDLWidget{
 		virtual int count();
 		virtual void remove(int index);
 		virtual ZDLListable* get(int index);
-		//virtual vector<ZDLListable*> getList();
-		//virtual void setList(vector<ZDLListable*> *newlist);
 		void doDragDrop(int enabled);
 		virtual void newDrop(QStringList fileList);
 	signals:

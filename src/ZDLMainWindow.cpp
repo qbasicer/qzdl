@@ -23,8 +23,10 @@
 
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
-#include "ZDLConfigurationManager.h"
+#include "confparser.h"
+#include "zdlcommon.h"
 #include "ZDLInfoBar.h"
+#include "ico_icon.xpm"
 
 extern QApplication *qapp;
 extern QString versionString;
@@ -32,75 +34,59 @@ extern QString versionString;
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
 	QPoint pt = this->pos();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	if(zconf){
 		QString str = QString("%1,%2").arg(sze.width()).arg(sze.height());
-		zconf->setValue("zdl.general", "windowsize", str);
+		zconf->setValue("zdl.general/windowsize", str);
 		str = QString("%1,%2").arg(pt.x()).arg(pt.y());
-		zconf->setValue("zdl.general", "windowpos", str);
+		zconf->setValue("zdl.general/windowpos", str);
 	}
-	LOGDATAO() << "Closing main window" << endl;
+	// Closing main window
 }
 
 QString ZDLMainWindow::getWindowTitle(){
 	QString windowTitle = "ZDL";
-	windowTitle += " " ZDL_VERSION_STRING " - ";
-	ZDLConfiguration *conf = ZDLConfigurationManager::getConfiguration();
-	if(conf){
-		QString userConfPath = conf->getPath(ZDLConfiguration::CONF_USER);
-		QString currentConf = ZDLConfigurationManager::getConfigFileName();
-		if(userConfPath != currentConf){
-			windowTitle += ZDLConfigurationManager::getConfigFileName();
-		}else{
-			windowTitle += "user config";
-		}
-	}else{
-		windowTitle += ZDLConfigurationManager::getConfigFileName();
-	}
-	LOGDATAO() << "Returning main window title " << windowTitle << endl;
+	windowTitle += " " ZDL_VERSION_STRING;
+	// Returning main window title
 	return windowTitle;
 
 }
 
 ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
-	LOGDATAO() << "New main window " << DPTR(this) << endl;
 	QString windowTitle = getWindowTitle();
 	setWindowTitle(windowTitle);
 
-	setWindowIcon(ZDLConfigurationManager::getIcon());
+	setWindowIcon(QPixmap(zdlicon));
 
 
 	setContentsMargins(2,2,2,2);
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
 
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 	if(zconf){
-		int ok = 0;
 		bool qtok = false;
-		if(zconf->hasValue("zdl.general", "windowsize")){
-			QString size = zconf->getValue("zdl.general", "windowsize", &ok);
+		if(zconf->contains("zdl.general/windowsize")){
+			QString size = zconf->value("zdl.general/windowsize").toString();
 			if(size.contains(",")){
 				QStringList list = size.split(",");
 				int w = list[0].toInt(&qtok);
 				if(qtok){
 					int h = list[1].toInt(&qtok);
 					if(qtok){
-						LOGDATAO() << "Resizing to w:" << w << " h:" << h << endl;
 						this->resize(QSize(w,h));
 					}
 				}
 			}
 		}
-		if(zconf->hasValue("zdl.general", "windowpos")){
-			QString size = zconf->getValue("zdl.general", "windowpos", &ok);
+		if(zconf->contains("zdl.general/windowpos")){
+			QString size = zconf->value("zdl.general/windowpos").toString();
 			if(size.contains(",")){
 				QStringList list = size.split(",");
 				int x = list[0].toInt(&qtok);
 				if(qtok){
 					int y = list[1].toInt(&qtok);
 					if(qtok){
-						LOGDATAO() << "Moving to x:" << x << " y:" << y << endl;
 						this->move(QPoint(x,y));
 					}
 				}
@@ -116,8 +102,6 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	setCentralWidget(widget);
 	widget->addTab(intr, "Main");
 	widget->addTab(settings, "Settings");
-	//I haven't started on this yet :)
-	//widget->addTab(new ZDLInterface(this), "Notifications");
 
 	QAction *qact = new QAction(widget);
 	qact->setShortcut(Qt::Key_Return);
@@ -131,11 +115,10 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	connect(qact2, &QAction::triggered, this, &ZDLMainWindow::quit);
 
 	connect(widget, &QTabWidget::currentChanged, this, &ZDLMainWindow::tabChange);
-	LOGDATAO() << "Main window created." << endl;
+	// Main window created.
 }
 
 void ZDLMainWindow::tabChange(int newTab){
-	LOGDATAO() << "Tab changed to " << newTab << endl;
 	if(newTab == 0){
 		settings->notifyFromParent(NULL);
 		intr->readFromParent(NULL);
@@ -146,18 +129,16 @@ void ZDLMainWindow::tabChange(int newTab){
 }
 
 void ZDLMainWindow::quit(){
-	LOGDATAO() << "quitting" << endl;
 	writeConfig();
 	close();
 }
 
 void ZDLMainWindow::launch(){
-	LOGDATAO() << "Launching" << endl;
 	writeConfig();
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+	auto zconf = ZDLSettingsManager::getInstance();
 
 	QString exec = getExecutable();
-	if (exec.length() < 1){
+	if (exec.isNull() || exec.length() < 1){
 		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
@@ -182,7 +163,6 @@ void ZDLMainWindow::launch(){
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
-	LOGDATAO() << "Working directory: " << workingDirectory << endl;
 	// Turns on launch confirmation
 	QProcess *proc = new QProcess(this);
 
@@ -192,18 +172,16 @@ void ZDLMainWindow::launch(){
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 	proc->start(exec, args);
 	procerr = proc->error();
-	int stat;
-	if (zconf->hasValue("zdl.general", "autoclose")){
-		QString append = zconf->getValue("zdl.general", "autoclose",&stat);
+	if (zconf->contains("zdl.general/autoclose")){
+		QString append = zconf->value("zdl.general/autoclose").toString();
 		if (append == "1" || append == "true"){
-			LOGDATAO() << "Asked to exit... closing" << endl;
+			// Asked to exit... closing;
 			close();
 		}
 	}
 }
 
 void ZDLMainWindow::badLaunch(){
-	LOGDATAO() << "badLaunch message box" << endl;
 	if(procerr == QProcess::FailedToStart){
 		QMessageBox::warning(NULL,"Failed to Start", "Failed to launch the application executable.",QMessageBox::Ok,QMessageBox::Ok);
 	}else if(procerr == QProcess::Crashed){
@@ -214,19 +192,16 @@ void ZDLMainWindow::badLaunch(){
 }
 
 QStringList ZDLMainWindow::getArguments(){
-	LOGDATAO() << "Getting arguments" << endl;
 	QStringList ourString;
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	ZDLSection *section = NULL;
+	auto zconf = ZDLSettingsManager::getInstance();
 
 	QString iwadName = "";
 
 	bool ok;
-	int stat;
 	int doquotes = 1;
 
-	if(zconf->hasValue("zdl.save", "iwad")){
-		QString rc = zconf->getValue("zdl.save", "iwad", &stat);
+	if(zconf->contains("zdl.save/iwad")){
+		QString rc = zconf->value("zdl.save/iwad").toString();
 		if (rc.length() > 0){
 			iwadName = rc;
 		}else{
@@ -237,68 +212,63 @@ QStringList ZDLMainWindow::getArguments(){
 		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
 		return ourString;
 	}
+	for (int i = 0; ; i++)
+	{
+		auto nameKey = QString("zdl.iwads/i%1n").arg(i);
+		auto fileKey = QString("zdl.iwads/i%1f").arg(i);
+		if (!zconf->contains(nameKey) || !zconf->contains(fileKey))
+		{
+			break;
+		}
 
-	section = zconf->getSection("zdl.iwads");
-	if (section){
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^i[0-9]+n$", fileVctr);
-
-		for(int i = 0; i < fileVctr.size(); i++){
-			ZDLLine *line = fileVctr[i];
-			if(line->getValue().compare(iwadName) == 0){
-				QString var = line->getVariable();
-				if(var.length() >= 3){
-					var = var.mid(1,var.length()-2);
-					QVector<ZDLLine*> nameVctr;
-					var = QString("i") + var + QString("f");
-					section->getRegex("^" + var + "$",nameVctr);
-					if(nameVctr.size() == 1){
-						ourString << "-iwad";
-						ourString << nameVctr[0]->getValue();
-					}
-				}
-			}
+		if (zconf->value(nameKey).toString().compare(iwadName) == 0)
+		{
+			ourString << "-iwad" << zconf->value(fileKey).toString();
+			break;
 		}
 	}
 
-	if (zconf->hasValue("zdl.save", "skill")){
+	if (zconf->contains("zdl.save/skill")){
 		ourString << "-skill";
-		ourString << zconf->getValue("zdl.save", "skill", &stat);
+		ourString << zconf->value("zdl.save/skill").toString();
 	}
 
-	if (zconf->hasValue("zdl.save", "warp")){
+	if (zconf->contains("zdl.save/warp")){
 		ourString << "+map";
-		ourString << zconf->getValue("zdl.save", "warp", &stat);
+		ourString << zconf->value("zdl.save/warp").toString();
 	}
 
-	if (zconf->hasValue("zdl.save", "dmflags")){
+	if (zconf->contains("zdl.save/dmflags")){
 		ourString << "+set";
 		ourString << "dmflags";
-		ourString << zconf->getValue("zdl.save", "dmflags", &stat);
+		ourString << zconf->value("zdl.save/dmflags").toString();
 	}
 
-	if (zconf->hasValue("zdl.save", "dmflags2")){
+	if (zconf->contains("zdl.save/dmflags2")){
 		ourString << "+set";
 		ourString << "dmflags2";
-		ourString << zconf->getValue("zdl.save", "dmflags2", &stat);
+		ourString << zconf->value("zdl.save/dmflags2").toString();
 	}
 
-	section = zconf->getSection("zdl.save");
 	QStringList pwads;
 	QStringList dhacked;
-	if (section){
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^file[0-9]+$", fileVctr);
-
-		if (fileVctr.size() > 0){
-			for(int i = 0; i < fileVctr.size(); i++){
-				if(fileVctr[i]->getValue().endsWith(".deh",Qt::CaseInsensitive) || fileVctr[i]->getValue().endsWith(".bex",Qt::CaseInsensitive)){
-					dhacked << fileVctr[i]->getValue();
-				}else{
-					pwads << fileVctr[i]->getValue();
-				}
-			}
+	for (int i = 0; ; i++)
+	{
+		auto key = QString("zdl.save/file%1").arg(i);
+		if (!zconf->contains(key))
+		{
+			break;
 		}
+		auto file = QFileInfo(zconf->value(key).toString());
+		if (file.suffix().compare("deh", Qt::CaseInsensitive) == 0 || file.suffix().compare("bex", Qt::CaseInsensitive) == 0)
+		{
+			dhacked << file.filePath();
+		}
+		else
+		{
+			pwads << file.filePath();
+		}
+
 	}
 
 	if(pwads.size() > 0){
@@ -311,30 +281,30 @@ QStringList ZDLMainWindow::getArguments(){
 		ourString << dhacked;
 	}
 
-	if(zconf->hasValue("zdl.save","gametype")){
-		QString tGameType = zconf->getValue("zdl.save","gametype",&stat);
+	if(zconf->contains("zdl.save/gametype")){
+		QString tGameType = zconf->value("zdl.save/gametype").toString();
 		if(tGameType != "0"){
 			if (tGameType == "2"){
 				ourString << "-deathmath";
 			}
 			int players = 0;
-			if(zconf->hasValue("zdl.save","players")){
-				QString tPlayers = zconf->getValue("zdl.save","players",&stat);
+			if(zconf->contains("zdl.save/players")){
+				QString tPlayers = zconf->value("zdl.save/players").toString();
 				players = tPlayers.toInt(&ok, 10);
 			}
 			if(players > 0){
 				ourString << "-host";
 				ourString << QString::number(players);
 			}else if(players == 0){
-				if(zconf->hasValue("zdl.save","host")){
+				if(zconf->contains("zdl.save/host")){
 					ourString << "-join";
-					ourString << zconf->getValue("zdl.save","host",&stat);
+					ourString << zconf->value("zdl.save/host").toString();
 				}
 			}
-			if(zconf->hasValue("zdl.save","fraglimit")){
+			if(zconf->contains("zdl.save/fraglimit")){
 				ourString << "+set";
 				ourString << "fraglimit";
-				ourString << zconf->getValue("zdl.save","fraglimit",&stat);
+				ourString << zconf->value("zdl.save/fraglimit").toString();
 
 			}
 		}
@@ -342,21 +312,21 @@ QStringList ZDLMainWindow::getArguments(){
 
 
 
-	if(zconf->hasValue("zdl.net","advenabled")){
-		QString aNetEnabled = zconf->getValue("zdl.net","advenabled",&stat);
+	if(zconf->contains("zdl.net/advenabled")){
+		QString aNetEnabled = zconf->value("zdl.net/advenabled").toString();
 		if(aNetEnabled == "enabled"){
-			if(zconf->hasValue("zdl.net","port")){
+			if(zconf->contains("zdl.net/port")){
 				ourString << "-port";
-				ourString << zconf->getValue("zdl.net","port",&stat);
+				ourString << zconf->value("zdl.net/port").toString();
 			}
-			if(zconf->hasValue("zdl.net","extratic")){
-				QString tExtratic = zconf->getValue("zdl.net","extratic",&stat);
+			if(zconf->contains("zdl.net/extratic")){
+				QString tExtratic = zconf->value("zdl.net/extratic").toString();
 				if(tExtratic == "enabled"){
 					ourString << "-extratic";
 				}
 			}
-			if(zconf->hasValue("zdl.net","netmode")){
-				QString tNetMode = zconf->getValue("zdl.net","netmode",&stat);
+			if(zconf->contains("zdl.net/netmode")){
+				QString tNetMode = zconf->value("zdl.net/netmode").toString();
 				if(tNetMode == "1"){
 					ourString << "-netmode";
 					ourString << "0";
@@ -365,8 +335,8 @@ QStringList ZDLMainWindow::getArguments(){
 					ourString << "1";
 				}
 			}
-			if(zconf->hasValue("zdl.net","dup")){
-				QString tDup = zconf->getValue("zdl.net","dup",&stat);
+			if(zconf->contains("zdl.net/dup")){
+				QString tDup = zconf->value("zdl.net/dup").toString();
 				if(tDup != "0"){
 					ourString << "-dup";
 					ourString << tDup;
@@ -374,13 +344,9 @@ QStringList ZDLMainWindow::getArguments(){
 			}
 		}
 	}
-	if(zconf->hasValue("zdl.general","quotefiles")){
-		int ok;
-		QString rc = zconf->getValue("zdl.general","quotefiles",&ok);
-		if(rc == "disabled"){
-			doquotes = 0;
-		}
-	}
+
+	// This is always true. There was supposed to be a zdl.general/quotefiles key, which could have a value of "disabled", but it
+	// was never implemented.
 	if(doquotes){
 		for(int i = 0; i < ourString.size(); i++){
 			if(ourString[i].contains(" ")){
@@ -390,53 +356,45 @@ QStringList ZDLMainWindow::getArguments(){
 		}
 	}
 
-	if (zconf->hasValue("zdl.general", "alwaysadd")){
-		ourString << zconf->getValue("zdl.general", "alwaysadd", &stat);
+	if (zconf->contains("zdl.general/alwaysadd")){
+		ourString << zconf->value("zdl.general/alwaysadd").toString();
 	}
 
-	if (zconf->hasValue("zdl.save", "extra")){
-		ourString << zconf->getValue("zdl.save", "extra", &stat);
+	if (zconf->contains("zdl.save/extra")){
+		ourString << zconf->value("zdl.save/extra").toString();
 	}
-	LOGDATAO() << "args: " << ourString << endl;
+
 	return ourString;
 }
 
 QString ZDLMainWindow::getExecutable(){
-	LOGDATAO() << "Getting exec" << endl;
-	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	int stat;
+	// Getting exec
+	auto zconf = ZDLSettingsManager::getInstance();
 	QString portName = "";
-	if(zconf->hasValue("zdl.save", "port")){
-		ZDLSection *section = zconf->getSection("zdl.ports");
-		portName = zconf->getValue("zdl.save", "port", &stat);
-		QVector<ZDLLine*> fileVctr;
-		section->getRegex("^p[0-9]+n$", fileVctr);
+	if(zconf->contains("zdl.save/port")){
+		portName = zconf->value("zdl.save/port").toString();
+	}
 
-		for(int i = 0; i < fileVctr.size(); i++){
-			ZDLLine *line = fileVctr[i];
-			if(line->getValue().compare(portName) == 0){
-				QString var = line->getVariable();
-				if(var.length() >= 3){
-					var = var.mid(1,var.length()-2);
-					QVector<ZDLLine*> nameVctr;
-					var = QString("p") + var + QString("f");
-					section->getRegex("^" + var + "$",nameVctr);
-					if(nameVctr.size() == 1){
-						LOGDATAO() << "Executable: " << nameVctr[0]->getValue() << endl;
-						return QString(nameVctr[0]->getValue());
-					}
-				}
-			}
+	for (int i = 0; ; i++)
+	{
+		auto nameKey = QString("zdl.ports/p%1n").arg(i);
+		auto fileKey = QString("zdl.ports/p%1f").arg(i);
+		if (!zconf->contains(fileKey) ||!zconf->contains(nameKey))
+		{
+			break;
+		}
+		if (zconf->value(nameKey).toString().compare(portName) == 0)
+		{
+			return zconf->value(fileKey).toString();
 		}
 	}
-	LOGDATAO() << "No executable" << endl;
-	return QString("");
+	// No executable;
+	return QString();
 }
 
 
 //Pass through functions.
 void ZDLMainWindow::startRead(){
-	LOGDATAO() << "Starting to read configuration" << endl;
 	intr->startRead();
 	settings->startRead();
 	QString windowTitle = getWindowTitle();
@@ -444,7 +402,6 @@ void ZDLMainWindow::startRead(){
 }
 
 void ZDLMainWindow::writeConfig(){
-	LOGDATAO() << "Writing configuration" << endl;
 	intr->writeConfig();
 	settings->writeConfig();
 }
