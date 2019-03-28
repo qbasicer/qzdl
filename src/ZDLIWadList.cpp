@@ -36,7 +36,7 @@ ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLIWadList::wizardAddButton(){
     QString filters =
-        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+        "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
         "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
         "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
         "All files (" QFD_FILTER_ALL ")";

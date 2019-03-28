@@ -26,7 +26,7 @@ QT += core gui
 CONFIG += release
 DEFINES += _ZDL_NO_WARNINGS _ZDL_NO_WFA NOMINMAX QT_HAVE_MMX QT_HAVE_3DNOW QT_HAVE_SSE QT_HAVE_MMXEXT QT_HAVE_SSE2
 
-*g++ {
+*g++|*g++-64 {
     QMAKE_CFLAGS += -fno-strict-aliasing
     QMAKE_CXXFLAGS += -Wno-missing-field-initializers
 }
@@ -35,7 +35,7 @@ DEFINES += _ZDL_NO_WARNINGS _ZDL_NO_WFA NOMINMAX QT_HAVE_MMX QT_HAVE_3DNOW QT_HA
 static {
     DEFINES += STATIC
 
-    *g++ {
+    *g++|*g++-64 {
         QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
     }
 }
