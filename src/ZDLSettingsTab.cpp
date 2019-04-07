@@ -69,7 +69,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchClose = new QCheckBox("Close on launch",this);
 	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
-	showPaths = new QCheckBox("Show files paths in lists",this);
+    showPaths = new QCheckBox("Show file paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
 	connect(showPaths,SIGNAL(stateChanged(int)),this,SLOT(pathToggled(int)));
 	sections->addWidget(alwaysArgs);
@@ -86,8 +86,8 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
-	savePaths = new QCheckBox("Save/load external file list automatically", this);
-	savePaths->setToolTip("Save the external file list when closing");
+    savePaths = new QCheckBox("Remember external file list", this);
+    savePaths->setToolTip("Save external file list on exit and load it on next program launch");
 
 	sections->addLayout(fileassoc);
 	sections->addWidget(split);
