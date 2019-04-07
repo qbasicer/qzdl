@@ -26,24 +26,24 @@ QT += core gui
 CONFIG += release
 DEFINES += _ZDL_NO_WARNINGS _ZDL_NO_WFA NOMINMAX QT_HAVE_MMX QT_HAVE_3DNOW QT_HAVE_SSE QT_HAVE_MMXEXT QT_HAVE_SSE2
 
-*g++|*g++-64 {
+*g++|*g++-64|*g++-32 {
     QMAKE_CFLAGS += -fno-strict-aliasing
-    QMAKE_CXXFLAGS += -Wno-missing-field-initializers
+    QMAKE_CXXFLAGS += -Wno-missing-field-initializers -Wno-maybe-uninitialized
 }
 
 # For static build supply CONFIG+=static as additional argument in qmake build step for selected kit
 static {
     DEFINES += STATIC
 
-    *g++|*g++-64 {
+    *g++|*g++-64|*g++-32 {
         QMAKE_LFLAGS += -static-libstdc++ -static-libgcc -Wl,--as-needed
     }
 }
 
 INCLUDEPATH += \
     miniz \
-    res/XPM \
-    include
+    include \
+    res/XPM
 HEADERS += \
     miniz/miniz.h \
     include/ZDLFileInfo.h \

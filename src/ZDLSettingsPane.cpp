@@ -135,7 +135,7 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 	if (ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration()) {
 		if (ZDLSection *section=zconf->getSection("zdl.save")) {
 			QVector<ZDLLine*> vctr;
-			QRegExp exts("\\.(zip|wad|iwad|pk3|ipk3|pkz)$", Qt::CaseInsensitive);
+            QRegExp exts("\\.(zip|wad|iwad|pk3|ipk3|pkz|pke)$", Qt::CaseInsensitive);
 
 			section->getRegex("^file[0-9]+$", vctr);
 			if (vctr.size()) {

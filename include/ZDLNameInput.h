@@ -31,7 +31,7 @@ class ZDLNameInput: public QDialog{
 		ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi);
 		QString getName();
 		QString getFile();
-        void setFilter(QString inFilters);
+        void setFilter(const QString &inFilters);
 		void basedOff(ZDLNameListable *listable);
 		void fromUrl(QUrl url);
 	public slots:

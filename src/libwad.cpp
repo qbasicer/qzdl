@@ -30,8 +30,29 @@ struct wadinfo_t {
 struct filelump_t {
 	int	filepos;
 	int	size;
-	char name[8];
+    union {
+        char name[8];
+        struct {
+            qint32 x1;
+            qint32 x2;
+        };
+    };
 };
+
+union name8_t {
+    char name[8];
+    struct {
+        qint32 x1;
+        qint32 x2;
+    };
+};
+
+const name8_t things_lump={'T', 'H', 'I', 'N', 'G', 'S', '\0', '\0'};
+const name8_t textmap_lump={'T', 'E', 'X', 'T', 'M', 'A', 'P', '\0'};
+const name8_t iwadinfo_lump={'I', 'W', 'A', 'D', 'I', 'N', 'F', 'O'};
+const name8_t map01_lump={'M', 'A', 'P', '0', '1', '\0', '\0', '\0'};
+
+#define NAME8_CMP(f, l) (f.x1==l.x1&&f.x2==l.x2)
 
 DoomWad::DoomWad(const QString &file):
 	file(file)
@@ -52,16 +73,19 @@ QStringList DoomWad::getMapNames() {
             qint64 length=sizeof(filelump_t)*header.numlumps;
 
 			if (wad.read((char*)fileinfo, length)==length) {
-				char prev_lump_name[9]={};
+                name8_t prev_lump_name;
+                bool prev_lump=false;
 
 				for (int i=0; i<header.numlumps; i++) {
-					if (!strncmp(fileinfo[i].name, "THINGS", 8)||!strncmp(fileinfo[i].name, "TEXTMAP", 8)) {
-						if (prev_lump_name[0]) {
-							map_names<<QString(prev_lump_name).toUpper();
-							prev_lump_name[0]='\0';
+                    if (NAME8_CMP(fileinfo[i], things_lump)||NAME8_CMP(fileinfo[i], textmap_lump)) {
+                        if (prev_lump) {
+                            map_names<<QString(QByteArray::fromRawData(prev_lump_name.name, 8)).toUpper();
+                            prev_lump=false;
 						}
 					} else {
-						strncpy(prev_lump_name, fileinfo[i].name, 8);
+                        prev_lump_name.x1=fileinfo[i].x1;
+                        prev_lump_name.x2=fileinfo[i].x2;
+                        prev_lump=true;
 					}
 				}
 			}
@@ -89,7 +113,7 @@ QString DoomWad::getIwadinfoName()
 
 			if (wad.read((char*)fileinfo, length)==length) {
 				for (int i=0; i<header.numlumps; i++) {
-					if (!strncmp(fileinfo[i].name, "IWADINFO", 8)) {
+                    if (NAME8_CMP(fileinfo[i], iwadinfo_lump)) {
 						char* iwadinfo=new char[fileinfo[i].size+1];
 						iwadinfo[fileinfo[i].size]='\0';
 						
@@ -130,7 +154,7 @@ bool DoomWad::isMAPXX()
 				for (int i=0; i<header.numlumps; i++) {
 					//In original ZDoom code only global namespace is checked for 'MAP01' lump
 					//Global namespace includes lumps outside of any markers
-					if (!strncmp(fileinfo[i].name, "MAP01", 8)) {
+                    if (NAME8_CMP(fileinfo[i], map01_lump)) {
 						is_mapxx=true;
 						break;
 					}

@@ -25,6 +25,12 @@
 #include "ZDLFileInfo.h"
 #include "gph_ast.xpm"
 
+const QString iwad_filters =
+    "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.ipk7);;"
+    "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+    "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+    "All files (" QFD_FILTER_ALL ")";
+
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
     QPushButton *btnWizardAdd = new QPushButton(this);
     btnWizardAdd->setIcon(QPixmap(glyph_asterisk));
@@ -35,16 +41,10 @@ ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 }
 
 void ZDLIWadList::wizardAddButton(){
-    QString filters =
-        "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
-        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-        "All files (" QFD_FILTER_ALL ")";
-
     ZDLIwadInfo zdl_fi;
     ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
     diag.setWindowTitle("Add IWAD");
-    diag.setFilter(filters);
+    diag.setFilter(iwad_filters);
     if (diag.exec()){
         saveWadLastDir(diag.getFile());
         insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
@@ -104,13 +104,8 @@ void ZDLIWadList::newDrop(QStringList fileList){
 
 void ZDLIWadList::addButton(){
     LOGDATAO() << "Adding new IWADs" << endl;
-    QString filters =
-        "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
-        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-        "All files (" QFD_FILTER_ALL ")";
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters);
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), iwad_filters);
     for(int i = 0; i < fileNames.size(); i++){
         LOGDATAO() << "Adding file " << fileNames[i] << endl;
         saveWadLastDir(fileNames[i]);
@@ -120,17 +115,11 @@ void ZDLIWadList::addButton(){
 
 void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
-        QString filters =
-            "IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3);;"
-            "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-            "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz);;"
-            "All files (" QFD_FILTER_ALL ")";
-
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLIwadInfo zdl_fi;
 		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
 		diag.setWindowTitle("Edit IWAD");
-		diag.setFilter(filters);
+        diag.setFilter(iwad_filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){
 			saveWadLastDir(diag.getFile());

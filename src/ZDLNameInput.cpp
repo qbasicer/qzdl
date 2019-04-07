@@ -87,7 +87,7 @@ void ZDLNameInput::basedOff(ZDLNameListable *listable){
 	}
 }
 
-void ZDLNameInput::setFilter(QString inFilters){
+void ZDLNameInput::setFilter(const QString &inFilters){
 	filters = inFilters;
 }
 
