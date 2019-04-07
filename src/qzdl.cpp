@@ -176,13 +176,11 @@ int main( int argc, char **argv ){
 		}
 	}
 
-	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
-		QString exec = ZDLConfigurationManager::getExec();
-		QStringList path = exec.split("/");
-		path.removeLast();
-		if(QFile::exists(path.join("/")+"/zdl.ini")){
-			LOGDATA() << "Using zdl.ini at " << (path.join("/")+"/zdl.ini") << endl;
-			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
+    if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
+        QDir ini_dir(QFileInfo(ZDLConfigurationManager::getExec()).dir());
+        if (ini_dir.exists("zdl.ini")) {
+            LOGDATA() << "Using zdl.ini at " << ini_dir.filePath("zdl.ini") << endl;
+            ZDLConfigurationManager::setConfigFileName(ini_dir.filePath("zdl.ini"));
 		}
 	}
 

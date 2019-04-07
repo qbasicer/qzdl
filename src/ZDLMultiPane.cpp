@@ -181,7 +181,8 @@ void ZDLMultiPane::VerbosePopup()
 	savegame->addItem("(Browse...)");
 
 	if (save_path.size()) {
-		QStringList filter("*.zds");
+        QStringList filter;
+        filter<<"*.zds"<<"*.dsg"<<"*.esg";
 		QDir save_dir(save_path);
 		QFileInfoList saves=save_dir.entryInfoList(filter);
 
@@ -212,7 +213,7 @@ void ZDLMultiPane::EditSave(int idx)
 		QString prev_save=property("prev_save").toString();
 
         QString filters =
-            "Savefiles (*.zds);;"
+            "Savefiles (*.zds" QFD_FILTER_DELIM "*.dsg" QFD_FILTER_DELIM "*.esg);;"
             "All files (" QFD_FILTER_ALL ")";
 		QFileInfo fi(prev_save);
 		QString save_path=(fi.isRelative()||!fi.isFile())?getSaveLastDir():fi.absolutePath();
