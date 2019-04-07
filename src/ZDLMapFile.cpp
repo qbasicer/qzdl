@@ -22,6 +22,7 @@
 
 #include "libwad.h"
 #include "ZLibPK3.h"
+#include "ZLibDir.h"
 
 const char iwad_m[]={'I', 'W', 'A', 'D'};
 const char pwad_m[]={'P', 'W', 'A', 'D'};
@@ -30,18 +31,25 @@ const char zip_m[]={'P', 'K', 0x03, 0x04};
 ZDLMapFile::~ZDLMapFile()
 {}
 
-ZDLMapFile *ZDLMapFile::getMapFile(QString file){
-	QFile fileio(file);
+ZDLMapFile *ZDLMapFile::getMapFile(QString file)
+{
 	ZDLMapFile *mapfile=NULL;
+	QFileInfo file_info(file);
 
-	if (fileio.open(QIODevice::ReadOnly)) {
-		char magic[4];
+	if (file_info.isDir()) {
+		mapfile=new ZLibDir(file);
+	} else if (file_info.exists()) {
+		QFile fileio(file);
 
-		if (fileio.read(magic, 4)==4) {
-			if (!strncmp(magic, iwad_m, 4)||!strncmp(magic, pwad_m, 4))
-				mapfile=new DoomWad(file);
-			else if (!strncmp(magic, zip_m, 4))
-				mapfile=new ZLibPK3(file);
+		if (fileio.open(QIODevice::ReadOnly)) {
+			char magic[4];
+
+			if (fileio.read(magic, 4)==4) {
+				if (!strncmp(magic, iwad_m, 4)||!strncmp(magic, pwad_m, 4))
+					mapfile=new DoomWad(file);
+				else if (!strncmp(magic, zip_m, 4))
+					mapfile=new ZLibPK3(file);
+			}
 		}
 
 		fileio.close();

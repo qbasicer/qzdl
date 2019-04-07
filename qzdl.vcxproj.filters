@@ -182,6 +182,9 @@
     <ClCompile Include="src\ZLibPK3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ZLibDir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <CustomBuild Include="include\ZDLAboutDialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -273,6 +276,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ZLibPK3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ZLibDir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="include\ZDLFileList.h">

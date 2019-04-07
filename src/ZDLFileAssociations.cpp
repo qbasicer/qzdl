@@ -127,8 +127,8 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 	setContentsMargins(4,4,4,4);
 	layout()->setContentsMargins(0,0,0,0);
 	setFixedHeight(sizeHint().height());
-	setFixedWidth(320);
-	resize(320, sizeHint().height());
+	setFixedWidth(400);
+	resize(400, sizeHint().height());
 	
 	connect(btn_ok, SIGNAL(clicked()), this, SLOT(ApplyAssociations()));
 	connect(chk_clear, SIGNAL(stateChanged(int)), this, SLOT(ClearStateChanged(int)));

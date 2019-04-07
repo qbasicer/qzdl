@@ -185,6 +185,7 @@
     <ClCompile Include="src\zdlline.cpp" />
     <ClCompile Include="src\zdlsection.cpp" />
     <ClCompile Include="src\ZLibPK3.cpp" />
+	<ClCompile Include="src\ZLibDir.cpp" />
     <ClCompile Include="SimpleWFA\SimpleWFA.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +403,7 @@
     <ClInclude Include="include\zdlline.hpp" />
     <ClInclude Include="include\zdlsection.hpp" />
     <ClInclude Include="include\ZLibPK3.h" />
+	<ClInclude Include="include\ZLibDir.h" />
     <ClInclude Include="SimpleWFA\SimpleWFA.h" />
     <None Include="res\XPM\adown.xpm" />
     <None Include="res\XPM\aup.xpm" />
