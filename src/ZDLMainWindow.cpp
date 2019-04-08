@@ -249,7 +249,7 @@ void ZDLMainWindow::launch(){
 
 	QString exec=getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, "ZDL", "Please select a source port");
+		QMessageBox::warning(this, "ZDL", "Please select a source port.");
 		return;
 	}
 	QFileInfo exec_fi(exec);
@@ -266,12 +266,12 @@ void ZDLMainWindow::launch(){
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	} else {
-		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::warning(NULL, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #else
     if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
-		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::warning(NULL, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #endif

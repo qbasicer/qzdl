@@ -21,8 +21,8 @@
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
 
-ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi):
-    QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir)
+ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs):
+    QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs)
 {
 	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);
@@ -61,7 +61,7 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 	resize(350, sizeHint().height());
 	
 	connect(btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
-	connect(btnOK, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(btnOK, SIGNAL(clicked()), this, SLOT(okClick()));
 	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
@@ -73,6 +73,20 @@ void ZDLNameInput::browse(){
 			zdl_fi->setFile(fileName);
 			lname->setText(zdl_fi->GetFileDescription());
 		}
+	}
+}
+
+void ZDLNameInput::okClick(){
+	QFileInfo selected_file(lfile->text());
+
+    if (selected_file.exists()&&(alllow_dirs||selected_file.isFile())) {
+		if (lname->text().length()) {
+			accept();
+		} else {
+			QMessageBox::warning(this, "ZDL", "Name can't be empty.");
+		}
+	} else {
+		QMessageBox::warning(this, "ZDL", "File path is invalid.");
 	}
 }
 
@@ -92,11 +106,7 @@ void ZDLNameInput::setFilter(const QString &inFilters){
 }
 
 QString ZDLNameInput::getName() {
-	if (lname->text().length() > 0) {
-		return lname->text();
-	} else {
-		return lfile->text();
-	}
+	return lname->text();
 }
 
 QString ZDLNameInput::getFile() {

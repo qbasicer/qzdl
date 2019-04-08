@@ -135,19 +135,15 @@ QStringList ZDLSettingsPane::getFilesMaps(){
 	if (ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration()) {
 		if (ZDLSection *section=zconf->getSection("zdl.save")) {
 			QVector<ZDLLine*> vctr;
-            QRegExp exts("\\.(zip|wad|iwad|pk3|ipk3|pkz|pke)$", Qt::CaseInsensitive);
-
+			
 			section->getRegex("^file[0-9]+$", vctr);
 			if (vctr.size()) {
 				QStringList maps;
 
 				foreach (ZDLLine *line, vctr) {
-					QString file_pth=line->getValue();
-					if (exts.indexIn(file_pth)>-1) {
-						if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(file_pth)) {
-							maps+=mapfile->getMapNames();
-							delete mapfile;
-						}
+					if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(line->getValue())) {
+						maps+=mapfile->getMapNames();
+						delete mapfile;
 					}
 				}
 

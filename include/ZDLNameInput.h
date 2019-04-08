@@ -28,7 +28,7 @@
 class ZDLNameInput: public QDialog{
 	Q_OBJECT
 	public: 
-		ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi);
+		ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs);
 		QString getName();
 		QString getFile();
         void setFilter(const QString &inFilters);
@@ -36,9 +36,11 @@ class ZDLNameInput: public QDialog{
 		void fromUrl(QUrl url);
 	public slots:
 		void browse();
+		void okClick();
 	protected:
 		ZDLFileInfo *zdl_fi;
 		QString last_used_dir;
+		bool alllow_dirs;
 		QLineEdit *lname;
 		QLineEdit *lfile;
         QString filters;
