@@ -266,12 +266,12 @@ void ZDLMainWindow::launch(){
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	} else {
-		QMessageBox::warning(NULL, "ZDL", "Failed to launch the application executable.");
+		QMessageBox::warning(this, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #else
     if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
-		QMessageBox::warning(NULL, "ZDL", "Failed to launch the application executable.");
+		QMessageBox::warning(this, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #endif
