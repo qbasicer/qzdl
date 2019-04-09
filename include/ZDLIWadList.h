@@ -30,7 +30,7 @@ class ZDLIWadList : public ZDLListWidget{
 		virtual void editButton(QListWidgetItem * item);
 		virtual void newDrop(QStringList fileList);
 	protected slots:
-        void wizardAddButton();
+		void wizardAddButton();
 };
 
 #endif

@@ -22,7 +22,7 @@
 #include "ZDLConfigurationManager.h"
 
 ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs):
-    QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs)
+	QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs)
 {
 	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);
@@ -66,7 +66,7 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 }
 
 void ZDLNameInput::browse(){
-    QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filters);
+	QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filters);
 	if (!fileName.isEmpty()) {
 		lfile->setText(QFD_QT_SEP(fileName));
 		if (zdl_fi) {
@@ -79,7 +79,7 @@ void ZDLNameInput::browse(){
 void ZDLNameInput::okClick(){
 	QFileInfo selected_file(lfile->text());
 
-    if (selected_file.exists()&&(alllow_dirs||selected_file.isFile())) {
+	if (selected_file.exists()&&(alllow_dirs||selected_file.isFile())) {
 		if (lname->text().length()) {
 			accept();
 		} else {

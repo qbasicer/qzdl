@@ -270,7 +270,7 @@ void ZDLMainWindow::launch(){
 		no_err=false;
 	}
 #else
-    if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
+	if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
 		QMessageBox::warning(this, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
@@ -315,35 +315,35 @@ QString QuoteParam(const QString& param)
 	//Based on "Everyone quotes command line arguments the wrong way" by Daniel Colascione
 	//http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
 
-    if (!param.isEmpty()&&param.indexOf(QRegExp("[\\s\"]"))<0) {
-        return param;
-    } else {
-        QString qparam('"');
+	if (!param.isEmpty()&&param.indexOf(QRegExp("[\\s\"]"))<0) {
+		return param;
+	} else {
+		QString qparam('"');
 
-        for (QString::const_iterator it=param.constBegin();; it++) {
-            int backslash_count=0;
+		for (QString::const_iterator it=param.constBegin();; it++) {
+			int backslash_count=0;
 
-            while (it!=param.constEnd()&&*it=='\\') {
-                it++;
-                backslash_count++;
-            }
+			while (it!=param.constEnd()&&*it=='\\') {
+				it++;
+				backslash_count++;
+			}
 
-            if (it==param.constEnd()) {
-                qparam.append(QString(backslash_count*2, '\\'));
-                break;
-            } else if (*it==L'"') {
-                qparam.append(QString(backslash_count*2+1, '\\'));
-                qparam.append(*it);
-            } else {
-                qparam.append(QString(backslash_count, '\\'));
-                qparam.append(*it);
-            }
-        }
+			if (it==param.constEnd()) {
+				qparam.append(QString(backslash_count*2, '\\'));
+				break;
+			} else if (*it==L'"') {
+				qparam.append(QString(backslash_count*2+1, '\\'));
+				qparam.append(*it);
+			} else {
+				qparam.append(QString(backslash_count, '\\'));
+				qparam.append(*it);
+			}
+		}
 
-        qparam.append('"');
+		qparam.append('"');
 
 		return qparam;
-    }
+	}
 }
 
 QString ExpandEnvironmentStringsWrapper(QString &args)
@@ -470,10 +470,10 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 		deh_last+=3;
 	} while (deh_last<=4);
 
-    foreach (const QString &str, autoexecs) {
+	foreach (const QString &str, autoexecs) {
 		args.append(" +exec ");
 		args.append(QuoteParam(IF_NATIVE_SEP(str)));
-    }
+	}
 
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");
@@ -576,19 +576,19 @@ QStringList ZDLMainWindow::getArgumentsList()
 
 QStringList ParseParams(const QString& params)
 {
-    QStringList plist;
-    
+	QStringList plist;
+	
 	wordexp_t result;
 
 	switch (wordexp(qPrintable(params), &result, 0)) {
 		case 0:
-            for (size_t i=0; i<result.we_wordc; i++)
+			for (size_t i=0; i<result.we_wordc; i++)
 				plist<<result.we_wordv[i];
 		case WRDE_NOSPACE:	//If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
 			wordfree (&result);
 	}
 
-    return plist;
+	return plist;
 }
 
 QStringList ZDLMainWindow::getArgumentsList()
@@ -686,9 +686,9 @@ QStringList ZDLMainWindow::getArgumentsList()
 		deh_last+=3;
 	} while (deh_last<=4);
 
-    foreach (const QString &str, autoexecs) {
+	foreach (const QString &str, autoexecs) {
 		args<<"+exec"<<str;
-    }
+	}
 
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");

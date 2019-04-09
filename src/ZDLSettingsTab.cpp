@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchClose = new QCheckBox("Close on launch",this);
 	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
-    showPaths = new QCheckBox("Show file paths in lists",this);
+	showPaths = new QCheckBox("Show file paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
 	connect(showPaths,SIGNAL(stateChanged(int)),this,SLOT(pathToggled(int)));
 	sections->addWidget(alwaysArgs);
@@ -86,8 +86,8 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
-    savePaths = new QCheckBox("Remember external file list", this);
-    savePaths->setToolTip("Save external file list on exit and load it on next program launch");
+	savePaths = new QCheckBox("Remember external file list", this);
+	savePaths->setToolTip("Save external file list on exit and load it on next program launch");
 
 	sections->addLayout(fileassoc);
 	sections->addWidget(split);

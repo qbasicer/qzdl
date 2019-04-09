@@ -35,43 +35,43 @@ QStringList ZLibPK3::getMapNames()
 	if (mz_zip_reader_init_file(&zip_archive, qPrintable(file), 0)) {
 		if (mz_uint fnum=mz_zip_reader_get_num_files(&zip_archive)) {
 			mz_zip_archive_file_stat file_stat;
-            mz_uint mapinfo_idx;
-            bool mapinfo=false;
-            bool zmapinfo=false;
+			mz_uint mapinfo_idx;
+			bool mapinfo=false;
+			bool zmapinfo=false;
 
 			for (mz_uint i=0; i<fnum; i++) {
 				if (!mz_zip_reader_is_file_a_directory(&zip_archive, i)&&mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) {
 					QFileInfo zname(file_stat.m_filename);
-                    if (!zname.path().compare("maps", Qt::CaseInsensitive)) {
+					if (!zname.path().compare("maps", Qt::CaseInsensitive)) {
 						map_names<<zname.baseName().left(8).toUpper();
-                    } else if (!zname.path().compare(".")) {
-                        if (!mapinfo&&!zmapinfo&&!zname.baseName().compare("mapinfo", Qt::CaseInsensitive)) {
-                            mapinfo=true;
-                            mapinfo_idx=i;
-                        } else if (!zmapinfo&&!zname.baseName().compare("zmapinfo", Qt::CaseInsensitive)) {
-                            zmapinfo=true;
-                            mapinfo_idx=i;
-                        }
-                    }
-                }
+					} else if (!zname.path().compare(".")) {
+						if (!mapinfo&&!zmapinfo&&!zname.baseName().compare("mapinfo", Qt::CaseInsensitive)) {
+							mapinfo=true;
+							mapinfo_idx=i;
+						} else if (!zmapinfo&&!zname.baseName().compare("zmapinfo", Qt::CaseInsensitive)) {
+							zmapinfo=true;
+							mapinfo_idx=i;
+						}
+					}
+				}
 			}
 
-            if (mapinfo||zmapinfo) {
-                size_t buf_len;
-                void *buf;
+			if (mapinfo||zmapinfo) {
+				size_t buf_len;
+				void *buf;
 
-                if ((buf=mz_zip_reader_extract_to_heap(&zip_archive, mapinfo_idx, &buf_len, 0))) {
-                    QByteArray char_buf=QByteArray::fromRawData((const char*)buf, buf_len);
+				if ((buf=mz_zip_reader_extract_to_heap(&zip_archive, mapinfo_idx, &buf_len, 0))) {
+					QByteArray char_buf=QByteArray::fromRawData((const char*)buf, buf_len);
 
-                    foreach (const QString &str, QString(char_buf).split(QRegExp("[\r\n]"), QString::SkipEmptyParts)) {
-                        QRegExp name_re("^\\s*map\\s+([^\\s]+)(\\s+.*)?$", Qt::CaseInsensitive);
-                        if (name_re.indexIn(str)>-1)
-                            map_names<<name_re.cap(1).left(8).toUpper();
-                    }
+					foreach (const QString &str, QString(char_buf).split(QRegExp("[\r\n]"), QString::SkipEmptyParts)) {
+						QRegExp name_re("^\\s*map\\s+([^\\s]+)(\\s+.*)?$", Qt::CaseInsensitive);
+						if (name_re.indexIn(str)>-1)
+							map_names<<name_re.cap(1).left(8).toUpper();
+					}
 
-                    mz_free(buf);
-                }
-            }
+					mz_free(buf);
+				}
+			}
 		}
 
 		mz_zip_reader_end(&zip_archive);

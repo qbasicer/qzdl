@@ -30,7 +30,7 @@ class ZLibPK3: public ZDLMapFile {
 		virtual QString getIwadinfoName();
 		virtual QStringList getMapNames();
 		virtual bool isMAPXX();
-        virtual ~ZLibPK3();
+		virtual ~ZLibPK3();
 };
 
 #endif

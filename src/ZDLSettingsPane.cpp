@@ -162,7 +162,7 @@ bool ZDLSettingsPane::naturalSortLess(const QString &left, const QString &right)
 	//http://www.davekoelle.com/alphanum.html
 	//Released under MIT License (https://opensource.org/licenses/MIT)
 
-    bool mode_letter=true;	//If it's not letter mode, then it's digit mode
+	bool mode_letter=true;	//If it's not letter mode, then it's digit mode
 	QString::const_iterator li=left.begin();
 	QString::const_iterator ri=right.begin();
 	bool l_is_digit, r_is_digit;

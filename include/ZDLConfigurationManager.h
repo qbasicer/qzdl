@@ -93,7 +93,7 @@ signals:
 class EvilValidator: public QValidator {
 	Q_OBJECT
 public:
-    EvilValidator(QObject *parent): QValidator(parent) {}
+	EvilValidator(QObject *parent): QValidator(parent) {}
 	virtual QValidator::State validate(QString &input, int &pos) const;
 };
 

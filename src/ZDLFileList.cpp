@@ -119,16 +119,16 @@ void ZDLFileList::rebuild(){
 void ZDLFileList::addButton()
 {
 	LOGDATAO() << "Adding new file" << endl;
-    QString filters =
-        "Doom resource files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke" QFD_FILTER_DELIM "*.bex" QFD_FILTER_DELIM "*.deh" QFD_FILTER_DELIM "*.cfg);;"
-        "WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
-        "Patch files (*.bex" QFD_FILTER_DELIM "*.deh);;"
-        "Config files (*.cfg);;"
-        "All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
-        "Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
-        "All files (" QFD_FILTER_ALL ")";
+	QString filters =
+		"Doom resource files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke" QFD_FILTER_DELIM "*.bex" QFD_FILTER_DELIM "*.deh" QFD_FILTER_DELIM "*.cfg);;"
+		"WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
+		"Patch files (*.bex" QFD_FILTER_DELIM "*.deh);;"
+		"Config files (*.cfg);;"
+		"All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+		"Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+		"All files (" QFD_FILTER_ALL ")";
 
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add files", getWadLastDir(), filters);
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add files", getWadLastDir(), filters);
 	for(int i = 0; i < fileNames.size(); i++){
 		LOGDATAO() << "Adding file " << fileNames[i] << endl;
 		saveWadLastDir(fileNames[i]);
@@ -154,7 +154,7 @@ void ZDLFileList::editButton(const QList<QListWidgetItem*> &items)
 	QList<QListWidgetItem*> en_items;
 	bool disable_all=true;
 
-    foreach (QListWidgetItem *item, items) {
+	foreach (QListWidgetItem *item, items) {
 		if (!item->font().strikeOut()) {
 			en_items.append(item);
 			disable_all=false;

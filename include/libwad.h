@@ -31,7 +31,7 @@ class DoomWad: public ZDLMapFile {
 		virtual QString getIwadinfoName();
 		virtual QStringList getMapNames();
 		virtual bool isMAPXX();
-        virtual ~DoomWad();
+		virtual ~DoomWad();
 };
 
 #endif

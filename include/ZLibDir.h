@@ -1,6 +1,6 @@
 /*
  * This file is part of qZDL
- * Copyright (C) 2018-2019  Lcferrum
+ * Copyright (C) 2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ class ZLibDir: public ZDLMapFile {
 		virtual QString getIwadinfoName();
 		virtual QStringList getMapNames();
 		virtual bool isMAPXX();
-        virtual ~ZLibDir();
+		virtual ~ZLibDir();
 };
 
 #endif

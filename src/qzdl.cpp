@@ -114,7 +114,7 @@ int main( int argc, char **argv ){
 	QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
 #endif
 
-    QApplication::setGraphicsSystem("native");
+	QApplication::setGraphicsSystem("native");
 	QApplication a( argc, argv );
 	qapp = &a;
 	ZDLConfigurationManager::setArgv(eatenArgs);
@@ -176,11 +176,11 @@ int main( int argc, char **argv ){
 		}
 	}
 
-    if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
-        QDir ini_dir(QFileInfo(ZDLConfigurationManager::getExec()).dir());
-        if (ini_dir.exists("zdl.ini")) {
-            LOGDATA() << "Using zdl.ini at " << ini_dir.filePath("zdl.ini") << endl;
-            ZDLConfigurationManager::setConfigFileName(ini_dir.filePath("zdl.ini"));
+	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
+		QDir ini_dir(QFileInfo(ZDLConfigurationManager::getExec()).dir());
+		if (ini_dir.exists("zdl.ini")) {
+			LOGDATA() << "Using zdl.ini at " << ini_dir.filePath("zdl.ini") << endl;
+			ZDLConfigurationManager::setConfigFileName(ini_dir.filePath("zdl.ini"));
 		}
 	}
 

@@ -25,8 +25,8 @@
 #include "ZLibDir.h"
 
 union magic_t {
-    char n[4];
-    qint32 x;
+	char n[4];
+	qint32 x;
 };
 
 const magic_t iwad_m={'I', 'W', 'A', 'D'};

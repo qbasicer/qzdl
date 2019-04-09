@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class ZDLListWidget: public ZDLWidget{
 		void currentRowChanged(int currentRow);
 	protected slots:
 		void currentItemChangedInternal(QListWidgetItem *current, QListWidgetItem *previous);
-        void currentRowChangedInternal(int currentRow);
+		void currentRowChangedInternal(int currentRow);
 		virtual void addButton();
 		virtual void removeButton();
 		virtual void upButton();

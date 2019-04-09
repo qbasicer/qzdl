@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ ZDLListWidget::ZDLListWidget(ZDLWidget *parent): ZDLWidget(parent) {
 	btnDn = new QPushButton(this);
 	btnDn->setIcon(QPixmap(glyph_down_arr));
 
-    btnAdd->setToolTip("Add items");
+	btnAdd->setToolTip("Add items");
 	btnRem->setToolTip("Remove selected items");
 	btnEdt->setToolTip("Edit selected item");
 	btnUp->setToolTip("Move selected items up");
@@ -273,7 +273,7 @@ void ZDLListWidget::downButton(){
 			pList->setCurrentRow(oldRow+1);
 		}
 	}else if (pList->selectedItems().size() > 1){
-                QList<QListWidgetItem*> items = pList->selectedItems();
+				QList<QListWidgetItem*> items = pList->selectedItems();
 		// Need this check in here to ensure we don't use an invalid index
 		if(items.size() <= 1){
 			return;
@@ -281,24 +281,24 @@ void ZDLListWidget::downButton(){
 
 		sortItemsByRow(pList, items);
 		int max = pList->count();
-                for(int i = 0; i < items.size(); i++) {
-                        QListWidgetItem* item = items[i];
-                        int row = pList->row(item);
+				for(int i = 0; i < items.size(); i++) {
+						QListWidgetItem* item = items[i];
+						int row = pList->row(item);
 			// Make sure we don't run off the end
-                        if(row >= max - 1){
-                                return;
-                        }
-                }
-                for(int i = items.size()-1; i >= 0; i--) {
-                        QListWidgetItem* item = items[i];
-                        int row = pList->row(item);
+						if(row >= max - 1){
+								return;
+						}
+				}
+				for(int i = items.size()-1; i >= 0; i--) {
+						QListWidgetItem* item = items[i];
+						int row = pList->row(item);
 			item = pList->takeItem(row);
-                        pList->insertItem(row + 1, item);
-                }
+						pList->insertItem(row + 1, item);
+				}
 		for(int i = 0; i < items.size(); i++) {
-                        pList->setCurrentItem(items[i], QItemSelectionModel::Select);
-                }
-        }
+						pList->setCurrentItem(items[i], QItemSelectionModel::Select);
+				}
+		}
 }
 
 void ZDLListWidget::editButton(QListWidgetItem * item)
