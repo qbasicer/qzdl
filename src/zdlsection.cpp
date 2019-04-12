@@ -176,6 +176,7 @@ int ZDLSection::streamWrite(QIODevice *stream)
 				LOGDATAO() << "Ignoring FLAG_VIRTUAL and FLAG_TEMP entries" << endl;
 			}
 		}
+		tstream << ENDOFLINE;
 	}
 	READUNLOCK();
 	return 0;
@@ -205,6 +206,8 @@ ZDLLine *ZDLSection::findLine(QString inVar)
 
 int ZDLSection::addLine(QString linedata)
 {
+	if (linedata.isEmpty()) return 0;
+
 	writes++;
 	ZDLLine *newl = new ZDLLine(linedata);
 	WRITELOCK();

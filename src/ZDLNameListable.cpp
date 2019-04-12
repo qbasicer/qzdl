@@ -26,17 +26,9 @@ ZDLNameListable::ZDLNameListable( QListWidget *parent, int type, QString file, Q
 	setFile(file);
 	setDisplayName(name);
 	setName(generateName());
-	ZDLConfigurationEvents* events = ZDLConfigurationManager::getEvents();
-	if(events){
-		connect(events, SIGNAL(newConfiguration(ZDLConf*)), this, SLOT(configurationChanged(ZDLConf*)));
-	}
 }
 
 ZDLNameListable::~ZDLNameListable(){
-}
-
-void ZDLNameListable::configurationChanged(ZDLConf *conf){
-	setName(generateName(conf));
 }
 
 QString ZDLNameListable::getFile(){

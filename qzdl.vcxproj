@@ -135,7 +135,6 @@
   <ItemGroup>
     <ClCompile Include="miniz\miniz.c" />
     <ClCompile Include="moc\moc_ZDLAboutDialog.cpp" />
-    <ClCompile Include="moc\moc_ZDLConfigurationEvents.cpp" />
     <ClCompile Include="moc\moc_ZDLConfigurationManager.cpp" />
     <ClCompile Include="moc\moc_ZDLFileAssociations.cpp" />
     <ClCompile Include="moc\moc_ZDLFileList.cpp" />
@@ -156,7 +155,6 @@
     <ClCompile Include="moc\moc_ZDLWidget.cpp" />
     <ClCompile Include="src\ZDLAboutDialog.cpp" />
     <ClCompile Include="src\ZDLConfiguration.cpp" />
-    <ClCompile Include="src\ZDLConfigurationEvents.cpp" />
     <ClCompile Include="src\ZDLConfigurationManager.cpp" />
     <ClCompile Include="src\ZDLFileAssociations.cpp" />
     <ClCompile Include="src\ZDLFileInfo.cpp" />
@@ -185,7 +183,7 @@
     <ClCompile Include="src\zdlline.cpp" />
     <ClCompile Include="src\zdlsection.cpp" />
     <ClCompile Include="src\ZLibPK3.cpp" />
-	<ClCompile Include="src\ZLibDir.cpp" />
+    <ClCompile Include="src\ZLibDir.cpp" />
     <ClCompile Include="SimpleWFA\SimpleWFA.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,16 +201,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="include\ZDLConfiguration.h" />
-    <CustomBuild Include="include\ZDLConfigurationEvents.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -DNOMINMAX -DWIN32 -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\res\XPM" "-I.\res\Win32" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDLConfigurationEvents.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\moc\moc_%(Filename).cpp"  -D_WINDOWS -D_CRT_SECURE_NO_WARNINGS -D_ZDL_NO_WARNINGS -DWIN32 -DNOMINMAX -DSTATIC -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -D_UNICODE -DUNICODE  "-I.\miniz" "-I.\res\XPM" "-I.\res\Win32" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include" "-I." "-I.\include" "-I.\SimpleWFA" "-I.\moc" "-I$(QTDIR)\mkspecs\default" "-I.\uic" "-I.\rcc"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing ZDLConfigurationEvents.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\moc\moc_%(Filename).cpp;%(Outputs)</Outputs>
-    </CustomBuild>
     <CustomBuild Include="include\ZDLConfigurationManager.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ZDLConfigurationManager.h...</Message>
@@ -403,7 +391,7 @@
     <ClInclude Include="include\zdlline.hpp" />
     <ClInclude Include="include\zdlsection.hpp" />
     <ClInclude Include="include\ZLibPK3.h" />
-	<ClInclude Include="include\ZLibDir.h" />
+    <ClInclude Include="include\ZLibDir.h" />
     <ClInclude Include="SimpleWFA\SimpleWFA.h" />
     <None Include="res\XPM\adown.xpm" />
     <None Include="res\XPM\aup.xpm" />

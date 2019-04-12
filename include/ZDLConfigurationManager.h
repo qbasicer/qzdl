@@ -19,12 +19,11 @@
  
 #ifndef _configurationManger_h_
 #define _configurationManger_h_
+
 #include <QComboBox>
 #include <QValidator>
 #include "ZDLWidget.h"
 #include "ZDLConfiguration.h"
-#include "ZDLConfigurationEvents.h"
-
 #include "zdlcommon.h"
 
 class ZDLConfigurationEvents;
@@ -53,7 +52,6 @@ class ZDLConfigurationManager{
 		static void setArgv(QStringList args);
 		static QString getExec();
 		static void setExec(QString execu);
-		static ZDLConfigurationEvents* getEvents();
 	protected:
 		static QString exec;
 		static QStringList argv;
@@ -63,7 +61,6 @@ class ZDLConfigurationManager{
 		static QString cdir;
 		static ZDLConfiguration *conf;
 		static WhyConfig why;
-		static ZDLConfigurationEvents *events;
 };
 
 QString getLastDir(ZDLConf *zconf=NULL);

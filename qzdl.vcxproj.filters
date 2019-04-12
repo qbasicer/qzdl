@@ -29,9 +29,6 @@
     <ClCompile Include="src\ZDLConfiguration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ZDLConfigurationEvents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ZDLConfigurationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -116,9 +113,6 @@
     <ClCompile Include="moc\moc_ZDLAboutDialog.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="moc\moc_ZDLConfigurationEvents.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="moc\moc_ZDLFileAssociations.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -191,9 +185,6 @@
     <ClInclude Include="include\ZDLConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="include\ZDLConfigurationEvents.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="include\ZDLFileAssociations.h">
       <Filter>Header Files</Filter>
     </CustomBuild>

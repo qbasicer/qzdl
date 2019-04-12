@@ -18,7 +18,6 @@
  */
  
 #include <stdlib.h>
-
 #include "zdlcommon.h"
 #include "ZDLConfigurationManager.h"
 #include "ico_icon.xpm"
@@ -27,7 +26,6 @@ void ZDLConfigurationManager::init(){
 	activeConfig = NULL;
 	cdir = "";
 	conf = new ZDLConfiguration();
-	events = new ZDLConfigurationEvents();
 }
 
 ZDLConf *ZDLConfigurationManager::activeConfig;
@@ -38,11 +36,6 @@ ZDLConfiguration *ZDLConfigurationManager::conf;
 ZDLConfigurationManager::WhyConfig ZDLConfigurationManager::why;
 QStringList ZDLConfigurationManager::argv;
 QString ZDLConfigurationManager::exec;
-ZDLConfigurationEvents* ZDLConfigurationManager::events;
-
-ZDLConfigurationEvents* ZDLConfigurationManager::getEvents(){
-	return ZDLConfigurationManager::events;
-}
 
 void ZDLConfigurationManager::setExec(QString execu){
 	ZDLConfigurationManager::exec = execu;
@@ -79,7 +72,6 @@ ZDLWidget* ZDLConfigurationManager::getInterface(){
 void ZDLConfigurationManager::setActiveConfiguration(ZDLConf *zconf){
 	//cout << "Using new configuration" << endl;
 	ZDLConfigurationManager::activeConfig = zconf;
-	events->signalNewConfiguration(zconf);
 }
 
 ZDLConf* ZDLConfigurationManager::getActiveConfiguration(){

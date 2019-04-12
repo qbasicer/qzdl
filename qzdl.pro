@@ -59,7 +59,6 @@ HEADERS += \
     include/zdlsection.hpp \
     include/ZLibPK3.h \
     include/ZDLAboutDialog.h \
-    include/ZDLConfigurationEvents.h \
     include/ZDLConfigurationManager.h \
     include/ZDLFileList.h \
     include/ZDLFilePane.h \
@@ -81,7 +80,6 @@ SOURCES += \
     miniz/miniz.c \
     src/ZDLAboutDialog.cpp \
     src/ZDLConfiguration.cpp \
-    src/ZDLConfigurationEvents.cpp \
     src/ZDLConfigurationManager.cpp \
     src/ZDLFileInfo.cpp \
     src/ZDLFileList.cpp \
