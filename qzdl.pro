@@ -1,6 +1,5 @@
 # This file is part of qZDL
-# Copyright (C) 2007-2010  Cody Harris
-# Copyright (C) 2018-2019  Lcferrum
+# Copyright (C) 2019  Lcferrum
 #
 # qZDL is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,6 +57,7 @@ HEADERS += \
     include/zdlline.hpp \
     include/zdlsection.hpp \
     include/ZLibPK3.h \
+    include/ZLibDir.h \
     include/ZDLAboutDialog.h \
     include/ZDLConfigurationManager.h \
     include/ZDLFileList.h \
@@ -106,6 +106,7 @@ SOURCES += \
     src/zdlconf.cpp \
     src/zdlline.cpp \
     src/zdlsection.cpp \
+    src/ZLibDir.cpp \
     src/ZLibPK3.cpp
 OTHER_FILES += \
     res/XPM/adown.xpm \

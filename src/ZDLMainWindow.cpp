@@ -346,7 +346,7 @@ QString QuoteParam(const QString& param)
 	}
 }
 
-QString ExpandEnvironmentStringsWrapper(QString &args)
+QString ExpandEnvironmentStringsWrapper(QString args)
 {
 	wchar_t dummy_buf;
 
