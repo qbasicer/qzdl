@@ -5,6 +5,9 @@
 moc/
 rcc/
 uic/
+*.Release
+*.Debug
+Makefile
 
 # User-specific files
 *.suo
