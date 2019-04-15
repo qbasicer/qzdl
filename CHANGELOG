@@ -3,6 +3,7 @@
 	* Release 3-1.1
 	* Fixed:
 		- Passing explicit params to source port binary on Linux
+		- Inability to type in file path in savegame selection combobox
 	* Changed:
 		- Improved map scanning algorithm
 		- If error occured during launch, 'close on launch' is ignored
@@ -13,7 +14,9 @@
 		- Folders are now also scanned for maps
 		- Backward compatibility with '-warp' parameter - useful for ports that doesn't support '+map'
 		- More file extensions are added to the file dialog filters and available file associations
-		- More known IWADs and source ports are added to auto detect algorithm
+		- More known IWADs and source ports are added to auto detect algorithms
+	* Removed:
+		- Removed PWADs from WAD detection algorithm
 
 2019-02-05  Lcferrum <lcferrum@yandex.com>
 
