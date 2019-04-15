@@ -19,17 +19,11 @@
  
 #ifndef _configurationManger_h_
 #define _configurationManger_h_
-#include <iostream>
-#include <list>
-#include <string>
+
 #include <QComboBox>
 #include <QValidator>
 #include "ZDLWidget.h"
 #include "ZDLConfiguration.h"
-#include "ZDLConfigurationEvents.h"
-
-using namespace std;
-
 #include "zdlcommon.h"
 
 class ZDLConfigurationEvents;
@@ -58,7 +52,6 @@ class ZDLConfigurationManager{
 		static void setArgv(QStringList args);
 		static QString getExec();
 		static void setExec(QString execu);
-		static ZDLConfigurationEvents* getEvents();
 	protected:
 		static QString exec;
 		static QStringList argv;
@@ -68,7 +61,6 @@ class ZDLConfigurationManager{
 		static QString cdir;
 		static ZDLConfiguration *conf;
 		static WhyConfig why;
-		static ZDLConfigurationEvents *events;
 };
 
 QString getLastDir(ZDLConf *zconf=NULL);
@@ -98,7 +90,7 @@ signals:
 class EvilValidator: public QValidator {
 	Q_OBJECT
 public:
-    EvilValidator(QObject *parent): QValidator(parent) {}
+	EvilValidator(QObject *parent): QValidator(parent) {}
 	virtual QValidator::State validate(QString &input, int &pos) const;
 };
 

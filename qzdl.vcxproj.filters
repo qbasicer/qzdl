@@ -29,16 +29,7 @@
     <ClCompile Include="src\ZDLConfiguration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ZDLConfigurationEvents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ZDLConfigurationManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZDLDMFlagCheckbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZDLDMFlagManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ZDLFileAssociations.cpp">
@@ -101,15 +92,6 @@
     <ClCompile Include="src\ZDLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ZDMFlagDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZDMFlagPicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\extras.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\libwad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,22 +107,10 @@
     <ClCompile Include="src\zdlsection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\zdlvariables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SimpleWFA\SimpleWFA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="moc\moc_ZDLAboutDialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDLConfigurationEvents.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDLDMFlagCheckbox.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDLDMFlagManager.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="moc\moc_ZDLFileAssociations.cpp">
@@ -185,12 +155,6 @@
     <ClCompile Include="moc\moc_ZDLWidget.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="moc\moc_ZDMFlagDialog.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="moc\moc_ZDMFlagPicker.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="moc\moc_ZDLFileList.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -212,21 +176,15 @@
     <ClCompile Include="src\ZLibPK3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ZLibDir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <CustomBuild Include="include\ZDLAboutDialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <ClInclude Include="include\ZDLConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="include\ZDLConfigurationEvents.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagCheckbox.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDLDMFlagManager.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="include\ZDLFileAssociations.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -281,12 +239,6 @@
     <CustomBuild Include="include\ZDLWidget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagDialog.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="include\ZDMFlagPicker.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <ClInclude Include="include\libwad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -302,9 +254,6 @@
     <ClInclude Include="include\zdlsection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\zdlvariables.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="res\Win32\resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -318,6 +267,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ZLibPK3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ZLibDir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="include\ZDLFileList.h">

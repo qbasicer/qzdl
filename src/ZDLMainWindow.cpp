@@ -17,24 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <QtGui>
 #include <QRegExp>
-#include <QApplication>
 #include <QMainWindow>
 
 #include "ZDLInterface.h"
 #include "ZDLMainWindow.h"
 #include "ZDLConfigurationManager.h"
 #include "ZDLImportDialog.h"
+#include "ZDLMapFile.h"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
 #else
 #include <wordexp.h>
 #endif
-
-extern QApplication *qapp;
 
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
@@ -252,7 +249,7 @@ void ZDLMainWindow::launch(){
 
 	QString exec=getExecutable();
 	if (exec.length() < 1){
-		QMessageBox::critical(this, "ZDL", "Please select a source port");
+		QMessageBox::warning(this, "ZDL", "Please select a source port.");
 		return;
 	}
 	QFileInfo exec_fi(exec);
@@ -269,12 +266,12 @@ void ZDLMainWindow::launch(){
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	} else {
-		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::warning(this, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #else
-	if (QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
-		QMessageBox::warning(NULL, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+	if (!QProcess::startDetached(exec_fi.absoluteFilePath(), getArgumentsList(), exec_fi.absolutePath())) {
+		QMessageBox::warning(this, "ZDL", "Failed to launch the application executable.");
 		no_err=false;
 	}
 #endif
@@ -287,6 +284,30 @@ void ZDLMainWindow::launch(){
 	}
 }
 
+QStringList WarpBackwardCompat(const QString& iwad_path, const QString& map_name)
+{
+	if (iwad_path.length()) {
+		bool iwad_mapxx=false;
+
+		if (ZDLMapFile *mapfile=ZDLMapFile::getMapFile(iwad_path)) {
+			iwad_mapxx=mapfile->isMAPXX();
+			delete mapfile;
+		}
+
+		if (iwad_mapxx) {
+			QRegExp mapxx_re("^MAP(\\d\\d)$", Qt::CaseInsensitive);
+			if (mapxx_re.indexIn(map_name)>-1)
+				return QStringList()<<"-warp"<<mapxx_re.cap(1);
+		} else {
+			QRegExp exmy_re("^E(\\d)M([1-9])$", Qt::CaseInsensitive);
+			if (exmy_re.indexIn(map_name)>-1)
+				return QStringList()<<"-warp"<<exmy_re.cap(1)<<exmy_re.cap(2);
+		}
+	}
+
+	return QStringList();
+}
+
 #ifdef Q_WS_WIN
 
 QString QuoteParam(const QString& param)
@@ -294,38 +315,38 @@ QString QuoteParam(const QString& param)
 	//Based on "Everyone quotes command line arguments the wrong way" by Daniel Colascione
 	//http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
 
-    if (!param.isEmpty()&&param.indexOf(QRegExp("[\\s\"]"))<0) {
-        return param;
-    } else {
-        QString qparam('"');
+	if (!param.isEmpty()&&param.indexOf(QRegExp("[\\s\"]"))<0) {
+		return param;
+	} else {
+		QString qparam('"');
 
-        for (QString::const_iterator it=param.constBegin();; it++) {
-            int backslash_count=0;
+		for (QString::const_iterator it=param.constBegin();; it++) {
+			int backslash_count=0;
 
-            while (it!=param.constEnd()&&*it=='\\') {
-                it++;
-                backslash_count++;
-            }
+			while (it!=param.constEnd()&&*it=='\\') {
+				it++;
+				backslash_count++;
+			}
 
-            if (it==param.constEnd()) {
-                qparam.append(QString(backslash_count*2, '\\'));
-                break;
-            } else if (*it==L'"') {
-                qparam.append(QString(backslash_count*2+1, '\\'));
-                qparam.append(*it);
-            } else {
-                qparam.append(QString(backslash_count, '\\'));
-                qparam.append(*it);
-            }
-        }
+			if (it==param.constEnd()) {
+				qparam.append(QString(backslash_count*2, '\\'));
+				break;
+			} else if (*it==L'"') {
+				qparam.append(QString(backslash_count*2+1, '\\'));
+				qparam.append(*it);
+			} else {
+				qparam.append(QString(backslash_count, '\\'));
+				qparam.append(*it);
+			}
+		}
 
-        qparam.append('"');
+		qparam.append('"');
 
 		return qparam;
-    }
+	}
 }
 
-QString ExpandEnvironmentStringsWrapper(QString &args)
+QString ExpandEnvironmentStringsWrapper(QString args)
 {
 	wchar_t dummy_buf;
 
@@ -355,14 +376,10 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	ZDLSection *section = NULL;
 
 	QString iwadName = zconf->getValue("zdl.save", "iwad");
-
-	if (iwadName.isEmpty()) {
-		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-		return args;
-	}
+	QString iwadPath;
 
 	section = zconf->getSection("zdl.iwads");
-	if (section){
+	if (section&&iwadName.length()){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+n$", fileVctr);
 
@@ -376,8 +393,9 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 					var = QString("i") + var + QString("f");
 					section->getRegex("^" + var + "$",nameVctr);
 					if(nameVctr.size() == 1){
+						iwadPath=nameVctr[0]->getValue();
 						args.append("-iwad ");
-						args.append(QuoteParam(IF_NATIVE_SEP(nameVctr[0]->getValue())));
+						args.append(QuoteParam(IF_NATIVE_SEP(iwadPath)));
 					}
 				}
 			}
@@ -390,8 +408,16 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
-		args.append(" +map ");
-		args.append(QuoteParam(zconf->getValue("zdl.save", "warp")));
+		QString map_arg=zconf->getValue("zdl.save", "warp");
+		QStringList warp_args=WarpBackwardCompat(iwadPath, map_arg);
+
+		if (warp_args.length()) {
+			args.append(' ');
+			args.append(warp_args.join(" "));
+		} else {
+			args.append(" +map ");
+			args.append(QuoteParam(map_arg));
+		}
 	}
 
 	section = zconf->getSection("zdl.save");
@@ -444,10 +470,10 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 		deh_last+=3;
 	} while (deh_last<=4);
 
-    foreach (const QString &str, autoexecs) {
+	foreach (const QString &str, autoexecs) {
 		args.append(" +exec ");
 		args.append(QuoteParam(IF_NATIVE_SEP(str)));
-    }
+	}
 
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");
@@ -538,7 +564,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	}
 
 	LOGDATAO() << "args: " << args << endl;
-	return args;
+	return args.trimmed();
 }
 
 QStringList ZDLMainWindow::getArgumentsList()
@@ -550,19 +576,19 @@ QStringList ZDLMainWindow::getArgumentsList()
 
 QStringList ParseParams(const QString& params)
 {
-    QStringList plist;
-    
+	QStringList plist;
+	
 	wordexp_t result;
 
 	switch (wordexp(qPrintable(params), &result, 0)) {
 		case 0:
-			for (int i=0; i<result.we_wordc; i++)
+			for (size_t i=0; i<result.we_wordc; i++)
 				plist<<result.we_wordv[i];
 		case WRDE_NOSPACE:	//If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
 			wordfree (&result);
 	}
 
-    return plist;
+	return plist;
 }
 
 QStringList ZDLMainWindow::getArgumentsList()
@@ -572,15 +598,11 @@ QStringList ZDLMainWindow::getArgumentsList()
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = NULL;
 
+	QString iwadPath;
 	QString iwadName = zconf->getValue("zdl.save", "iwad");
 
-	if (iwadName.isEmpty()) {
-		QMessageBox::critical(this, "ZDL", "Please select an IWAD");
-		return args;
-	}
-
 	section = zconf->getSection("zdl.iwads");
-	if (section){
+	if (section&&iwadName.length()){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^i[0-9]+n$", fileVctr);
 
@@ -594,7 +616,8 @@ QStringList ZDLMainWindow::getArgumentsList()
 					var = QString("i") + var + QString("f");
 					section->getRegex("^" + var + "$",nameVctr);
 					if(nameVctr.size() == 1){
-						args<<"-iwad"<<nameVctr[0]->getValue();
+						iwadPath=nameVctr[0]->getValue();
+						args<<"-iwad"<<iwadPath;
 					}
 				}
 			}
@@ -606,7 +629,14 @@ QStringList ZDLMainWindow::getArgumentsList()
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
-		args<<"+map"<<zconf->getValue("zdl.save", "warp");
+		QString map_arg=zconf->getValue("zdl.save", "warp");
+		QStringList warp_args=WarpBackwardCompat(iwadPath, map_arg);
+
+		if (warp_args.length()) {
+			args<<warp_args;
+		} else {
+			args<<"+map"<<map_arg;
+		}
 	}
 
 	section = zconf->getSection("zdl.save");
@@ -656,9 +686,9 @@ QStringList ZDLMainWindow::getArgumentsList()
 		deh_last+=3;
 	} while (deh_last<=4);
 
-    foreach (const QString &str, autoexecs) {
+	foreach (const QString &str, autoexecs) {
 		args<<"+exec"<<str;
-    }
+	}
 
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");

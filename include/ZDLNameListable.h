@@ -31,8 +31,6 @@ class ZDLNameListable : public ZDLListable{
 		QString getName();
 		void setDisplayName(QString name);
 		void setFile(QString file);
-	protected slots:
-		void configurationChanged(ZDLConf *conf);
 	protected:
 		QString generateName();
 		QString generateName(ZDLConf *zconf);

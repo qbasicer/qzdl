@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,36 +22,33 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
 #include "ZDLFileInfo.h"
-#include "gph_dps.xpm"
+#include "gph_ast.xpm"
 
-#include <cstdio>
-#include <iostream>
-using namespace std;
+#if defined(Q_WS_WIN)
+	const QString src_filters = "Executables (*.exe);;All files (*.*)";
+#elif defined(Q_WS_MAC)
+	const QString src_filters = "Applications (*.app);;All files (*)";
+#else
+	const QString src_filters = "All files (*)";
+#endif
 
 ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
-	QPushButton *btnMassAdd = new QPushButton(this);
-	btnMassAdd->setIcon(QPixmap(glyph_dbl_plus));
-	btnMassAdd->setToolTip("Add items");
-	buttonRow->insertWidget(0, btnMassAdd);
+	QPushButton *btnWizardAdd = new QPushButton(this);
+	btnWizardAdd->setIcon(QPixmap(glyph_asterisk));
+	btnWizardAdd->setToolTip("Add and name item");
+	buttonRow->insertWidget(0, btnWizardAdd);
 
-	QObject::connect(btnMassAdd, SIGNAL(clicked()), this, SLOT(massAddButton()));
+	QObject::connect(btnWizardAdd, SIGNAL(clicked()), this, SLOT(wizardAddButton()));
 }
 
-void ZDLSourcePortList::massAddButton(){
-	LOGDATAO() << "Adding new source ports" << endl;
-	QStringList filters;
-#if defined(Q_WS_WIN)
-	filters << "Executables (*.exe)";
-#elif defined(Q_WS_MAC)
-	filters << "Applications (*.app)";
-#endif
-	filters << "All files (*.*)";
-
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), filters.join(";;"));
-	for(int i = 0; i < fileNames.size(); i++){
-		LOGDATAO() << "Adding file " << fileNames[i] << endl;
-		saveSrcLastDir(fileNames[i]);
-		insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
+void ZDLSourcePortList::wizardAddButton(){
+	ZDLAppInfo zdl_fi;
+	ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false);
+	diag.setWindowTitle("Add source port");
+	diag.setFilter(src_filters);
+	if (diag.exec()){
+		saveSrcLastDir(diag.getFile());
+		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
 	}
 }
 
@@ -108,41 +105,23 @@ void ZDLSourcePortList::newDrop(QStringList fileList){
 
 
 void ZDLSourcePortList::addButton(){
-	QStringList filters;
-#if defined(Q_WS_WIN)
-	filters << "Executables (*.exe)";
-#elif defined(Q_WS_MAC)
-	filters << "Applications (*.app)";
-#endif
-	filters << "All files (*.*)";
-	
-	ZDLAppInfo zdl_fi;
-	ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
-	diag.setWindowTitle("Add source port");
-	diag.setFilter(filters);
-	if (diag.exec()){
-		saveSrcLastDir(diag.getFile());
-		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
+	LOGDATAO() << "Adding new source ports" << endl;
+
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add source ports", getSrcLastDir(), src_filters);
+	for(int i = 0; i < fileNames.size(); i++){
+		LOGDATAO() << "Adding file " << fileNames[i] << endl;
+		saveSrcLastDir(fileNames[i]);
+		insert(new ZDLNameListable(pList, 1001, QFD_QT_SEP(fileNames[i]), ZDLAppInfo(fileNames[i]).GetFileDescription()), -1);
 	}
-	
-	
 }
 
 void ZDLSourcePortList::editButton(QListWidgetItem * item){
 	if (item){
-		QStringList filters;
-#if defined(Q_WS_WIN)
-		filters << "Executables (*.exe)";
-#elif defined(Q_WS_MAC)
-		filters << "Applications (*.app)";
-#endif
-		filters << "All files (*.*)";
-
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLAppInfo zdl_fi;
-		ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi);
-		diag.setWindowTitle("Add source port");
-		diag.setFilter(filters);
+		ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false);
+		diag.setWindowTitle("Edit source port");
+		diag.setFilter(src_filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){
 			saveSrcLastDir(diag.getFile());

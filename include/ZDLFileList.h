@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,13 @@ class ZDLFileList : public ZDLListWidget{
 		ZDLFileList(ZDLWidget *parent);
 	protected:
 		virtual void editButton(QListWidgetItem * item);
+		virtual void editButton(const QList<QListWidgetItem*> &items);
 		virtual void editButton();
 		virtual void addButton();
 		virtual void rebuild();
 		virtual void newConfig();
 		virtual void newDrop(QStringList fileList);
+		bool basic_fileopendialog;
 	protected slots:
 		void folderButton();
 };

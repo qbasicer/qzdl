@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,9 @@
 #include <QtGui>
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
-#include <string>
 
-ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi):
-	QDialog(parent), last_used_dir(last_used_dir), zdl_fi(zdl_fi)
+ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs):
+	QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs)
 {
 	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);
@@ -62,19 +61,32 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 	resize(350, sizeHint().height());
 	
 	connect(btnBrowse, SIGNAL(clicked()), this, SLOT(browse()));
-	connect(btnOK, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(btnOK, SIGNAL(clicked()), this, SLOT(okClick()));
 	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 void ZDLNameInput::browse(){
-	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filter);
+	QString fileName = QFileDialog::getOpenFileName(this, "Add file", last_used_dir, filters);
 	if (!fileName.isEmpty()) {
-		lfile->setText(fileName);
+		lfile->setText(QFD_QT_SEP(fileName));
 		if (zdl_fi) {
 			zdl_fi->setFile(fileName);
 			lname->setText(zdl_fi->GetFileDescription());
 		}
+	}
+}
+
+void ZDLNameInput::okClick(){
+	QFileInfo selected_file(lfile->text());
+
+	if (selected_file.exists()&&(alllow_dirs||selected_file.isFile())) {
+		if (lname->text().length()) {
+			accept();
+		} else {
+			QMessageBox::warning(this, "ZDL", "Name can't be empty.");
+		}
+	} else {
+		QMessageBox::warning(this, "ZDL", "File path is invalid.");
 	}
 }
 
@@ -89,16 +101,12 @@ void ZDLNameInput::basedOff(ZDLNameListable *listable){
 	}
 }
 
-void ZDLNameInput::setFilter(QStringList inFilters){
+void ZDLNameInput::setFilter(const QString &inFilters){
 	filters = inFilters;
 }
 
 QString ZDLNameInput::getName() {
-	if (lname->text().length() > 0) {
-		return lname->text();
-	} else {
-		return lfile->text();
-	}
+	return lname->text();
 }
 
 QString ZDLNameInput::getFile() {

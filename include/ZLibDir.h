@@ -1,6 +1,6 @@
 /*
  * This file is part of qZDL
- * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,31 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#include "ZDLDMFlagCheckbox.h"
 
-ZDLDMFlagCheckbox::ZDLDMFlagCheckbox(int dmvalue, int highOn, QString text, QWidget *parent):QCheckBox(text,parent){
-	logic = highOn;
-	value = dmvalue;
-	setValue(0);
-}
+#ifndef _ZLIBDIR_H_
+#define _ZLIBDIR_H_
 
-void ZDLDMFlagCheckbox::setValue(int value){
-	int msk = value & this->value;
-	if(logic && msk){
-		setCheckState(Qt::Checked);
-	}else if(!logic && !msk){
-		setCheckState(Qt::Checked);
-	}else{
-		setCheckState(Qt::Unchecked);
-	}
-}
+#include <QtCore>
+#include "ZDLMapFile.h"
 
-int ZDLDMFlagCheckbox::getValue(){
-	if(checkState() == Qt::Checked && logic){
-		return value;
-	}else if(checkState() == Qt::Unchecked && !logic){
-		return value;
-	}
-	return 0;
-}
+class ZLibDir: public ZDLMapFile {
+	private:
+		QString file;
+	public:
+		ZLibDir(const QString &file);
+		virtual QString getIwadinfoName();
+		virtual QStringList getMapNames();
+		virtual bool isMAPXX();
+		virtual ~ZLibDir();
+};
+
+#endif

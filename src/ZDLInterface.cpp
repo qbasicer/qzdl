@@ -30,7 +30,6 @@
 #include "ZDLFilePane.h"
 #include "ZDLSettingsPane.h"
 #include "ZDLQSplitter.h"
-#include "ZDMFlagPicker.h"
 
 #include "gph_dnt.xpm"
 #include "gph_upt.xpm"
@@ -201,8 +200,11 @@ QLayout *ZDLInterface::getButtonPane(){
 	
 	btnExit->setMinimumHeight(26);
 	btnZDL->setMinimumHeight(26);
-	btnEpr->setMinimumHeight(26);
 	btnLaunch->setMinimumHeight(26);
+	//26 is a cherry-picked value for Win32 system font
+	//On other OSes we can have fonts with greater sizes so text buttons will be taller than 26 but glyph button will remain the same
+	//To accomodate this, we set minimum height for glyph button dynamically
+	btnEpr->setMinimumHeight(btnLaunch->sizeHint().height());
 
 	connect(btnLaunch, SIGNAL( clicked() ), this, SLOT(launch()));
 
@@ -223,14 +225,11 @@ void ZDLInterface::clearAllPWads(){
 	mw->writeConfig();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	ZDLSection *section = zconf->getSection("zdl.save");
-	if(!section){
-		return;
-	}
-	for(int i = 0; i < section->lines.size(); i++){
-		if(section->lines[i]->getVariable().startsWith("file", Qt::CaseInsensitive)){
-			ZDLLine *line = section->lines[i];
-			section->lines.remove(i--);
-			delete line;
+	if (section){
+		QVector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+d?$", vctr);
+		for(int i = 0; i < vctr.size(); i++){
+			zconf->deleteValue("zdl.save", vctr[i]->getVariable());
 		}
 	}
 	mw->startRead();
@@ -259,12 +258,6 @@ void ZDLInterface::clearAllFields(){
 	zconf->deleteSectionByName("zdl.save");
 	mw->startRead();
 	LOGDATAO() << "Complete" << endl;
-}
-
-void ZDLInterface::showNewDMFlagger(){
-	LOGDATAO() << "New DMFlag picker" << endl;
-	ZDMFlagPicker dialog(this);
-	dialog.exec();
 }
 
 void ZDLInterface::launch(){
@@ -324,13 +317,12 @@ void ZDLInterface::saveConfigFile(){
 	LOGDATAO() << "Saving config file" << endl;
 	sendSignals();
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	QStringList filters;
-	filters << "INI files (*.ini)"
-		<< "All files (*.*)";
+	QString filters =
+		"INI files (*.ini);;"
+		"All files (" QFD_FILTER_ALL ")";
 
-	QString filter = filters.join(";;");
 	QString lastDir = getIniLastDir(zconf);
-	QString fileName = QFileDialog::getSaveFileName(this, "Save configuration", lastDir, filter);
+	QString fileName = QFileDialog::getSaveFileName(this, "Save configuration", lastDir, filters);
 
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		QFileInfo fi(fileName);
@@ -348,19 +340,17 @@ void ZDLInterface::saveConfigFile(){
 void ZDLInterface::loadConfigFile(){
 	LOGDATAO() << "Loading config file" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
-	QString filter;
-	QStringList filters;
-	
-	filters << "INI files (*.ini)"
-		<< "All files (*.*)";
-	filter = filters.join(";;");
+	QString filters =
+		"INI files (*.ini);;"
+		"All files (" QFD_FILTER_ALL ")";
+
 	QString lastDir = getIniLastDir(zconf);
-	QString fileName = QFileDialog::getOpenFileName(this, "Load configuration", lastDir, filter);
+	QString fileName = QFileDialog::getOpenFileName(this, "Load configuration", lastDir, filters);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		QFileInfo fi(fileName);
-                if(!fi.fileName().contains(".")){
-                        fileName += ".ini";
-                }
+				if(!fi.fileName().contains(".")){
+						fileName += ".ini";
+				}
 		delete zconf;
 		ZDLConf* tconf = new ZDLConf();
 		ZDLConfigurationManager::setConfigFileName(fileName);
@@ -375,11 +365,11 @@ void ZDLInterface::loadConfigFile(){
 
 void ZDLInterface::loadZdlFile(){
 	LOGDATAO() << "Loading ZDL file" << endl;
-	QStringList filters;
-	QString filter;
-	filters << "ZDL files (*.zdl)" << "All files (*.*)";
-	filter = filters.join(";;");
-	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", getZdlLastDir(), filter);
+	QString filters =
+		"ZDL files (*.zdl);;"
+		"All files (" QFD_FILTER_ALL ")";
+
+	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", getZdlLastDir(), filters);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		for(int i = 0; i < current->sections.size(); i++){
@@ -408,10 +398,11 @@ void ZDLInterface::loadZdlFile(){
 void ZDLInterface::saveZdlFile(){
 	LOGDATAO() << "Saving ZDL File" << endl;
 	sendSignals();
-	QStringList filters;
-	filters << "ZDL files (*.zdl)" << "All files (*.*)";
-	QString filter = filters.join(";;");
-	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", getZdlLastDir(), filter);
+	QString filters =
+		"ZDL files (*.zdl);;"
+		"All files (" QFD_FILTER_ALL ")";
+
+	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", getZdlLastDir(), filters);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		ZDLConf *current = ZDLConfigurationManager::getActiveConfiguration();
 		ZDLConf *copy = new ZDLConf();
@@ -451,9 +442,12 @@ void ZDLInterface::showCommandline(){
 	QMessageBox msgBox(this);
 	msgBox.setWindowTitle("Command line and environment");
 	QString dwd;
+	QString args=mw->getArgumentsString();
+	if (args.length())
+		args="\n\nArguments: "+args;
 	if (QProcessEnvironment::systemEnvironment().contains("DOOMWADDIR"))
 		dwd="\n\nDOOMWADDIR: "+QDir::fromNativeSeparators(QProcessEnvironment::systemEnvironment().value("DOOMWADDIR"));
-	msgBox.setText("Executable: "+exec_fi.fileName()+"\n\nArguments: "+mw->getArgumentsString()+"\n\nWorking directory: "+exec_fi.canonicalPath()+dwd);
+	msgBox.setText("Executable: "+exec_fi.fileName()+args+"\n\nWorking directory: "+exec_fi.canonicalPath()+dwd);
 	msgBox.setStandardButtons(QMessageBox::Cancel);
 	QPushButton *launch_btn=msgBox.addButton("Execute", QMessageBox::AcceptRole);
 	msgBox.setDefaultButton(launch_btn);

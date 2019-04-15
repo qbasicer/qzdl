@@ -1,3 +1,20 @@
+2019-XX-XX  Lcferrum <lcferrum@yandex.com>
+
+	* Release 3-1.1
+	* Fixed:
+		- Passing explicit params to source port binary on Linux
+	* Changed:
+		- Improved map scanning algorithm
+		- If error occured during launch, 'close on launch' is ignored
+		- Files passed on command line now replaces current external files list
+		- Minor GUI improvements
+	* Added:
+		- Added support for IWADINFO lumps for WAD identification purposes
+		- Folders are now also scanned for maps
+		- Backward compatibility with '-warp' parameter - useful for ports that doesn't support '+map'
+		- More file extensions are added to the file dialog filters and available file associations
+		- More known IWADs and source ports are added to auto detect algorithm
+
 2019-02-05  Lcferrum <lcferrum@yandex.com>
 
 	* Release 3-1.0

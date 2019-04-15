@@ -17,32 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
-#include <fstream>
 #include <QtCore>
-#include <list>
-using namespace std;
 #include "zdlcommon.h"
-
-QString chomp(QString in);
 
 ZDLLine::ZDLLine(QString inLine)
 {
 	flags = FLAG_NORMAL;
-	reads = 0;
-	writes = 1;
-	line = QString(chomp(inLine));
-	//Convert slashes on Windows
-#if defined(Q_WS_WIN)
-	//If the line already contains slashes, don't mess with it
-	if(line.contains("/")){
-		slashConvert = false;
-	}else{
-		slashConvert = true;
-	}
-#else
-	slashConvert = false;
-#endif
+	line = inLine.trimmed();
 	comment = "";
 	if (line[0] == ';' || line[0] == '#'){
 		type = 2;
@@ -55,8 +36,6 @@ ZDLLine::ZDLLine(QString inLine)
 
 ZDLLine::ZDLLine()
 {
-	reads = 0;
-	writes = 1;
 	line = "";
 	comment = "";
 	value = "";
@@ -75,38 +54,23 @@ void ZDLLine::setIsCopy(bool val){
 
 QString ZDLLine::getValue()
 {
-	reads++;
-	if(!slashConvert){
-		return value;
-	}
-	return QString(value).replace("\\","/");
+	return QFD_QT_SEP(value);;
 }
 
 QString ZDLLine::getVariable()
 {
-	reads++;
-	if(!slashConvert){
-		return variable;
-	}
-	return QString(variable).replace("\\","/");
+	return QFD_QT_SEP(variable);
 }
 
 QString ZDLLine::getLine()
 {
-	reads++;
-	if(!slashConvert){
-		return line;
-	}
-	return QString(line).replace("\\","/");;
+	return QFD_QT_SEP(line);
 }
 
 int ZDLLine::setValue(QString inValue)
 {
 	if(isCopy){
 		qDebug() << "SETTING A VALUE ON A COPY" << endl;
-	}
-	if(slashConvert){
-		inValue.replace("/","\\");
 	}
 	// Don't overwrite if the string is the same!
 	if(inValue.compare(value, Qt::CaseInsensitive) == 0){
@@ -117,7 +81,6 @@ int ZDLLine::setValue(QString inValue)
 		line = line + QString("     ") + comment;
 	}
 	value = inValue;
-	writes++;
 	return 0;
 }
 
@@ -125,7 +88,7 @@ int ZDLLine::findComment(char delim){
 	int cloc = line.indexOf(delim, line.size());
 	if (cloc > -1){
 		if (cloc > 0){
-			if (line[cloc-1] != '\\'){
+			if (line[cloc-1] != '\\'&&line[cloc-1] != '/'){
 				return cloc;
 			}
 		}
@@ -138,25 +101,21 @@ void ZDLLine::parse()
 	int cloc = findComment(';');
 	int cloc2 = findComment('#');
 	if(cloc != -1 && cloc2 != -1){
-		cloc = min(cloc,cloc2);
+		cloc = qMin(cloc,cloc2);
 	}else if(cloc == -1 && cloc2 != -1){
 		cloc = cloc2;
 	}
 	
 	if(cloc != -1){
 		//Strip out comment
-		comment = chomp(line.mid(cloc, line.size()));
+		comment = line.mid(cloc, line.size()).trimmed();
 		
 	}
 	
 	int loc = line.indexOf("=", 0);
 	if (loc > -1){
-		variable = chomp(line.mid(0, loc));
-		value = chomp(line.mid(loc+1, line.length() - loc - 1));
-		//This is important for cross platform
-		//Currently disabled
-		//if (slashConvert == true){
-		//}
+		variable = line.mid(0, loc).trimmed();
+		value = line.mid(loc+1, line.length() - loc - 1).trimmed();
 		type = 0;
 	}else{
 		type = 1;
@@ -172,11 +131,8 @@ ZDLLine *ZDLLine::clone(){
 	copy->comment = comment;
 	copy->line = line;
 	copy->value = value;
-	copy->slashConvert = slashConvert;
 	copy->type = type;
 	copy->flags = flags;
-	reads += 7;
-	copy->writes += 7;
 	return copy;
 }
 

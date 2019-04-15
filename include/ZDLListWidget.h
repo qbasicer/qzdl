@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,8 @@
 
 #include <QtGui>
 #include <QObject>
-#include <vector>
 #include "ZDLWidget.h"
 #include "ZDLListable.h"
-
-using namespace std;
 
 class ZDLListWidget: public ZDLWidget{
 	Q_OBJECT
@@ -36,8 +33,6 @@ class ZDLListWidget: public ZDLWidget{
 		virtual int count();
 		virtual void remove(int index);
 		virtual ZDLListable* get(int index);
-		//virtual vector<ZDLListable*> getList();
-		//virtual void setList(vector<ZDLListable*> *newlist);
 		void doDragDrop(int enabled);
 		virtual void newDrop(QStringList fileList);
 	signals:
@@ -45,7 +40,7 @@ class ZDLListWidget: public ZDLWidget{
 		void currentRowChanged(int currentRow);
 	protected slots:
 		void currentItemChangedInternal(QListWidgetItem *current, QListWidgetItem *previous);
-        void currentRowChangedInternal(int currentRow);
+		void currentRowChangedInternal(int currentRow);
 		virtual void addButton();
 		virtual void removeButton();
 		virtual void upButton();
@@ -65,7 +60,6 @@ class ZDLListWidget: public ZDLWidget{
 		QPushButton *btnUp;
 		QPushButton *btnDn;
 		QListWidget *pList;
-		vector<ZDLListable*> list;
-
+		QList<ZDLListable*> list;
 };
 #endif

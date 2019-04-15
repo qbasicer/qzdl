@@ -39,6 +39,7 @@ AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const
 			initial=false;
 		} else if (res_stat!=cur_stat) {
 			res_stat=SimpleWFA::ASSOCIATED_DUNNO;
+			break;
 		}
 	}
 
@@ -115,7 +116,7 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 	assoc_list->addItem(new AssocListWidget("WAD files (*.wad;*.iwad)", assoc_list, "ZDL.Wad.1", "Doom engine WAD file", ".wad .iwad", hklm, IDI_WAD));
 	assoc_list->addItem(new AssocListWidget("Patch files (*.bex;*.deh)", assoc_list, "ZDL.Patch.1", "Doom engine DeHackEd patch", ".bex .deh", hklm, IDI_PATCH));
 	assoc_list->addItem(new AssocListWidget("Config files (*.cfg)", assoc_list, "ZDL.Config.1", "Doom engine config file", ".cfg", hklm, IDI_CFG));
-	assoc_list->addItem(new AssocListWidget("Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)", assoc_list, "ZDL.DoomArch.1", "Doom engine specialized archive", ".pk3 .ipk3 .pk7 .p7z .pkz", hklm, IDI_ARCH));
+	assoc_list->addItem(new AssocListWidget("Specialized archives (*.pk3;*.ipk3;*.pk7;*.ipk7;*.p7z;*.pkz;*.pke)", assoc_list, "ZDL.DoomArch.1", "Doom engine specialized archive", ".pk3 .ipk3 .pk7 .ipk7 .p7z .pkz .pke", hklm, IDI_ARCH));
 	assoc_list->addItem(new AssocListWidget("Other supported archives (*.zip;*.7z)", assoc_list, "ZDL.OtherArch.1", "Doom engine supported archive", ".zip .7z", hklm, IDI_ARCH_RED));
 
 	main_layout->addWidget(desc);
@@ -127,8 +128,8 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 	setContentsMargins(4,4,4,4);
 	layout()->setContentsMargins(0,0,0,0);
 	setFixedHeight(sizeHint().height());
-	setFixedWidth(320);
-	resize(320, sizeHint().height());
+	setFixedWidth(400);
+	resize(400, sizeHint().height());
 	
 	connect(btn_ok, SIGNAL(clicked()), this, SLOT(ApplyAssociations()));
 	connect(chk_clear, SIGNAL(stateChanged(int)), this, SLOT(ClearStateChanged(int)));

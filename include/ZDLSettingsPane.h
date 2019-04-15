@@ -43,10 +43,17 @@ protected:
 };
 
 class AlwaysFocusedDelegate: public QItemDelegate {
-    Q_OBJECT
+	Q_OBJECT
 public:
 	AlwaysFocusedDelegate(QObject *parent=NULL): QItemDelegate(parent) {}
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	//virtual void drawFocus(QPainter*, const QStyleOptionViewItem&, const QRect&) const {}
+};
+
+class DeselectableListWidget: public QListWidget {
+	Q_OBJECT
+public:
+	DeselectableListWidget(QWidget *parent=NULL): QListWidget(parent) {}
+	virtual void mousePressEvent(QMouseEvent *event);
 };
 

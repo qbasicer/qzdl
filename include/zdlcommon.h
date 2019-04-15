@@ -20,13 +20,22 @@
 #ifndef _ZDLCOMMON_H_
 #define _ZDLCOMMON_H_
 #include <QtCore>
-using namespace std;
 
 #define ZDL_FLAG_NAMELESS	0x00001
 
 #define ZDL_VERSION_STRING "3-1.1"
 #define ZDL_DEV_BUILD 1
 #define ZDL_PRIVATE_VERSION_STRING "3.2.2.3~2017.01.11.git.6e5fe853c7-1.1+lcferrum"
+
+#ifdef Q_WS_WIN
+#define QFD_FILTER_DELIM    ";"
+#define QFD_FILTER_ALL      "*.*"
+#define QFD_QT_SEP(x)       QDir::fromNativeSeparators(x)
+#else
+#define QFD_FILTER_DELIM    " "
+#define QFD_FILTER_ALL      "*"
+#define QFD_QT_SEP(x)       x
+#endif
 
 extern QDebug *zdlDebug;
 
@@ -62,28 +71,14 @@ extern QDebug *zdlDebug;
 #define DPTR(ptr) QString("")
 #endif
 
-
-#if defined(Q_WS_WIN)
-#define ASSOCIATE_FILETYPES_AVAILBLE
-extern void RegisterFileType(char *ext,char *type,char *nicetype,char *exe,char* command,int icon);
-extern void RegisterFileTypeQt(QString extension, QString type, QString niceType, QString exec, QString command, int iconIndex);
-#define ASSOCIATE_FILETYPES() {\
-		QString rawExecutablePath = ZDLConfigurationManager::getExec().replace("/","\\");\\
-		RegisterFileTypeQt(".zdl", "ZDL.SaveFile", "ZDL Saved Configuration File", rawExecutablePath, "\"%1\"", 1);\
-	}
-#else
-//Do nothing
-#define ASSOCIATE_FILETYPES() {}
-#endif
-
 #if QT_VERSION < 0x94040
-#define LOCK_CLASS		QMutex
-#define LOCK_BUILDER()		new QMutex(QMutex::Recursive)
-#define GET_READLOCK(mlock)	(mlock)->lock()
-#define RELEASE_READLOCK(mlock)	(mlock)->unlock()
-#define GET_WRITELOCK(mlock)	(mlock)->lock()
-#define RELEASE_WRITELOCK(mlock)	(mlock)->unlock()
-#define TRY_READLOCK(mlock, to)	(mlock)->tryLock(to)
+#define LOCK_CLASS               QMutex
+#define LOCK_BUILDER()           new QMutex(QMutex::Recursive)
+#define GET_READLOCK(mlock)      (mlock)->lock()
+#define RELEASE_READLOCK(mlock)  (mlock)->unlock()
+#define GET_WRITELOCK(mlock)     (mlock)->lock()
+#define RELEASE_WRITELOCK(mlock) (mlock)->unlock()
+#define TRY_READLOCK(mlock, to)  (mlock)->tryLock(to)
 #define TRY_WRITELOCK(mlock, to) (mlock)->tryLock(to)
 #ifndef _ZDL_NO_WARNINGS
 #ifdef __GNUC__
@@ -101,7 +96,7 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 #define RELEASE_READLOCK(lock)  (lock)->unlock()
 #define GET_WRITELOCK(lock)     (lock)->lockForWrite()
 #define RELEASE_WRITELOCK(lock) (lock)->unlock()
-#define TRY_READLOCK(lock, to)	(lock)->tryLockForRead(to)
+#define TRY_READLOCK(lock, to)  (lock)->tryLockForRead(to)
 #define TRY_WRITELOCK(lock, to) (lock)->tryLockForWrite(to)
 #ifndef _ZDL_NO_WARNINGS
 #ifdef __GNUC__
@@ -113,10 +108,8 @@ extern void RegisterFileTypeQt(QString extension, QString type, QString niceType
 
 #endif	
 
-
 #include "zdlline.hpp"
 #include "zdlsection.hpp"
 #include "zdlconf.hpp"
-#include "zdlvariables.hpp"
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,33 +23,31 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLNameInput.h"
 #include "ZDLFileInfo.h"
-#include "gph_dps.xpm"
+#include "gph_ast.xpm"
 
-#include <iostream>
-using namespace std;
+const QString iwad_filters =
+	"IWAD files (*.wad" QFD_FILTER_DELIM "*.iwad" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.ipk7);;"
+	"All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+	"Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
+	"All files (" QFD_FILTER_ALL ")";
 
 ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
-	QPushButton *btnMassAdd = new QPushButton(this);
-	btnMassAdd->setIcon(QPixmap(glyph_dbl_plus));
-	btnMassAdd->setToolTip("Add items");
-	buttonRow->insertWidget(0, btnMassAdd);
+	QPushButton *btnWizardAdd = new QPushButton(this);
+	btnWizardAdd->setIcon(QPixmap(glyph_asterisk));
+	btnWizardAdd->setToolTip("Add and name item");
+	buttonRow->insertWidget(0, btnWizardAdd);
 
-	QObject::connect(btnMassAdd, SIGNAL(clicked()), this, SLOT(massAddButton()));
+	QObject::connect(btnWizardAdd, SIGNAL(clicked()), this, SLOT(wizardAddButton()));
 }
 
-void ZDLIWadList::massAddButton(){
-	LOGDATAO() << "Adding new IWADs" << endl;
-	QStringList filters;
-	filters << "WAD files (*.wad;*.iwad)"
-		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-		<< "All files (*.*)";
-
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), filters.join(";;"));
-	for(int i = 0; i < fileNames.size(); i++){
-		LOGDATAO() << "Adding file " << fileNames[i] << endl;
-		saveWadLastDir(fileNames[i]);
-		insert(new ZDLNameListable(pList, 1001, fileNames[i], ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
+void ZDLIWadList::wizardAddButton(){
+	ZDLIwadInfo zdl_fi;
+	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true);
+	diag.setWindowTitle("Add IWAD");
+	diag.setFilter(iwad_filters);
+	if (diag.exec()){
+		saveWadLastDir(diag.getFile());
+		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
 	}
 }
 
@@ -105,35 +103,23 @@ void ZDLIWadList::newDrop(QStringList fileList){
 }
 
 void ZDLIWadList::addButton(){
-	QStringList filters;
-	filters << "WAD files (*.wad;*.iwad)"
-		<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-		<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-		<< "All files (*.*)";
-	
-	ZDLIwadInfo zdl_fi;
-	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
-	diag.setWindowTitle("Add IWAD");
-	diag.setFilter(filters);
-	if (diag.exec()){
-		saveWadLastDir(diag.getFile());
-		insert(new ZDLNameListable(pList, 1001, diag.getFile(), diag.getName()), -1);
+	LOGDATAO() << "Adding new IWADs" << endl;
+
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add IWADs", getWadLastDir(), iwad_filters);
+	for(int i = 0; i < fileNames.size(); i++){
+		LOGDATAO() << "Adding file " << fileNames[i] << endl;
+		saveWadLastDir(fileNames[i]);
+		insert(new ZDLNameListable(pList, 1001, QFD_QT_SEP(fileNames[i]), ZDLIwadInfo(fileNames[i]).GetFileDescription()), -1);
 	}
 }
 
 void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
-		QStringList filters;
-		filters << "WAD files (*.wad;*.iwad)"
-			<< "All supported archives (*.zip;*.pk3;*.ipk3;*.7z;*.pk7;*.p7z;*.pkz)"
-			<< "Specialized archives (*.pk3;*.ipk3;*.pk7;*.p7z;*.pkz)"
-			<< "All files (*.*)";
-
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLIwadInfo zdl_fi;
-		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi);
-		diag.setWindowTitle("Add IWAD");
-		diag.setFilter(filters);
+		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true);
+		diag.setWindowTitle("Edit IWAD");
+		diag.setFilter(iwad_filters);
 		diag.basedOff(zitem);
 		if(diag.exec()){
 			saveWadLastDir(diag.getFile());

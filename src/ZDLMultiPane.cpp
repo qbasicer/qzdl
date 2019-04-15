@@ -24,10 +24,6 @@
 #include "ZDLConfigurationManager.h"
 #include "ZDLMultiPane.h"
 
-#ifdef _DMFLAG_PICKER_
-#include "ZDMFlagDialog.h"
-#endif
-
 void PlayersValidator::fixup(QString &input) const
 {
 	Q_UNUSED(input);
@@ -101,16 +97,10 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent) {
 	dupmode->addItem("8");
 	dupmode->addItem("9");
 	
-	//Per issue #26, remove DMFlag picker
-#ifdef _DMFLAG_PICKER_
-	bDMFlags = new QPushButton("0",this);
-	bDMFlags2 = new QPushButton("0",this);
-#else
 	bDMFlags = new QLineEdit("", this);
 	bDMFlags->setValidator(max_int_validator);
 	bDMFlags2 = new QLineEdit("", this);
 	bDMFlags2->setValidator(max_int_validator);
-#endif
 	
 	QGridLayout *topGrid = new QGridLayout();
 
@@ -152,10 +142,6 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent) {
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 
-#ifdef _DMFLAG_PICKER_
-	connect(bDMFlags, SIGNAL(clicked()), this, SLOT(dmflags()));
-	connect(bDMFlags2, SIGNAL(clicked()), this, SLOT(dmflags2()));
-#endif
 	connect(gMode, SIGNAL(currentIndexChanged(int)), this, SLOT(ModePlayerChanged(int)));
 	connect(gPlayers, SIGNAL(currentIndexChanged(int)), this, SLOT(ModePlayerChanged(int)));
 
@@ -195,7 +181,8 @@ void ZDLMultiPane::VerbosePopup()
 	savegame->addItem("(Browse...)");
 
 	if (save_path.size()) {
-		QStringList filter("*.zds");
+		QStringList filter;
+		filter<<"*.zds"<<"*.dsg"<<"*.esg";
 		QDir save_dir(save_path);
 		QFileInfoList saves=save_dir.entryInfoList(filter);
 
@@ -225,16 +212,17 @@ void ZDLMultiPane::EditSave(int idx)
 	if (idx==1) {
 		QString prev_save=property("prev_save").toString();
 
-		QStringList filters;
-		filters<<"Savefiles (*.zds)"<<"All files (*.*)";
+		QString filters =
+			"Savefiles (*.zds" QFD_FILTER_DELIM "*.dsg" QFD_FILTER_DELIM "*.esg);;"
+			"All files (" QFD_FILTER_ALL ")";
 		QFileInfo fi(prev_save);
 		QString save_path=(fi.isRelative()||!fi.isFile())?getSaveLastDir():fi.absolutePath();
-		QString new_save=QFileDialog::getOpenFileName(this, "Select savefile", save_path, filters.join(";;"));
+		QString new_save=QFileDialog::getOpenFileName(this, "Select savefile", save_path, filters);
 
 		if (new_save.isEmpty()) {
 			savegame->setEditText(prev_save);
 		} else {
-			savegame->setEditText(new_save);
+			savegame->setEditText(QFD_QT_SEP(new_save));
 			saveSaveLastDir(new_save);
 		}
 	} else if (idx>1) {

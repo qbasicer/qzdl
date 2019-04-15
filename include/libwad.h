@@ -30,6 +30,8 @@ class DoomWad: public ZDLMapFile {
 		DoomWad(const QString &file);
 		virtual QString getIwadinfoName();
 		virtual QStringList getMapNames();
+		virtual bool isMAPXX();
+		virtual ~DoomWad();
 };
 
 #endif

@@ -34,7 +34,20 @@
 QApplication *qapp;
 ZDLMainWindow *mw;
 
-static void addFile(QString file, ZDLConf* zconf){
+void clearFiles(ZDLConf* zconf)
+{
+	ZDLSection *section = zconf->getSection("zdl.save");
+	if (section){
+		QVector <ZDLLine*> vctr;
+		section->getRegex("^file[0-9]+d?$", vctr);
+		for(int i = 0; i < vctr.size(); i++){
+			zconf->deleteValue("zdl.save", vctr[i]->getVariable());
+		}
+	}
+}
+
+void addFile(QString file, ZDLConf* zconf)
+{
 	LOGDATA() << "Adding " << file << " to " << (void*)zconf << endl;
 	ZDLSection *section = zconf->getSection("zdl.save");
 	if(!section){
@@ -61,7 +74,6 @@ static void addFile(QString file, ZDLConf* zconf){
 	qSort(numbers);
 	int highest = numbers.last();
 	zconf->setValue("zdl.save", "file"+QString::number(highest+1), file);
-	return;
 }
 
 QDebug *zdlDebug;
@@ -71,11 +83,10 @@ QDebug *zdlDebug;
 #endif
 
 int main( int argc, char **argv ){
-	QStringList args;
+	QStringList eatenArgs;
 	for(int i = 1; i < argc; i++){
-		args << QString(argv[i]);
+		eatenArgs << argv[i];
 	}
-	QStringList eatenArgs(args);
 	ZDLNullDevice nullDev;
 #if defined(ZDL_BLACKBOX)
 	QFile *loggingFile = NULL;
@@ -103,9 +114,10 @@ int main( int argc, char **argv ){
 	QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
 #endif
 
+	QApplication::setGraphicsSystem("native");
 	QApplication a( argc, argv );
 	qapp = &a;
-	ZDLConfigurationManager::setArgv(args);
+	ZDLConfigurationManager::setArgv(eatenArgs);
 	{
 		QFileInfo fullPath(argv[0]);
 		LOGDATA() << "Executable path: " << fullPath.canonicalFilePath() << endl;
@@ -164,13 +176,11 @@ int main( int argc, char **argv ){
 		}
 	}
 
-	if(ZDLConfigurationManager::getConfigFileName().length() == 0){
-		QString exec = ZDLConfigurationManager::getExec();
-		QStringList path = exec.split("/");
-		path.removeLast();
-		if(QFile::exists(path.join("/")+"/zdl.ini")){
-			LOGDATA() << "Using zdl.ini at " << (path.join("/")+"/zdl.ini") << endl;
-			ZDLConfigurationManager::setConfigFileName(path.join("/")+"/zdl.ini");
+	if(ZDLConfigurationManager::getConfigFileName().isEmpty()){
+		QDir ini_dir(QFileInfo(ZDLConfigurationManager::getExec()).dir());
+		if (ini_dir.exists("zdl.ini")) {
+			LOGDATA() << "Using zdl.ini at " << ini_dir.filePath("zdl.ini") << endl;
+			ZDLConfigurationManager::setConfigFileName(ini_dir.filePath("zdl.ini"));
 		}
 	}
 
@@ -188,33 +198,35 @@ int main( int argc, char **argv ){
 	tconf->readINI(ZDLConfigurationManager::getConfigFileName());
 	ZDLConfigurationManager::setActiveConfiguration(tconf);
 
-	bool hasZDLFile = false;
-
-	for(int i = 0; i < eatenArgs.size(); i++){
-		if(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive)){
+	bool clear_on_args=true;
+	bool hasZDLFile=false;
+	foreach (const QString &item, eatenArgs) {
+		if (item.endsWith(".zdl", Qt::CaseInsensitive)) {
 			LOGDATA() << "Found a .zdl on the command line, replacing current zdl.save" << endl;
 			tconf->deleteSectionByName("zdl.save");
 			ZDLConf zdlFile;
-			zdlFile.readINI(eatenArgs[i]);
+			zdlFile.readINI(item);
 			ZDLSection *section = zdlFile.getSection("zdl.save");
 			if(section){
 				tconf->addSection(section->clone());
-				hasZDLFile = true;
+				hasZDLFile=true;
+				clear_on_args=false;
 			}
-			eatenArgs.removeAt(i);
 			break;
 		}
 	}
 
+	foreach (const QString &item, eatenArgs) {
+		if (item.endsWith(".zdl", Qt::CaseInsensitive)||item.endsWith(".ini", Qt::CaseInsensitive)||item.startsWith("-"))
+			continue;
 
-	for(int i = 0; i < eatenArgs.size(); i++){
-		if(!(eatenArgs[i].endsWith(".zdl", Qt::CaseInsensitive) || eatenArgs[i].endsWith(".ini", Qt::CaseInsensitive) || eatenArgs.startsWith("-"))){
-			addFile(eatenArgs[i], tconf);
-			eatenArgs.removeAt(i);
-			i--;
+		if (clear_on_args) {
+			clearFiles(tconf);
+			clear_on_args=false;
 		}
-	}
 
+		addFile(item, tconf);
+	}
 
 	mw = new ZDLMainWindow();
 	mw->show();

@@ -28,7 +28,7 @@
 #include "ZDLSettingsTab.h"
 
 class ZDLMainWindow: public QMainWindow{
-    Q_OBJECT
+	Q_OBJECT
 public:
 	ZDLMainWindow( QWidget *parent=0);
 	~ZDLMainWindow();

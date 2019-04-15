@@ -1,6 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
+ * Copyright (C) 2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 #include "ZDLQSplitter.h"
-#include <QMetaObject>
-
 
 ZDLQSplitter::ZDLQSplitter(ZDLWidget *parent):ZDLWidget(parent){
 	box = new QVBoxLayout(this);

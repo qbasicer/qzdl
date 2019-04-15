@@ -22,23 +22,41 @@
 
 #include "libwad.h"
 #include "ZLibPK3.h"
+#include "ZLibDir.h"
 
-const char iwad_m[]={'I', 'W', 'A', 'D'};
-const char pwad_m[]={'P', 'W', 'A', 'D'};
-const char zip_m[]={'P', 'K', 0x03, 0x04};
+union magic_t {
+	char n[4];
+	qint32 x;
+};
 
-ZDLMapFile *ZDLMapFile::getMapFile(QString file){
-	QFile fileio(file);
+const magic_t iwad_m={'I', 'W', 'A', 'D'};
+const magic_t pwad_m={'P', 'W', 'A', 'D'};
+const magic_t zip_m={'P', 'K', 0x03, 0x04};
+
+ZDLMapFile::~ZDLMapFile()
+{}
+
+ZDLMapFile *ZDLMapFile::getMapFile(QString file)
+{
 	ZDLMapFile *mapfile=NULL;
+	QFileInfo file_info(file);
+	QString ext=file_info.completeSuffix();
+	QRegExp ban_exts("lmp|txt|cfg|ini|deh|bex|zdl|zds|dsg|esg", Qt::CaseInsensitive);	//Blacklist obvious non-map files
 
-	if (fileio.open(QIODevice::ReadOnly)) {
-		char magic[4];
+	if (file_info.isDir()) {
+		mapfile=new ZLibDir(file);
+	} else if (ext.length()&&!ban_exts.exactMatch(ext)&&file_info.exists()) {	//Only process files with present non-blacklisted extension
+		QFile fileio(file);
 
-		if (fileio.read(magic, 4)==4) {
-			if (!strncmp(magic, iwad_m, 4)||!strncmp(magic, pwad_m, 4))
-				mapfile=new DoomWad(file);
-			else if (!strncmp(magic, zip_m, 4))
-				mapfile=new ZLibPK3(file);
+		if (fileio.open(QIODevice::ReadOnly)) {
+			magic_t file_m;
+
+			if (fileio.read(file_m.n, 4)==4) {
+				if (file_m.x==iwad_m.x||file_m.x==pwad_m.x)
+					mapfile=new DoomWad(file);
+				else if (file_m.x==zip_m.x)
+					mapfile=new ZLibPK3(file);
+			}
 		}
 
 		fileio.close();

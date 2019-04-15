@@ -1,7 +1,7 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * Copyright (C) 2018  Lcferrum
+ * Copyright (C) 2018-2019  Lcferrum
  * 
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <iostream>
 #include <QtGui>
 #include <QApplication>
 
@@ -26,9 +25,8 @@
 #include "ZDLSettingsTab.h"
 #include "ZDLQSplitter.h"
 
+#if defined(Q_WS_WIN)&&!defined(_ZDL_NO_WFA)
 #include <windows.h>
-
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
 #include "ZDLFileAssociations.h"
 #endif
 
@@ -71,7 +69,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchClose = new QCheckBox("Close on launch",this);
 	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
-	showPaths = new QCheckBox("Show files paths in lists",this);
+	showPaths = new QCheckBox("Show file paths in lists",this);
 	showPaths->setToolTip("Show the directory path in square brackets in list widgets");
 	connect(showPaths,SIGNAL(stateChanged(int)),this,SLOT(pathToggled(int)));
 	sections->addWidget(alwaysArgs);
@@ -81,15 +79,15 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
 	
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+#if defined(Q_WS_WIN)&&!defined(_ZDL_NO_WFA)
 	QPushButton *assoc = new QPushButton("Associations", this);
 	assoc->setToolTip("Associate various file types with ZDL");
 	fileassoc->addWidget(assoc);
 	connect(assoc, SIGNAL(clicked()), this, SLOT(fileAssociations()));
 #endif
 	
-	savePaths = new QCheckBox("Save/load external file list automatically", this);
-	savePaths->setToolTip("Save the external file list when closing");
+	savePaths = new QCheckBox("Remember external file list", this);
+	savePaths->setToolTip("Save external file list on exit and load it on next program launch");
 
 	sections->addLayout(fileassoc);
 	sections->addWidget(split);
@@ -100,7 +98,8 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	layout()->setContentsMargins(0,0,0,0);
 }
 
-void ZDLSettingsTab::pathToggled(int state){
+void ZDLSettingsTab::pathToggled(int state)
+{
 	Q_UNUSED(state);
 
 	ZDLConf *zconf=ZDLConfigurationManager::getActiveConfiguration();
@@ -112,10 +111,11 @@ void ZDLSettingsTab::pathToggled(int state){
 	sourceList->newConfig();
 }
 
-void ZDLSettingsTab::fileAssociations(){
-#if defined(ASSOCIATE_FILETYPES_AVAILBLE)
+void ZDLSettingsTab::fileAssociations()
+{
+#if defined(Q_WS_WIN)&&!defined(_ZDL_NO_WFA)
 	ZDLFileAssociations assoc(this);
-	if (assoc.exec()) {}
+	assoc.exec();
 #endif
 }
 
