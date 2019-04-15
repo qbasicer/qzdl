@@ -39,6 +39,7 @@ AssocListWidget::AssocListWidget(const QString &text, QListWidget *parent, const
 			initial=false;
 		} else if (res_stat!=cur_stat) {
 			res_stat=SimpleWFA::ASSOCIATED_DUNNO;
+			break;
 		}
 	}
 
