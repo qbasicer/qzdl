@@ -7,7 +7,7 @@
 	* Changed:
 		- Improved map scanning algorithm
 		- If error occured during launch, 'close on launch' is ignored
-		- Files passed on command line now replaces current external files list
+		- Files passed on command line now replace current external files list
 		- Minor GUI improvements
 	* Added:
 		- Added support for IWADINFO lumps for WAD identification purposes
