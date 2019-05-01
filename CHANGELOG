@@ -8,6 +8,7 @@
 		- Improved map scanning algorithm
 		- If error occured during launch, 'close on launch' is ignored
 		- Files passed on command line now replace current external files list
+		- IWADs can now be deselected in IWAD list for source port to use it's default IWAD
 		- Minor GUI improvements
 	* Added:
 		- Added support for IWADINFO lumps for WAD identification purposes
