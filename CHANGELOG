@@ -2,14 +2,14 @@
 
 	* Release 3-1.1
 	* Fixed:
-		- Passing explicit params to source port binary on Linux
+		- Passing explicit command line params ("Extra..." and "Always add...") to source port binary on Linux
 		- Inability to type in file path in savegame selection combobox
 	* Changed:
 		- Improved map scanning algorithm
-		- If error occured during launch, 'close on launch' is ignored
+		- If error occured during launch, "close on launch" is ignored
 		- Files passed on command line now replace current external files list
 		- IWADs can now be deselected in IWAD list for source port to use it's default IWAD
-		- Minor GUI improvements
+		- Minor UI and UX improvements
 	* Added:
 		- Added support for IWADINFO lumps for WAD identification purposes
 		- Folders are now also scanned for maps
