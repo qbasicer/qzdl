@@ -44,8 +44,7 @@ already installed, download it from here:
 Linux distribution of ZDL is tested to be working with most popular modern
 distros. If it's not working for you, check that all binary dependencies are
 met (listed in DEPENDENCIES file). If dependencies are satisfied but binary
-still fails to run (for example, this can happen because of incompatible Glibc
-version), the only option is to compile ZDL from the sources.
+still fails to run, the only option is to compile ZDL from the sources.
 	
 ZDL is just a frontend, you should get Doom source port and needed game assets
 (IWADs and PWADs) separately.
