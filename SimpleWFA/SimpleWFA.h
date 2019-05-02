@@ -15,7 +15,7 @@
 //Extensions should be fully qualified - they should include leading period (e.g. ".ext")
 //If prog_open_params is specified, use "%1" (including double quotes) as filename placeholder for 'open' verse
 //If prog_icon_res_id is 0, default application icon will be used
-//Do not double quote prog_path and also make shure that it properly uses backslashes as path delimiter
+//Do not double quote prog_path and also make sure that it properly uses backslashes as path delimiter
 //References:
 //	https://docs.microsoft.com/en-us/windows/desktop/shell/fa-progids
 //	https://docs.microsoft.com/en-us/windows/desktop/com/-progid--key

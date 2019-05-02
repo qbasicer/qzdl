@@ -41,6 +41,12 @@ already installed, download it from here:
 
 	https://www.microsoft.com/en-us/download/details.aspx?id=8328
 	
+Linux distribution of ZDL is tested to be working with most popular modern
+distros. If it's not working for you, check that all binary dependencies are
+met (listed in DEPENDENCIES file). If dependencies are satisfied but binary
+still fails to run (for example, this can happen because of incompatible Glibc
+version), the only option is to compile ZDL from the sources.
+	
 ZDL is just a frontend, you should get Doom source port and needed game assets
 (IWADs and PWADs) separately.
 
@@ -48,13 +54,13 @@ ZDL interface should be self-explanatory to someone familiar with Doom source
 ports. There are two tabs: first one is used to configure launch options for
 selected source port and the second one is used to manage collection of IWADs
 and source ports. Button with a down arrow on the first tab opens additional
-panel for configuring multiplayer options. For the quickstart:
+panel with multiplayer options. For the quickstart:
 
     1) Switch to the second tab and add IWADs and source ports
 
-        a) Drag and drop IWAD files to IWADs list
+        a) Drag and drop IWAD files to IWAD list
 
-        b) Drag and drop source port executables to source ports list
+        b) Drag and drop source port executables to source port list
 
     2) Switch to the first tab and configure launch options 
 	
@@ -63,7 +69,7 @@ panel for configuring multiplayer options. For the quickstart:
         b) Select IWAD from the IWAD list
 
         c) If necessary, add any additional files (PWADs, configs, patches) by
-           dragging and dropping them to external files list
+           dragging and dropping them to external file list
 
     3) Click 'Launch' button to launch source port using current configuration
 

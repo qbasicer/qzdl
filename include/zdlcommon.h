@@ -24,7 +24,7 @@
 #define ZDL_FLAG_NAMELESS	0x00001
 
 #define ZDL_VERSION_STRING "3-1.1"
-#define ZDL_DEV_BUILD 1
+#define ZDL_DEV_BUILD 0
 #define ZDL_PRIVATE_VERSION_STRING "3.2.2.3~2017.01.11.git.6e5fe853c7-1.1+lcferrum"
 
 #ifdef Q_WS_WIN

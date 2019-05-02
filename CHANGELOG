@@ -1,14 +1,17 @@
-2019-XX-XX  Lcferrum <lcferrum@yandex.com>
+2019-05-02  Lcferrum <lcferrum@yandex.com>
 
 	* Release 3-1.1
 	* Fixed:
-		- Passing explicit command line params ("Extra..." and "Always add...") to source port binary on Linux
-		- Inability to type in file path in savegame selection combobox
+		- "Extra..." and "Always add..." command line params are now correctly processed on Linux
+		- Fixed inability to type in file path in savegame selection combobox
+		- Fixed 'Add directory' dialog showing contents of last used dir instead of dir itself on Linux and post-XP Windows versions
+		- File filters now work correctly on Linux
 	* Changed:
 		- Improved map scanning algorithm
-		- If error occured during launch, "close on launch" is ignored
-		- Files passed on command line now replace current external files list
+		- If error occurred during launch, 'Close on launch' checkbox is ignored
+		- Files passed on command line now replace current external file list
 		- IWADs can now be deselected in IWAD list for source port to use it's default IWAD
+		- Environment vars in "Extra..." and "Always add..." command line params will be expanded before being passed to source port binary
 		- Minor UI and UX improvements
 	* Added:
 		- Added support for IWADINFO lumps for WAD identification purposes
@@ -35,7 +38,7 @@
 		- Drag & drop support for source ports and IWADs lists
 		- 'Add several files' button for source ports and IWADs lists
 		- 'Add directory' button for external files list
-		- Entries in external files list can be "excluded"/"included" with double click
+		- Entries in external file list can be "excluded"/"included" with double click
 		- Server port, time limit and savegame multiplayer options
 		- Support for PK3 (ZIP) and UDMF (TEXTMAP) maps in map select drop-down list
 

@@ -18,10 +18,10 @@ LICENSE files for details.
 
 2. General
 ----------
-ZDL is written in C++ and uses Qt library. To be able to compile ZDL you should
-install Qt SDK. ZDL also uses SimpleWFA and miniz libraries which are
-statically linked and included with the sources. Sources can be downloaded from
-official GitHub page:
+ZDL is written in C++ and uses Qt 4.8 framework. To be able to compile ZDL you
+should install Qt 4.8 SDK. ZDL also uses SimpleWFA and miniz libraries which
+are statically linked and included with the sources. Sources can be downloaded
+from official GitHub page:
 
 	https://github.com/lcferrum/qzdl
 	
@@ -29,14 +29,45 @@ After compiling, see README file for instructions on using ZDL.
 
 3. Compile for Windows
 ----------------------
-ZDL source code is distributed in the form of Microsoft Visual Studio 2010
-solution and uses Qt 4.8. Besides VS 2010, to compile ZDL you need to download:
+ZDL source code includes Microsoft Visual Studio 2010 that should be used to
+compile ZDL on Windows. Besides VS 2010, to compile ZDL you need to install:
 
     1) Qt 4.8 for Microsoft Visual Studio 2010
 
     2) Qt Visual Studio Add-in
 	
-Default distribution of Qt 4.8 is compiled for dynamic linking. If you want ZDL
-to be compiled as standalone executable, you have to recompile Qt with static
-linking support. After setting up build environment, don't forget to set
-correct Qt version in Qt project settings.
+Note that you can also use versions of VS greater than 2010 (there is a
+backward compatibility with solutions from previous versions), but official VS
+Qt 4.8 distributions support only 2008 and 2010 versions. Also, official VS
+Qt 4.8 distributions support only x86 architecture. For versions of VS greater
+than 2010 or for x86-64 architecture, Qt 4.8 should be compiled from the
+sources. Official VS 2010 distribution of Qt 4.8 is compiled for dynamic
+linking. If you want ZDL to be compiled as standalone executable, you have to
+recompile Qt with static linking support and select 'Release (Static)'
+configuration in VS solution. After setting up build environment and selecting
+proper build configuration, don't forget to set correct VS solution Qt version.
+
+Also note that there is a Qt Creator project distributed with ZDL sources, but
+it's not intended to be used to compile ZDL on Windows. Though it can be used
+in such role after some modifications to the source code and project itself.
+
+4. Compile for Linux
+--------------------
+ZDL source code includes Qt Creator project that should be used to compile ZDL
+on Linux. Project is optimized for GNU C++ compiler, other compilers may 
+require some modifications to be made. Besides C++ compiler, to compile ZDL you
+need to install:
+
+    1) Qt 4.8 toolchain
+
+    2) Qt Creator
+	
+All these should be readily available for your selected Linux distro via it's
+package manager. Actual package names of needed components differ between Linux
+distros. If your Linux distro provides only generic "Qt 4" toolchain package(s),
+make sure that it is 4.8 version of Qt toolchain. If not, Qt 4.8 should be
+compiled from the sources. Usually, Qt toolchain provided via package manager
+supports only dynamic linking. If you want ZDL to be compiled as standalone
+executable, you have to recompile Qt with static linking support and supply
+'CONFIG+=static' as additional argument to qmake in Qt Creator build settings
+for ZDL project.
