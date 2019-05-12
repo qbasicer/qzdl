@@ -29,8 +29,9 @@ After compiling, see README file for instructions on using ZDL.
 
 3. Compile for Windows
 ----------------------
-ZDL source code includes Microsoft Visual Studio 2010 that should be used to
-compile ZDL on Windows. Besides VS 2010, to compile ZDL you need to install:
+ZDL source code includes Microsoft Visual Studio 2010 solution that should be
+used to compile ZDL on Windows. Besides VS 2010, to compile ZDL you need to
+install:
 
     1) Qt 4.8 for Microsoft Visual Studio 2010
 
