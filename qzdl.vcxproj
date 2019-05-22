@@ -560,7 +560,8 @@
     <None Include="res\Win32\ico_patch.ico" />
     <None Include="res\Win32\ico_save.ico" />
     <None Include="res\Win32\ico_wad.ico" />
-	<None Include="res\Win32\compat.manifest" />
+    <None Include="res\Win32\ico_demo.ico" />
+    <None Include="res\Win32\compat.manifest" />
     <ResourceCompile Include="res\Win32\qzdl.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

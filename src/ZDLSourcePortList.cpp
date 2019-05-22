@@ -43,7 +43,7 @@ ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLSourcePortList::wizardAddButton(){
 	ZDLAppInfo zdl_fi;
-	ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false);
+	ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false, true);
 	diag.setWindowTitle("Add source port");
 	diag.setFilter(src_filters);
 	if (diag.exec()){
@@ -119,7 +119,7 @@ void ZDLSourcePortList::editButton(QListWidgetItem * item){
 	if (item){
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLAppInfo zdl_fi;
-		ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false);
+		ZDLNameInput diag(this, getSrcLastDir(), &zdl_fi, false, true);
 		diag.setWindowTitle("Edit source port");
 		diag.setFilter(src_filters);
 		diag.basedOff(zitem);

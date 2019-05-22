@@ -124,6 +124,7 @@ void ZDLFileList::addButton()
 		"WAD files (*.wad" QFD_FILTER_DELIM "*.iwad);;"
 		"Patch files (*.bex" QFD_FILTER_DELIM "*.deh);;"
 		"Config files (*.cfg);;"
+		"Demo files (*.lmp);;"
 		"All supported archives (*.zip" QFD_FILTER_DELIM "*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.7z" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
 		"Specialized archives (*.pk3" QFD_FILTER_DELIM "*.ipk3" QFD_FILTER_DELIM "*.pk7" QFD_FILTER_DELIM "*.ipk7" QFD_FILTER_DELIM "*.p7z" QFD_FILTER_DELIM "*.pkz" QFD_FILTER_DELIM "*.pke);;"
 		"All files (" QFD_FILTER_ALL ")";

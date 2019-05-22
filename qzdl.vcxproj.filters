@@ -305,6 +305,9 @@
     <None Include="res\Win32\ico_wad.ico">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\Win32\ico_demo.ico">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="res\Win32\compat.manifest">
       <Filter>Resource Files</Filter>
     </None>

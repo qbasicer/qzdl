@@ -112,10 +112,12 @@ ZDLFileAssociations::ZDLFileAssociations(QWidget *parent):
 
 	bool hklm=SimpleWFA::CheckIfLocalMachineAvailable();
 
+	//Font on all icons is "Small Fonts" size 7
 	assoc_list->addItem(new AssocListWidget("ZDL files (*.zdl)", assoc_list, "ZDL.Zdl.1", "ZDL config file", ".zdl", hklm, IDI_SAVE));
 	assoc_list->addItem(new AssocListWidget("WAD files (*.wad;*.iwad)", assoc_list, "ZDL.Wad.1", "Doom engine WAD file", ".wad .iwad", hklm, IDI_WAD));
 	assoc_list->addItem(new AssocListWidget("Patch files (*.bex;*.deh)", assoc_list, "ZDL.Patch.1", "Doom engine DeHackEd patch", ".bex .deh", hklm, IDI_PATCH));
 	assoc_list->addItem(new AssocListWidget("Config files (*.cfg)", assoc_list, "ZDL.Config.1", "Doom engine config file", ".cfg", hklm, IDI_CFG));
+	assoc_list->addItem(new AssocListWidget("Demo files (*.lmp)", assoc_list, "ZDL.Demo.1", "Doom engine demo file", ".lmp", hklm, IDI_DEMO));
 	assoc_list->addItem(new AssocListWidget("Specialized archives (*.pk3;*.ipk3;*.pk7;*.ipk7;*.p7z;*.pkz;*.pke)", assoc_list, "ZDL.DoomArch.1", "Doom engine specialized archive", ".pk3 .ipk3 .pk7 .ipk7 .p7z .pkz .pke", hklm, IDI_ARCH));
 	assoc_list->addItem(new AssocListWidget("Other supported archives (*.zip;*.7z)", assoc_list, "ZDL.OtherArch.1", "Doom engine supported archive", ".zip .7z", hklm, IDI_ARCH_RED));
 

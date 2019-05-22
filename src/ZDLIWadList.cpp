@@ -42,7 +42,7 @@ ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLIWadList::wizardAddButton(){
 	ZDLIwadInfo zdl_fi;
-	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true);
+	ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true, false);
 	diag.setWindowTitle("Add IWAD");
 	diag.setFilter(iwad_filters);
 	if (diag.exec()){
@@ -117,7 +117,7 @@ void ZDLIWadList::editButton(QListWidgetItem * item){
 	if (item){
 		ZDLNameListable *zitem = (ZDLNameListable*)item;
 		ZDLIwadInfo zdl_fi;
-		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true);
+		ZDLNameInput diag(this, getWadLastDir(NULL, true), &zdl_fi, true, false);
 		diag.setWindowTitle("Edit IWAD");
 		diag.setFilter(iwad_filters);
 		diag.basedOff(zitem);

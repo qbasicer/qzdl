@@ -82,6 +82,7 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	diffList->addItem("Medium");
 	diffList->addItem("Hard");
 	diffList->addItem("V. Hard");
+	diffList->addItem("No monsters");
 	skillBox->addWidget(new QLabel("Skill",this));
 	skillBox->addWidget(diffList);
 	LOGDATAO() << "Done" << endl;

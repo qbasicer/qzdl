@@ -403,8 +403,16 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
-		args.append(" -skill ");
-		args.append(zconf->getValue("zdl.save", "skill"));
+		bool ok;
+		QString s_skill=zconf->getValue("zdl.save", "skill");
+		int i_skill=s_skill.toInt(&ok, 10);
+
+		if (i_skill>0&&i_skill<6) {
+			args.append(" -skill ");
+			args.append(s_skill);
+		} else if (i_skill==6) {
+			args.append(" -nomonsters");
+		}
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
@@ -424,8 +432,9 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	QStringList pwads;
 	QStringList dehs;
 	QStringList bexs;
-	char deh_last=1;
+	QStringList lumps;
 	QStringList autoexecs;
+	char deh_last=1;
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^file[0-9]+$", fileVctr);
@@ -440,6 +449,8 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 					dehs << fileVctr[i]->getValue();
 				} else if(fileVctr[i]->getValue().endsWith(".cfg",Qt::CaseInsensitive)) {
 					autoexecs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".lmp",Qt::CaseInsensitive)) {
+					lumps << fileVctr[i]->getValue();
 				} else {
 					pwads << fileVctr[i]->getValue();
 				}
@@ -475,6 +486,11 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 		args.append(QuoteParam(IF_NATIVE_SEP(str)));
 	}
 
+	foreach (const QString &str, lumps) {
+		args.append(" -playdemo ");
+		args.append(QuoteParam(IF_NATIVE_SEP(str)));
+	}
+
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");
 		if(tGameType != "0"){
@@ -497,8 +513,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 			int players = 0;
 			if(zconf->hasValue("zdl.save","players")){
 				bool ok;
-				QString tPlayers = zconf->getValue("zdl.save","players");
-				players = tPlayers.toInt(&ok, 10);
+				players = zconf->getValue("zdl.save","players").toInt(&ok, 10);
 			}
 			if(players > 0){
 				args.append(" -host ");
@@ -625,6 +640,18 @@ QStringList ZDLMainWindow::getArgumentsList()
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
+		bool ok;
+		QString s_skill=zconf->getValue("zdl.save", "skill");
+		int i_skill=s_skill.toInt(&ok, 10);
+
+		if (i_skill>0&&i_skill<6) {
+			args<<"-skill"<<s_skill;
+		} else if (i_skill==6) {
+			args<<"-nomonsters";
+		}
+	}
+
+	if (zconf->hasValue("zdl.save", "skill")){
 		args<<"-skill"<<zconf->getValue("zdl.save", "skill");
 	}
 
@@ -643,8 +670,9 @@ QStringList ZDLMainWindow::getArgumentsList()
 	QStringList pwads;
 	QStringList dehs;
 	QStringList bexs;
-	char deh_last=1;
 	QStringList autoexecs;
+	QStringList lumps;
+	char deh_last=1;
 	if (section){
 		QVector<ZDLLine*> fileVctr;
 		section->getRegex("^file[0-9]+$", fileVctr);
@@ -659,6 +687,8 @@ QStringList ZDLMainWindow::getArgumentsList()
 					dehs << fileVctr[i]->getValue();
 				} else if(fileVctr[i]->getValue().endsWith(".cfg",Qt::CaseInsensitive)) {
 					autoexecs << fileVctr[i]->getValue();
+				} else if(fileVctr[i]->getValue().endsWith(".lmp",Qt::CaseInsensitive)) {
+					lumps << fileVctr[i]->getValue();
 				} else {
 					pwads << fileVctr[i]->getValue();
 				}
@@ -690,6 +720,10 @@ QStringList ZDLMainWindow::getArgumentsList()
 		args<<"+exec"<<str;
 	}
 
+	foreach (const QString &str, lumps) {
+		args<<"-playdemo"<<str;
+	}
+
 	if(zconf->hasValue("zdl.save","gametype")){
 		QString tGameType = zconf->getValue("zdl.save","gametype");
 		if(tGameType != "0"){
@@ -710,8 +744,7 @@ QStringList ZDLMainWindow::getArgumentsList()
 			int players = 0;
 			if(zconf->hasValue("zdl.save","players")){
 				bool ok;
-				QString tPlayers = zconf->getValue("zdl.save","players");
-				players = tPlayers.toInt(&ok, 10);
+				players = zconf->getValue("zdl.save","players").toInt(&ok, 10);
 			}
 			if(players > 0){
 				args<<"-host"<<QString::number(players);

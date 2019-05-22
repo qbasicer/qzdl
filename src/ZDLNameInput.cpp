@@ -21,8 +21,8 @@
 #include "ZDLNameInput.h"
 #include "ZDLConfigurationManager.h"
 
-ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs):
-	QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs)
+ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFileInfo *zdl_fi, bool alllow_dirs, bool allow_params):
+	QDialog(parent), zdl_fi(zdl_fi), last_used_dir(last_used_dir), alllow_dirs(alllow_dirs), params_offset(allow_params?2:0)
 {
 	setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint); 
 	QVBoxLayout *lays = new QVBoxLayout(this);
@@ -39,9 +39,17 @@ ZDLNameInput::ZDLNameInput(QWidget *parent, const QString &last_used_dir, ZDLFil
 
 	inputGrid->addWidget(new QLabel("Name", this),0,0,1,2);
 	inputGrid->addWidget(lname,1,0,1,2);
-	inputGrid->addWidget(new QLabel("File", this),2,0,1,2);
-	inputGrid->addWidget(lfile,3,0);
-	inputGrid->addWidget(btnBrowse,3,1);
+	inputGrid->addWidget(new QLabel("File", this),params_offset+2,0,1,2);
+	inputGrid->addWidget(lfile,params_offset+3,0);
+	inputGrid->addWidget(btnBrowse,params_offset+3,1);
+
+	if (params_offset) {
+		lparams = new QLineEdit(this);
+		lparams->setPlaceholderText("(Optional)");
+		inputGrid->addWidget(new QLabel("Parameters", this),2,0,1,2);
+		inputGrid->addWidget(lparams,3,0,1,2);
+	}
+
 	inputGrid->setSpacing(2);
 	inputGrid->setContentsMargins(0,0,0,0);
 
@@ -107,6 +115,10 @@ void ZDLNameInput::setFilter(const QString &inFilters){
 
 QString ZDLNameInput::getName() {
 	return lname->text();
+}
+
+QString ZDLNameInput::getParams() {
+	return lparams->text();
 }
 
 QString ZDLNameInput::getFile() {
