@@ -170,15 +170,50 @@ void ZDLMainWindow::launch(){
 	proc->setWorkingDirectory(workingDirectory);
 
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
-	proc->start(exec, args);
-	procerr = proc->error();
-	if (zconf->contains("zdl.general/autoclose")){
-		QString append = zconf->value("zdl.general/autoclose").toString();
-		if (append == "1" || append == "true"){
-			// Asked to exit... closing;
-			close();
+
+
+	auto bar = intr->getInfobar();
+	bar->setVisible(false);
+
+	setEnabled(false);
+
+	connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
+		Q_UNUSED(exitStatus);
+		setEnabled(true);
+
+		if (exitCode)
+		{
+			intr->setInfobarMessage("Failed to launch the process!", 1);
+			connect(bar, &ZDLInfoBar::moreclicked, [=]() {
+				// badLaunch message box
+				switch(proc->error())
+				{
+				case QProcess::FailedToStart:
+					QMessageBox::warning(nullptr, "Failed to Start", "Failed to launch the application executable.", QMessageBox::Ok, QMessageBox::Ok);
+					break;
+
+				case QProcess::Crashed:
+					QMessageBox::warning(nullptr, "Process Crashed", "The application ended abnormally (usually due to a crash or error).", QMessageBox::Ok, QMessageBox::Ok);
+					break;
+
+				default:
+					QMessageBox::warning(nullptr, "Unknown error", "There was a problem running the application.", QMessageBox::Ok, QMessageBox::Ok);
+				}
+			});
 		}
-	}
+		else if (zconf->hasValue("zdl.general", "autoclose"))
+		{
+			int stat;
+			QString append = zconf->getValue("zdl.general", "autoclose", &stat);
+			if (append == "1" || append == "true")
+			{
+				// Asked to exit... closing
+				close();
+			}
+		}
+	});
+
+	proc->start(exec, args);
 }
 
 void ZDLMainWindow::badLaunch(){
