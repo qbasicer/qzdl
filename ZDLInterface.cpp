@@ -19,7 +19,7 @@
 #include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
-#include "confparser.h"
+#include "zdlconf.h"
 #include "ZDLAdvancedMultiplayerDialog.h"
 #include "ZDLAboutDialog.h"
 

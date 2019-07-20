@@ -1,61 +1,61 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * 
+ *
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #include <iostream>
 #include <QtWidgets>
 #include <QApplication>
 
-#include "confparser.h"
+#include "zdlconf.h"
 #include "ZDLListWidget.h"
 #include "ZDLSettingsTab.h"
 
 ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	QVBoxLayout *sections = new QVBoxLayout(this);
-	
+
 	QVBoxLayout *iwadl = new QVBoxLayout();
 	QVBoxLayout *spl = new QVBoxLayout();
-	
+
 	alwaysArgs = new QLineEdit(this);
-	
+
 	QHBoxLayout *lrpane = new QHBoxLayout();
-	
+
 	//IWAD
 	QVBoxLayout *lpane = new QVBoxLayout();
 	iwadList = new ZDLIWadList(this);
 	iwadl->addWidget(new QLabel("IWADs:", this));
 	iwadl->addWidget(iwadList);
-	
+
 	//Source Port
 	QVBoxLayout *rpane = new QVBoxLayout();
 	sourceList = new ZDLSourcePortList(this);
 	spl->addWidget(new QLabel("Source Ports/Engines:", this));
 	spl->addWidget(sourceList);
-	
+
 	rpane->addLayout(iwadl);
 	lpane->addLayout(spl);
-	
+
 	//Add the left and right panes
 	lrpane->addLayout(lpane);
 	lrpane->addLayout(rpane);
-	
+
 	//Add all the sections together
 	sections->addWidget(new QLabel("Always Add These Parameters", this));
-	
+
 	launchClose = new QCheckBox("Close on launch",this);
 	launchClose->setToolTip("Close ZDL completely when launching a new game");
 
@@ -68,7 +68,7 @@ ZDLSettingsTab::ZDLSettingsTab(QWidget *parent): ZDLWidget(parent){
 	launchZDL = new QCheckBox("Launch *.ZDL files transparently", this);
 	launchZDL->setToolTip("If a .ZDL file is specified on the command line path, launch the configuration without showing the interface");
 	fileassoc->addWidget(launchZDL);
-	
+
 	savePaths = new QCheckBox("Save/Load PWAD list automatically", this);
 	savePaths->setToolTip("Save the zdl.save section (PWADS) when closing");
 
@@ -89,7 +89,7 @@ void ZDLSettingsTab::pathToggled(bool enabled){
 
 void ZDLSettingsTab::rebuild(){
 	auto zconf = ZDLSettingsManager::getInstance();
-	
+
 	if(launchClose->checkState() == Qt::Checked){
 		zconf->setValue("zdl.general/autoclose", "1");
 	}else{
@@ -141,7 +141,7 @@ void ZDLSettingsTab::newConfig(){
 			alwaysArgs->setText(rc);
 		}
 	}
-	
+
 	if(zconf->contains("zdl.general/autoclose")){
 		QString closeSetting = zconf->value("zdl.general","autoclose").toString();
 		if(closeSetting == "1"){
@@ -175,7 +175,7 @@ void ZDLSettingsTab::newConfig(){
 	}else{
 		savePaths->setCheckState(Qt::Unchecked);
 	}
-	
+
 }
 
 void ZDLSettingsTab::reloadConfig(){

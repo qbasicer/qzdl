@@ -1,24 +1,24 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * 
+ *
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ZDLAboutDialog.h"
 #include "zdlcommon.h"
-#include "confparser.h"
+#include "zdlconf.h"
 #include <QDialogButtonBox>
 #include "ZDLVersion.h"
 #include "bmp_logo.xpm"
@@ -58,13 +58,13 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	QLabel *url = new QLabel("<a href=http://zdl.vectec.net>http://zdl.vectec.net</a>",this);
 	url->setOpenExternalLinks(true);
 	box->addWidget(url);
-	box->addWidget(new QLabel(QString("Source: ")+QString(ZDL_SOURCE),this));	
+	box->addWidget(new QLabel(QString("Source: ")+QString(ZDL_SOURCE),this));
 	box->addWidget(new QLabel(QString("Build: ")+QString(ZDL_BUILD),this));
 	box->addWidget(new QLabel(QString("Revision: ")+QString(ZDL_REVISION),this));
 	QFrame *hrMid = new QFrame(this);
 	hrMid->setFrameStyle(QFrame::HLine);
 	box->addWidget(hrMid);
-	
+
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
 	box->addWidget(new QLabel("Huge thanks to NeuralStunner.  Without his help, none of this would be possible.", this));
 	box->addWidget(new QLabel("Special thanks to Blzut3, Risen, Enjay, DRDTeam.org, ZDoom.org",this));

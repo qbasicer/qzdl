@@ -2,11 +2,9 @@
 #include <QIODevice>
 #include <QRegularExpression>
 #include <QSettings>
-#include <stdio.h>
-#include "ini.h"
-#include "confparser.h"
-#include <QDebug>
 #include <QTextStream>
+#include "ini.h"
+#include "zdlconf.h"
 
 int handler(void* user, const char* section, const char* name, const char* value)
 {

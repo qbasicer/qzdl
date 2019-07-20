@@ -1,25 +1,25 @@
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
- * 
+ *
  * qZDL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 
 #include <QtWidgets>
 #include <QApplication>
-#include "confparser.h"
+#include "zdlconf.h"
 #include "ZDLMultiPane.h"
 
 
@@ -30,10 +30,10 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	gMode->addItem("Single Player");
 	gMode->addItem("Co-op");
 	gMode->addItem("Deathmatch");
-	
-	
+
+
 	tHostAddy = new QLineEdit(this);
-	
+
 	gPlayers = new QComboBox(this);
 	gPlayers->addItem("Joining");
 	gPlayers->addItem("1");
@@ -44,9 +44,9 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	gPlayers->addItem("6");
 	gPlayers->addItem("7");
 	gPlayers->addItem("8");
-	
+
 	tFragLimit = new QLineEdit(this);
-	
+
 	bDMFlags = new QLineEdit("0", this);
 	bDMFlags2 = new QLineEdit("0", this);
 
@@ -64,7 +64,7 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 	topGrid->addWidget(new QLabel("DMFLAGS2",this),2,3);
 	topGrid->addWidget(bDMFlags2,3,3);
 	box->addLayout(topGrid);
-	
+
 	topGrid->setSpacing(0);
 
 	layout()->setContentsMargins(0,0,0,0);
@@ -87,7 +87,7 @@ void ZDLMultiPane::newConfig(){
 		}else{
 			gPlayers->setCurrentIndex(0);
 		}
-		
+
 	}else{
 		gPlayers->setCurrentIndex(0);
 	}
@@ -100,7 +100,7 @@ void ZDLMultiPane::newConfig(){
 		}else{
 			gMode->setCurrentIndex(0);
 		}
-		
+
 	}else{
 		gMode->setCurrentIndex(0);
 	}
@@ -140,7 +140,7 @@ void ZDLMultiPane::newConfig(){
 	}else{
 		tFragLimit->setText("");
 	}
-	
+
 }
 
 void ZDLMultiPane::rebuild(){
