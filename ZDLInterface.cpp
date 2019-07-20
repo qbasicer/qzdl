@@ -389,6 +389,16 @@ void ZDLInterface::writeConfig(){
 	emit buildChildren(this);
 }
 
+ZDLInfoBar* ZDLInterface::getInfobar()
+{
+	return zib;
+}
+
+void ZDLInterface::setInfobarMessage(const char* message, int icon)
+{
+	zib->setMessage(message, icon);
+}
+
 QString ZDLInterface::getExtraArgs() const
 {
 	return extraArgs->text();

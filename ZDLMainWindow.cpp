@@ -201,10 +201,9 @@ void ZDLMainWindow::launch(){
 				}
 			});
 		}
-		else if (zconf->hasValue("zdl.general", "autoclose"))
+		else if (zconf->contains("zdl.general/autoclose"))
 		{
-			int stat;
-			QString append = zconf->getValue("zdl.general", "autoclose", &stat);
+			QString append = zconf->value("zdl.general/autoclose").toString();
 			if (append == "1" || append == "true")
 			{
 				// Asked to exit... closing

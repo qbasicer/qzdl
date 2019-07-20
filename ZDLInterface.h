@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 #include <QObject>
+#include "ZDLInfoBar.h"
 #include "ZDLWidget.h"
 #include "ZDLMultiPane.h"
 
@@ -31,6 +32,8 @@ public:
 	ZDLInterface( QWidget *parent=0);
 	void startRead();
 	void writeConfig();
+	ZDLInfoBar *getInfobar();
+	void setInfobarMessage(const char*, int icon = 0);
 	virtual void newConfig();
 	virtual void rebuild();
 
@@ -67,5 +70,6 @@ private:
 	QVBoxLayout *box;
 	ZDLMultiPane *mpane;
 	QLineEdit *extraArgs;
+  ZDLInfoBar *zib;
 };
 #endif
