@@ -73,9 +73,10 @@ void ZDLFileList::rebuild(){
 
 void ZDLFileList::addButton(){
 	QStringList filters;
-	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z)"
+	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z *.ipk3)"
 		<< "WAD Files (*.wad)"
 		<< "PK3 Files (*.pk3)"
+		<< "IPK3 Files (*.ipk3)"
 		<< "Patch Files (*.bex *.deh)"
 		<< "PK7 Files (*.pk7)"
 		<< "PKZ Files (*.pkz)"
