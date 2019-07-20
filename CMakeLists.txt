@@ -10,9 +10,7 @@ qt_wrap_cpp(
 	${PROJECT_SOURCE_DIR}/ZDLDMFlagCheckbox.h
 	${PROJECT_SOURCE_DIR}/ZDLDMFlagManager.h
 	${PROJECT_SOURCE_DIR}/ZDLDMFlagManager.h
-	${PROJECT_SOURCE_DIR}/ZDLFileListable.h
 	${PROJECT_SOURCE_DIR}/ZDLFilePane.h
-	${PROJECT_SOURCE_DIR}/ZDLIWadList.h
 	${PROJECT_SOURCE_DIR}/ZDLInfoBar.h
 	${PROJECT_SOURCE_DIR}/ZDLInterface.h
 	${PROJECT_SOURCE_DIR}/ZDLListWidget.h
@@ -24,7 +22,6 @@ qt_wrap_cpp(
 	${PROJECT_SOURCE_DIR}/ZDLQSplitter.h
 	${PROJECT_SOURCE_DIR}/ZDLSettingsPane.h
 	${PROJECT_SOURCE_DIR}/ZDLSettingsTab.h
-	${PROJECT_SOURCE_DIR}/ZDLSourcePortList.h
 	${PROJECT_SOURCE_DIR}/ZDLWidget.h
 	${PROJECT_SOURCE_DIR}/ZDMFlagPicker.h
 )
