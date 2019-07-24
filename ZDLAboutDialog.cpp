@@ -69,7 +69,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 	box->addWidget(new QLabel("Huge thanks to NeuralStunner.  Without his help, none of this would be possible.", this));
 	box->addWidget(new QLabel("Special thanks to Blzut3, Risen, Enjay, DRDTeam.org, ZDoom.org",this));
 
-	auto conf = ZDLSettingsManager::getInstance();
+	auto conf = ZDLConfigurationManager::getActiveConfiguration();
 	QString userConfPath = conf->fileName();
 
 	QFrame *hrBot = new QFrame(this);

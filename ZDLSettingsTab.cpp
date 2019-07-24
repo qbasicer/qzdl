@@ -88,7 +88,7 @@ void ZDLSettingsTab::pathToggled(bool enabled){
 }
 
 void ZDLSettingsTab::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
 	if(launchClose->checkState() == Qt::Checked){
 		zconf->setValue("zdl.general/autoclose", "1");
@@ -118,7 +118,7 @@ void ZDLSettingsTab::rebuild(){
 }
 
 void ZDLSettingsTab::newConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
 	if(zconf->contains("zdl.general/showpaths")){
 		QString setting = zconf->value("zdl.general/showpaths").toString();

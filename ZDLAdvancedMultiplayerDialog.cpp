@@ -90,7 +90,7 @@ void ZDLAdvancedMultiplayerDialog::close(){
 }
 
 void ZDLAdvancedMultiplayerDialog::readConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString tEnabled = "disabled";
 	if(zconf->contains("zdl.net/advenabled")){
 		tEnabled = zconf->value("zdl.net/advenabled").toString();
@@ -149,7 +149,7 @@ void ZDLAdvancedMultiplayerDialog::readConfig(){
 }
 
 void ZDLAdvancedMultiplayerDialog::save(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(enable->isChecked()){
 		zconf->setValue("zdl.net/advenabled", "enabled");
 	}else{

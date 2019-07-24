@@ -71,7 +71,7 @@ ZDLMultiPane::ZDLMultiPane(ZDLWidget *parent): ZDLWidget(parent){
 }
 
 void ZDLMultiPane::newConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (zconf->contains("zdl.save/host")){
 		auto hostName = zconf->value("zdl.save/host").toString();
 		tHostAddy->setText(hostName);
@@ -144,7 +144,7 @@ void ZDLMultiPane::newConfig(){
 }
 
 void ZDLMultiPane::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (tHostAddy->text().length() > 0){
 		zconf->setValue("zdl.save/host", tHostAddy->text());
 	}else{

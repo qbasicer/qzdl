@@ -30,7 +30,7 @@ ZDLSourcePortList::ZDLSourcePortList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLSourcePortList::newConfig(){
 	pList->clear();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++){
 		auto fileKey = QString("zdl.ports/p%1f").arg(i);
 		auto nameKey = QString("zdl.ports/p%1n").arg(i);
@@ -46,7 +46,7 @@ void ZDLSourcePortList::newConfig(){
 
 
 void ZDLSourcePortList::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	zconf->beginGroup("zdl.ports");
 	zconf->remove("");
 	zconf->endGroup();

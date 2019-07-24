@@ -56,7 +56,7 @@ void ZDLNameListable::setFile(QString file){
 
 
 QString ZDLNameListable::generateName(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	bool showPath = true;
 	if(zconf->contains("zdl.general/showpaths")){
 		QString rc = zconf->value("zdl.general/showpaths").toString();

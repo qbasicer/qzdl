@@ -70,8 +70,8 @@ int main( int argc, char **argv ){
 	{
 		tconf = new QSettings(iniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
 	}
-	ZDLSettingsManager settingsManager;
-	settingsManager.setInstance(tconf);
+	ZDLConfigurationManager settingsManager;
+	settingsManager.setActiveConfiguration(tconf);
 
 	bool hasZDLFile = false;
 

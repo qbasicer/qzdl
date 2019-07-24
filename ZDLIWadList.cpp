@@ -27,7 +27,7 @@ ZDLIWadList::ZDLIWadList(ZDLWidget *parent): ZDLListWidget(parent){
 
 void ZDLIWadList::newConfig(){
 	pList->clear();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
 		auto nameKey = QString("zdl.iwads/i%1n").arg(i);
@@ -46,7 +46,7 @@ void ZDLIWadList::newConfig(){
 
 
 void ZDLIWadList::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	zconf->beginGroup("zdl.iwads");
 	zconf->remove("");
 

@@ -116,14 +116,14 @@ bool pairIndexComparator(QString keyA, QString keyB)
 	return re.match(keyA).captured(1) < re.match(keyB).captured(1);
 }
 
-QSettings *ZDLSettingsManager::settings = nullptr;
+QSettings *ZDLConfigurationManager::settings = nullptr;
 
-void ZDLSettingsManager::setInstance(QSettings *instance)
+void ZDLConfigurationManager::setActiveConfiguration(QSettings *instance)
 {
 	settings = instance;
 }
 
-QSettings *ZDLSettingsManager::getInstance()
+QSettings *ZDLConfigurationManager::getActiveConfiguration()
 {
 	return settings;
 }

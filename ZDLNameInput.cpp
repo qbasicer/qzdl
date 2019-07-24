@@ -22,7 +22,7 @@
 #include <string>
 
 QString getLastDir(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){
 		return QString();
 	}
@@ -34,7 +34,7 @@ QString getLastDir(){
 }
 
 void saveLastDir(QString fileName){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){
 		return;
 	}

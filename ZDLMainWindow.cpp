@@ -34,7 +34,7 @@ extern QString versionString;
 ZDLMainWindow::~ZDLMainWindow(){
 	QSize sze = this->size();
 	QPoint pt = this->pos();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf){
 		QString str = QString("%1,%2").arg(sze.width()).arg(sze.height());
 		zconf->setValue("zdl.general/windowsize", str);
@@ -63,7 +63,7 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 	layout()->setContentsMargins(2,2,2,2);
 	QTabWidget *widget = new QTabWidget(this);
 
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf){
 		bool qtok = false;
 		if(zconf->contains("zdl.general/windowsize")){
@@ -135,7 +135,7 @@ void ZDLMainWindow::quit(){
 
 void ZDLMainWindow::launch(){
 	writeConfig();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
 	QString exec = getExecutable();
 	if (exec.isNull() || exec.length() < 1){
@@ -227,7 +227,7 @@ void ZDLMainWindow::badLaunch(){
 
 QStringList ZDLMainWindow::getArguments(){
 	QStringList ourString;
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
 	QString iwadName = "";
 
@@ -403,7 +403,7 @@ QStringList ZDLMainWindow::getArguments(){
 
 QString ZDLMainWindow::getExecutable(){
 	// Getting exec
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QString portName = "";
 	if(zconf->contains("zdl.save/port")){
 		portName = zconf->value("zdl.save/port").toString();

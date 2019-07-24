@@ -160,7 +160,7 @@ void ZDLInterface::launch(){
 }
 
 void ZDLInterface::buttonPaneNewConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (zconf->contains("zdl.save/dlgmode")){
 		if (zconf->value("zdl.save/dlgmode").toString().compare("open",Qt::CaseInsensitive) == 0){
 			btnEpr->setIcon(QPixmap(adown));
@@ -174,7 +174,7 @@ void ZDLInterface::buttonPaneNewConfig(){
 
 void ZDLInterface::mclick(){
 	writeConfig();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->contains("zdl.save/dlgmode")){
 		QString txt = zconf->value("zdl.save/dlgmode").toString();
 		if(txt == "closed"){
@@ -205,7 +205,7 @@ void ZDLInterface::sendSignals(){
 
 static QString getLastDir(){
 	QString lastDir;
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (zconf->contains("zdl.general/lastDir")) {
 		lastDir = zconf->value("zdl.general/lastDir").toString();
 	}
@@ -213,7 +213,7 @@ static QString getLastDir(){
 }
 
 static void saveLastDir(QString fileName){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	QFileInfo fi(fileName);
 	zconf->setValue("zdl.general/lastDir", fi.absolutePath());
 }
@@ -226,7 +226,7 @@ void ZDLInterface::loadZdlFile(){
 	QString lastDir = getLastDir();
 	QString fileName = QFileDialog::getOpenFileName(this, "Load ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-		auto current = ZDLSettingsManager::getInstance();
+		auto current = ZDLConfigurationManager::getActiveConfiguration();
 		current->beginGroup("zdl.save");
 		current->remove("");
 		current->endGroup();
@@ -252,7 +252,7 @@ void ZDLInterface::saveZdlFile(){
 	QString lastDir = getLastDir();
 	QString fileName = QFileDialog::getSaveFileName(this, "Save ZDL", lastDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
-		auto current = ZDLSettingsManager::getInstance();
+		auto current = ZDLConfigurationManager::getActiveConfiguration();
 		auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
 		QSettings copy(fileName, iniFormat);
 		current->beginGroup("zdl.save");
@@ -309,7 +309,7 @@ void ZDLInterface::showCommandline(){
 }
 
 void ZDLInterface::rebuild(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(extraArgs->text().length() > 0){
 		zconf->setValue("zdl.save/extra", extraArgs->text());
 
@@ -319,7 +319,7 @@ void ZDLInterface::rebuild(){
 }
 
 void ZDLInterface::bottomPaneNewConfig(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->contains("zdl.save/extra")){
 		QString rc = zconf->value("zdl.save/extra").toString();
 		if(rc.length() > 0){
@@ -337,7 +337,7 @@ void ZDLInterface::newConfig(){
 	buttonPaneNewConfig();
 	bottomPaneNewConfig();
 	//Grab our configuration
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	//Grab our section in the configuration
 	//Do we have it?
 	if (zconf->childGroups().contains("zdl.save")){

@@ -15,11 +15,11 @@ bool fileComparator(QString keyA, QString keyB);
 bool pairComparator(QString keyA, QString keyB);
 bool pairIndexComparator(QString keyA, QString keyB);
 
-class ZDLSettingsManager
+class ZDLConfigurationManager
 {
 public:
-	static void setInstance(QSettings *);
-	static QSettings *getInstance();
+	static void setActiveConfiguration(QSettings *);
+	static QSettings *getActiveConfiguration();
 private:
 	static QSettings *settings;
 };

@@ -88,7 +88,7 @@ void ZDLSettingsPane::currentRowChanged(int idx){
 }
 
 QStringList ZDLSettingsPane::getFilesMaps(){
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(!zconf){
 		return QStringList();
 	}
@@ -151,7 +151,7 @@ void ZDLSettingsPane::reloadMapList(){
 
 void ZDLSettingsPane::rebuild(){
 	// Saving config
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(diffList->currentIndex() > 0){
 		zconf->setValue("zdl.save/skill", QString::number(diffList->currentIndex()));
 	}else{
@@ -197,7 +197,7 @@ void ZDLSettingsPane::rebuild(){
 }
 
 void ZDLSettingsPane::newConfig(){
-	QSettings *zconf = ZDLSettingsManager::getInstance();
+	QSettings *zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if(zconf->contains("zdl.save/skill")){
 
 		int index = 0;

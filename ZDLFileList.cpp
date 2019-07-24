@@ -36,7 +36,7 @@ void ZDLFileList::newDrop(QStringList fileList){
 
 void ZDLFileList::newConfig(){
 	pList->clear();
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
 		QString key{"zdl.save/file" + QString::number(i)};
@@ -51,7 +51,7 @@ void ZDLFileList::newConfig(){
 
 void ZDLFileList::rebuild(){
 
-	auto zconf = ZDLSettingsManager::getInstance();
+	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
 
