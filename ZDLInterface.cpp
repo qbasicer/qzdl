@@ -50,7 +50,7 @@ ZDLInterface::ZDLInterface(QWidget *parent):ZDLWidget(parent){
 	setContentsMargins(0,0,0,0);
 	layout()->setContentsMargins(0,0,0,0);
 	box->setSpacing(0);
-	ZDLInfoBar *zib = new ZDLInfoBar(this);
+	zib = new ZDLInfoBar(this);
 	box->addWidget(zib);
 
 	box->addLayout(tpane);
