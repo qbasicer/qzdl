@@ -27,6 +27,7 @@
 #include "zdlcommon.h"
 #include "ZDLInfoBar.h"
 #include "ico_icon.xpm"
+#include <QDebug>
 
 extern QApplication *qapp;
 extern QString versionString;
@@ -145,10 +146,6 @@ void ZDLMainWindow::launch(){
 	QStringList args = getArguments();
 	if (args.join("").length() < 1){
 		return;
-	}
-
-	if(exec.contains("\\")){
-		exec.replace("\\","/");
 	}
 
 	//Find the executable
