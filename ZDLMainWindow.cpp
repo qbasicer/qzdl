@@ -229,7 +229,6 @@ QStringList ZDLMainWindow::getArguments(){
 	QString iwadName = "";
 
 	bool ok;
-	int doquotes = 1;
 
 	if(zconf->contains("zdl.save/iwad")){
 		QString rc = zconf->value("zdl.save/iwad").toString();
@@ -372,17 +371,6 @@ QStringList ZDLMainWindow::getArguments(){
 					ourString << "-dup";
 					ourString << tDup;
 				}
-			}
-		}
-	}
-
-	// This is always true. There was supposed to be a zdl.general/quotefiles key, which could have a value of "disabled", but it
-	// was never implemented.
-	if(doquotes){
-		for(int i = 0; i < ourString.size(); i++){
-			if(ourString[i].contains(" ")){
-				QString newString = QString("\"") + ourString[i] + QString("\"");
-				ourString[i] = newString;
 			}
 		}
 	}
