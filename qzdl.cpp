@@ -40,6 +40,8 @@ int main( int argc, char **argv ){
 		args << QString(argv[i]);
 	}
 
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
 	QApplication a( argc, argv );
 	qapp = &a;
 
@@ -57,7 +59,6 @@ int main( int argc, char **argv ){
 	QCoreApplication::setApplicationName("qZDL");
 	QCoreApplication::setOrganizationName("Vectec Software");
 	QCoreApplication::setApplicationVersion(versionString);
-	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
 	auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
 	QSettings *tconf{nullptr};
