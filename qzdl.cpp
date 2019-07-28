@@ -108,7 +108,6 @@ int main( int argc, char **argv ){
 	QObject::connect(&a, &QApplication::lastWindowClosed, &a, &QApplication::quit);
 	mw->startRead();
 
-#if 0
 	if(hasZDLFile){
 		//  A .zdl file as passed as a command line option
 		if(tconf->contains("zdl.general/zdllaunch")){
@@ -123,8 +122,6 @@ int main( int argc, char **argv ){
 			}
 		}
 	}
-#endif
-
 
 	int ret = a.exec();
 	if (ret != 0){
