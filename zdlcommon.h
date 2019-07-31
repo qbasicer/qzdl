@@ -18,5 +18,5 @@
  
 #ifndef _ZDLCOMMON_H_
 #define _ZDLCOMMON_H_
-#define ZDL_VERSION_STRING	"3.2.2.3 beta"
+#define ZDL_VERSION_STRING	"3.3.0.0"
 #endif
