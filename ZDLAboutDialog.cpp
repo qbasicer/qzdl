@@ -67,7 +67,7 @@ ZDLAboutDialog::ZDLAboutDialog(ZDLWidget *parent):QDialog(parent){
 
 	box->addWidget(new QLabel("Special thanks to BioHazard for the original version",this));
 	box->addWidget(new QLabel("Huge thanks to NeuralStunner.  Without his help, none of this would be possible.", this));
-	box->addWidget(new QLabel("Special thanks to Blzut3, Risen, Enjay, DRDTeam.org, ZDoom.org",this));
+	box->addWidget(new QLabel("Special thanks to Blzut3, Risen, Enjay, DRDTeam.org, ZDoom.org, Dugan Chen",this));
 
 	auto conf = ZDLConfigurationManager::getActiveConfiguration();
 	QString userConfPath = conf->fileName();
