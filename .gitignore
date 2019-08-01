@@ -1,7 +1,6 @@
 obj/
 moc/
 *~
-*.ini
 *.pro
 Makefile
 config.log
@@ -9,3 +8,11 @@ zdl.log
 qrc_qzdl.cpp
 autom4te.cache/
 qzdl
+build
+compile_commands.json
+CMakeLists.txt.user*
+tags
+.mypy_cache
+GPATH
+GTAGS
+GRTAGS
