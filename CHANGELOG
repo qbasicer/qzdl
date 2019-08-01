@@ -6,6 +6,9 @@
 http://zdl.vectec.net
 (C) ZDL Software Foundation
 
+* 3.3.0.0 - July 31st, 2019
+  * Port to Qt5 and other fixes
+
 * 3.2.2.3 - May 16th, 2014
   * Remember last directory used in the file pane
 
