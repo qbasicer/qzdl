@@ -54,8 +54,7 @@ void ZDLFileList::rebuild(){
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
-
-		QString key{"zdl.save/file%1" + QString::number(i)};
+		QString key{"zdl.save/file" + QString::number(i)};
 		if (!zconf->contains(key))
 		{
 			break;
