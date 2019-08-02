@@ -39,7 +39,8 @@ void ZDLFileList::newConfig(){
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
-		QString key{"zdl.save/file" + QString::number(i)};
+		QString key("zdl.save/file%1");
+		key = key.arg(i);
 		if (!zconf->contains(key))
 		{
 			break;
@@ -54,8 +55,8 @@ void ZDLFileList::rebuild(){
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
 	{
-
-		QString key{"zdl.save/file%1" + QString::number(i)};
+		QString key("zdl.save/file%1");
+		key = key.arg(i);
 		if (!zconf->contains(key))
 		{
 			break;
@@ -66,7 +67,7 @@ void ZDLFileList::rebuild(){
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLFileListable* fitm = (ZDLFileListable*)itm;
-		QString name = QString("file").append(QString::number(i));
+		QString name = QString("file%1").arg(QString::number(i));
 		zconf->setValue("zdl.save/" + name, fitm->getFile());
 	}
 }

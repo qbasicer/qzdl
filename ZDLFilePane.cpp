@@ -19,7 +19,7 @@
 #include <QtWidgets>
 #include <QApplication>
 #include <QListWidget>
-#include <iostream>
+//#include <iostream>
 
 #include "ZDLListWidget.h"
 #include "ZDLFilePane.h"
@@ -41,4 +41,5 @@ ZDLFilePane::ZDLFilePane(QWidget *parent):ZDLWidget(parent){
 
 void ZDLFilePane::rebuild(){
 	//std::cout << "Rebuilding config" << std::endl;
+    fList->rebuild();
 }
