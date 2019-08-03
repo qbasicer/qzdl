@@ -208,6 +208,8 @@ static QString getLastDir(){
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	if (zconf->contains("zdl.general/lastDir")) {
 		lastDir = zconf->value("zdl.general/lastDir").toString();
+	} else {
+		lastDir = QDir::currentPath();
 	}
 	return lastDir;
 }
@@ -236,7 +238,7 @@ void ZDLInterface::loadZdlFile(){
 		for (auto key : newConf.childKeys())
 		{
 			auto settingKey = "zdl.save/" + key;
-			current->setValue(settingKey, newConf.value(settingKey).toString());
+			current->setValue(settingKey, newConf.value(key).toString());
 		}
 		newConf.endGroup();
 		saveLastDir(fileName);
@@ -259,7 +261,7 @@ void ZDLInterface::saveZdlFile(){
 		for (auto key: current->childKeys())
 		{
 			QString settingKey{"zdl.save/" + key};
-			copy.setValue(settingKey, current->value(settingKey).toString());
+			copy.setValue(settingKey, current->value(key).toString());
 		}
 		current->endGroup();
 		saveLastDir(fileName);
