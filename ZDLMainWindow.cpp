@@ -376,11 +376,15 @@ QStringList ZDLMainWindow::getArguments(){
 	}
 
 	if (zconf->contains("zdl.general/alwaysadd")){
-		ourString << zconf->value("zdl.general/alwaysadd").toString();
+		for (auto arg: zconf->value("zdl.save/extra").toString().split(QRegExp("\\s+"), QString::SkipEmptyParts)) {
+			ourString << arg;
+		}
 	}
 
 	if (zconf->contains("zdl.save/extra")){
-		ourString << zconf->value("zdl.save/extra").toString();
+		for (auto arg: zconf->value("zdl.save/extra").toString().split(QRegExp("\\s+"), QString::SkipEmptyParts)) {
+			ourString << arg;
+		}
 	}
 
 	return ourString;
