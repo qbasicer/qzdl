@@ -27,7 +27,7 @@
 #include "zdlcommon.h"
 #include "ZDLInfoBar.h"
 #include "ico_icon.xpm"
-#include <QDebug>
+#include <wordexp.h>
 
 extern QApplication *qapp;
 extern QString versionString;
@@ -222,6 +222,23 @@ void ZDLMainWindow::badLaunch(){
 	}
 }
 
+QStringList ParseParams(const QString& params)
+{
+	QStringList plist;
+
+	wordexp_t result;
+
+	switch (wordexp(qPrintable(params), &result, 0)) {
+		case 0:
+			for (size_t i=0; i<result.we_wordc; i++)
+				plist<<result.we_wordv[i];
+		case WRDE_NOSPACE:	//If error is WRDE_NOSPACE - there is a possibilty that at least some part of wordexp_t.we_wordv was allocated
+			wordfree (&result);
+	}
+
+	return plist;
+}
+
 QStringList ZDLMainWindow::getArguments(){
 	QStringList ourString;
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
@@ -376,15 +393,11 @@ QStringList ZDLMainWindow::getArguments(){
 	}
 
 	if (zconf->contains("zdl.general/alwaysadd")){
-		for (auto arg: zconf->value("zdl.save/extra").toString().split(QRegExp("\\s+"), QString::SkipEmptyParts)) {
-			ourString << arg;
-		}
+		ourString << ParseParams(zconf->value("zdl.save/extra").toString());
 	}
 
 	if (zconf->contains("zdl.save/extra")){
-		for (auto arg: zconf->value("zdl.save/extra").toString().split(QRegExp("\\s+"), QString::SkipEmptyParts)) {
-			ourString << arg;
-		}
+		ourString << ParseParams(zconf->value("zdl.save/extra").toString());
 	}
 
 	return ourString;
