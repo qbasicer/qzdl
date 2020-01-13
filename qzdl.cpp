@@ -62,7 +62,7 @@ int main( int argc, char **argv ){
 
 	auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
 	QSettings *tconf{nullptr};
-	auto portaConf = QCoreApplication::applicationDirPath() + "/zdl.ini";
+	auto portaConf = QCoreApplication::applicationDirPath() + "/qZDL.ini";
 	if (QFileInfo(portaConf).isFile())
 	{
 		tconf = new QSettings(portaConf, iniFormat);
