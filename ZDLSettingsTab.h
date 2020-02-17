@@ -1,3 +1,6 @@
+#ifndef ZDLSETTINGSTAB_H
+#define ZDLSETTINGSTAB_H
+
 /*
  * This file is part of qZDL
  * Copyright (C) 2007-2010  Cody Harris
@@ -49,3 +52,5 @@ private:
 	QCheckBox *launchZDL;
 	QCheckBox *savePaths;
 };
+
+#endif
