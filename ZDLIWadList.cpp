@@ -87,9 +87,9 @@ void ZDLIWadList::newDrop(QStringList fileList){
 
 void ZDLIWadList::addButton(){
 	QStringList filters;
-	filters << "WAD/PK3/ZIP (*.wad *.pk3 *.zip)"
-         << "WAD Files (*.wad)"
-         << "pk3 Files (*.pk3)"
+	filters << "WAD/PK3/ZIP (*.WAD *.PK3 *.zip)"
+         << "WAD Files (*.WAD)"
+         << "pk3 Files (*.PK3)"
          << "zip Files (*.zip)"
          << "All files (*)";
 
