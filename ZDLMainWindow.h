@@ -36,30 +36,17 @@ public:
 	QStringList getArguments();
 	QString getExecutable();
 	QString getWindowTitle();
-
-	// For the unit tests
-	QString getExtraArgs() const;
-	QString getMode();
-	QString getHostAddy();
-	QString getPlayers();
-	QString getFragLmit();
-	QString getDMFlags();
-	QString getDMFlags2();
-	QString getAlwaysArgs();
-	Qt::CheckState getLaunchClose();
-	Qt::CheckState getShowPaths();
-	Qt::CheckState getLaunchZDL();
-	Qt::CheckState getSavePaths();
 public slots:
 	void launch();
 	void quit();
 	void tabChange(int index);
-	void badLaunch();
 protected:
 	ZDLInterface* intr;
 	ZDLSettingsTab* settings;
 	
 	int procerr;
 	QAction *qact2;
+
+    void badLaunch(QProcess::ProcessError);
 };
 #endif
