@@ -303,11 +303,17 @@ void ZDLInterface::showCommandline(){
 	QDir cwd(workingDirectory);
 	workingDirectory = cwd.absolutePath();
 	// Turns on launch confirmation
-	QMessageBox::StandardButton btnrc = QMessageBox::question(this, "Would you like to continue?","Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	if(btnrc == QMessageBox::Yes){
-		mw->launch();
-		return;
-	}
+    QMessageBox launchConfirm(this);
+    launchConfirm.setWindowTitle("Would you like to continue?");
+    launchConfirm.setText("Executable: "+exec+"\n\nArguments: "+args.join(" ")+"\n\nWorking Directory: "+workingDirectory);
+    launchConfirm.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    launchConfirm.setDefaultButton(QMessageBox::Yes);
+    launchConfirm.setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    int btnrc = launchConfirm.exec();
+    if(btnrc == QMessageBox::Yes){
+        mw->launch();
+        return;
+    }
 }
 
 void ZDLInterface::rebuild(){
