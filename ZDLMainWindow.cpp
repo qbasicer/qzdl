@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+
 #include <QtWidgets>
 #include <QApplication>
 #include <QMainWindow>
@@ -121,11 +121,11 @@ ZDLMainWindow::ZDLMainWindow(QWidget *parent): QMainWindow(parent){
 
 void ZDLMainWindow::tabChange(int newTab){
 	if(newTab == 0){
-		settings->notifyFromParent(NULL);
-		intr->readFromParent(NULL);
+        settings->notifyFromParent(nullptr);
+        intr->readFromParent(nullptr);
 	}else if (newTab == 1){
-		intr->notifyFromParent(NULL);
-		settings->readFromParent(NULL);
+        intr->notifyFromParent(nullptr);
+        settings->readFromParent(nullptr);
 	}
 }
 
@@ -198,6 +198,7 @@ void ZDLMainWindow::launch(){
 	});
 
     connect(proc, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::errorOccurred), [=](QProcess::ProcessError error) {
+        Q_UNUSED(error)
         setEnabled(true);
         intr->setInfobarMessage("Failed to launch the process!", 1);
         connect(bar, &ZDLInfoBar::moreclicked, [=]() {
@@ -380,11 +381,11 @@ QStringList ZDLMainWindow::getArguments(){
 	}
 
 	if (zconf->contains("zdl.general/alwaysadd")){
-		ourString << zconf->value("zdl.general/alwaysadd").toString();
+        ourString += parseExtraArgs(zconf->value("zdl.general/alwaysadd").toString());
 	}
 
 	if (zconf->contains("zdl.save/extra")){
-		ourString << zconf->value("zdl.save/extra").toString();
+        ourString += parseExtraArgs(zconf->value("zdl.save/extra").toString());
 	}
 
 	return ourString;
@@ -428,3 +429,59 @@ void ZDLMainWindow::writeConfig(){
 	intr->writeConfig();
 	settings->writeConfig();
 }
+
+
+QStringList parseExtraArgs(QString arg_str)
+{
+    // Parses the -alwaysAdd and -extraArgs strings into
+    // a list of tokens that can be added to a QProcess' arguments array.
+    // Note: no shell variable expansion or backslash escapes.
+
+    int length = arg_str.length();
+    QStringList tokens;
+    QStack<QChar> quotes;
+    QString token{""};
+
+    for (int i = 0; i < length; i++)
+    {
+        QChar c = arg_str.at(i);
+
+        if (quotes.size() == 0 && (c == ' ' || c == '\t'))
+        {
+            if (token.length() != 0)
+            {
+                tokens.push_back(token);
+            }
+            token = "";
+            continue;
+        }
+
+        if (c == '"' || c == '"')
+        {
+            if (!quotes.isEmpty() && c == quotes.top())
+            {
+                quotes.pop();
+                tokens.push_back(token);
+                continue;
+            }
+            else
+            {
+                quotes.push(c);
+                if (quotes.size() == 1)
+                {
+                    continue;
+                }
+            }
+        }
+
+        token.append(c);
+
+        if (i == length - 1)
+        {
+            tokens.push_back(token);
+        }
+    }
+
+    return tokens;
+}
+

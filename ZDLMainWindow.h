@@ -29,7 +29,7 @@
 class ZDLMainWindow: public QMainWindow{
     Q_OBJECT
 public:
-	ZDLMainWindow( QWidget *parent=0);
+    ZDLMainWindow(QWidget *parent=0);
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
@@ -49,4 +49,8 @@ protected:
 
     void badLaunch(QProcess::ProcessError);
 };
+
+
+QStringList parseExtraArgs(QString);
+
 #endif
