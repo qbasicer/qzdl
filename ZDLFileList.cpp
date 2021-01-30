@@ -83,7 +83,7 @@ void ZDLFileList::addButton(){
 		<< "PKZ Files (*.pkz *.PKZ)"
 		<< "P7Z Files (*.p7z *.P7Z)"
 		<< "zip Files (*.zip *.ZIP)"
-		<< "Any files (*)";many WADs are distributed 
+		<< "Any files (*)";
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", getLastDir(), filters.join(";;"));
 	for(int i = 0; i < fileNames.size(); i++){
 		saveLastDir(fileNames[i]);
