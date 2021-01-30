@@ -74,16 +74,16 @@ void ZDLFileList::rebuild(){
 
 void ZDLFileList::addButton(){
 	QStringList filters;
-	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.pk3 *.zip *.pk7 *.pkz *.p7z *.ipk3)"
-		<< "WAD Files (*.wad)"
-		<< "PK3 Files (*.pk3)"
-		<< "IPK3 Files (*.ipk3)"
-		<< "Patch Files (*.bex *.deh)"
-		<< "PK7 Files (*.pk7)"
-		<< "PKZ Files (*.pkz)"
-		<< "P7Z Files (*.p7z)"
-		<< "zip Files (*.zip)"
-		<< "Any files (*)";
+	filters << "WAD/PK3/ZIP/PK7/PKZ/P7Z (*.wad *.WAD *.pk3 *.PK3 *.zip *.ZIP *.pk7 *.PK7 *.pkz *.PKZ *.p7z *.P7Z *.ipk3 *.IPK3)"
+		<< "WAD Files (*.wad *.WAD)"
+		<< "PK3 Files (*.pk3 *.PK3)"
+		<< "IPK3 Files (*.ipk3 *.IPK3)"
+		<< "Patch Files (*.bex *.deh *.BEX *.DEH)"
+		<< "PK7 Files (*.pk7 *.PK7)"
+		<< "PKZ Files (*.pkz *.PKZ)"
+		<< "P7Z Files (*.p7z *.P7Z)"
+		<< "zip Files (*.zip *.ZIP)"
+		<< "Any files (*)";many WADs are distributed 
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Add File", getLastDir(), filters.join(";;"));
 	for(int i = 0; i < fileNames.size(); i++){
 		saveLastDir(fileNames[i]);
