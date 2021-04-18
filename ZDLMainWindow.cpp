@@ -320,7 +320,7 @@ QStringList ZDLMainWindow::getArguments(){
 		QString tGameType = zconf->value("zdl.save/gametype").toString();
 		if(tGameType != "0"){
 			if (tGameType == "2"){
-				ourString << "-deathmath";
+				ourString << "-deathmatch";
 			}
 			int players = 0;
 			if(zconf->contains("zdl.save/players")){
