@@ -21,6 +21,8 @@
 #include "zdlconf.h"
 #include "ZDLMapFile.h"
 
+#include "disabled.h"
+
 extern QString getLastDir();
 extern void saveLastDir(QString fileName);
 
@@ -30,13 +32,22 @@ ZDLFileList::ZDLFileList(ZDLWidget *parent): ZDLListWidget(parent){
 void ZDLFileList::newDrop(QStringList fileList){
 	for (int i = 0; i < fileList.size(); i++) {
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileList[i]);
+		zList->enable();
 		insert(zList, -1);
 	}
 }
 
 void ZDLFileList::newConfig(){
+	QString disabled;
+
 	pList->clear();
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
+
+	if (zconf->contains(disabledKey))
+	{
+		disabled = zconf->value(disabledKey).toString();
+	}
+
 	for (int i = 0; ; i++)
 	{
 		QString key("zdl.save/file%1");
@@ -45,12 +56,21 @@ void ZDLFileList::newConfig(){
 		{
 			break;
 		}
+
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, zconf->value(key).toString());
+
+		/* disabled in constructor */
+		if (!disabledScan(disabled, i))
+		{
+			zList->enable();
+		}
+
 		insert(zList, -1);
 	}
 }
 
 void ZDLFileList::rebuild(){
+	QStringList disabled;
 
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 	for (int i = 0; ; i++)
@@ -64,11 +84,26 @@ void ZDLFileList::rebuild(){
 		zconf->remove(key);
 	}
 
+	if (zconf->contains(disabledKey))
+	{
+		zconf->remove(disabledKey);
+	}
+
 	for(int i = 0; i < count(); i++){
 		QListWidgetItem *itm = pList->item(i);
 		ZDLFileListable* fitm = (ZDLFileListable*)itm;
 		QString name = QString("file%1").arg(QString::number(i));
 		zconf->setValue("zdl.save/" + name, fitm->getFile());
+
+		if (!fitm->state())
+		{
+			disabled << QString::number(i);
+		}
+	}
+
+	if (disabled.size() > 0)
+	{
+		zconf->setValue(disabledKey, disabled.join(","));
 	}
 }
 
@@ -88,6 +123,7 @@ void ZDLFileList::addButton(){
 	for(int i = 0; i < fileNames.size(); i++){
 		saveLastDir(fileNames[i]);
 		ZDLFileListable *zList = new ZDLFileListable(pList, 1001, fileNames[i]);
+		zList->enable();
 		insert(zList, -1);
 	}
 }

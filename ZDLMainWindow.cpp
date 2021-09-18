@@ -29,6 +29,8 @@
 #include "ico_icon.xpm"
 #include <QDebug>
 
+#include "disabled.h"
+
 extern QApplication *qapp;
 extern QString versionString;
 
@@ -285,6 +287,12 @@ QStringList ZDLMainWindow::getArguments(){
 		ourString << zconf->value("zdl.save/dmflags2").toString();
 	}
 
+	QString disabled;
+	if (zconf->contains(disabledKey))
+	{
+		disabled = zconf->value(disabledKey).toString();
+	}
+
 	QStringList pwads;
 	QStringList dhacked;
 	for (int i = 0; ; i++)
@@ -294,6 +302,12 @@ QStringList ZDLMainWindow::getArguments(){
 		{
 			break;
 		}
+
+		if (disabledScan(disabled, i))
+		{
+			continue;
+		}
+
 		auto file = QFileInfo(zconf->value(key).toString());
 		if (file.suffix().compare("deh", Qt::CaseInsensitive) == 0 || file.suffix().compare("bex", Qt::CaseInsensitive) == 0)
 		{

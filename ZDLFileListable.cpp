@@ -26,11 +26,24 @@ using namespace std;
 
 ZDLFileListable::ZDLFileListable( QListWidget *parent, int type, QString file):ZDLNameListable(parent, type, file, QFileInfo(file).fileName()){
 	fileName = file;
+
+	setFlags(flags() | Qt::ItemIsUserCheckable);
+	/* initialize here just in case */
+	setCheckState(Qt::Unchecked);
 }
 
 QString ZDLFileListable::getFile(){
 	return fileName;
 }
 	
+bool ZDLFileListable::state() {
+	return checkState();
+}
 
+void ZDLFileListable::enable() {
+	setCheckState(Qt::Checked);
+}
 
+void ZDLFileListable::disable() {
+	setCheckState(Qt::Unchecked);
+}
