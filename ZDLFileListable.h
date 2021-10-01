@@ -21,10 +21,14 @@
 
 #include "ZDLNameListable.h"
 
-class ZDLFileListable : public ZDLNameListable{
-public:
-	ZDLFileListable( QListWidget * parent, int type, QString qfile);
-	QString getFile();
+class ZDLFileListable : public ZDLNameListable {
+	public:
+		ZDLFileListable( QListWidget * parent, int type, QString qfile);
+		QString getFile();
+
+		bool state();
+		void enable();
+		void disable();
 
 	private:
 		QString fileName;
