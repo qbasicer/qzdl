@@ -14,7 +14,11 @@ const QString disabledKey = "zdl.save/disabled";
  * disabled value every time we want to do something with it.
  */
 inline bool disabledScan(QString str, int val) {
+#if QTCORE_VERSION <= 0x050C08
+        for (auto s : str.split(",", QString::SkipEmptyParts))
+#else
         for (auto s : str.split(",", Qt::SkipEmptyParts))
+#endif
 	{
                 bool ok;
 
