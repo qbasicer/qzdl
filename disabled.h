@@ -14,6 +14,9 @@ const QString disabledKey = "zdl.save/disabled";
  * disabled value every time we want to do something with it.
  */
 inline bool disabledScan(QString str, int val) {
+        // 0x050C08 is the Qt version number (5.12.8) in hexadecimal. This is
+        // the Qt version available in Kubuntu 20.04. It comes from
+        // qtcoreversion.h
 #if QTCORE_VERSION <= 0x050C08
         for (auto s : str.split(",", QString::SkipEmptyParts))
 #else
