@@ -29,7 +29,6 @@
 #include "ico_icon.xpm"
 #include <QDebug>
 
-#define CUSTOM_ARG_SEP "                               "
 #include "disabled.h"
 
 extern QApplication *qapp;
@@ -146,7 +145,8 @@ void ZDLMainWindow::launch(){
 		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
-	QStringList args = getArguments();
+	int customArgStart;
+	QStringList args = getArguments(&customArgStart);
 	if (args.join("").length() < 1){
 		return;
 	}
@@ -154,22 +154,16 @@ void ZDLMainWindow::launch(){
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
 	// Custom arguments appear at the end of the list
-	int customArgStart = 0;
 	int commandIndex = 0;
 
-	for (int i = 0; i < args.size(); i++)
+	for (int i = customArgStart; i < args.size(); i++)
 	{
 		const QString arg = args[i];
-		if (arg == CUSTOM_ARG_SEP)
-		{
-			customArgStart = i;
-			args.removeAt(i--);
-		}
-		else if (arg.toLower() == "%command%")
+		if (arg.toLower() == "%command%")
 		{
 			if (commandIndex == 0) { // Only accept the first "%command%"
 				commandIndex = i - customArgStart;
-				qInfo() << "commandIndex:" << commandIndex;
+				// qInfo() << "commandIndex:" << commandIndex;
 			}
 			args.removeAt(i--);
 		}
@@ -310,7 +304,7 @@ void ZDLMainWindow::badLaunch(QProcess::ProcessError procerr){
     }
 }
 
-QStringList ZDLMainWindow::getArguments(){
+QStringList ZDLMainWindow::getArguments(int* customArgStart){
 	QStringList ourString;
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
@@ -475,7 +469,10 @@ QStringList ZDLMainWindow::getArguments(){
 		}
 	}
 
-	ourString += CUSTOM_ARG_SEP;
+	if (customArgStart)
+	{
+		*customArgStart = ourString.size();
+	}
 
 	if (zconf->contains("zdl.save/extra")){
         ourString += parseExtraArgs(zconf->value("zdl.save/extra").toString());
