@@ -177,7 +177,7 @@ void ZDLMainWindow::launch(){
 		// Given "always add" arguments: +sv_cheats 1
 		// Expected executable: mangohud
 		// Expected arguments: --dlsym <gzdoom> -iwad <IWAD> abc +sv_cheats 1
-		for (int argi = customArgStart; argi < args.size(); argi++)
+		for (int argi = customArgStart; commandIndex; argi++, commandIndex--)
 		{
 			const QString arg = args[argi];
 			int eqpos = arg.indexOf('=');
@@ -188,7 +188,6 @@ void ZDLMainWindow::launch(){
 				env.insert(enkey, enval);
 				// qInfo() << enkey << ":" << enval;
 				args.removeAt(argi--);
-				commandIndex--;
 			}
 			else if (gameExecutable == exec)
 			{
@@ -197,25 +196,20 @@ void ZDLMainWindow::launch(){
 				exec = arg;
 				parsingEnvVars = false;
 				args.removeAt(argi--);
-				commandIndex--;
 			}
-			else if (commandIndex)
+			else // if (commandIndex)
 			{ // Before the %command%
 				args.removeAt(argi);
 				args.insert(preInsertIndex++, arg);
-				commandIndex--;
-			}
-			if (!commandIndex)
-			{
-				args.insert(preInsertIndex++, gameExecutable);
-				break;
 			}
 			// Nothing else needs to be done, since the arguments after the
 			// first %command% are already at the end of the list.
 		}
+		args.insert(preInsertIndex++, gameExecutable);
 	}
 
 	/*
+	qInfo() << "Environment variables:" << env.toStringList();
 	qInfo() << "args:";
 	for(const QString arg : args) {
 		qInfo() << arg;
