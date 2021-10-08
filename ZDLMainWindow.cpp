@@ -145,19 +145,88 @@ void ZDLMainWindow::launch(){
 		QMessageBox::critical(this, "ZDL", "Please select a source port");
 		return;
 	}
-	QStringList args = getArguments();
+	int customArgStart;
+	QStringList args = getArguments(&customArgStart);
 	if (args.join("").length() < 1){
 		return;
 	}
 
+	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+	// Custom arguments appear at the end of the list
+	int commandIndex = 0;
+
+	for (int i = customArgStart; i < args.size(); i++)
+	{
+		const QString arg = args[i];
+		if (arg.toLower() == "%command%")
+		{
+			if (commandIndex == 0) { // Only accept the first "%command%"
+				commandIndex = i - customArgStart;
+				// qInfo() << "commandIndex:" << commandIndex;
+			}
+			args.removeAt(i--);
+		}
+	}
+
+	QString gameExecutable = exec;
+	if (commandIndex) {
+		bool parsingEnvVars = true;
+		int preInsertIndex = 0;
+		// Given extra arguments: DXVK_HUD=api,fps mangohud --dlsym %command% abc
+		// Given "always add" arguments: +sv_cheats 1
+		// Expected executable: mangohud
+		// Expected arguments: --dlsym <gzdoom> -iwad <IWAD> abc +sv_cheats 1
+		for (int argi = customArgStart; commandIndex; argi++, commandIndex--)
+		{
+			const QString arg = args[argi];
+			int eqpos = arg.indexOf('=');
+			if (eqpos != -1 && parsingEnvVars)
+			{
+				QString enkey = arg.left(eqpos);
+				QString enval = arg.mid(eqpos + 1);
+				env.insert(enkey, enval);
+				// qInfo() << enkey << ":" << enval;
+				args.removeAt(argi--);
+			}
+			else if (gameExecutable == exec)
+			{
+				// Insert executable into args
+				gameExecutable = exec;
+				exec = arg;
+				parsingEnvVars = false;
+				args.removeAt(argi--);
+			}
+			else // if (commandIndex)
+			{ // Before the %command%
+				args.removeAt(argi);
+				args.insert(preInsertIndex++, arg);
+			}
+			// Nothing else needs to be done, since the arguments after the
+			// first %command% are already at the end of the list.
+		}
+		args.insert(preInsertIndex++, gameExecutable);
+	}
+
+	/*
+	qInfo() << "Environment variables:" << env.toStringList();
+	qInfo() << "args:";
+	for(const QString arg : args) {
+		qInfo() << arg;
+	}
+	qInfo() << "exec:" << exec;
+	qInfo() << "gameExecutable:" << gameExecutable;
+	return;
+	*/
+
 	//Find the executable
-	QStringList executablePath = exec.split("/");
+	QStringList executablePath = gameExecutable.split(QDir::separator());
 
 	//Remove the last item, which will be the .exe
 	executablePath.removeLast();
 
 	//Re-create the string
-	QString workingDirectory = executablePath.join("/");
+	QString workingDirectory = executablePath.join(QDir::separator());
 
 	//Resolve the path to an absolute directory
 	QDir cwd(workingDirectory);
@@ -167,7 +236,7 @@ void ZDLMainWindow::launch(){
 
 	//Set the working directory to that directory
 	proc->setWorkingDirectory(workingDirectory);
-
+	proc->setProcessEnvironment(env);
 	proc->setProcessChannelMode(QProcess::ForwardedChannels);
 
 
@@ -229,7 +298,7 @@ void ZDLMainWindow::badLaunch(QProcess::ProcessError procerr){
     }
 }
 
-QStringList ZDLMainWindow::getArguments(){
+QStringList ZDLMainWindow::getArguments(int* customArgStart){
 	QStringList ourString;
 	auto zconf = ZDLConfigurationManager::getActiveConfiguration();
 
@@ -394,12 +463,17 @@ QStringList ZDLMainWindow::getArguments(){
 		}
 	}
 
-	if (zconf->contains("zdl.general/alwaysadd")){
-        ourString += parseExtraArgs(zconf->value("zdl.general/alwaysadd").toString());
+	if (customArgStart)
+	{
+		*customArgStart = ourString.size();
 	}
 
 	if (zconf->contains("zdl.save/extra")){
         ourString += parseExtraArgs(zconf->value("zdl.save/extra").toString());
+	}
+
+	if (zconf->contains("zdl.general/alwaysadd")){
+        ourString += parseExtraArgs(zconf->value("zdl.general/alwaysadd").toString());
 	}
 
 	return ourString;

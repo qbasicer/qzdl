@@ -33,7 +33,7 @@ public:
 	~ZDLMainWindow();
 	void startRead();
 	void writeConfig();
-	QStringList getArguments();
+	QStringList getArguments(int* customArgStart = nullptr);
 	QString getExecutable();
 	QString getWindowTitle();
 public slots:
