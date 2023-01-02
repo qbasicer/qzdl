@@ -14,8 +14,14 @@ if (NOT inih_POPULATED)
 	FetchContent_Populate(inih)
 endif()
 
+set(ICON ${PROJECT_SOURCE_DIR}/res/zdl3.icns)
+set_source_files_properties(${ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+file(COPY ${ICON_PATH} DESTINATION "zdl.app/Contents/Resources")
+
 add_executable(
 	zdl
+	MACOSX_BUNDLE
+	${ICON}
 	ZDLAboutDialog.cpp
 	ZDLAdvancedMultiplayerDialog.cpp
 	ZDLDMFlagCheckbox.cpp
@@ -48,3 +54,11 @@ add_executable(
 target_include_directories(zdl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/zdlconf)
 target_include_directories(zdl PRIVATE ${inih_SOURCE_DIR})
 target_link_libraries(zdl Qt5::Core Qt5::Widgets)
+
+install(TARGETS zdl
+    BUNDLE DESTINATION . COMPONENT Runtime
+    RUNTIME DESTINATION bin COMPONENT Runtime
+    )
+
+set(CPACK_GENERATOR "DragNDrop")
+include(CPack)
