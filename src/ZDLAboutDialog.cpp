@@ -21,7 +21,7 @@
 #include "zdlconf.h"
 #include <QDialogButtonBox>
 #include "ZDLVersion.h"
-#include "bmp_logo.xpm"
+#include "xpm/bmp_logo.xpm"
 
 extern QString versionString;
 

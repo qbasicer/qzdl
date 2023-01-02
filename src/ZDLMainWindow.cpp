@@ -26,7 +26,7 @@
 #include "zdlconf.h"
 #include "zdlcommon.h"
 #include "ZDLInfoBar.h"
-#include "ico_icon.xpm"
+#include "xpm/ico_icon.xpm"
 #include <QDebug>
 
 #include "disabled.h"
