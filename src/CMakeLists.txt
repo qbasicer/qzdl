@@ -64,22 +64,27 @@ install(TARGETS zdl
 # the binaries
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
 get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
 find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
 
-# add_custom_command(TARGET zdl POST_BUILD
-#     COMMAND "${CMAKE_COMMAND}" -E
-#         env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}"
-#             "$<TARGET_FILE:zdl>"
-#     COMMENT "Running windeployqt..."
-# )
+if (WIN32)
+    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qt_bin_dir}")
+    add_custom_command(TARGET zdl POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E
+            env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}"
+                "$<TARGET_FILE:zdl>"
+        COMMENT "Running windeployqt..."
+    )
+endif(WIN32)
 
-add_custom_command(TARGET zdl POST_BUILD
-    COMMAND "${MACDEPLOYQT_EXECUTABLE}"
-        "$<TARGET_FILE_DIR:zdl>/../.."
-        -always-overwrite
-    COMMENT "Running macdeployqt..."
-)
+if (APPLE)
+    add_custom_command(TARGET zdl POST_BUILD
+        COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+            "$<TARGET_FILE_DIR:zdl>/../.."
+            -always-overwrite
+        COMMENT "Running macdeployqt...
+(not codesigning, afterwards run 'codesign --deep -f -s - $<TARGET_FILE_DIR:zdl>/../..')"
+    )
 
-set(CPACK_GENERATOR "DragNDrop")
-include(CPack)
+	set(CPACK_GENERATOR "DragNDrop")
+	include(CPack)
+endif(APPLE)
