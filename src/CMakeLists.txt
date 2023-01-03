@@ -71,9 +71,18 @@ if (WIN32)
     add_custom_command(TARGET zdl POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E
             env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}"
+				--dir deploy
                 "$<TARGET_FILE:zdl>"
         COMMENT "Running windeployqt..."
     )
+
+    install(
+        DIRECTORY "${CMAKE_BINARY_DIR}/deploy/"
+        TYPE BIN
+    )
+
+	set(CPACK_GENERATOR "NSIS")
+	include(CPack)	
 endif(WIN32)
 
 if (APPLE)
