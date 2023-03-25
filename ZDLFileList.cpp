@@ -18,10 +18,12 @@
 
 #include "ZDLFileList.h"
 #include "ZDLFileListable.h"
+#include "ZDLListWidget.h"
 #include "zdlconf.h"
 #include "ZDLMapFile.h"
 
 #include "disabled.h"
+#include <qvariant.h>
 
 extern QString getLastDir();
 extern void saveLastDir(QString fileName);
@@ -128,3 +130,21 @@ void ZDLFileList::addButton(){
 	}
 }
 
+void ZDLFileList::remove(int index) {
+	ZDLListWidget::remove(index);
+	QString keyBase { "file%1" };
+	QSettings* conf = ZDLConfigurationManager::getActiveConfiguration();
+	// Move following files back by one, and remove the last.
+	for (int curIndex = index;; curIndex++) {
+		int nextIndex = curIndex + 1;
+		QString curKey = keyBase.arg(curIndex);
+		QString nextKey = keyBase.arg(nextIndex);
+		if (!conf->contains(curKey)) { break; }
+		if (conf->contains(nextKey)) {
+			QVariant nextValue = conf->value(nextKey);
+			conf->setValue(curKey, nextValue);
+		} else {
+			conf->remove(curKey);
+		}
+	}
+}

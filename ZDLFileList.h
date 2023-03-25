@@ -26,7 +26,7 @@ class ZDLFileList : public ZDLListWidget{
 		virtual void rebuild();
 		virtual void newConfig();
 		virtual void newDrop(QStringList fileList);
-		
+		void remove(int index) override;
 
 };
 
