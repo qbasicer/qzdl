@@ -257,6 +257,7 @@ void ZDLInterface::saveZdlFile(){
 		auto current = ZDLConfigurationManager::getActiveConfiguration();
 		auto iniFormat = QSettings::registerFormat("ini", readZDLConf, writeZDLConf);
 		QSettings copy(fileName, iniFormat);
+		copy.clear(); // Otherwise, extra files will be in the overwritten zdl
 		current->beginGroup("zdl.save");
 		for (auto key: current->childKeys())
 		{
