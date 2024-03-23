@@ -4,7 +4,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 project(qzdl LANGUAGES C CXX)
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets REQUIRED)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -50,4 +51,4 @@ add_executable(
 
 target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf)
 target_include_directories(zdl PRIVATE ${inih_SOURCE_DIR})
-target_link_libraries(zdl Qt5::Core Qt5::Widgets)
+target_link_libraries(zdl Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets)
