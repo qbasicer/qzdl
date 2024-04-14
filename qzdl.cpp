@@ -32,28 +32,30 @@ QApplication *qapp;
 QString versionString;
 ZDLMainWindow *mw;
 
-
-int main( int argc, char **argv ){
+int main(int argc, char **argv)
+{
 
 	QStringList args;
-	for(int i = 1; i < argc; i++){
+	for (int i = 1; i < argc; i++)
+	{
 		args << QString(argv[i]);
 	}
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
-	QApplication a( argc, argv );
+	QApplication a(argc, argv);
 	qapp = &a;
 
-
 #if defined(Q_WS_WIN)
-	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD)+QString(")");
+	versionString = ZDL_VERSION_STRING + QString(" (windows/") + QString(ZDL_BUILD) + QString(")");
 #elif defined(Q_WS_MAC)
-	versionString = ZDL_VERSION_STRING + QString(" (mac/") + QString(ZDL_BUILD)+QString(")");
+	versionString = ZDL_VERSION_STRING + QString(" (mac/") + QString(ZDL_BUILD) + QString(")");
 #elif defined(Q_WS_X11)
-	versionString = ZDL_VERSION_STRING + QString(" (linux/") + QString(ZDL_BUILD)+QString(")");
+	versionString = ZDL_VERSION_STRING + QString(" (linux/") + QString(ZDL_BUILD) + QString(")");
 #else
-	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD)+QString(")");
+	versionString = ZDL_VERSION_STRING + QString(" (other/") + QString(ZDL_BUILD) + QString(")");
 #endif
 
 	QCoreApplication::setApplicationName("qZDL");
@@ -91,7 +93,7 @@ int main( int argc, char **argv ){
 			tconf->remove("");
 			QSettings zdlFile(zdlInfo.absoluteFilePath(), iniFormat);
 			zdlFile.beginGroup("zdl.save");
-			for (auto key: zdlFile.allKeys())
+			for (auto key : zdlFile.allKeys())
 			{
 				tconf->setValue(key, zdlFile.value(key));
 			}
@@ -108,12 +110,16 @@ int main( int argc, char **argv ){
 	QObject::connect(&a, &QApplication::lastWindowClosed, &a, &QApplication::quit);
 	mw->startRead();
 
-	if(hasZDLFile){
+	if (hasZDLFile)
+	{
 		//  A .zdl file as passed as a command line option
-		if(tconf->contains("zdl.general/zdllaunch")){
+		if (tconf->contains("zdl.general/zdllaunch"))
+		{
 			QString rc = tconf->value("zdl.general/zdllaunch").toString();
-			if(rc.length() > 0){
-				if(rc.compare("1") == 0){
+			if (rc.length() > 0)
+			{
+				if (rc.compare("1") == 0)
+				{
 					// Launching configuration NOW
 					mw->launch();
 					// ZDL QUIT
@@ -124,27 +130,32 @@ int main( int argc, char **argv ){
 	}
 
 	int ret = a.exec();
-	if (ret != 0){
+	if (ret != 0)
+	{
 		// ZDL QUIT, ERROR CONDITION
 		return ret;
 	}
-
 
 	mw->writeConfig();
 
 	delete mw;
 
 	bool doSave = true;
-	if (tconf->contains("zdl.general/rememberFilelist")){
+	if (tconf->contains("zdl.general/rememberFilelist"))
+	{
 		QString val = tconf->value("zdl.general/rememberFilelist").toString();
-		if (val == "0"){
+		if (val == "0")
+		{
 			doSave = false;
-		} else {
+		}
+		else
+		{
 			doSave = true;
 		}
 	}
-	if (!doSave){
-		for (int i = 0; ; i++)
+	if (!doSave)
+	{
+		for (int i = 0;; i++)
 		{
 			auto key = QString("zdl.save/file%1").arg(i);
 			if (!tconf->contains(key))
@@ -158,4 +169,3 @@ int main( int argc, char **argv ){
 	delete tconf;
 	return ret;
 }
-
