@@ -21,8 +21,12 @@
 ZDLDMFlagManager::ZDLDMFlagManager(QWidget *parent) :QObject(parent){
 }
 
-void ZDLDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box){
+void ZDLDMFlagManager::addCheckbox(ZDLDMFlagCheckbox* box) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 7, 0)
 	connect(box, &ZDLDMFlagCheckbox::stateChanged, this, &ZDLDMFlagManager::stateChanged);
+#else
+	connect(box, &ZDLDMFlagCheckbox::checkStateChanged, this, &ZDLDMFlagManager::stateChanged);
+#endif
 	checks.append(box);
 }
 
