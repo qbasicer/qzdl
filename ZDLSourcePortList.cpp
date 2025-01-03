@@ -100,8 +100,10 @@ void ZDLSourcePortList::addButton(){
 	if (diag.exec()){
 		QString fileName = diag.getFile();
 		QString name = diag.getName();
-		ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, name);
-		insert(zList, -1);
+		if (!name.isEmpty()) {
+			ZDLNameListable *zList = new ZDLNameListable(pList, 1001, fileName, name);
+			insert(zList, -1);
+		}
 	}
 
 
