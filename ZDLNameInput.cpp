@@ -75,10 +75,16 @@ ZDLNameInput::ZDLNameInput(QWidget *parent):QDialog(parent){
 	connect(btnCancel, &QPushButton::clicked, this, &ZDLNameInput::reject);
 }
 
+void ZDLNameInput::setBrowseDir(QString startDir){
+	browseDir = startDir;
+}
+
 void ZDLNameInput::browse(){
 	QString filter = filters.join(";;");
-	QString lastDir = getLastDir();
-	QString fileName = QFileDialog::getOpenFileName(this, "Add File", lastDir, filter);
+	if (browseDir.isEmpty() || !QDir(browseDir).exists()) {
+		browseDir = getLastDir();
+	}
+	QString fileName = QFileDialog::getOpenFileName(this, "Add File", browseDir, filter);
 	if(!fileName.isNull() && !fileName.isEmpty()){
 		lfile->setText(fileName);
 		saveLastDir(fileName);

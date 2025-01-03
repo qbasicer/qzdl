@@ -32,6 +32,9 @@ class ZDLNameInput: public QDialog{
 		void setFilter(QStringList inFilters);
 		void basedOff(ZDLNameListable *listable);
 		void fromUrl(QUrl url);
+		// Normally, we start in the last directory picked. This is so we
+		// can override the IWAD list to start browsing in DOOMWADDIR.
+		void setBrowseDir(QString);
 	public slots:
 		void browse();
 	protected:
@@ -39,6 +42,8 @@ class ZDLNameInput: public QDialog{
 		QLineEdit *lfile;
 		QStringList filters;
 		QPushButton *btnBrowse;
+	private:
+		QString browseDir;
 };
 
 #endif

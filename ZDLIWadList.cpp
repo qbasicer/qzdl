@@ -96,6 +96,10 @@ void ZDLIWadList::addButton(){
 	ZDLNameInput diag(this);
 	diag.setWindowTitle("Add IWAD");
 	diag.setFilter(filters);
+	QString doomWadDir = qgetenv("DOOMWADDIR");
+	if (QDir(doomWadDir).exists()) {
+		diag.setBrowseDir(doomWadDir);
+	}
 	if (diag.exec()){
 		QString fileName = diag.getFile();
 		QString name = diag.getName();
