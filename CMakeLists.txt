@@ -15,7 +15,7 @@ FetchContent_Declare(
 )
 FetchContent_GetProperties(inih)
 if (NOT inih_POPULATED)
-	FetchContent_Populate(inih)
+	FetchContent_MakeAvailable(inih)
 endif()
 
 add_executable(

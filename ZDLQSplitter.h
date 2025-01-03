@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-#include <QMetaObject>
 #ifndef _ZQSPLIT_H_
 #define _ZQSPLIT_H_
 #include <QObject>
@@ -24,7 +23,7 @@
 #include "ZDLWidget.h"
 
 
-class ZDLQSplitter: public virtual ZDLWidget{
+class ZDLQSplitter: public ZDLWidget{
 Q_OBJECT
 	public:
 		ZDLQSplitter(ZDLWidget *parent);
