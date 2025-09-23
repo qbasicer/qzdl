@@ -1,0 +1,66 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.5.3'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+        modules: 'qtbase qttools'
+        cache: true
+
+    - name: Set up MSVC
+      uses: microsoft/setup-msbuild@v1.3
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -S . -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+      shell: cmd
+
+    - name: Build project
+      run: |
+        cmake --build build --config Release --verbose
+      shell: cmd
+
+    - name: Create deployment directory
+      run: |
+        mkdir deploy
+        copy build\Release\zdl.exe deploy\
+      shell: cmd
+
+    - name: Deploy Qt libraries
+      run: |
+        windeployqt.exe --release --no-translations --no-system-d3d-compiler --no-opengl-sw deploy\zdl.exe
+      shell: cmd
+
+    - name: List deployed files
+      run: |
+        echo "Files in deployment directory:"
+        dir deploy /s
+      shell: cmd
+
+    - name: Create ZIP package
+      run: |
+        powershell Compress-Archive -Path deploy\* -DestinationPath qzdl-windows-${{ github.sha }}.zip
+      shell: cmd
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: qzdl-windows-build
+        path: qzdl-windows-${{ github.sha }}.zip
+        retention-days: 30
